@@ -8,11 +8,15 @@
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: AppleSDGothicNeo;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+@font-face {
+  font-family: AppleSDGothicNeo;
+  src: url('assets/fonts/AppleSDGothicNeoM.ttf');
 }
 
 nav {
