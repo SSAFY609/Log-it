@@ -38,7 +38,7 @@
       margin-left: 6px;
       margin-top: 5px;
       display: flex;
-      
+        
       align-items: center;
     }
     .slider_box {
