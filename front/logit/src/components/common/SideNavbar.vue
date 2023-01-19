@@ -1,11 +1,11 @@
 <template>
     <div class="container b_transparentwhite">
-      <div class="logo_box">
+      <div class="logo_box hover_cursor">
         <v-img class="logo_img"
       :src="require('../../assets/images/logit_logo_text.png')"
       height="110"
         />
-        <div @click="closeSidebar" class="slider_box b_lightgray"><v-icon class="silder_icon f_darkgray">mdi-chevron-double-left</v-icon></div>
+        <div @click="closeSidebar" class="slider_box b_lightgray hover_cursor"><v-icon class="silder_icon f_white">mdi-chevron-double-left</v-icon></div>
       </div>
       
     </div>

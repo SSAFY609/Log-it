@@ -1,17 +1,17 @@
 <template>
   <div class="container b_transparentwhite">
     <div class="left_box">
-      <div @click="openSidebar" class="slider_box b_lightgray"><v-icon class="silder_icon f_darkgray">mdi-menu</v-icon></div>
+      <div @click="openSidebar" class="slider_box b_lightgray"><v-icon class="silder_icon f_white">mdi-menu</v-icon></div>
     </div>
     <div class="right_box lay2">
       <div class="search_box right_box_items">
-        <div class="search_icon_box"><v-icon class="search_icon">mdi-magnify</v-icon></div>
-        <div class="search_content_box">
+        <div class="search_icon_box hover_cursor"><v-icon class="search_icon">mdi-magnify</v-icon></div>
+        <div class="search_content_box hover_cursor">
           <div class="search_content">검색</div>
         </div>
       </div>
       <div class="login_btn_box righ  t_box_items">
-        <div class="login_btn b_main">
+        <div class="login_btn b_main hover_cursor">
           <div class="login_btn_text f_white">로그인</div>
         </div>
       </div>

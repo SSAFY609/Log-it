@@ -151,6 +151,9 @@ export default {
   .nosee {
     display: none;
   }
+  .hover_cursor:hover {
+    cursor: pointer;
+  }
 
   
 
