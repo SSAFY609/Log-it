@@ -4,7 +4,13 @@
       <div class="slider_box lay1"><v-icon class="silder_icon">mdi-menu</v-icon></div>
     </div>
     <div class="right_box lay2">
-    
+      <div class="search_box right_box_items lay1"></div>
+      <div class="login_btn_box right_box_items lay1">
+        <div class="login_btn">
+          <div class="login_btn_text f_white">로그인</div>
+        </div>
+      </div>
+      <div class="profile_box right_box_items lay1"></div>
     </div>
     
 
@@ -27,6 +33,7 @@ export default {
     align-items: center;
     padding: 0 10px;
     border-bottom: 0.5px solid rgba(216, 216, 216, 0.575);
+    background-color: rgba(255,255,255,0.9);
   }
 
   .slider_box {
@@ -49,7 +56,34 @@ export default {
     height: 50px;
   }
   .right_box {
-    width: 40%;
+    width: 30%;
     height: 50px;
+    display: flex;
+  }
+  .right_box_items {
+    height: 50px;
+  }
+  .search_box {
+    width: 60%;
+  }
+  .login_btn_box {
+    width: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+  }
+  .profile_box {
+    width: 40%;
+    display: none;
+  }
+  .login_btn {
+    width: 140px;
+    height: 42px;
+    background-color: #FF0A54;
+    border-radius: 8px;
+    margin-right: 10px;
+
+  }
+  .login_btn_text {
   }
 </style>

@@ -3,9 +3,9 @@
     <div class="app_container">
       <SideNavbar class="SideNavbar_box"/>
       <TopNavbar class="TopNavbar_box" />
+      <router-view class="router_view_container"></router-view>
     </div>
-      <router-view/>
-    
+
   </v-app>
 </template>
 
@@ -21,10 +21,16 @@ export default {
     TopNavbar,
     SideNavbar,
   },
+  
+  methods: {
+
+  },
 
   data: () => ({
 
   }),
+
+
 }
 </script>
 <style>
@@ -39,6 +45,7 @@ export default {
   }
   .first {
     font-family: AppleL, AppleM, AppleB, AppleH;
+    height: 100%;
   }
   /* 아래로 내려갈수록 두꺼운 글씨체 */
   @font-face {
@@ -64,8 +71,51 @@ export default {
     margin: 0;
     padding: 0;
   }
+  /* 폰트 컬러*/
+  .f_white {
+    color: white;
+  }
+  .f_black {
+    color: #191919;
+  }
+  .f_lightgray {
+    color: #A1A1A0;
+  }
+  .f_darkgray {
+    color: #464646;
+  }
+  .f_main {
+    color: #FF0A54;
+  }
+  .f_sub {
+    color: #FE91BD;
+  }
+  .f_green {
+    color: green;
+  }
 
-  
+  /* 배경 컬러*/
+  .b_main {
+    background-color: #FF0A54;
+  }
+  .b_sub {
+    background-color: #FE91BD;
+  }
+  .b_white {
+    background-color: white;
+  }
+  .b_black {
+    color: #191919;
+  }
+  .b_lightgray {
+    background-color: #A1A1A0;
+  }
+  .b_darkgray {
+    background-color: #464646;
+  }
+
+
+
   .TopNavbar_box {
     width: 100%;
     height: 60px;
@@ -77,7 +127,17 @@ export default {
   .app_container {
     width: 100%;
     height: 100%;
-
-    
   }
+  .router_view_container {
+    height: 100%;
+    background-color: red;
+  }
+
+  .dark_mode_btn {
+    margin-top: 600px;
+    margin-left: 500px;
+  }
+  
+
+
 </style>

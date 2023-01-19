@@ -19,7 +19,7 @@
   </script>
   <style scoped>
     .container {
-      position: fixed;
+      position: absolute;
       background-color: rgba(200,200,200,1);
       z-index: 200;
     }

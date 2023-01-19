@@ -29,6 +29,7 @@ import PageSetting from '../components/etc/PageSetting.vue'
 import DeveloperList from '../components/etc/DeveloperList.vue'
 
 const routes = [
+  
   {
     path: '/',
     name: 'home',
@@ -190,5 +191,6 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes
 })
+
 
 export default router
