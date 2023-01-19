@@ -1,11 +1,11 @@
 <template>
-    <div class="container lay2 b_lightwhite">
-      <div class="logo_box lay3">
+    <div class="container b_transparentwhite">
+      <div class="logo_box">
         <v-img class="logo_img"
       :src="require('../../assets/images/logit_logo_text.png')"
       height="110"
         />
-        <div class="slider_box lay1"><v-icon class="silder_icon">mdi-chevron-double-left</v-icon></div>
+        <div @click="closeSidebar" class="slider_box b_lightgray"><v-icon class="silder_icon f_darkgray">mdi-chevron-double-left</v-icon></div>
       </div>
       
     </div>
@@ -15,11 +15,21 @@
   
   export default {
     name: 'SideNavbar',
+    methods: {
+
+      closeSidebar() {
+        const eventTarget1 = document.querySelector('.SideNavbar_box')
+        const eventTarget2 = document.querySelector('.SideNavbar_space')
+
+        eventTarget1.classList.toggle('nosee')
+        eventTarget2.classList.toggle('nosee')
+      }
+    }
   }
   </script>
   <style scoped>
     .container {
-      position: absolute;
+      position: fixed;
       z-index: 200;
     }
     .logo_box {
@@ -28,11 +38,11 @@
       margin-left: 6px;
       margin-top: 5px;
       display: flex;
+      align-items: center;
     }
     .slider_box {
-      width: 50px;
-      height: 50px;
-      background-color: #dfdfdf;
+      width: 40px;
+      height: 40px;
       border-radius: 8px;
       display: flex;
       justify-content: center;
@@ -42,7 +52,6 @@
     }
     .silder_icon {
       font-size: 40px;
-      color: grey;
     }
 
   </style>
