@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping("/user")
@@ -25,6 +27,34 @@ public class UserController {
         try {
             userService.insertUser(userDto);
             return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(FAIL, HttpStatus.OK);
+        }
+    }
+
+    @GetMapping("/get")
+    public ResponseEntity<List<UserDto>> getAllUser() throws Exception {
+        System.out.println("===== getAllUser =====");
+        return new ResponseEntity<List<UserDto>>(userService.getAllUser(), HttpStatus.OK);
+    }
+
+    @GetMapping("/{email}")
+    public ResponseEntity<UserDto> getUser(@PathVariable String email) throws Exception {
+        System.out.println("===== getUser =====");
+        return new ResponseEntity<UserDto>(userService.getUser(email), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> dropUser(@PathVariable Long id) throws Exception {
+        System.out.println("===== dropUser =====");
+        boolean result = userService.dropUser(id);
+        try {
+            if(result) {
+                return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("존재하지 않는 회원입니다.", HttpStatus.OK);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<String>(FAIL, HttpStatus.OK);

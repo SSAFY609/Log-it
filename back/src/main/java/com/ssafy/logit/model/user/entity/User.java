@@ -5,7 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Getter
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -36,13 +36,17 @@ public class User extends DateTime {
     @Column(nullable = false)
     private int isDeleted;
 
-//    public void updateUser(UserDto userDto) {
-//        this.name = userDto.getName();
-//        this.email = userDto.getEmail();
-//        this.pw = userDto.getPw();
-//        this.flag = userDto.getFlag();
-//        this.studentNo = userDto.getStudentNo();
-//        this.image = userDto.getImage();
-//        this.isDeleted = userDto.getIsDeleted();
-//    }
+    // Entity -> DTO 변환
+    public UserDto toDto() {
+        return UserDto.builder()
+                .id(this.id)
+                .name(this.name)
+                .email(this.email)
+                .pw(this.pw)
+                .flag(this.flag)
+                .studentNo(this.studentNo)
+                .image(this.image)
+                .isDeleted(this.isDeleted).build();
+                // createdTime, loginTime 가져와야 함
+    }
 }

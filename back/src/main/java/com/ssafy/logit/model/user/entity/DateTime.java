@@ -1,13 +1,13 @@
 package com.ssafy.logit.model.user.entity;
 
-import lombok.Getter;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
-@Getter
+@Data
 public class DateTime {
 
     @Column(name = "created_time", nullable = false, updatable = false)
