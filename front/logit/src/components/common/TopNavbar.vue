@@ -1,9 +1,9 @@
 <template>
   <div class="container b_transparentwhite">
     <div class="left_box">
-      <div @click="openSidebar" class="slider_box b_lightgray"><v-icon class="silder_icon f_white">mdi-menu</v-icon></div>
+      <div @click="openSidebar" class="slider_box b_lightgray hover_cursor"><v-icon class="silder_icon f_white">mdi-chevron-double-right</v-icon></div>
     </div>
-    <div class="right_box lay2">
+    <div class="right_box">
       <div class="search_box right_box_items">
         <div class="search_icon_box hover_cursor"><v-icon class="search_icon">mdi-magnify</v-icon></div>
         <div class="search_content_box hover_cursor">
