@@ -1,15 +1,14 @@
 package com.ssafy.logit.model.user.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+import com.ssafy.logit.model.user.dto.UserDto;
+import lombok.*;
 import javax.persistence.*;
 
 @Entity
 @Getter
-@Setter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class User extends DateTime {
 
     @Id
@@ -29,8 +28,21 @@ public class User extends DateTime {
     private int flag;
 
     @Column(length = 10, nullable = false)
-    private String student_no;
+    private String studentNo;
 
     @Column(length = 100)
     private String image;
+
+    @Column(nullable = false)
+    private int isDeleted;
+
+//    public void updateUser(UserDto userDto) {
+//        this.name = userDto.getName();
+//        this.email = userDto.getEmail();
+//        this.pw = userDto.getPw();
+//        this.flag = userDto.getFlag();
+//        this.studentNo = userDto.getStudentNo();
+//        this.image = userDto.getImage();
+//        this.isDeleted = userDto.getIsDeleted();
+//    }
 }
