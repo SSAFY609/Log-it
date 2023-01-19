@@ -28,6 +28,7 @@
       margin-left: 6px;
       margin-top: 5px;
       display: flex;
+      
     }
     .slider_box {
       width: 50px;

@@ -116,6 +116,9 @@ export default {
   .b_lightwhite {
     background-color: #FBFBFA;
   }
+  .b_lightgray_l{
+    background-color: #EDEDED;
+  }
 
 
 
