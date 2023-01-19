@@ -1,8 +1,9 @@
 <template>
   <v-app class="first">
     <div class="app_container">
-      <SideNavbar class="SideNavbar_box"/>
       <TopNavbar class="TopNavbar_box" />
+      <SideNavbar class="SideNavbar_box"/>
+      <div class="SideNavbar_space"></div>
       <router-view class="router_view_container"></router-view>
     </div>
 
@@ -34,6 +35,9 @@ export default {
 }
 </script>
 <style>
+
+/* 아웃라인 보고싶지 않으면 주석처리 */
+  
   .lay1 {
     outline: 1px dashed crimson;
   }
@@ -43,6 +47,8 @@ export default {
   .lay3 {
     outline: 1px dashed green;
   }
+
+
   .first {
     font-family: AppleL, AppleM, AppleB, AppleH;
     height: 100%;
@@ -73,48 +79,48 @@ export default {
   }
   /* 폰트 컬러*/
   .f_white {
-    color: white;
+    color: white !important;
   }
   .f_black {
-    color: #191919;
+    color: #191919 !important;
   }
   .f_lightgray {
-    color: #A1A1A0;
+    color: #DFDFDF !important;
   }
   .f_darkgray {
-    color: #464646;
+    color: #464646 !important;
   }
   .f_main {
-    color: #FF0A54;
+    color: #FF0A54 !important;
   }
   .f_sub {
-    color: #FE91BD;
-  }
-  .f_green {
-    color: green;
+    color: #FE91BD !important;
   }
 
   /* 배경 컬러*/
   .b_main {
-    background-color: #FF0A54;
+    background-color: #FF0A54 !important;
   }
   .b_sub {
-    background-color: #FE91BD;
+    background-color: #FE91BD !important;
   }
   .b_white {
-    background-color: white;
+    background-color: white !important;
   }
   .b_black {
-    background-color: #191919;
+    background-color: #191919 !important;
   }
   .b_lightgray {
-    background-color: #A1A1A0;
+    background-color: #DFDFDF !important;
   }
   .b_darkgray {
-    background-color: #464646;
+    background-color: #464646 !important;
   }
-  .b_lightwhite {
-    background-color: #FBFBFA;
+  .b_transparentwhite {
+    background-color: rgba(250,250,250,1)!important;
+  }
+  .b_transparentgray {
+    background-color: rgba(200,200,200,0.3)!important;
   }
   .b_lightgray_l{
     background-color: #EDEDED;
@@ -129,19 +135,26 @@ export default {
   .SideNavbar_box {
     width: 240px;
     height: 100%;
+    left: 0px;
+  }
+  .SideNavbar_space {
+    width: 240px;
+    height: 100%;
+    margin-left: 20px;
   }
   .app_container {
     width: 100%;
     height: 100%;
+    display: flex;
   }
   .router_view_container {
+    width: 100%;
     height: 100%;
   }
-
-  .dark_mode_btn {
-    margin-top: 600px;
-    margin-left: 500px;
+  .nosee {
+    display: none;
   }
+
   
 
 
