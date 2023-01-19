@@ -1,12 +1,14 @@
 <template>
   <div class="container lay1">
     <div class="left_box lay2">
-      <div class="slider_box lay1"><v-icon class="silder_icon">mdi-menu</v-icon></div>
+      <div class="slider_box lay1 b_lightgray"><v-icon class="silder_icon f_darkgray">mdi-menu</v-icon></div>
     </div>
     <div class="right_box lay2">
-      <div class="search_box right_box_items lay1"></div>
+      <div class="search_box right_box_items lay1">
+        <div class="search_icon_box lay2"><v-icon>mdi-magnify</v-icon></div>
+      </div>
       <div class="login_btn_box right_box_items lay1">
-        <div class="login_btn">
+        <div class="login_btn b_main">
           <div class="login_btn_text f_white">로그인</div>
         </div>
       </div>
@@ -39,7 +41,6 @@ export default {
   .slider_box {
     width: 50px;
     height: 50px;
-    background-color: #dfdfdf;
     border-radius: 8px;
     display: flex;
     justify-content: center;
@@ -49,7 +50,6 @@ export default {
     
   .silder_icon {
     font-size: 40px;
-    color: grey;
   }
   .left_box {
     width: 14%;
@@ -65,6 +65,8 @@ export default {
   }
   .search_box {
     width: 60%;
+    display: flex;
+    align-items: center;
   }
   .login_btn_box {
     width: 40%;
@@ -77,13 +79,24 @@ export default {
     display: none;
   }
   .login_btn {
-    width: 140px;
-    height: 42px;
-    background-color: #FF0A54;
-    border-radius: 8px;
+    width: 120px;
+    height: 36px;
+    border-radius: 6px;
     margin-right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
   }
   .login_btn_text {
+    margin-top: 2px;
+    font-size: 16px;
+  }
+  .search_icon_box {
+    width: 36px;
+    height: 36px;  
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 </style>

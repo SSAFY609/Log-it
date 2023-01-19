@@ -105,13 +105,16 @@ export default {
     background-color: white;
   }
   .b_black {
-    color: #191919;
+    background-color: #191919;
   }
   .b_lightgray {
     background-color: #A1A1A0;
   }
   .b_darkgray {
     background-color: #464646;
+  }
+  .b_lightwhite {
+    background-color: #FBFBFA;
   }
 
 
@@ -130,7 +133,6 @@ export default {
   }
   .router_view_container {
     height: 100%;
-    background-color: red;
   }
 
   .dark_mode_btn {

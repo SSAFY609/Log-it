@@ -1,5 +1,5 @@
 <template>
-    <div class="container lay2">
+    <div class="container lay2 b_lightwhite">
       <div class="logo_box lay3">
         <v-img class="logo_img"
       :src="require('../../assets/images/logit_logo_text.png')"
@@ -20,7 +20,6 @@
   <style scoped>
     .container {
       position: absolute;
-      background-color: rgba(200,200,200,1);
       z-index: 200;
     }
     .logo_box {
