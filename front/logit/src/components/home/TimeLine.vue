@@ -9,7 +9,7 @@
           <li>Website development step <a href="https://xbsoftware.com/blog/website-development-process-full-guide/">https://xbsoftware.com/blog/website-development-process-full-guide/</a></li>
           <li>Swiper Grab Cursor <a href="http://idangero.us/swiper/demos/12-grab-cursor.html">http://idangero.us/swiper/demos/12-grab-cursor.html</a></li>
         </ul>
-        <div class="swiper-container">
+        <swiper v-bind="swiperOptions" class="swiper-container" @swiper="setSwiperRef">
           <p class="swiper-control">
             <button type="button" class="btn btn-default btn-sm prev-slide">Prev</button>
             <button type="button" class="btn btn-default btn-sm next-slide">Next</button>
@@ -26,7 +26,7 @@
           </div>
           <!-- Add Pagination -->
           <div class="swiper-pagination"></div>
-        </div>
+        </swiper>
       </div>
     </div>
   </div>
@@ -43,26 +43,25 @@ const data = [
   { dateLabel: 'July 2017', title: 'Maintenance' }
 ];
 import { Swiper } from "swiper/vue";
+// import 'swiper/swiper.scss';
 
 export default {
   name: 'TimeLine',
+  components: {
+    Swiper
+  },
   data() {
     return {
       steps: data,
+      swiperOptions: {
+        slidesPerView: 3,
+        grabCursor: true,
+        paginationClickable: true,
+        nextButton: '.next-slide',
+        prevButton: '.prev-slide',
+      }
     }
   },
-  mounted() {
-    const swiper = new Swiper('.swiper-container', {
-      //pagination: '.swiper-pagination',
-      slidesPerView: 3,
-      grabCursor: true,
-      paginationClickable: true,
-      nextButton: '.next-slide',
-      prevButton: '.prev-slide',
-    });    
-
-    // console.log(swiper);
-  }
   
 }
 </script>
