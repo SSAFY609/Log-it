@@ -7,10 +7,7 @@
               height="50">
               </v-img>
          </div>
-         <div>
-
-         </div>
-      <router-view></router-view>
+         <router-view></router-view>
       </div>
     </div>
   </template>
@@ -21,19 +18,18 @@
   }
   </script>
   
-  <style>
+  <style scoped>
   .user-container{
    display: flex;
    justify-content: center;
    align-items: center;
-   padding:100px 100px;
    background-color: EDEDED;
   }
   .user-box{
+   margin: 60px 0px;
    background-color: white;
    border-radius: 20px;
- 
-   width: 520px;
+   width: 500px;
    height: 600px;
   }
   </style>

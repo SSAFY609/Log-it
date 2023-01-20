@@ -125,6 +125,9 @@ export default {
   .b_lightgray_l{
     background-color: #EDEDED;
   }
+  .b_kakao{
+    background-color: #fae100;
+  }
 
 
 
