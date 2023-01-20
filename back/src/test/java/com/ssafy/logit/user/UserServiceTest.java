@@ -1,35 +1,52 @@
 package com.ssafy.logit.user;
 
-import org.junit.jupiter.api.DisplayName;
+import com.ssafy.logit.model.user.dto.UserDto;
+import com.ssafy.logit.model.user.repository.UserRepository;
+import com.ssafy.logit.model.user.service.UserService;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
-    @Test
-    @DisplayName(value = "saveUser")
-    void saveUser() {
+    @Mock
+    private UserRepository userRepo;
 
+    @InjectMocks
+    private UserService userService;
+
+    @Test
+    void saveUser() {
+        UserDto userDto = UserDto.builder()
+                            .name("테스트 회원")
+                            .email("test@test.com")
+                            .pw("1234")
+                            .flag(8)
+                            .studentNo("0800000")
+                            .deleted(false).build();
+        when(userRepo.save(any())).thenReturn(userDto.toEntity());
+
+        userService.saveUser(userDto);
     }
 
     @Test
-    @DisplayName(value = "saveUser")
     void getAllUser() {
     }
 
     @Test
-    @DisplayName(value = "saveUser")
     void getUser() {
     }
 
     @Test
-    @DisplayName(value = "saveUser")
     void deleteUser() {
     }
 
     @Test
-    @DisplayName(value = "dropUser")
     void dropUser() {
     }
 }

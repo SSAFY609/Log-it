@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @SpringBootTest
-@Rollback(false)
+// @Rollback(false)
 public class UserDBTest {
 
     @Autowired
