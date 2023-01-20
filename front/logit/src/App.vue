@@ -79,48 +79,48 @@ export default {
   }
   /* 폰트 컬러*/
   .f_white {
-    color: white !important;
+    color: white ;
   }
   .f_black {
-    color: #191919 !important;
+    color: #191919 ;
   }
   .f_lightgray {
-    color: #DFDFDF !important;
+    color: #DFDFDF ;
   }
   .f_darkgray {
-    color: #464646 !important;
+    color: #464646 ;
   }
   .f_main {
-    color: #FF0A54 !important;
+    color: #FF0A54 ;
   }
   .f_sub {
-    color: #FE91BD !important;
+    color: #FE91BD ;
   }
 
   /* 배경 컬러*/
   .b_main {
-    background-color: #FF0A54 !important;
+    background-color: #FF0A54 ;
   }
   .b_sub {
-    background-color: #FE91BD !important;
+    background-color: #FE91BD ;
   }
   .b_white {
-    background-color: white !important;
+    background-color: white ;
   }
   .b_black {
-    background-color: #191919 !important;
+    background-color: #191919 ;
   }
   .b_lightgray {
-    background-color: #DFDFDF !important;
+    background-color: #DFDFDF ;
   }
   .b_darkgray {
-    background-color: #464646 !important;
+    background-color: #464646 ;
   }
   .b_transparentwhite {
-    background-color: rgba(250,250,250,1)!important;
+    background-color: rgba(255,255,255,0.9);
   }
   .b_transparentgray {
-    background-color: rgba(200,200,200,0.3)!important;
+    background-color: #F6F6F6;
   }
   .b_lightgray_l{
     background-color: #EDEDED;
@@ -136,14 +136,14 @@ export default {
     height: 60px;
   }
   .SideNavbar_box {
-    width: 240px;
+    width: 250px;
     height: 100%;
     left: 0px;
   }
   .SideNavbar_space {
-    width: 240px;
+    width: 250px;
     height: 100%;
-    margin-left: 20px;
+    margin-left: 0px;
   }
   .app_container {
     width: 100%;
@@ -156,6 +156,9 @@ export default {
   }
   .nosee {
     display: none;
+  }
+  .hover_cursor:hover {
+    cursor: pointer;
   }
 
   
