@@ -2,7 +2,7 @@
   <v-app class="first">
     <div class="app_container">
       <TopNavbar class="TopNavbar_box" />
-      <SideNavbar class="SideNavbar_box"/>
+      <SideNavbar class="SideNavbar_box" />
       <div class="SideNavbar_space"></div>
       <router-view class="router_view_container"></router-view>
     </div>
@@ -38,7 +38,7 @@ export default {
 
 /* 아웃라인 보고싶지 않으면 주석처리 */
   
-  .lay1 {
+  /* .lay1 {
     outline: 1px dashed crimson;
   }
   .lay2 {
@@ -46,7 +46,7 @@ export default {
   }
   .lay3 {
     outline: 1px dashed green;
-  }
+  } */
 
 
   .first {
@@ -96,6 +96,9 @@ export default {
   .f_sub {
     color: #FE91BD ;
   }
+  .f_icon {
+    color: #8A8A8A;
+  }
 
   /* 배경 컬러*/
   .b_main {
@@ -117,7 +120,7 @@ export default {
     background-color: #464646 ;
   }
   .b_transparentwhite {
-    background-color: rgba(255,255,255,0.9);
+    background-color: rgba(255,255,255,0.8);
   }
   .b_transparentgray {
     background-color: #F6F6F6;
@@ -130,12 +133,12 @@ export default {
     height: 60px;
   }
   .SideNavbar_box {
-    width: 250px;
+    width: 240px;
     height: 100%;
     left: 0px;
   }
   .SideNavbar_space {
-    width: 250px;
+    width: 270px;
     height: 100%;
     margin-left: 0px;
   }

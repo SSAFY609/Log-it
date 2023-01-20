@@ -1,48 +1,50 @@
 <template>
     <div class="container b_transparentgray">
-      <div class="logo_box hover_cursor">
+      <div class="logo_box hover_cursor lay1">
         <v-img class="logo_img"
       :src="require('../../assets/images/logit_logo_text.png')"
       height="110"
         />
-        <div @click="closeSidebar" class="slider_box b_lightgray hover_cursor"><v-icon class="silder_icon f_white">mdi-chevron-double-left</v-icon></div>
+        <div @click="closeSidebar" class="slider_box b_lightgray hover_cursor lay2">
+          <v-icon class="silder_icon f_white">mdi-chevron-double-left</v-icon>
+        </div>
       </div>
 
       <!-- 사이드바 메뉴 영역-->
       <div class="menu_container lay1">
-        <div class="menu_item_box lay2 hover_cursor">
+        <router-link :to="{name: 'MainPage'}" class="menu_item_box lay2 hover_cursor">
           <div class="menu_icon_box lay3">
-            <v-icon class="menu_icon f_darkgray">mdi-layers</v-icon>  
+            <v-icon class="menu_icon f_icon">mdi-layers</v-icon>  
           </div>
           <div class="menu_text_box f_darkgray lay3">홈</div>
-        </div>
-        <div class="menu_item_box lay2 hover_cursor">
+        </router-link>
+        <router-link :to="{name: 'SearchResult'}" class="menu_item_box lay2 hover_cursor">
           <div class="menu_icon_box lay3">
-            <v-icon class="menu_icon f_darkgray">mdi-magnify</v-icon>  
+            <v-icon class="menu_icon f_icon">mdi-magnify</v-icon>  
           </div>
           <div class="menu_text_box f_darkgray lay3">검색</div>
-        </div>
-        <div class="menu_item_box lay2 hover_cursor">
+        </router-link>
+        <router-link :to="{name: 'EventList'}" class="menu_item_box lay2 hover_cursor">
           <div class="menu_icon_box lay3">
-            <v-icon class="menu_icon f_darkgray">mdi-list-status</v-icon>  
+            <v-icon class="menu_icon f_icon">mdi-list-status</v-icon>  
           </div>
           <div class="menu_text_box f_darkgray lay3">성장일지</div>
-        </div>
-        <div class="menu_item_box lay2 hover_cursor">
+        </router-link>
+        <router-link :to="{name: 'JobList'}" class="menu_item_box lay2 hover_cursor">
           <div class="menu_icon_box lay3">
-            <v-icon class="menu_icon f_darkgray">mdi-briefcase</v-icon>  
+            <v-icon class="menu_icon f_icon">mdi-briefcase</v-icon>  
           </div>
           <div class="menu_text_box f_darkgray lay3">취업일지</div>
-        </div>
-        <div class="menu_item_box lay2 hover_cursor">
+        </router-link>
+        <router-link :to="{name: 'ProfilePage'}" class="menu_item_box lay2 hover_cursor">
           <div class="menu_icon_box lay3">
-            <v-icon class="menu_icon f_darkgray">mdi-account-circle</v-icon>  
+            <v-icon class="menu_icon f_icon">mdi-account-circle</v-icon>  
           </div>
           <div class="menu_text_box f_darkgray lay3">프로필</div>
-        </div>
+        </router-link>
         <div class="menu_item_box lay2 hover_cursor">
           <div class="menu_icon_box lay3">
-            <v-icon class="menu_icon f_darkgray">mdi-poll</v-icon>  
+            <v-icon class="menu_icon f_icon">mdi-poll</v-icon>  
           </div>
           <div class="menu_text_box f_darkgray lay3">통계</div>
         </div>
@@ -52,23 +54,23 @@
       <!-- 하단 옵션 메뉴 -->
 
       <div class="option_menu lay3">
-        <div class="menu_item_box2 lay2 hover_cursor">
+        <router-link :to="{name: 'PageSetting'}" class="menu_item_box2 lay2 hover_cursor">
           <div class="item_container lay1">
             <div class="menu_icon_box2 lay3">
-              <v-icon class="menu_icon2 f_darkgray">mdi-cog</v-icon>  
+              <v-icon class="menu_icon2 f_icon">mdi-cog</v-icon>  
             </div>
             <div class="menu_text_box2 f_darkgray lay3">설정</div>
           </div>
-        </div>
+        </router-link>
 
-        <div class="menu_item_box2 lay2 hover_cursor">
+        <router-link :to="{name: 'DeveloperList'}" class="menu_item_box2 lay2 hover_cursor">
           <div class="item_container lay1">
             <div class="menu_icon_box2 lay3">
-              <v-icon class="menu_icon2 f_darkgray">mdi-xml</v-icon>  
+              <v-icon class="menu_icon2 f_icon">mdi-xml</v-icon>  
             </div>
           <div class="menu_text_box2 f_darkgray lay3">Developer</div>
         </div>
-      </div>
+        </router-link>
       </div>
     </div>
   </template>
@@ -97,8 +99,8 @@
     }
     .logo_box {
       width: 220px;
-      height: 50px;
-      margin-left: 6px;
+      height: 70px;
+      margin-left: 14px;
       margin-top: 5px;
       display: flex;
       align-items: center;
@@ -106,10 +108,12 @@
     .slider_box {
       width: 40px;
       height: 40px;
+      margin-bottom: 14px;
       border-radius: 8px;
       display: flex;
       justify-content: center;
       align-items: center;
+      margin-right: 8px;
 
       
     }
@@ -117,20 +121,24 @@
       font-size: 36px;
     }
     .menu_container {
-      margin-top: 50px;
+      margin-top: 10px;
     }
     .menu_item_box {
       display: flex;
-      height: 70px;
+      height: 60px;
       align-items: center;
+      text-decoration: none;
     }
     .menu_icon_box {
-      margin-left: 26px;
+      margin-left: 20px;
       width: 30px;
       height: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     .menu_icon {
-      font-size: 30px;
+      font-size: 24px;
     }
     .menu_text_box {
       width: 140px;
@@ -139,7 +147,7 @@
       padding-top: 2px;
       align-items: center;
       margin-left: 20px;
-      font-size: 24px;
+      font-size: 20px;
       font-weight: 400;
     }
     .menu_item_box2 {
@@ -153,7 +161,8 @@
       height: 24px;
     }
     .menu_icon2 {
-      font-size: 24px;
+      margin-top: 4px;
+      font-size: 20px;
     }
     .menu_text_box2 {
       width: 140px;
@@ -162,7 +171,7 @@
       padding-top: 2px;
       align-items: center;
       margin-left: 20px;
-      font-size: 20px;
+      font-size: 16px;
       font-weight: 400;
     }
     .menu_item_box:hover {
@@ -177,12 +186,14 @@
       font-weight: 900;
     }
     .option_menu {
-      margin-top: 560px;
-      height: 240px;
+      position: fixed;
+      bottom: 0px;
+      height: 180px;
     }
     .item_container {
       display: flex;
     }
+
     
   </style>
   
