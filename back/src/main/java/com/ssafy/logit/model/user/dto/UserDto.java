@@ -17,7 +17,7 @@ public class UserDto {
     private int flag;
     private String studentNo;
     private String image;
-    private int isDeleted;
+    private boolean deleted;
     private LocalDateTime createdTime;
     private LocalDateTime loginTime;
 
@@ -29,7 +29,7 @@ public class UserDto {
         this.pw = user.getPw();
         this.flag = user.getFlag();
         this.studentNo = user.getStudentNo();
-        this.isDeleted = user.getIsDeleted();
+        this.deleted = user.isDeleted();
         this.createdTime = user.toDto().getCreatedTime();
         this.loginTime = user.toDto().getLoginTime();
     }
@@ -40,10 +40,10 @@ public class UserDto {
                 .name(userDto.getName())
                 .email(userDto.getEmail())
                 .pw(userDto.getPw())
-                .flag(userDto.flag)
-                .studentNo(userDto.studentNo)
-                .image(userDto.image)
-                .isDeleted(userDto.isDeleted).build();
+                .flag(userDto.getFlag())
+                .studentNo(userDto.getStudentNo())
+                .image(userDto.getImage())
+                .deleted(userDto.isDeleted()).build();
                 // createdTime, loginTime 가져와야 함
     }
 
@@ -57,7 +57,7 @@ public class UserDto {
                     .flag(this.flag)
                     .studentNo(this.studentNo)
                     .image(this.image)
-                    .isDeleted(this.isDeleted).build();
+                    .deleted(this.deleted).build();
                     // createdTime, loginTime 가져와야 함
     }
 }

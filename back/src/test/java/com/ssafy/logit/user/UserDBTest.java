@@ -1,4 +1,4 @@
-package com.ssafy.logit;
+package com.ssafy.logit.user;
 
 import com.ssafy.logit.model.user.entity.User;
 import com.ssafy.logit.model.user.repository.UserRepository;
@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @SpringBootTest
 @Rollback(false)
-public class UserTests {
+public class UserDBTest {
 
     @Autowired
     UserRepository userRepo;

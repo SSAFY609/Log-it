@@ -46,9 +46,9 @@ public class UserService {
         Optional<User> user = userRepo.findById(id);
         if(user.isPresent()) {
             UserDto userDto = user.get().toDto();
-            int isDeletedStatus = userDto.getIsDeleted();
-            if(isDeletedStatus == 0) {
-                userDto.setIsDeleted(1);
+            boolean deletedStatus = userDto.isDeleted();
+            if(!deletedStatus) {
+                userDto.setDeleted(true);
                 userRepo.save(userDto.toEntity());
                 return "success";
             } else {

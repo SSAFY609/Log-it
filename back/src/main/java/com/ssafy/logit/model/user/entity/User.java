@@ -34,7 +34,7 @@ public class User extends DateTime {
     private String image;
 
     @Column(nullable = false)
-    private int isDeleted;
+    private boolean deleted;
 
     // Entity -> DTO 변환
     public UserDto toDto() {
@@ -46,7 +46,7 @@ public class User extends DateTime {
                 .flag(this.flag)
                 .studentNo(this.studentNo)
                 .image(this.image)
-                .isDeleted(this.isDeleted).build();
+                .deleted(this.deleted).build();
                 // createdTime, loginTime 가져와야 함
     }
 }
