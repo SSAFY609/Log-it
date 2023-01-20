@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @Slf4j
@@ -21,11 +20,12 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    // 회원 삽입 or 수정
     @PostMapping
-    public ResponseEntity<String> insertUser(@RequestBody UserDto userDto) throws Exception {
-        System.out.println("===== insertUser =====");
+    public ResponseEntity<String> saveUser(@RequestBody UserDto userDto) throws Exception {
+        System.out.println("===== saveUser =====");
         try {
-            userService.insertUser(userDto);
+            userService.saveUser(userDto);
             return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -33,18 +33,40 @@ public class UserController {
         }
     }
 
+    // 전체 회원 조회
     @GetMapping("/get")
     public ResponseEntity<List<UserDto>> getAllUser() throws Exception {
         System.out.println("===== getAllUser =====");
         return new ResponseEntity<List<UserDto>>(userService.getAllUser(), HttpStatus.OK);
     }
 
+    // email로 회원 조회
     @GetMapping("/{email}")
     public ResponseEntity<UserDto> getUser(@PathVariable String email) throws Exception {
         System.out.println("===== getUser =====");
         return new ResponseEntity<UserDto>(userService.getUser(email), HttpStatus.OK);
     }
 
+    // 회원 삭제 (실제 삭제x, isDeleted 1로 업데이트)
+    @PutMapping("/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) throws  Exception {
+        System.out.println("===== deleteUser =====");
+        String result = userService.deleteUser(id);
+        try {
+            if(result.equals("success")) {
+                return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+            } else if(result.equals("already deleted")) {
+                return new ResponseEntity<String>("이미 삭제된 회원입니다.", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<String>("없는 회원입니다.", HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(FAIL, HttpStatus.OK);
+        }
+    }
+
+    // 회원 삭제 (실제 삭제)
     @DeleteMapping("/{id}")
     public ResponseEntity<String> dropUser(@PathVariable Long id) throws Exception {
         System.out.println("===== dropUser =====");
@@ -53,35 +75,11 @@ public class UserController {
             if(result) {
                 return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
             } else {
-                return new ResponseEntity<>("존재하지 않는 회원입니다.", HttpStatus.OK);
+                return new ResponseEntity<>("없는 회원입니다.", HttpStatus.OK);
             }
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<String>(FAIL, HttpStatus.OK);
         }
     }
-
-//    @GetMapping
-//    public List<UserDto> getAllUser() {
-//        System.out.println("===== getAllUser =====");
-//        return userService.getAllUser();
-//    }
-
-//    @GetMapping("/{email}")
-//    public UserDto getUser(@PathVariable String email) {
-//        System.out.println("===== getUser =====");
-//        return userService.getUser(email);
-//    }
-
-//    @PostMapping
-//    public void insertUser(@RequestBody UserDto userDto) {
-//        System.out.println("===== insertUser =====");
-//        userService.insertUser(userDto);
-//    }
-//
-//    @PutMapping
-//    public void updateUser(@RequestBody UserDto userDto) {
-//        System.out.println("===== updateUser =====");
-//        userService.updateUser(userDto);
-//    }
 }

@@ -2,24 +2,30 @@ package com.ssafy.logit.model.user.service;
 
 import com.ssafy.logit.model.user.dto.UserDto;
 import com.ssafy.logit.model.user.entity.User;
-import com.ssafy.logit.model.user.repository.UserRepo;
+import com.ssafy.logit.model.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class UserService {
 
     @Autowired
-    private UserRepo userRepo;
+    private UserRepository userRepo;
 
     @Transactional
-    public void insertUser(UserDto userDto) {
-        User user = userDto.toEntity();
-        userRepo.save(user);
+    public void saveUser(UserDto userDto) {
+        Optional<User> user = userRepo.findByEmail(userDto.getEmail());
+        if(user.isPresent()) { // update
+            System.out.println("===== updateUser =====");
+            userRepo.save(userDto.updateUser(user.get().getId(), userDto));
+        } else { // insert
+            System.out.println("===== insertUser =====");
+            userRepo.save(userDto.toEntity());
+        }
     }
 
     public List<UserDto> getAllUser() {
@@ -32,6 +38,24 @@ public class UserService {
             return userRepo.findByEmail(email).get().toDto();
         } else {
             return null;
+        }
+    }
+
+    @Transactional
+    public String deleteUser(Long id) {
+        Optional<User> user = userRepo.findById(id);
+        if(user.isPresent()) {
+            UserDto userDto = user.get().toDto();
+            int isDeletedStatus = userDto.getIsDeleted();
+            if(isDeletedStatus == 0) {
+                userDto.setIsDeleted(1);
+                userRepo.save(userDto.toEntity());
+                return "success";
+            } else {
+                return "already deleted";
+            }
+        } else {
+            return "none";
         }
     }
 

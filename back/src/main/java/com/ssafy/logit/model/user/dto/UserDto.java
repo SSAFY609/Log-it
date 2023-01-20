@@ -2,7 +2,6 @@ package com.ssafy.logit.model.user.dto;
 
 import com.ssafy.logit.model.user.entity.User;
 import lombok.*;
-
 import java.time.LocalDateTime;
 
 @Data
@@ -33,6 +32,19 @@ public class UserDto {
         this.isDeleted = user.getIsDeleted();
         this.createdTime = user.toDto().getCreatedTime();
         this.loginTime = user.toDto().getLoginTime();
+    }
+
+    public User updateUser(Long id, UserDto userDto) {
+        return User.builder()
+                .id(id)
+                .name(userDto.getName())
+                .email(userDto.getEmail())
+                .pw(userDto.getPw())
+                .flag(userDto.flag)
+                .studentNo(userDto.studentNo)
+                .image(userDto.image)
+                .isDeleted(userDto.isDeleted).build();
+                // createdTime, loginTime 가져와야 함
     }
 
     // DTO -> Entity 변환

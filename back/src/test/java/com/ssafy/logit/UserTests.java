@@ -1,7 +1,7 @@
 package com.ssafy.logit;
 
 import com.ssafy.logit.model.user.entity.User;
-import com.ssafy.logit.model.user.repository.UserRepo;
+import com.ssafy.logit.model.user.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,7 +15,7 @@ import java.util.Optional;
 public class UserTests {
 
     @Autowired
-    UserRepo userRepo;
+    UserRepository userRepo;
 
     // 삽입
     @Test
