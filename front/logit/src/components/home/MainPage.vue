@@ -8,9 +8,9 @@
         />
       </div>
       <div>
-        <h1>매일 새로운 여정을</h1>
-        <h1>기록해보세요.</h1>
-        <p>진행중인 이벤트와 취업여정을 기록하면서 <br/>달라진 나의 모습을 발견해보아요.
+        <h1>당신의 새로운 여정.</h1>
+        <h1>매일 기록해보세요</h1>
+        <p>진행중인 이벤트와 취업여정을 기록하면서 달라진 나의 모습을 발견하세요.
         </p>
       </div>
       <div class="login_btn_box b_main hover_cursor">
@@ -44,16 +44,15 @@ export default {
     justify-content: center;
   }
   h1 {
-    font-size: 70px;
-  }
-  h1 {
     text-align: center;
     font-family: appleB;
+    font-size: 50px;
+    ;
   }
   p {
     text-align: center;
-    font-size: 28px;
-    margin-top: 10px;
+    font-size: 24px;
+    margin-top: 6px;
   }
   .logo_box {
     width: 200px;
@@ -62,27 +61,30 @@ export default {
   }
   .logo_img {
     margin-left: 6px;
-    margin-top: 20px;
+    margin-top: 10px;
   }
   .img_box {
-    width: 2000px;
+    width: 1300px;
+    display: flex;
+    justify-content: center;
+
   }
   .laptop_img {
-    width: 100%;
+    margin: 0 auto;
   }
   .login_btn_box {
-    width: 240px;
-    height: 56px;
+    width: 200px;
+    height: 50px;
     border-radius: 6px;
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 0 auto;
-    margin-top: 10px;
+    margin-top: 20px;
   }
   .login_btn_text {
     margin-top: 2px;
-    font-size: 26px;
+    font-size: 22px;
     font-weight: 500;
   }
 
