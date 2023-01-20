@@ -2,11 +2,13 @@ package com.ssafy.logit.model.user.entity;
 
 import com.ssafy.logit.model.user.dto.UserDto;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
+
 import javax.persistence.*;
 
 @Entity
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class User extends DateTime {
@@ -46,7 +48,9 @@ public class User extends DateTime {
                 .flag(this.flag)
                 .studentNo(this.studentNo)
                 .image(this.image)
-                .deleted(this.deleted).build();
+                .deleted(this.deleted)
+                .createdTime(super.getCreatedTime())
+                .loginTime(super.getLoginTime()).build();
                 // createdTime, loginTime 가져와야 함
     }
 }

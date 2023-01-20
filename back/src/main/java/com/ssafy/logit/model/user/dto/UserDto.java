@@ -1,11 +1,14 @@
 package com.ssafy.logit.model.user.dto;
 
+import com.ssafy.logit.model.user.entity.DateTime;
 import com.ssafy.logit.model.user.entity.User;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
+
 import java.time.LocalDateTime;
 
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDto {
@@ -30,8 +33,8 @@ public class UserDto {
         this.flag = user.getFlag();
         this.studentNo = user.getStudentNo();
         this.deleted = user.isDeleted();
-        this.createdTime = user.toDto().getCreatedTime();
-        this.loginTime = user.toDto().getLoginTime();
+        this.createdTime = user.getCreatedTime();
+        this.loginTime = user.getLoginTime();
     }
 
     public User updateUser(Long id, UserDto userDto) {
@@ -43,7 +46,9 @@ public class UserDto {
                 .flag(userDto.getFlag())
                 .studentNo(userDto.getStudentNo())
                 .image(userDto.getImage())
-                .deleted(userDto.isDeleted()).build();
+                .deleted(userDto.isDeleted())
+                .createdTime(userDto.getCreatedTime())
+                .loginTime(userDto.getLoginTime()).build();
                 // createdTime, loginTime 가져와야 함
     }
 
@@ -57,7 +62,8 @@ public class UserDto {
                     .flag(this.flag)
                     .studentNo(this.studentNo)
                     .image(this.image)
-                    .deleted(this.deleted).build();
-                    // createdTime, loginTime 가져와야 함
+                    .deleted(this.deleted)
+                    .createdTime(this.createdTime)
+                    .loginTime(this.loginTime).build();
     }
 }

@@ -1,6 +1,8 @@
 package com.ssafy.logit.model.user.entity;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -8,6 +10,9 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
 @Data
+@SuperBuilder
+@AllArgsConstructor
+@NoArgsConstructor
 public class DateTime {
 
     @Column(name = "created_time", nullable = false, updatable = false)
