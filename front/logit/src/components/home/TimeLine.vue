@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-      <h1 class="welcome">타임라인에 일정을 추가해보세요</h1>
+      <h1 class="welcome">❤오하늘❤ 님의 타임라인</h1>
       <swiper 
       class="mySwiper"
       :modules="modules"
@@ -128,6 +128,7 @@ export default {
           // console.log(state.st.toLocaleDateString());
           // console.log(state.ed.toLocaleDateString());
 
+          // 최소 날짜와 최대 날짜 사이 일주일 단위로 끊기
           let new_date = state.st;
           let idx = 0;
           const today = new Date();
@@ -135,7 +136,8 @@ export default {
               const push_date = {
                   sun: new Date(),
                   sat: new Date(),
-                  str: []
+                  str: [],
+                  events: [{}]
               };
               push_date.sun = new_date;
               for(let i=0; i<7; i++){
@@ -243,16 +245,21 @@ export default {
 }
 
 .box {
-  margin: 20% 8%;
+  margin: 150px 8%;
   text-align: center;
 }
 
 .welcome {
-  margin-bottom: 40px;
+  margin-bottom: 110px;
+}
+
+.welcome h1 {
+  font-size: 40px;
 }
 
 .bar {
   display: flex;
+  margin-top: 10px;
   margin-bottom: 10px;
 }
 
@@ -261,7 +268,7 @@ export default {
   width: 100%;
   display: flex;
   justify-content: center;
-  border-top: 3px solid #d0d0d0;
+  border-top: 6px solid #d0d0d0;
   position: relative;
   transition: all 200ms ease-in ;
 }
@@ -275,9 +282,10 @@ export default {
   border: none;
   border-radius: 50%;
   background-color: white;
-  z-index: -100;
   color: #a6a6a6;
   text-align: center;
+  font-size: medium;
+
 }
 
 .today-date button {
@@ -288,7 +296,8 @@ export default {
   display: block;
   background-color: pink;
   position: relative;
-  height: 20px;
+  height: 30px;
+  font-size: 20px;
   left: 28.6%;
   width: 28.6%;
 }
@@ -305,27 +314,28 @@ export default {
   border-radius: 50%;
   background-color: #c4c4c4;
   left: 4%;
-  top: 36.5%;
+  top: 38.5%;
 }
 
 .swiper-button-prev::before{
   content: '<';
-  font-size: small;
+  font-size: large;
+  color: #ffffff;
 }
 
 .swiper-button-next {
-  color: #ffffff;
   height: 22px;
   width: 22px;
   border-radius: 50%;
   background-color: #c4c4c4;
   right: 4%;
-  top: 36.5%;
+  top: 38.5%;
 }
 
 .swiper-button-next::before{
   content: '>';
-  font-size: small;
+  font-size: large;
+  color: #ffffff;
 }
 
 .swiper-button-next::after,
@@ -359,13 +369,13 @@ display: none;
   display: flex;
   flex-direction: column;
   content: '';
-  width: 10px;
-  height: 10px;
+  width: 15px;
+  height: 15px;
   background-color: #ffffff;
-  border-radius: 10px;
-  border: 3px solid #a6a6a6;
+  border-radius: 50%;
+  border: 5px solid #a6a6a6;
   position: absolute;
-  top: -10px;
+  top: -13px;
   transition: all 200ms step-start;
 }
 
@@ -380,10 +390,10 @@ display: none;
 
 .circle:hover {
   color:#a6a6a6 ;
-  width: 20px;
-  height: 20px;
-  border-radius: 25px;
-  border: 4px solid #a6a6a6;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 5px solid #a6a6a6;
   top: -16px;
 }
 
