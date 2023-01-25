@@ -129,6 +129,12 @@ export default {
   .b_transparentgray {
     background-color: #F6F6F6;
   }
+  .b_lightgray_l{
+    background-color: #EDEDED;
+  }
+  .b_kakao{
+    background-color: #fae100;
+  }
 
 
 

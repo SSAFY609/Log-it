@@ -1,5 +1,6 @@
 <template>
     <div class="container b_transparentgray">
+
       <div class="logo_box">
         <router-link :to="{name: 'MainPage'}" class="logo_img_box">
           <v-img class="logo_img"
@@ -107,6 +108,7 @@
       height: 70px;
       margin-left: 14px;
       display: flex;
+        
       align-items: center;
     }
     .slider_box {
