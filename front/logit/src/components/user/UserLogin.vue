@@ -18,20 +18,27 @@
               :type="show1 ? 'text' : 'password'"
               name="input-10-1"
               label="Password"
-              hint="At least 8 characters"
+          
               clearable
               @click:append-inner="show1 = !show1"
           ></v-text-field>
          
         </div>
         <div class="login-form-OauthBtn ">
-          <v-img class="logo_img_kakao" @click="kakaoLogin" 
-          :src="require('../../assets/images/kakao_login_btn.png')"
-          height="80"
-          /><v-img class="logo_img_google" @click="googleLogin" 
-          :src="require('../../assets/images/google_login_btn.png')"
-          height="80"
-          />
+            <div class="logo-img-kakao">
+              <v-img class="logo-img"
+              :src="require('../../assets/images/kakao_logo.png')"
+              height="25px"
+               />
+              <span class="logo-text">카카오 로그인</span>
+            </div>
+            <div class="logo-img-google">
+              <v-img class="logo-img google-logo-img"
+              :src="require('../../assets/images/google_logo.png')"
+              height="25px"
+               />
+              <span class="logo-text google-logo-text">구글 로그인</span>
+            </div>
         </div>
         <div  @click="loginCheck" class="login-form-input-button ">
           <div class="login-form-input-button-btn b_lightgray_l">
@@ -39,7 +46,10 @@
           </div>
         </div>
         <div class="login-form-link">
-
+          <span >비밀번호를 잊으셨습니까?</span>
+          <div>
+          <span>Log-it이 처음인가요?<spam>회원가입 바로가기</spam></span>
+          </div> 
         </div>
 
       </div>
@@ -54,7 +64,7 @@
   data: () => ({
     rules1: {
           required: value => !!value || 'Required.',
-          min: v => v.length >= 8 || 'Min 8 characters',
+          min: v => v.length >= 8 || '최소 8자리 이상 입력해주세요.',
           emailMatch: () => (`The email and password you entered don't match`),
         },
     rules2:
@@ -63,7 +73,7 @@
         value => (value || '').length <= 20 || 'Max 20 characters',
         value => {
           const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-          return pattern.test(value) || 'Invalid e-mail.'
+          return pattern.test(value) || '유효하지 않은 이메일 형식입니다.'
         },       
     ],
     
@@ -86,6 +96,12 @@
   </script >
   
   <style scoped>
+.login-form-link{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+}
   .login-container{
    display: flex;
    width: 100%;
@@ -104,18 +120,34 @@
   }
   .login-form-OauthBtn{
    display: flex;
-   justify-content: space-around;
+   justify-content: space-between;
   }
 
+  .logo-img-kakao{
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    border-radius: 6px;
+    width: 182px;
+    height: 45px;
+    margin: 10px 0px;
+  } .logo-img-google{
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    border-radius: 6px;
+    width: 182px;
+    height: 45px;
+    margin: 10px 0px;
+  }
+  .logo-text{
+    right: 18px;
+    position: relative;
+  }
   .logo_img:hover{
     cursor: pointer;
   }
-  .logo_img_kakao{
-    margin-right:10px;
-  }
-  .logo_img_google{
-    margin-left:10px;
-  }
+
   .login-form-input-button{
     display: flex;
     justify-content: center;
@@ -139,7 +171,6 @@
   .login-form-input-button-btn:active{
     background-color: #C0003A;
   }
-
   .login-btn{
     cursor: pointer;
     display: inline-block;
@@ -150,6 +181,23 @@
   .login-form-OauthBtn:hover{
     cursor: pointer;
   }
-
-
+  .logo-img-kakao{
+    background-color: #FEE500;
+    justify-content: center;
+  }
+  .logo-img-google{
+    background-color: white;
+    border: 1px solid rgb(207, 207, 207);
+  }
+  .logo-text{
+    font-size: 18px;
+    color:#191919;
+    ;
+  }
+  .google-logo-img{
+    right: 8px;
+  }
+  .google-logo-text{
+    right:23px;
+  }
   </style>
