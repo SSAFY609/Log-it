@@ -8,8 +8,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.util.Arrays;
-
 @EnableJpaAuditing
 @SpringBootApplication
 public class LogitApplication implements WebMvcConfigurer {
@@ -24,6 +22,6 @@ public class LogitApplication implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(jwtInterceptor).addPathPatterns("/**") // 기본 적용 경로
-				.excludePathPatterns(Arrays.asList("/user/login/**")); // 적용 제외 경로
+				.excludePathPatterns("/user/**"); // 적용 제외 경로
 	}
 }

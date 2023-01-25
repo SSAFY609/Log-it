@@ -100,7 +100,7 @@ public class JwtTest {
     }
 
     @Test
-    public void testGetInfoSuccess() throws Exception{
+    public void testGetInfoSuccess() throws Exception {
         // given
         String token = util.createAuthToken("seolhee2750@naver.com");
 

@@ -38,6 +38,7 @@ public class UserDto {
         this.deleted = user.isDeleted();
         this.createdTime = user.getCreatedTime();
         this.loginTime = user.getLoginTime();
+        this.refreshToken = user.getRefreshToken();
     }
 
     public User updateUser(Long id, UserDto userDto) {
@@ -51,8 +52,8 @@ public class UserDto {
                 .image(userDto.getImage())
                 .deleted(userDto.isDeleted())
                 .createdTime(userDto.getCreatedTime())
-                .loginTime(userDto.getLoginTime()).build();
-                // createdTime, loginTime 가져와야 함
+                .loginTime(userDto.getLoginTime())
+                .refreshToken(userDto.getRefreshToken()).build();
     }
 
     // DTO -> Entity 변환
@@ -67,6 +68,7 @@ public class UserDto {
                     .image(this.image)
                     .deleted(this.deleted)
                     .createdTime(this.createdTime)
-                    .loginTime(this.loginTime).build();
+                    .loginTime(this.loginTime)
+                    .refreshToken(this.refreshToken).build();
     }
 }

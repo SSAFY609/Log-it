@@ -27,11 +27,12 @@ public class UserController {
     @Autowired
     private JwtUtil jwtUtil;
 
+    // 로그인
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody UserDto userDto) throws Exception {
         log.info("login user info : {}", userDto);
         Map<String, Object> resultMap = new HashMap<>();
-        UserDto loginUser = userService.signin(userDto.getEmail(), userDto.getPw());
+        UserDto loginUser = userService.login(userDto.getEmail(), userDto.getPw());
 
         // 생성된 토큰 정보를 클라이언트에게 전달
         resultMap.put("jwt-auth-token", loginUser.getAuthToken());
@@ -43,10 +44,34 @@ public class UserController {
         return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
     }
 
+    // refresh-token 확인 후 auth-token 재발급
+    @PostMapping("/refresh")
+    public ResponseEntity<Map<String, Object>> refreshToken(@RequestParam String email) {
+        Map<String, Object> resultMap = new HashMap<>();
+        String token = userService.getRefreshToken(email);
+        jwtUtil.checkAndGetClaims(token);
+
+        if (token.equals(userService.getRefreshToken(email))) {
+            String authToken = jwtUtil.createAuthToken(email);
+            resultMap.put("jwt-auth-token", authToken);
+            Map<String, Object> info = jwtUtil.checkAndGetClaims(authToken);
+            resultMap.putAll(info);
+        }
+
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+    }
+
+    // 로그아웃
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(@RequestParam String email) {
+        log.debug("logout : {}", email);
+        userService.logout(email);
+        return new ResponseEntity<String>(SUCCESS, HttpStatus.ACCEPTED);
+    }
+
     // 회원 삽입 or 수정
     @PostMapping
     public ResponseEntity<String> saveUser(@RequestBody UserDto userDto) throws Exception {
-        System.out.println("===== saveUser =====");
         try {
             userService.saveUser(userDto);
             return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
@@ -59,21 +84,18 @@ public class UserController {
     // 전체 회원 조회
     @GetMapping("/get")
     public ResponseEntity<List<UserDto>> getAllUser() throws Exception {
-        System.out.println("===== getAllUser =====");
         return new ResponseEntity<List<UserDto>>(userService.getAllUser(), HttpStatus.OK);
     }
 
     // email로 회원 조회
     @GetMapping("/{email}")
     public ResponseEntity<UserDto> getUser(@PathVariable String email) throws Exception {
-        System.out.println("===== getUser =====");
         return new ResponseEntity<UserDto>(userService.getUser(email), HttpStatus.OK);
     }
 
     // 회원 삭제 (실제 삭제x, isDeleted 1로 업데이트)
     @PutMapping("/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable Long id) throws  Exception {
-        System.out.println("===== deleteUser =====");
         String result = userService.deleteUser(id);
         try {
             if(result.equals("success")) {
@@ -92,7 +114,6 @@ public class UserController {
     // 회원 삭제 (실제 삭제)
     @DeleteMapping("/{id}")
     public ResponseEntity<String> dropUser(@PathVariable Long id) throws Exception {
-        System.out.println("===== dropUser =====");
         boolean result = userService.dropUser(id);
         try {
             if(result) {

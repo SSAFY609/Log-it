@@ -48,4 +48,9 @@ public class JwtUtil {
         log.trace("claims : {}", claims);
         return claims.getBody();
     }
+
+    public String createRefreshToken() {
+        // 인증 정보는 유지하지 않고, 유효 기간을 auth-token의 5배로 설정
+        return create(null, "refreshToken", expireMin * 5);
+    }
 }

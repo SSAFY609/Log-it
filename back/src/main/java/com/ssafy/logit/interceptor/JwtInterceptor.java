@@ -23,7 +23,7 @@ public class JwtInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        // request의 헤더에서 jwt-quth-token으로 넘어온 것을 찾음
+        // request의 헤더에서 jwt-auth-token으로 넘어온 것을 찾음
         String authToken = request.getHeader("jwt-auth-token");
         log.debug("경로 : {}, 토큰 : {}", request.getServletPath(), authToken);
 

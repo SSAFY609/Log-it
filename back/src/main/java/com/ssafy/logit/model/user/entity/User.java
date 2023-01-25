@@ -17,7 +17,7 @@ public class User extends DateTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 10, nullable = false)
+    @Column(length = 10)
     private String name;
 
     @Column(length = 50, nullable = false)
@@ -26,31 +26,31 @@ public class User extends DateTime {
     @Column(length = 50, nullable = false)
     private String pw;
 
-    @Column(nullable = false)
     private int flag;
 
-    @Column(length = 10, nullable = false)
+    @Column(length = 10)
     private String studentNo;
 
     @Column(length = 100)
     private String image;
 
-    @Column(nullable = false)
     private boolean deleted;
+
+    private String refreshToken;
 
     // Entity -> DTO 변환
     public UserDto toDto() {
         return UserDto.builder()
-                .id(this.id)
-                .name(this.name)
-                .email(this.email)
-                .pw(this.pw)
-                .flag(this.flag)
-                .studentNo(this.studentNo)
-                .image(this.image)
-                .deleted(this.deleted)
-                .createdTime(super.getCreatedTime())
-                .loginTime(super.getLoginTime()).build();
-                // createdTime, loginTime 가져와야 함
+                        .id(this.id)
+                        .name(this.name)
+                        .email(this.email)
+                        .pw(this.pw)
+                        .flag(this.flag)
+                        .studentNo(this.studentNo)
+                        .image(this.image)
+                        .deleted(this.deleted)
+                        .createdTime(super.getCreatedTime())
+                        .loginTime(super.getLoginTime())
+                        .refreshToken(this.refreshToken).build();
     }
 }
