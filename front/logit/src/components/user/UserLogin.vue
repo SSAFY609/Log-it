@@ -6,20 +6,23 @@
             <v-text-field
             v-model="email"
             :readonly="loading"
-            :rules="rules"
+            :rules="rules2"
             class="mb-2"
             clearable
             label="Email"
-            style="border-radius:20px;"
              ></v-text-field>
-            <v-text-field
-            v-model="password"
-            :readonly="loading"
-            :rules="[required]"
-            clearable 
-            label="Password"
-            placeholder="Enter your password"
-            ></v-text-field>
+             <v-text-field
+              v-model="password"
+              :append-inner-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+              :rules="[rules1.required, rules1.min]"
+              :type="show1 ? 'text' : 'password'"
+              name="input-10-1"
+              label="Password"
+              hint="At least 8 characters"
+              clearable
+              @click:append-inner="show1 = !show1"
+          ></v-text-field>
+         
         </div>
         <div class="login-form-OauthBtn ">
           <v-img class="logo_img_kakao" @click="kakaoLogin" 
@@ -31,8 +34,9 @@
           />
         </div>
         <div  @click="loginCheck" class="login-form-input-button ">
-          <div class="login-form-input-button-btn b_lightgray_l"></div>
-          
+          <div class="login-form-input-button-btn b_lightgray_l">
+            <v-icon class="login-btn menu_icon f_darkgray ">mdi-arrow-right</v-icon> 
+          </div>
         </div>
         <div class="login-form-link">
 
@@ -42,20 +46,33 @@
     </div>
   </template>
   
-  <script>
+  <script >
+    
   export default {
   name: 'UserLogin',
+  
   data: () => ({
-      rules: [
+    rules1: {
+          required: value => !!value || 'Required.',
+          min: v => v.length >= 8 || 'Min 8 characters',
+          emailMatch: () => (`The email and password you entered don't match`),
+        },
+    rules2:
+      [
         value => !!value || 'Required.',
         value => (value || '').length <= 20 || 'Max 20 characters',
         value => {
           const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
           return pattern.test(value) || 'Invalid e-mail.'
-        },
+        },       
     ],
+    
     email: "",
-    password:"",
+    show1: false,
+    show2: true,
+    password: '',
+    rules1Check: false,
+    rules2Check: false,
     }),
  
    methods: {
@@ -109,5 +126,30 @@
     margin-bottom: 15px;
     width:85px;
     height: 85px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color .2s;
+    cursor: pointer;
   }
+  .login-form-input-button-btn:hover{
+    background-color: #FF0A54 ;
+    cursor: pointer;
+  }
+  .login-form-input-button-btn:active{
+    background-color: #C0003A;
+  }
+
+  .login-btn{
+    cursor: pointer;
+    display: inline-block;
+    position:relative;
+    font-size: 50px !important;
+    color:white;
+  }
+  .login-form-OauthBtn:hover{
+    cursor: pointer;
+  }
+
+
   </style>
