@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="discription_box lay2">
-      <div class="logo_box lay1">
+      <div class="logo_box">
         <v-img class="logo_img"
                :src="require('../../assets/images/logit_logo_text.png')"
 
@@ -13,12 +13,12 @@
         <p>진행중인 이벤트와 취업여정을 기록하면서 달라진 나의 모습을 발견하세요.
         </p>
       </div>
-      <div class="login_btn_box b_main hover_cursor">
+      <div class="login_btn_box b_main btn_hover">
         <div class="login_btn_text f_white">시작하기</div>
       </div>
       <div class="img_box lay1">
         <v-img class="laptop_img"
-               :src="require('../../assets/images/laptop2.png')"
+               :src="require('../../assets/images/laptop02.png')"
         />
       </div>
     </div>
@@ -57,7 +57,9 @@ export default {
   .logo_box {
     width: 200px;
     height: 70px;
-    margin: 10px auto;
+    margin: 0 auto;
+    margin-top: 10px;
+    
   }
   .logo_img {
     margin-left: 6px;
@@ -67,7 +69,7 @@ export default {
     width: 1300px;
     display: flex;
     justify-content: center;
-
+    margin-top: 0px;
   }
   .laptop_img {
     margin: 0 auto;
