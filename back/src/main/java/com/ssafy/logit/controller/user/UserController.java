@@ -1,5 +1,6 @@
 package com.ssafy.logit.controller.user;
 
+import com.ssafy.logit.jwt.JwtUtil;
 import com.ssafy.logit.model.user.dto.UserDto;
 import com.ssafy.logit.model.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -7,7 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -19,6 +23,25 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, Object>> login(@RequestBody UserDto userDto) throws Exception {
+        log.info("login user info : {}", userDto);
+        Map<String, Object> resultMap = new HashMap<>();
+        UserDto loginUser = userService.signin(userDto.getEmail(), userDto.getPw());
+
+        // 생성된 토큰 정보를 클라이언트에게 전달
+        resultMap.put("jwt-auth-token", loginUser.getAuthToken());
+
+        // 정보 확인을 위해 클라이언트로 전달
+        Map<String, Object> info = jwtUtil.checkAndGetClaims(loginUser.getAuthToken());
+        resultMap.putAll(info);
+
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+    }
 
     // 회원 삽입 or 수정
     @PostMapping

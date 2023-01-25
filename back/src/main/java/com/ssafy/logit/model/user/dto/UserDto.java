@@ -24,6 +24,9 @@ public class UserDto {
     private LocalDateTime createdTime;
     private LocalDateTime loginTime;
 
+    private String authToken; // 사용자 인증 정보 토큰
+    private String refreshToken; // authToken 갱신을 위한 토큰
+
     // List<Entity> -> List<DTO> 변환을 위함
     public UserDto(User user) {
         this.id = user.getId();

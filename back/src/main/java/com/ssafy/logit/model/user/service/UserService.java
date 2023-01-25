@@ -1,11 +1,14 @@
 package com.ssafy.logit.model.user.service;
 
+import com.ssafy.logit.jwt.JwtUtil;
 import com.ssafy.logit.model.user.dto.UserDto;
 import com.ssafy.logit.model.user.entity.User;
 import com.ssafy.logit.model.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -16,6 +19,18 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepo;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    public UserDto signin(String email, String pw) {
+        if(userRepo.findByEmail(email).isPresent() && userRepo.findByEmail(email).get().getPw().equals(pw)) {
+            String authToken = jwtUtil.createAuthToken(email);
+            return UserDto.builder().email(email).authToken(authToken).build();
+        } else {
+            throw new RuntimeException("일치하는 사용자 없음");
+        }
+    }
 
     @Transactional
     public void saveUser(UserDto userDto) {
