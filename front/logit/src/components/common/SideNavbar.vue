@@ -1,11 +1,14 @@
 <template>
     <div class="container b_transparentgray">
-      <div class="logo_box hover_cursor lay1">
-        <v-img class="logo_img"
-      :src="require('../../assets/images/logit_logo_text.png')"
-      height="110"
+      <div class="logo_box">
+        <router-link :to="{name: 'MainPage'}" class="logo_img_box">
+          <v-img class="logo_img"
+              :src="require('../../assets/images/logit_logo_text.png')"
+              height="110"
         />
-        <div @click="closeSidebar" class="slider_box b_lightgray hover_cursor lay2">
+        </router-link>
+        
+      <div @click="closeSidebar" class="slider_box b_lightgray slider_hover lay2">
           <v-icon class="silder_icon f_white">mdi-chevron-double-left</v-icon>
         </div>
       </div>
@@ -54,6 +57,7 @@
       <!-- 하단 옵션 메뉴 -->
 
       <div class="option_menu lay3">
+
         <router-link :to="{name: 'PageSetting'}" class="menu_item_box2 lay2 hover_cursor">
           <div class="item_container lay1">
             <div class="menu_icon_box2 lay3">
@@ -71,6 +75,7 @@
           <div class="menu_text_box2 f_darkgray lay3">Developer</div>
         </div>
         </router-link>
+        
       </div>
     </div>
   </template>
@@ -88,7 +93,7 @@
         eventTarget1.classList.toggle('nosee')
         eventTarget2.classList.toggle('nosee')
       }
-    }
+    },
   }
   </script>
   <style scoped>
@@ -101,7 +106,6 @@
       width: 220px;
       height: 70px;
       margin-left: 14px;
-      margin-top: 5px;
       display: flex;
       align-items: center;
     }
@@ -109,6 +113,7 @@
       width: 40px;
       height: 40px;
       margin-bottom: 14px;
+      margin-top: 6px;
       border-radius: 8px;
       display: flex;
       justify-content: center;
@@ -153,7 +158,8 @@
     .menu_item_box2 {
       display: flex;
       height: 60px;
-      align-items: center;  
+      align-items: center;
+      text-decoration: none;  
     }
     .menu_icon_box2 {
       margin-left: 26px;
@@ -193,6 +199,14 @@
     .item_container {
       display: flex;
     }
+    .logo_img_box {
+      display: flex;
+      width: 130px;
+      height: 60px;
+      justify-content: center;
+      margin: 10px 20px;
+    }
+
 
     
   </style>
