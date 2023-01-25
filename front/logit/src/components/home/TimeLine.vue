@@ -203,7 +203,8 @@ export default {
 }
 
 .box {
-  margin: 0 8%;
+  margin: 20% 8%;
+  text-align: center;
 }
 
 .welcome {
@@ -246,7 +247,6 @@ export default {
 .one {
   display: block;
   background-color: pink;
-  font-size: small;
   position: relative;
   height: 20px;
   left: 28.6%;
@@ -375,6 +375,6 @@ display: none;
 
 .date {
   margin-top: 20px;
-  font-size: x-small;
+  font-size: medium;
 }
 </style>
