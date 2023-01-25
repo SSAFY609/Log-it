@@ -7,6 +7,7 @@ import ProfileView from '../views/ProfileView.vue'
 import UserView from '../views/UserView.vue'
 import EtcView from '../views/EtcView.vue'
 import MainPage from '../components/home/MainPage.vue'
+import FirstTimeline from '../components/home/FirstTimeline.vue'
 import TimeLine from '../components/home/TimeLine.vue'
 import SearchResult from '../components/search/SearchResult.vue'
 import EventList from '../components/event/EventList.vue'
@@ -41,6 +42,11 @@ const router = createRouter({
           path: '',
           name: 'MainPage',
           component: MainPage
+        },
+        {
+          path: 'start',
+          name: 'FirstTimeline',
+          component: FirstTimeline
         },
         {
           path: 'timeline',
