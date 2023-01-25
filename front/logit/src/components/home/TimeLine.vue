@@ -1,13 +1,15 @@
 <template>
   <div class="box">
-      <div class="welcome">타임라인에 일정을 추가해보세요</div>
+      <h1 class="welcome">타임라인에 일정을 추가해보세요</h1>
       <swiper 
       class="mySwiper"
       :modules="modules"
       :navigation="true"
       :pagination="true"
+      @swiper="onSwiper"
+      @slideChange="onSlideChange"
       >
-          <swiper-slide v-for="(text, index) in dates" :key="index">
+          <swiper-slide v-for="(text, index) in state.dates" :key="index">
               <div class="one">엘렐레펠ㄹ렐레</div>
               <div class="bar">
                   <div class="hori-bar" v-for="(d, index) in text.str" :key="index">
@@ -40,8 +42,9 @@
 </template>
 
 <script>
-import { Swiper, SwiperSlide } from "swiper/vue";
+import { Swiper, SwiperSlide } from "vue-awesome-swiper";
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
+import { reactive, onBeforeMount, onMounted } from "vue";
 
 import "swiper/css";
   
@@ -56,6 +59,12 @@ export default {
   },
   data() {
       return {
+          
+      }
+  },
+  setup(){
+
+      const state = reactive({
           date: [],
           dates: [],
           day: ['일', '월', '화', '수', '목', '금', '토'],
@@ -63,33 +72,134 @@ export default {
           ed: new Date(),
           is_show: false,
           choose_date: '',
+          slide: 0,
           events: [
               {event_id: 4, start_date: new Date(2023,0,10), end_date: new Date(2023,1,10), name: 'SQLD 시험 준비'},
               {event_id: 1, start_date: new Date(2023,0,16), end_date: new Date(2023,2,12), name: '알고리즘 IM형'},
               {event_id: 2, start_date: new Date(2023,1,8), end_date: new Date(2023,3,13), name: '정보처리기사'},
               {event_id: 3, start_date: new Date(2023,0,24), end_date: new Date(2023,1,7), name: '알고리즘 A형'},
           ],
-      }
-  },
-  setup(){
+          swiper: null,
+      })
+
       const onSwiper = (swiper) => {
-          console.log(swiper);
+        // this.swiper = swiper;
+        console.log(swiper);
+        // console.log(this.swiper);
+        console.log(swiper['slideTo']);
+        state.swiper = swiper;
+        // swiper['slideTo'](this.slide_to, 1000, false)
+        
       };
+      
       const onSlideChange = () => {
           console.log('slide change');
       };
+
+      onBeforeMount(()=>{
+          // 들어온 events에서 최소날짜와 최대날짜 뽑기
+          const events = state.events;
+          let st = events.reduce((prev,curr) => {
+              return prev.start_date <= curr.start_date ? prev : curr;
+          })
+          console.log(st.start_date.toLocaleDateString());
+          let ed = events.reduce((prev, curr) => {
+              return curr.end_date <= prev.end_date ? prev : curr;
+          })
+          console.log(ed.end_date.toLocaleDateString());
+
+          state.st = st.start_date;
+          state.ed = ed.end_date;
+
+
+          // 시작날짜는 일요일부터, 끝나는 날짜는 토요일까지 될수 있도록
+          // 날짜 변경하기
+          if (state.st.getDay() != 0) {
+              const num = 0 - state.st.getDay();
+              state.st = addDays(state.st, num);
+          }
+
+          if (state.ed.getDay() != 6) {
+              const num = 6 - state.ed.getDay();
+              state.ed = addDays(state.ed, num);
+          }
+
+          // 테스트 (통)
+          // console.log(state.st.toLocaleDateString());
+          // console.log(state.ed.toLocaleDateString());
+
+          let new_date = state.st;
+          let idx = 0;
+          const today = new Date();
+          while (new_date < state.ed){
+              const push_date = {
+                  sun: new Date(),
+                  sat: new Date(),
+                  str: []
+              };
+              push_date.sun = new_date;
+              for(let i=0; i<7; i++){
+                  const target = addDays(new_date, i);
+                  if (target.toLocaleDateString() == today.toLocaleDateString()){
+                    state.slide = idx;
+                  }
+                  // const year = target.getFullYear();
+                  const month = target.getMonth() + 1;
+                  const date = target.getDate();
+                  const day = target.getDay();
+                  push_date.str.push(`${month >= 10 ? month : '0' + month}/${date >= 10 ? date : '0' + date}(${state.day[day]})`);
+                  if (i==6){
+                      push_date.sat = target;
+                  }
+              }
+              state.dates.push(push_date);
+              new_date = addDays(new_date, 7);
+              idx += 1;
+          }
+          console.log(state.slide)
+          console.log(state.dates);
+
+          // for (let i=-3; i<4; i++){
+          //     if(i == 0){
+          //         const day = today.getDay();
+          //         state.date.push(`오늘(${state.day[day]})`);
+          //     }else{
+          //         const target = addDays(today, i);
+          //         // const year = target.getFullYear();
+          //         const month = target.getMonth() + 1;
+          //         const date = target.getDate();
+          //         const day = target.getDay();
+          //         state.date.push(`${month >= 10 ? month : '0' + month}/${date >= 10 ? date : '0' + date}(${this.day[day]})`);
+          //     }
+          // }
+          // console.log(state.date);
+      })
+
+      onMounted(()=>{
+        console.log('onMounted?');
+        console.log(state.slide);
+        state.swiper.slideTo(state.slide)
+      })
+      
+      const addDays = (date, days) => {
+          const clone = new Date(date);
+          clone.setDate(date.getDate() + days)
+          return clone;
+      }
+
       return {
           onSwiper,
           onSlideChange,
+          state,
+          addDays,
           modules: [Navigation, Pagination, Scrollbar, A11y],
       };
   },
   methods: {
-      addDays(date, days) {
-          const clone = new Date(date);
-          clone.setDate(date.getDate() + days)
-          return clone;
+      slideChange() {
+        console.log(this.$refs.mySwiper.$swiper.activeIndex);
       },
+      
       show(index){
           const idx = index - 1;
           this.choose_date = this.date[idx];
@@ -117,78 +227,8 @@ export default {
   },
   created(){
 
-      // 들어온 events에서 최소날짜와 최대날짜 뽑기
-      const events = this.events;
-      let st = events.reduce((prev,curr) => {
-          return prev.start_date <= curr.start_date ? prev : curr;
-      })
-      console.log(st.start_date.toLocaleDateString());
-      let ed = events.reduce((prev, curr) => {
-          return curr.end_date <= prev.end_date ? prev : curr;
-      })
-      console.log(ed.end_date.toLocaleDateString());
-
-      this.st = st.start_date;
-      this.ed = ed.end_date;
-
-
-      // 시작날짜는 일요일부터, 끝나는 날짜는 토요일까지 될수 있도록
-      // 날짜 변경하기
-      if (this.st.getDay() != 0) {
-          const num = 0 - this.st.getDay();
-          this.st = this.addDays(this.st, num);
-      }
-
-      if (this.ed.getDay() != 6) {
-          const num = 6 - this.ed.getDay();
-          this.ed = this.addDays(this.ed, num);
-      }
-
-      // 테스트 (통)
-      // console.log(this.st.toLocaleDateString());
-      // console.log(this.ed.toLocaleDateString());
-
-      let new_date = this.st;
-      while (new_date < this.ed){
-          const push_date = {
-              sun: new Date(),
-              sat: new Date(),
-              str: []
-          };
-          push_date.sun = new_date;
-          for(let i=0; i<7; i++){
-              const target = this.addDays(new_date, i);
-              // const year = target.getFullYear();
-              const month = target.getMonth() + 1;
-              const date = target.getDate();
-              const day = target.getDay();
-              push_date.str.push(`${month >= 10 ? month : '0' + month}/${date >= 10 ? date : '0' + date}(${this.day[day]})`);
-              if (i==6){
-                  push_date.sat = target;
-              }
-          }
-          this.dates.push(push_date);
-          new_date = this.addDays(new_date, 7);
-      }
-
-      console.log(this.dates);
-
-      const today = new Date();        
-      for (let i=-3; i<4; i++){
-          if(i == 0){
-              const day = today.getDay();
-              this.date.push(`오늘(${this.day[day]})`);
-          }else{
-              const target = this.addDays(today, i);
-              // const year = target.getFullYear();
-              const month = target.getMonth() + 1;
-              const date = target.getDate();
-              const day = target.getDay();
-              this.date.push(`${month >= 10 ? month : '0' + month}/${date >= 10 ? date : '0' + date}(${this.day[day]})`);
-          }
-      }
-      console.log(this.date);
-  }
+    
+  },
 }
 </script>
 
