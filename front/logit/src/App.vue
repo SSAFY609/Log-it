@@ -77,6 +77,10 @@ export default {
     margin: 0;
     padding: 0;
   }
+  a {
+    text-decoration: none;
+  }
+
   /* 폰트 컬러*/
   .f_white {
     color: white ;
@@ -156,6 +160,15 @@ export default {
   }
   .hover_cursor:hover {
     cursor: pointer;
+  }
+  .btn_hover:hover {
+    cursor:pointer;
+    background-color: #c9023e;
+  }
+  
+  .slider_hover:hover {
+    cursor: pointer;
+    background-color: #c7c7c7;
   }
 
   
