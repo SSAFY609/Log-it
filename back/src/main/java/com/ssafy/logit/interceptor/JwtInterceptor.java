@@ -8,6 +8,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 @Component
@@ -32,7 +33,11 @@ public class JwtInterceptor implements HandlerInterceptor {
 
         // 유효한 토큰이면 진행, 그렇지 않으면 예외를 발생
         if(authToken != null) {
-            jwtUtil.checkAndGetClaims(authToken);
+            Map<String, Object> info = jwtUtil.checkAndGetClaims(authToken);
+            Object info_email = info.get("user");
+            String email = (String)info_email;
+            System.out.println("?????? email ???????" + email);
+            request.setAttribute("email", email);
             return true;
         } else {
             throw new RuntimeException("인증 토큰 없음");

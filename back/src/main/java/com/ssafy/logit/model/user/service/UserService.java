@@ -14,6 +14,10 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
 
+    private static final String SUCCESS = "success";
+    private static final String DELETED = "deleted";
+    private static final String NONE = "none";
+
     @Autowired
     private UserRepository userRepo;
 
@@ -50,7 +54,11 @@ public class UserService {
     @Transactional
     public void logout(String email) {
         System.out.println("===== logout =====");
-        saveRefreshToken(email, null);
+        if(userRepo.findByEmail(email).isPresent()) {
+            saveRefreshToken(email, null);
+        } else {
+            System.out.println("logout : " + email + "에 해당하는 사용자 없음");
+        }
     }
 
     public String getRefreshToken(String email) {
@@ -65,9 +73,9 @@ public class UserService {
     }
 
     @Transactional
-    public void saveUser(UserDto userDto) {
+    public void saveUser(UserDto userDto, boolean regist) {
         Optional<User> user = userRepo.findByEmail(userDto.getEmail());
-        if(user.isPresent()) { // update
+        if(user.isPresent() && !regist) { // update
             System.out.println("===== updateUser =====");
             userRepo.save(userDto.updateUser(user.get().getId(), userDto));
         } else { // insert
@@ -92,6 +100,16 @@ public class UserService {
         }
     }
 
+    public UserDto getUser(long id) {
+        if(userRepo.findById(id).isPresent()) {
+            System.out.println("===== getUser =====");
+            return userRepo.findById(id).get().toDto();
+        } else {
+            System.out.println("getUser : " + id + "에 해당하는 사용자 없음");
+            return null;
+        }
+    }
+
     @Transactional
     public String deleteUser(Long id) {
         Optional<User> user = userRepo.findById(id);
@@ -102,14 +120,14 @@ public class UserService {
                 System.out.println("===== deleteUser (회원 삭제) =====");
                 userDto.setDeleted(true);
                 userRepo.save(userDto.toEntity());
-                return "success";
+                return SUCCESS;
             } else {
                 System.out.println("===== deleteUser (이미 삭제된 회원) =====");
-                return "already deleted";
+                return DELETED;
             }
         } else {
             System.out.println("deleteUser : " + id + "에 해당하는 사용자 없음");
-            return "none";
+            return NONE;
         }
     }
 
