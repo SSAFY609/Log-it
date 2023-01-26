@@ -23,12 +23,12 @@ public class UserService {
     public UserDto login(String email, String pw) {
         Optional<User> user = userRepo.findByEmail(email);
         if(user.isPresent() && user.get().getPw().equals(pw)) {
-            // 인증 성공 시 auth-token과 refresh-token 함께 발급'
+            // 인증 성공 시 auth-token과 refresh-token 함께 발급
             System.out.println("===== login =====");
             String authToken = jwtUtil.createAuthToken(email);
             String refreshToken = jwtUtil.createRefreshToken();
             saveRefreshToken(email, refreshToken);
-            return UserDto.builder().email(email).authToken(authToken).build();
+            return UserDto.builder().email(email).refreshToken(refreshToken).authToken(authToken).build();
         } else {
             throw new RuntimeException("login : " + email + "에 해당하는 사용자 없음");
         }

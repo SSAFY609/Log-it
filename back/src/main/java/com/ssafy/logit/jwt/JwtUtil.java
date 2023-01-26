@@ -21,6 +21,11 @@ public class JwtUtil {
         return create(email, "authToken", expireMin);
     }
 
+    public String createRefreshToken() {
+        // 인증 정보는 유지하지 않고, 유효 기간을 auth-token의 5배로 설정
+        return create(null, "refreshToken", expireMin * 5);
+    }
+
     // 로그인 성공 시 사용자 정보를 기반으로 jwt 토큰을 생성해서 반환
     private String create(String email, String subject, long expireMin) {
         final JwtBuilder builder = Jwts.builder();
@@ -47,10 +52,5 @@ public class JwtUtil {
         Jws<Claims> claims = Jwts.parser().setSigningKey(salt.getBytes()).parseClaimsJws(jwt);
         log.trace("claims : {}", claims);
         return claims.getBody();
-    }
-
-    public String createRefreshToken() {
-        // 인증 정보는 유지하지 않고, 유효 기간을 auth-token의 5배로 설정
-        return create(null, "refreshToken", expireMin * 5);
     }
 }

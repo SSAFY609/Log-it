@@ -8,6 +8,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.StringTokenizer;
 
 @Component
 @Slf4j
@@ -23,8 +24,10 @@ public class JwtInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        // request의 헤더에서 jwt-auth-token으로 넘어온 것을 찾음
-        String authToken = request.getHeader("jwt-auth-token");
+        // request의 헤더에서 Authorization으로 넘어온 것을 찾음 (== jwt-auth-token)
+        StringTokenizer st = new StringTokenizer(request.getHeader("Authorization"));
+        String bearer = st.nextToken();
+        String authToken = st.nextToken();
         log.debug("경로 : {}, 토큰 : {}", request.getServletPath(), authToken);
 
         // 유효한 토큰이면 진행, 그렇지 않으면 예외를 발생
