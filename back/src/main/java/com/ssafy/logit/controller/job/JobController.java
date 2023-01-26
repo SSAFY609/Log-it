@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @RestController
 @RequestMapping("/job")
-@Tag(name="growth",description = "성장 여정 이벤트 API")
+@Tag(name="job",description = "취업 여정 이벤트 API")
 @RequiredArgsConstructor
 public class JobController {
     private final JobService jobService;
@@ -29,7 +29,7 @@ public class JobController {
 
 
 
-    @Operation(summary = "성장 이벤트 생성", description = "성장 이벤트를 생성")
+    @Operation(summary = "취업 이벤트 생성", description = "취업 이벤트를 생성")
     @PostMapping
     public ResponseEntity<CreateJobEventResponse> create(@RequestBody CreateJobEventRequest request){
          // todo        token -> userId
@@ -39,7 +39,7 @@ public class JobController {
     }
 
 
-    @Operation(summary = "성장 이벤트 모두 조회", description = "해당 유저의 성장 이벤트를 모두 조회")
+    @Operation(summary = "취업 이벤트 모두 조회", description = "해당 유저의 취업 이벤트를 모두 조회")
     @GetMapping
     public ResponseEntity<CreateJobEventResponse> getAll(){
         // todo        token -> userId
@@ -49,7 +49,7 @@ public class JobController {
 
 
 
-    @Operation(summary = "성장 이벤트 수정", description = "id값을 이용하여 성장 이벤트 수정합니다")
+    @Operation(summary = "취업 이벤트 수정", description = "id값을 이용하여 취업 이벤트 수정합니다")
     @PutMapping("/{id}")
     public ResponseEntity<CreateJobEventResponse> put(@PathVariable Long id,@RequestBody CreateJobEventRequest request){
         // todo token -> id
@@ -59,7 +59,7 @@ public class JobController {
     }
 
 
-    @Operation(summary = "성장 이벤트 삭제", description = "id값을 이용하여 성장 이벤트 삭제합니다.")
+    @Operation(summary = "취업 이벤트 삭제", description = "id값을 이용하여 취업 이벤트 삭제합니다.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String,String>> delete(@PathVariable Long id, @RequestBody CreateJobEventRequest request){
         // todo token -> id
