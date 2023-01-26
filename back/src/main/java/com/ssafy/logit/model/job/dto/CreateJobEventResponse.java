@@ -1,6 +1,5 @@
 package com.ssafy.logit.model.job.dto;
 
-
 import com.ssafy.logit.model.job.entity.JobEvent;
 import com.ssafy.logit.model.util.dto.EventDate;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,12 +15,14 @@ public class CreateJobEventResponse {
     @Column(length = 30)
     @Schema(description = "회사이름")
     private String companyName;
+
     @Column(length = 30)
     @Schema(description = "채용 유형", example = "인턴")
     private String type;
 
     @Schema(description = "결과")
     private boolean result;
+
     @Embedded
     private EventDate eventDate;
 
@@ -31,6 +32,4 @@ public class CreateJobEventResponse {
         this.result = jobEvent.isResult();
         this.eventDate = jobEvent.getEventDate();
     }
-
-
 }

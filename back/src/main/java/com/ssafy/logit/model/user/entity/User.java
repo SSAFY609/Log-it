@@ -35,7 +35,7 @@ public class User extends DateTime {
     @Column(length = 100)
     private String image;
 
-    private int deleted;
+    private boolean deleted;
 
     private String refreshToken;
 

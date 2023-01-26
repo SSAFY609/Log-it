@@ -1,6 +1,5 @@
 package com.ssafy.logit.model.user.dto;
 
-import com.ssafy.logit.model.user.entity.DateTime;
 import com.ssafy.logit.model.user.entity.User;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -20,7 +19,7 @@ public class UserDto {
     private int flag;
     private String studentNo;
     private String image;
-    private int deleted;
+    private boolean deleted;
     private LocalDateTime createdTime;
     private LocalDateTime loginTime;
 
@@ -35,7 +34,7 @@ public class UserDto {
         this.pw = user.getPw();
         this.flag = user.getFlag();
         this.studentNo = user.getStudentNo();
-        this.deleted = user.getDeleted();
+        this.deleted = user.isDeleted();
         this.createdTime = user.getCreatedTime();
         this.loginTime = user.getLoginTime();
         this.refreshToken = user.getRefreshToken();
@@ -50,7 +49,7 @@ public class UserDto {
                 .flag(userDto.getFlag())
                 .studentNo(userDto.getStudentNo())
                 .image(userDto.getImage())
-                .deleted(userDto.getDeleted())
+                .deleted(userDto.isDeleted())
                 .createdTime(userDto.getCreatedTime())
                 .loginTime(userDto.getLoginTime())
                 .refreshToken(userDto.getRefreshToken()).build();
