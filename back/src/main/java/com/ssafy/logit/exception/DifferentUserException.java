@@ -1,7 +1,6 @@
 package com.ssafy.logit.exception;
 
-public class DifferentUserException extends  RuntimeException{
-
+public class DifferentUserException extends RuntimeException {
 
     public DifferentUserException() {
         super();

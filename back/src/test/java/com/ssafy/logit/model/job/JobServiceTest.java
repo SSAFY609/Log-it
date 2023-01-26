@@ -3,7 +3,8 @@ package com.ssafy.logit.model.job;
 import com.ssafy.logit.model.job.entity.JobEvent;
 import com.ssafy.logit.model.job.repository.JobRepository;
 import com.ssafy.logit.model.user.entity.User;
-import com.ssafy.logit.model.user.repository.UserRepo;
+import com.ssafy.logit.model.user.repository.UserRepository;
+import com.ssafy.logit.model.user.repository.UserRepository;
 import com.ssafy.logit.model.util.dto.EventDate;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,11 +25,11 @@ class JobServiceTest {
     @Autowired
     JobRepository jobRepository;
     @Autowired
-    UserRepo userRepo;
+    UserRepository userRepo;
     @BeforeEach
     void initInstance(){
-        User user = new User( 1L,"test1", "abc@abc.com", "1234", 8, "123", null, 1);
-        User user2 = new User(2L,"test2", "abc@abc.com", "1234", 8, "123", null, 1);
+        User user = new User( 1L,"test1", "abc@abc.com", "1234", 8, "123", null, 1, null);
+        User user2 = new User(2L,"test2", "abc@abc.com", "1234", 8, "123", null, 1,null);
 
         userRepo.save(user);
         userRepo.save(user2);

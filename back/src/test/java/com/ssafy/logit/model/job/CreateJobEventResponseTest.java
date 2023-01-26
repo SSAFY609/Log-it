@@ -4,7 +4,8 @@ import com.ssafy.logit.model.job.dto.CreateJobEventResponse;
 import com.ssafy.logit.model.job.entity.JobEvent;
 import com.ssafy.logit.model.job.repository.JobRepository;
 import com.ssafy.logit.model.user.entity.User;
-import com.ssafy.logit.model.user.repository.UserRepo;
+import com.ssafy.logit.model.user.repository.UserRepository;
+import com.ssafy.logit.model.user.repository.UserRepository;
 import com.ssafy.logit.model.util.dto.EventDate;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,17 +20,17 @@ import java.time.LocalDate;
 class CreateJobEventResponseTest {
 
     @Autowired
-    UserRepo userRepo;
+    UserRepository userRepo;
     @Autowired
     JobRepository jobRepository;
 
     @BeforeEach
     public void init(){
-        User user = new User( 1L,"test1", "abc@abc.com", "1234", 8, "123", null, 1);
-        User user1 = new User( 2L,"test1", "abc@abc.com", "1234", 8, "123", null, 1);
-        User user2 = new User( 3L,"test1", "abc@abc.com", "1234", 8, "123", null, 1);
-        User user3 = new User( 4L,"test1", "abc@abc.com", "1234", 8, "123", null, 1);
-        User user4 = new User( 5L,"test1", "abc@abc.com", "1234", 8, "123", null, 1);
+        User user = new User( 1L,"test1", "abc@abc.com", "1234", 8, "123", null, 1, null);
+        User user1 = new User( 2L,"test1", "abc@abc.com", "1234", 8, "123", null, 1, null);
+        User user2 = new User( 3L,"test1", "abc@abc.com", "1234", 8, "123", null, 1, null);
+        User user3 = new User( 4L,"test1", "abc@abc.com", "1234", 8, "123", null, 1, null);
+        User user4 = new User( 5L,"test1", "abc@abc.com", "1234", 8, "123", null, 1, null);
         userRepo.save(user);
         userRepo.save(user1);
         userRepo.save(user2);

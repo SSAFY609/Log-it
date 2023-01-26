@@ -7,14 +7,12 @@ import com.ssafy.logit.model.job.dto.CreateJobEventResponse;
 import com.ssafy.logit.model.job.entity.JobEvent;
 import com.ssafy.logit.model.job.repository.JobRepository;
 import com.ssafy.logit.model.user.entity.User;
-import com.ssafy.logit.model.user.repository.UserRepo;
+import com.ssafy.logit.model.user.repository.UserRepository;
 import com.ssafy.logit.model.util.dto.EventDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestAttribute;
 
-import java.security.acl.NotOwnerException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -24,7 +22,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class JobService {
     private final JobRepository jobRepository;
-    private final UserRepo userRepo;
+    private final UserRepository userRepo;
 
     public List<JobEvent> getEvents(Long userId){
         User user = userRepo.findById(userId).orElseThrow(NoSuchElementException::new);
