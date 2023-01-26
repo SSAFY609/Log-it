@@ -55,7 +55,7 @@ export default {
     height: 40px;
     border-radius: 8px;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
     
   }
@@ -94,7 +94,7 @@ export default {
     width: 200px;
     height: 36px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: end;
     border-left: 1.5px solid lightgray;
     
