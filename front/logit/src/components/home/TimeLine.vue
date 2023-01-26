@@ -1,43 +1,53 @@
 <template>
-  <div class="box">
-      <h1 class="welcome">❤오하늘❤ 님의 타임라인</h1>
-      <swiper 
-      class="mySwiper"
-      :modules="modules"
-      :navigation="true"
-      :pagination="true"
-      @swiper="onSwiper"
-      @slideChange="onSlideChange"
-      >
-          <swiper-slide v-for="(text, index) in state.dates" :key="index">
-              <div class="one">엘렐레펠ㄹ렐레</div>
-              <div class="bar">
-                  <div class="hori-bar" v-for="(d, index) in text.str" :key="index">
-                      <!-- <div class="today-date" v-if="index == 4">
-                          {{ date[index-1] }}
-                      </div> -->
-                      <div class="date">
-                          {{ d }}
-                      </div>
-                      <span class="circle">
-                          <div class="hover"><button @click="show(index)">+</button></div>
-                      </span>
+  <div class="container">
+    <div class="box">
+        <h1 class="welcome">❤오하늘❤ 님의 타임라인</h1>
+        <div>
+          <v-btn @click="goslide(0)"><v-icon>mdi-chevron-triple-left</v-icon></v-btn>
+          <v-btn @click="nextSlide"><v-icon>mdi-chevron-double-left</v-icon></v-btn>
+          <v-btn @click="prevSlide(0)"><v-icon>mdi-chevron-double-right</v-icon></v-btn>
+          <v-btn @click="goslide(-1)"><v-icon>mdi-chevron-triple-right</v-icon></v-btn>
+        </div>
+        <swiper 
+        class="mySwiper"
+        :modules="modules"
+        :navigation="true"
+        :pagination="true"
+        @swiper="onSwiper"
+        >
+            <swiper-slide v-for="(date, index) in state.dates" :key="index">
+                <div class="grow">
+                  <div v-for="(data, index) in date.growths" :key="index" :class="`event ${data.start} ${data.period} floor${index + 1}`">
+                    {{ data.title }}
                   </div>
-              </div>
-              <a class="one" href="#">엘렐레</a>
-          </swiper-slide>
-          <!-- <div class="swiper-button-prev">전</div>
-          <div class="swiper-button-next">후</div> -->
-      </swiper>
-      <div class="show-btn">
-          <div v-if="this.choose_date" style="margin-bottom: 20px;">
-              {{ choose_date }}
-          </div>
-          <div>
-              <span class="add-event nosee"><button>성장여정추가</button></span>
-              <span class="add-job nosee"><button>취업여정추가</button></span>
-          </div>
-      </div>
+                </div>
+                <div class="bar">
+                    <div class="hori-bar" v-for="(d, index) in date.str" :key="index">
+                        <!-- <div class="today-date" v-if="index == 4">
+                            {{ date[index-1] }}
+                        </div> -->
+                        <div class="date">
+                            {{ d }}
+                        </div>
+                        <span class="circle">
+                            <div class="hover"><button @click="show(index)">+</button></div>
+                        </span>
+                    </div>
+                </div>
+            </swiper-slide>
+            <!-- <div class="swiper-button-prev">전</div>
+            <div class="swiper-button-next">후</div> -->
+        </swiper>
+        <!-- <div class="show-btn">
+            <div v-if="this.choose_date" style="margin-bottom: 20px;">
+                {{ choose_date }}
+            </div>
+            <div>
+                <span class="add-event nosee"><button>성장여정추가</button></span>
+                <span class="add-job nosee"><button>취업여정추가</button></span>
+            </div>
+        </div> -->
+    </div>
   </div>
 </template>
 
@@ -79,6 +89,8 @@ export default {
               {event_id: 2, start_date: new Date(2023,1,8), end_date: new Date(2023,3,13), name: '정보처리기사'},
               {event_id: 3, start_date: new Date(2023,0,24), end_date: new Date(2023,1,7), name: '알고리즘 A형'},
           ],
+          start: ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'],
+          period: ['one', 'two', 'three', 'four', 'five', 'six', 'seven'],
           swiper: null,
       })
 
@@ -92,13 +104,14 @@ export default {
         
       };
       
-      const onSlideChange = () => {
-          console.log('slide change');
-      };
-
       onBeforeMount(()=>{
-          // 들어온 events에서 최소날짜와 최대날짜 뽑기
+          // event 가져와서 start_date 순으로 정렬 (오름차순)
           const events = state.events;
+          events.sort((a, b) => {
+            return a.start_date - b.start_date;
+          });
+        
+          // 들어온 events에서 최소날짜와 최대날짜 뽑기
           let st = events.reduce((prev,curr) => {
               return prev.start_date <= curr.start_date ? prev : curr;
           })
@@ -137,22 +150,75 @@ export default {
                   sun: new Date(),
                   sat: new Date(),
                   str: [],
-                  events: [{}]
+                  growths: [],
+                  jobs: [],
               };
               push_date.sun = new_date;
               for(let i=0; i<7; i++){
                   const target = addDays(new_date, i);
                   if (target.toLocaleDateString() == today.toLocaleDateString()){
                     state.slide = idx;
+                    const day = target.getDay();
+                    push_date.str.push(`오늘(${state.day[day]})`);
                   }
-                  // const year = target.getFullYear();
-                  const month = target.getMonth() + 1;
-                  const date = target.getDate();
-                  const day = target.getDay();
-                  push_date.str.push(`${month >= 10 ? month : '0' + month}/${date >= 10 ? date : '0' + date}(${state.day[day]})`);
+                  else{
+                    // const year = target.getFullYear();
+                    const month = target.getMonth() + 1;
+                    const date = target.getDate();
+                    const day = target.getDay();
+                    push_date.str.push(`${month >= 10 ? month : '0' + month}/${date >= 10 ? date : '0' + date}(${state.day[day]})`);
+                  }
                   if (i==6){
                       push_date.sat = target;
                   }
+              }
+
+              // 이벤트들 등록 (쪼개서)
+              for(let i=0; i<events.length; i++){
+                const sd = events[i].start_date;
+                const ed = events[i].end_date;
+                const name = events[i].name;
+                if (sd < push_date.sun) {
+                  if (ed < push_date.sun) {
+                    continue;
+                  } else if (push_date.sun <= ed && ed <= push_date.sat) {
+                    const week = ed.getDay();
+                    const event = {
+                      start: state.start[0],
+                      period: state.period[week],
+                      title: name
+                    };
+                    push_date.growths.push(event);
+                  } else {
+                    const event = {
+                      start: state.start[0],
+                      period: state.period[6],
+                      title: name
+                    };
+                    push_date.growths.push(event);
+                  }
+                } else if (push_date.sun <= sd && sd <= push_date.sat){
+                  if(push_date.sun <= ed && ed <= push_date.sat){
+                    const st_week = sd.getDay();
+                    const ed_week = ed.getDay();
+                    const event = {
+                      start: state.start[st_week],
+                      period: state.period[ed_week - st_week],
+                      title: name
+                    };
+                    push_date.growths.push(event);
+                  } else {
+                    const st_week = sd.getDay();
+                    const event = {
+                      start: state.start[st_week],
+                      period: state.period[6 - st_week],
+                      title: name
+                    };
+                    push_date.growths.push(event);
+                  }
+                } else {
+                  break;
+                }
               }
               state.dates.push(push_date);
               new_date = addDays(new_date, 7);
@@ -189,11 +255,28 @@ export default {
           return clone;
       }
 
+      const prevSlide = () => {
+        state.swiper.slideNext()
+      }
+
+      const nextSlide = () => {
+        state.swiper.slidePrev()
+      }
+
+      const goslide = (page) => {
+        if (page == -1) {
+          page = state.dates.length;
+        }
+        state.swiper.slideTo(page)
+      }
+
       return {
           onSwiper,
-          onSlideChange,
           state,
           addDays,
+          prevSlide,
+          nextSlide,
+          goslide,
           modules: [Navigation, Pagination, Scrollbar, A11y],
       };
   },
@@ -234,27 +317,44 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.container {
+  /* background-color: gold; */
+  height: 100%;
+  width:100%;
+  display: flex;
+  justify-content: center;
+}
 
 .swiper-slide {
   width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .swiper {
   position: static;
+  height: 400px;
 }
 
 .box {
-  margin: 150px 8%;
+  margin-top: 150px;
+  width: 70%;
   text-align: center;
+  /* background-color: pink; */
 }
 
 .welcome {
-  margin-bottom: 110px;
+  margin-bottom: 50px;
 }
 
 .welcome h1 {
   font-size: 40px;
+}
+
+.grow div{
+  margin-top: 3px;
 }
 
 .bar {
@@ -292,29 +392,92 @@ export default {
   color: #ffb272;
 }
 
-.one {
+.event {
   display: block;
-  background-color: pink;
-  position: relative;
+  position: absolute;
   height: 30px;
   font-size: 20px;
-  left: 28.6%;
-  width: 28.6%;
 }
 
-.swiper-pagination {
-  position: static;
-  margin-top: 20px;
+.mon {
+  left: 14.28%;
+}
+
+.tue {
+  left: 28.56%;
+}
+
+.wed {
+  left: 42.84%;
+}
+
+.thu {
+  left: 57.12%;
+}
+
+.fri {
+  left: 71.4%;
+}
+
+.sat {
+  left: 85.68%;
+}
+
+.one {
+  width: 14.28%;
+}
+
+.two {
+  width: 28.56%;
+}
+
+.three {
+  width: 42.84%;
+}
+
+.four {
+  width: 57.12%;
+}
+
+.five {
+  width: 71.4%;
+}
+
+.six {
+  width: 85.68%;
+}
+
+.seven {
+  width: 100%;
+}
+
+
+.floor1 {
+  top: 130px;
+  background-color: rgb(255, 197, 207);
+}
+.floor2 {
+  top: 95px;
+  background-color: rgb(255, 210, 155);
+}
+.floor3 {
+  top: 60px;
+  background-color: rgb(255, 255, 172);
+}
+
+.floor4 {
+  top: 25px;
+  background-color: rgb(183, 255, 183);
 }
 
 .swiper-button-prev {
   color: #ffffff;
-  height: 22px;
-  width: 22px;
+  height: 30px;
+  width: 30px;
   border-radius: 50%;
   background-color: #c4c4c4;
   left: 4%;
-  top: 38.5%;
+  top: 45.9%;
 }
 
 .swiper-button-prev::before{
@@ -324,12 +487,12 @@ export default {
 }
 
 .swiper-button-next {
-  height: 22px;
-  width: 22px;
+  height: 30px;
+  width: 30px;
   border-radius: 50%;
   background-color: #c4c4c4;
   right: 4%;
-  top: 38.5%;
+  top: 45.9%;
 }
 
 .swiper-button-next::before{

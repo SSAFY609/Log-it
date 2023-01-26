@@ -1,30 +1,32 @@
 <template>
-  <div class="box">
-      <div class="welcome">타임라인에 일정을 추가해보세요</div>
-      <div class="bar">
-          <div class="hori-bar" v-for="index in 7" :key="index">
-              <div class="today-date" v-if="index == 4">
-                  {{ date[index-1] }}
-              </div>
-              <div class="date" v-else>
-                  {{ date[index-1] }}
-              </div>
-              <span class="circle">
-                  <!-- <div class="add-event nosee"><button>성장여정추가</button></div> -->
-                  <div class="hover"><button @click="show(index)">+</button></div>
-                  <!-- <div class="add-job nosee"><button>취업여정추가</button></div> -->
-              </span>
-          </div>
-      </div>
-      <div class="show-btn">
-          <div v-if="this.choose_date" style="margin-bottom: 20px;">
-              {{ choose_date }}
-          </div>
-          <div>
-              <span class="add-event nosee"><button>성장여정추가</button></span>
-              <span class="add-job nosee"><button>취업여정추가</button></span>
-          </div>
-      </div>
+  <div class="container">
+    <div class="box">
+        <div class="welcome">타임라인에 일정을 추가해보세요</div>
+        <div class="bar">
+            <div class="hori-bar" v-for="index in 7" :key="index">
+                <div class="today-date" v-if="index == 4">
+                    {{ date[index-1] }}
+                </div>
+                <div class="date" v-else>
+                    {{ date[index-1] }}
+                </div>
+                <span class="circle">
+                    <!-- <div class="add-event nosee"><button>성장여정추가</button></div> -->
+                    <div class="hover"><button @click="show(index)">+</button></div>
+                    <!-- <div class="add-job nosee"><button>취업여정추가</button></div> -->
+                </span>
+            </div>
+        </div>
+        <div class="show-btn">
+            <div v-if="this.choose_date" style="margin-bottom: 20px;">
+                {{ choose_date }}
+            </div>
+            <div>
+                <span class="add-event nosee"><button>성장여정추가</button></span>
+                <span class="add-job nosee"><button>취업여정추가</button></span>
+            </div>
+        </div>
+    </div>
   </div>
 </template>
 
