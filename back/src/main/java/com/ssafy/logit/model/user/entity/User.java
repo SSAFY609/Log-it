@@ -15,6 +15,7 @@ public class User extends DateTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
 
     @Column(length = 10)
@@ -34,7 +35,7 @@ public class User extends DateTime {
     @Column(length = 100)
     private String image;
 
-    private boolean deleted;
+    private int deleted;
 
     private String refreshToken;
 

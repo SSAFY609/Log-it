@@ -20,7 +20,7 @@ public class UserDto {
     private int flag;
     private String studentNo;
     private String image;
-    private boolean deleted;
+    private int deleted;
     private LocalDateTime createdTime;
     private LocalDateTime loginTime;
 
@@ -35,7 +35,7 @@ public class UserDto {
         this.pw = user.getPw();
         this.flag = user.getFlag();
         this.studentNo = user.getStudentNo();
-        this.deleted = user.isDeleted();
+        this.deleted = user.getDeleted();
         this.createdTime = user.getCreatedTime();
         this.loginTime = user.getLoginTime();
         this.refreshToken = user.getRefreshToken();
@@ -50,7 +50,7 @@ public class UserDto {
                 .flag(userDto.getFlag())
                 .studentNo(userDto.getStudentNo())
                 .image(userDto.getImage())
-                .deleted(userDto.isDeleted())
+                .deleted(userDto.getDeleted())
                 .createdTime(userDto.getCreatedTime())
                 .loginTime(userDto.getLoginTime())
                 .refreshToken(userDto.getRefreshToken()).build();
