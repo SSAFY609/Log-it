@@ -71,7 +71,7 @@ export default {
   src: url('assets/fonts/AppleSDGothicNeoH.ttf') format('truetype');
   }
   h1 {
-    font-family: AppleH;
+    font-family: AppleB;
   }
   body {
     margin: 0;
@@ -144,9 +144,9 @@ export default {
   .SideNavbar_space {
     width: 270px;
     height: 100%;
-    margin-left:60px;
-    outline: 2px dashed green;
-    background-color: red;
+    /* margin-left:60px; */
+    /* outline: 2px dashed green; */
+    /* background-color: red; */
   }
   .app_container {
     width: 100%;

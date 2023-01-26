@@ -30,7 +30,7 @@
                             {{ d }}
                         </div>
                         <span class="circle">
-                            <div class="hover"><button @click="show(index)">+</button></div>
+                            <div class="hover"><button @click="show(index)" style="font-size:large">+</button></div>
                         </span>
                     </div>
                 </div>
@@ -347,9 +347,6 @@ export default {
 
 .welcome {
   margin-bottom: 50px;
-}
-
-.welcome h1 {
   font-size: 40px;
 }
 
@@ -381,7 +378,7 @@ export default {
 .hover button {
   border: none;
   border-radius: 50%;
-  background-color: white;
+  background-color: rgba(255, 255, 172, 0);
   color: #a6a6a6;
   text-align: center;
   font-size: medium;
