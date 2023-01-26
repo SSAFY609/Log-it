@@ -13,6 +13,7 @@ public class User extends DateTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
 
     @Column(length = 10, nullable = false)

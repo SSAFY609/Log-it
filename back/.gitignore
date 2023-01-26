@@ -43,3 +43,4 @@ out/
 .LSOverride
 
 **/application.properties
+**/application.yml
