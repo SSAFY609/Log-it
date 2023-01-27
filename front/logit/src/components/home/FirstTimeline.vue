@@ -1,30 +1,33 @@
 <template>
-  <div class="box">
-      <div class="welcome">타임라인에 일정을 추가해보세요</div>
-      <div class="bar">
-          <div class="hori-bar" v-for="index in 7" :key="index">
-              <div class="today-date" v-if="index == 4">
-                  {{ date[index-1] }}
-              </div>
-              <div class="date" v-else>
-                  {{ date[index-1] }}
-              </div>
-              <span class="circle">
-                  <!-- <div class="add-event nosee"><button>성장여정추가</button></div> -->
-                  <div class="hover"><button @click="show(index)">+</button></div>
-                  <!-- <div class="add-job nosee"><button>취업여정추가</button></div> -->
-              </span>
-          </div>
-      </div>
-      <div class="show-btn">
-          <div v-if="this.choose_date" style="margin-bottom: 20px;">
-              {{ choose_date }}
-          </div>
-          <div>
-              <span class="add-event nosee"><button>성장여정추가</button></span>
-              <span class="add-job nosee"><button>취업여정추가</button></span>
-          </div>
-      </div>
+  <div class="container">
+    <div class="box">
+        <h1 class="welcome">날짜를 선택해 ✔</h1>
+        <h1 class="welcome" style="margin-bottom: 100px">타임라인에 일정을 추가해보세요</h1>
+        <div class="show-btn">
+            <div v-if="this.choose_date" style="margin-bottom: 20px; font-size:30px">
+                {{ choose_date }}
+            </div>
+            <div>
+                <span class="add-event nosee"><v-btn>성장여정추가</v-btn></span>
+                <span class="add-job nosee"><v-btn>취업여정추가</v-btn></span>
+            </div>
+        </div>
+        <div class="bar">
+            <div class="hori-bar" v-for="index in 7" :key="index">
+                <div class="today-date" v-if="index == 4">
+                    {{ date[index-1] }}
+                </div>
+                <div class="date" v-else>
+                    {{ date[index-1] }}
+                </div>
+                <span class="circle">
+                    <!-- <div class="add-event nosee"><button>성장여정추가</button></div> -->
+                    <div class="hover"><button @click="show(index)" style="font-size:large">+</button></div>
+                    <!-- <div class="add-job nosee"><button>취업여정추가</button></div> -->
+                </span>
+            </div>
+        </div>
+    </div>
   </div>
 </template>
 
@@ -83,21 +86,38 @@ export default {
 }
 </script>
 
-<style>
-.box {
-  margin: 0 50px;
+<style scoped>
+.container {
+  /* background-color: gold; */
+  height: 100%;
+  width:100%;
+  display: flex;
+  justify-content: center;
 }
+
+.box {
+  margin-top: 150px;
+  width: 70%;
+  text-align: center;
+}
+
+.welcome {
+  margin-bottom: 10px;
+  font-size: 50px;
+}
+
 
 .bar {
   display: flex;
+  margin-top: 50px;
 }
 
 .hori-bar {
-  margin-top: 50px;
+  margin-top: 20px;
   width: 100%;
   display: flex;
   justify-content: center;
-  border-top: 3px solid #d0d0d0;
+  border-top: 7px solid #d0d0d0;
   position: relative;
   transition: all 200ms ease-in ;
 }
@@ -111,9 +131,9 @@ export default {
   border: none;
   border-radius: 50%;
   background-color: white;
-  z-index: -100;
   color: #a6a6a6;
   text-align: center;
+  font-size: medium;
 }
 
 .today-date button {
@@ -139,21 +159,25 @@ export default {
   display: none;
 }
 
-.show-btn {
-  margin-top: 50px;
+/* .show-btn {
+  margin-top: 100px;
+} */
+
+.hover button {
+  background-color: rgba(1, 1, 1, 0);
 }
 
 .circle {
   display: flex;
   flex-direction: column;
   content: '';
-  width: 10px;
-  height: 10px;
+  width: 35px;
+  height: 35px;
   background-color: #ffffff;
-  border-radius: 10px;
-  border: 3px solid #a6a6a6;
+  border-radius: 50%;
+  border: 6px solid #a6a6a6;
   position: absolute;
-  top: -10px;
+  top: -20px;
   transition: all 200ms step-start;
 }
 
@@ -168,11 +192,11 @@ export default {
 
 .circle:hover {
   color:#a6a6a6 ;
-  width: 20px;
-  height: 20px;
-  border-radius: 25px;
-  border: 4px solid #a6a6a6;
-  top: -16px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 7px solid #a6a6a6;
+  top: -22px;
 }
 
 .circle:hover >.hover{
@@ -197,12 +221,12 @@ export default {
 **/
 
 .today-date {
-  margin-top: 18px;
-  font-size: small;
+  margin-top: 27px;
+  font-size: x-large;
 }
 
 .date {
-  margin-top: 20px;
-  font-size: x-small;
+  margin-top: 30px;
+  font-size: large;
 }
 </style>

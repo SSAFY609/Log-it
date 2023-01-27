@@ -71,7 +71,7 @@ export default {
   src: url('assets/fonts/AppleSDGothicNeoH.ttf') format('truetype');
   }
   h1 {
-    font-family: AppleH;
+    font-family: AppleB;
   }
   body {
     margin: 0;
@@ -150,7 +150,9 @@ export default {
   .SideNavbar_space {
     width: 270px;
     height: 100%;
-    margin-left: 0px;
+    /* margin-left:60px; */
+    /* outline: 2px dashed green; */
+    /* background-color: red; */
   }
   .app_container {
     width: 100%;
@@ -177,7 +179,41 @@ export default {
     background-color: #c7c7c7;
   }
 
-  
+  /* .swiper-button-prev {
+  color: #ffffff;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  background-color: #c4c4c4;
+  left: 10% !important;
+  top: 45.9%;
+}
+
+.swiper-button-prev::before{
+  content: '<';
+  font-size: large;
+  color: #ffffff;
+}
+
+.swiper-button-next {
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  background-color: #c4c4c4;
+  right: 10% !important;
+  top: 45.9%;
+}
+
+.swiper-button-next::before{
+  content: '>';
+  font-size: large;
+  color: #ffffff;
+} */
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+display: none;
+}
 
 
 </style>
