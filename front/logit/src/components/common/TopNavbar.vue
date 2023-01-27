@@ -10,12 +10,12 @@
           <div class="search_content">검색</div>
         </div>
       </div>
-      <div class="login_btn_box right_box_items">
+      <div v-if="!state.loginUser" class="login_btn_box right_box_items">
         <router-link :to="{name: 'UserLogin'}" class="login_btn b_main btn_hover">
           <div class="login_btn_text f_white">로그인</div>
         </router-link>
       </div>
-      <div class="profile_box right_box_items"></div>
+      <div v-else class="profile_box right_box_items">프로필</div>
     </div>
     
 
@@ -26,17 +26,24 @@
 
 export default {
   name: 'TopNavbar',
-  methods: {
-    openSidebar() {
+
+  setup() {
+    const state = {
+      loginUser: null,
+    }
+    const openSidebar = () => {
       const eventTarget1 = document.querySelector('.SideNavbar_box')
       const eventTarget2 = document.querySelector('.SideNavbar_space')
 
       eventTarget1.classList.toggle('nosee')
       eventTarget2.classList.toggle('nosee')
     }
+    return {
+      state,
+      openSidebar,
+    }
   }
-  
-}
+} 
 </script>
 <style scoped>
   .container {
@@ -100,8 +107,7 @@ export default {
     
   }
   .profile_box {
-    width: 230px;
-    display: none;
+    width: 200px;
   }
   .login_btn {
     width: 100px;

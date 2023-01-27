@@ -16,40 +16,40 @@
     <!-- 사이드바 메뉴 영역-->
     <div class="menu_container lay1">
       <router-link :to="{name: 'MainPage'}" class="menu_item_box lay2 hover_cursor">
-        <div class="menu_icon_box lay3">
-          <v-icon class="menu_icon f_icon">mdi-layers</v-icon>  
+        <div class="menu_icon_box lay2 btn_clicked" @click="btnClicked">
+          <v-icon class="menu_icon f_icon lay3 btn_clicked2">mdi-layers</v-icon>  
+          <div class="menu_text_box f_darkgray lay3 btn_clicked2">홈</div>
         </div>
-        <div class="menu_text_box f_darkgray lay3">홈</div>
       </router-link>
       <router-link :to="{name: 'SearchResult'}" class="menu_item_box lay2 hover_cursor">
-        <div class="menu_icon_box lay3">
+        <div class="menu_icon_box lay3" @click="btnClicked">
           <v-icon class="menu_icon f_icon">mdi-magnify</v-icon>  
+          <div class="menu_text_box f_darkgray lay3">검색</div>
         </div>
-        <div class="menu_text_box f_darkgray lay3">검색</div>
       </router-link>
       <router-link :to="{name: 'EventList'}" class="menu_item_box lay2 hover_cursor">
-        <div class="menu_icon_box lay3">
+        <div class="menu_icon_box lay3" @click="btnClicked">
           <v-icon class="menu_icon f_icon">mdi-list-status</v-icon>  
+          <div class="menu_text_box f_darkgray lay3">성장일지</div>
         </div>
-        <div class="menu_text_box f_darkgray lay3">성장일지</div>
       </router-link>
       <router-link :to="{name: 'JobList'}" class="menu_item_box lay2 hover_cursor">
-        <div class="menu_icon_box lay3">
+        <div class="menu_icon_box lay3" @click="btnClicked">
           <v-icon class="menu_icon f_icon">mdi-briefcase</v-icon>  
+          <div class="menu_text_box f_darkgray lay3">취업일지</div>
         </div>
-        <div class="menu_text_box f_darkgray lay3">취업일지</div>
       </router-link>
       <router-link :to="{name: 'ProfilePage'}" class="menu_item_box lay2 hover_cursor">
-        <div class="menu_icon_box lay3">
+        <div class="menu_icon_box lay3" @click="btnClicked">
           <v-icon class="menu_icon f_icon">mdi-account-circle</v-icon>  
+          <div class="menu_text_box f_darkgray lay3">프로필</div>
         </div>
-        <div class="menu_text_box f_darkgray lay3">프로필</div>
       </router-link>
       <div class="menu_item_box lay2 hover_cursor">
-        <div class="menu_icon_box lay3">
+        <div class="menu_icon_box lay3" @click="btnClicked">
           <v-icon class="menu_icon f_icon">mdi-poll</v-icon>  
+          <div class="menu_text_box f_darkgray lay3">통계</div>
         </div>
-        <div class="menu_text_box f_darkgray lay3">통계</div>
       </div>
     </div>
 
@@ -92,6 +92,22 @@ export default {
 
       eventTarget1.classList.toggle('nosee')
       eventTarget2.classList.toggle('nosee')
+    },
+
+    btnClicked() {
+      const target = event.target.parentElement
+      const removeList = document.querySelectorAll('.menu_icon_box')
+
+    
+      removeList.forEach((element) => {
+        element.classList.remove("btn_clicked")
+        element.firstChild.classList.remove("btn_clicked2")
+        element.lastChild.classList.remove("btn_clicked2")
+
+      })
+      target.classList.toggle('btn_clicked')
+      target.firstChild.classList.toggle('btn_clicked2')
+      target.lastChild.classList.toggle('btn_clicked2')
     }
   },
 }
@@ -135,23 +151,26 @@ export default {
     text-decoration: none;
   }
   .menu_icon_box {
-    margin-left: 20px;
-    width: 30px;
-    height: 30px;
+    width: 100%;
+    height: 100%;
     display: flex;
-    justify-content: center;
+    padding-left: 10px;
     align-items: center;
+    border-left: 6px solid transparent;
   }
   .menu_icon {
+    display: flex;
+    align-items: center;
+    width: 60px;
+    height: 100%;
     font-size: 24px;
   }
   .menu_text_box {
-    width: 140px;
-    height: 30px;
+    width: 100%;
+    height: 100%;
     display: flex;
-    padding-top: 2px;
     align-items: center;
-    margin-left: 20px;
+    padding-left: 10px;
     font-size: 20px;
     font-weight: 400;
   }
@@ -180,8 +199,9 @@ export default {
     font-size: 16px;
     font-weight: 400;
   }
-  .menu_item_box:hover {
+  .menu_icon_box:hover {
     background-color: #efefef;
+    border-left: 6px solid #929292;
   }
   .menu_item_box:hover .menu_icon {
     font-weight: 900;
@@ -206,6 +226,16 @@ export default {
     justify-content: center;
     margin: 10px 20px;
   }
+  .btn_clicked {
+    border-left: 6px solid #929292;
+    background-color: #efefef;
+  }
+
+  .btn_clicked2 {
+    font-weight: 900;
+    color: #191919;
+  }
+
 
 
   
