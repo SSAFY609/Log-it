@@ -22,6 +22,6 @@ public class LogitApplication implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(jwtInterceptor).addPathPatterns("/**") // 기본 적용 경로
-				.excludePathPatterns("/user/login/**"); // 적용 제외 경로
+				.excludePathPatterns("/user/login/**").excludePathPatterns("/user/regist/**"); // 적용 제외 경로
 	}
 }
