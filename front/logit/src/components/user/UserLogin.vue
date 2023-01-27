@@ -3,55 +3,67 @@
       <h2 class= "login-title lay2">로그인</h2>
       <div class= "login-form lay3">
          <div class= "login-form-input">
+          <v-form
+          ref="form"
+          lazy-validation
+          @keyup="loginCheck"
+          > 
+          <!-- 이메일 입력 칸-->
             <v-text-field
-            v-model="email"
-            :readonly="loading"
-            :rules="rules2"
-            class="mb-2"
-            clearable
-            label="Email"
+                v-model="email"
+                :rules="rules2"
+                class="mb-2"
+                counter
+                label="Email"
              ></v-text-field>
+          <!-- 비밀번호 입력 칸-->
              <v-text-field
-              v-model="password"
-              :append-inner-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-              :rules="[rules1.required, rules1.min]"
-              :type="show1 ? 'text' : 'password'"
-              name="input-10-1"
-              label="Password"
-          
-              clearable
-              @click:append-inner="show1 = !show1"
+                v-model="password"
+                :append-inner-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                :rules="[rules1.required, rules1.min]"
+                :type="show1 ? 'text' : 'password'"
+                name="input-10-1"
+                label="Password"
+                counter
+                @click:append-inner="show1 = !show1"
           ></v-text-field>
-         
+        </v-form>
         </div>
+          <!-- 소셜 로그인 버튼 칸-->
         <div class="login-form-OauthBtn ">
             <div class="logo-img-kakao">
-              <v-img class="logo-img"
+              <v-img class="logo-img kakao-logo-img"
               :src="require('../../assets/images/kakao_logo.png')"
-              height="25px"
+              height="22px"
                />
               <span class="logo-text">카카오 로그인</span>
             </div>
             <div class="logo-img-google">
               <v-img class="logo-img google-logo-img"
               :src="require('../../assets/images/google_logo.png')"
-              height="25px"
+              height="22px"
                />
               <span class="logo-text google-logo-text">구글 로그인</span>
             </div>
         </div>
-        <div  @click="loginCheck" class="login-form-input-button ">
-          <div class="login-form-input-button-btn b_lightgray_l">
-            <v-icon class="login-btn menu_icon f_darkgray ">mdi-arrow-right</v-icon> 
+        <div  class="login-form-input-button">
+          <div @click="login" class="login-form-input-button-btn b_lightgray_l">
+            <v-icon  class="login-btn menu_icon f_darkgray ">mdi-arrow-right</v-icon> 
           </div>
         </div>
         <div class="login-form-link">
-          <span >비밀번호를 잊으셨습니까?</span>
           <div>
-          <span>Log-it이 처음인가요?<spam>회원가입 바로가기</spam></span>
+            <span>비밀번호를 잊으셨습니까?</span>
+          </div>
+         
+          <div class="login-form-link-signup">
+            <span>Log-it이 처음인가요?
+              <router-link :to="{name: 'UserEmail'}">
+              <span class="login-form-link-signup-link" >회원가입 바로가기</span>
+              </router-link>
+            </span>
           </div> 
         </div>
-
       </div>
     </div>
   </template>
@@ -62,45 +74,75 @@
   name: 'UserLogin',
   
   data: () => ({
-    rules1: {
-          required: value => !!value || 'Required.',
-          min: v => v.length >= 8 || '최소 8자리 이상 입력해주세요.',
-          emailMatch: () => (`The email and password you entered don't match`),
-        },
     rules2:
       [
-        value => !!value || 'Required.',
+        value => !!value || '',
         value => (value || '').length <= 20 || 'Max 20 characters',
         value => {
           const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
           return pattern.test(value) || '유효하지 않은 이메일 형식입니다.'
         },       
     ],
-    
+    rules1: {
+          required: value => !!value || '',
+          min: v => v.length >= 8 || '최소 8자리 이상 입력해주세요.',
+        },
     email: "",
+    password: "",
     show1: false,
     show2: true,
-    password: '',
-    rules1Check: false,
-    rules2Check: false,
     }),
  
-   methods: {
-     kakaoLogin() {},
-     googleLogin() {},
-     loginCheck() {}
-
+  methods: {
+    async loginCheck() { 
+      const validate = await this.$refs.form.validate()
+      if (validate.valid) { 
+        document.querySelector('.login-form-input-button-btn').classList.add('color');
+      } else {
+        document.querySelector('.login-form-input-button-btn').classList.remove('color');
+      }
+    },
+    login() { 
+      alert("로그인 기능을 구현하지 않았습니다.")
+    }
+    ,
+    kakaoLogin() {},
+    googleLogin() { },
+    toSignup() { 
+      this.$router.push('email')
+    }
   },
-
+ 
 }
   </script >
-  
   <style scoped>
+.login-form-link-signup{
+  margin-top: 9px;
+}
+.login-form-link-signup-link{
+  color:#FF0A54; 
+  text-decoration-line: underline;
+}
+
+
+.color {
+  background-color:#FF0A54;
+}
+
+.google-logo-img{
+  left: -13px;
+ }
+.kakao-logo-img{
+  left: -5px;
+}
 .login-form-link{
+  margin-top: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
-
+}
+.login-form-link:hover{
+  cursor: pointer;
 }
   .login-container{
    display: flex;
@@ -111,8 +153,10 @@
    align-items: center;
   }
   .login-title{
-   font-size: 40px;
+   font-size: 45px;
    font-family: AppleB;
+   margin-top:-13px;
+   margin-bottom: 5px;
   }
   .login-form {
    width: 100%;
@@ -126,6 +170,7 @@
   .logo-img-kakao{
     justify-content: center;
     align-items: center;
+    text-align: center;
     display: flex;
     border-radius: 6px;
     width: 182px;
@@ -198,6 +243,6 @@
     right: 8px;
   }
   .google-logo-text{
-    right:23px;
+    right:30px;
   }
   </style>
