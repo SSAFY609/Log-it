@@ -29,9 +29,45 @@ export default {
 }
 </script>
 <style>
+
 @import "@/assets/style/app.css";
 
-  
+
+  /* .swiper-button-prev {
+  color: #ffffff;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  background-color: #c4c4c4;
+  left: 10% !important;
+  top: 45.9%;
+}
+
+.swiper-button-prev::before{
+  content: '<';
+  font-size: large;
+  color: #ffffff;
+}
+
+.swiper-button-next {
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  background-color: #c4c4c4;
+  right: 10% !important;
+  top: 45.9%;
+}
+
+.swiper-button-next::before{
+  content: '>';
+  font-size: large;
+  color: #ffffff;
+} */
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+display: none;
+}
 
 
 </style>
