@@ -11,6 +11,7 @@ import FirstTimeline from '../components/home/FirstTimeline.vue'
 import TimeLine from '../components/home/TimeLine.vue'
 import SearchResult from '../components/search/SearchResult.vue'
 import EventList from '../components/event/EventList.vue'
+import EventCreate from '../components/event/EventCreate.vue'
 import EventProgress from '../components/event/EventProgress.vue'
 import ProgressCreate from '../components/event/ProgressCreate.vue'
 import ProgressDetail from '../components/event/ProgressDetail.vue'
@@ -76,6 +77,11 @@ const router = createRouter({
           path: '',
           name: 'EventList',
           component: EventList
+        },
+        {
+          path: 'create',
+          name: 'EventCreate',
+          component: EventCreate,
         },
         {
           path: ':eventId',
