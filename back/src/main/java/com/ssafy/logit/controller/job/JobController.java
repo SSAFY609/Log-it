@@ -29,7 +29,7 @@ public class JobController {
     @Operation(summary = "취업 이벤트 생성", description = "취업 이벤트를 생성")
     @PostMapping
     public ResponseEntity<CreateJobEventResponse> create(@RequestBody CreateJobEventRequest request){
-         // todo token -> user  Id
+         // todo token -> user Id
         JobEvent jobEvent = jobService.create(1L, request);
         CreateJobEventResponse createJobEventResponse = new CreateJobEventResponse(jobEvent);
         return new ResponseEntity<>(createJobEventResponse, HttpStatus.CREATED);
