@@ -10,16 +10,15 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class JasyptConfig {
 
-    @Value("${jasypt.encryptor.password")
-    private String encryptKey;
+//    @Value("${jasypt.encryptor.password")
+//    private String encryptKey;
 
 
     @Bean("jasyptStringEncryptor")
     public StringEncryptor stringEncryptor() {
         PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
         SimpleStringPBEConfig config = new SimpleStringPBEConfig();
-        System.out.println("encryptKey = " + encryptKey);
-        config.setPassword(encryptKey);
+        config.setPassword(System.getProperty("jasypt.encryptor.password"));
         config.setAlgorithm("PBEWithMD5AndDES");
         config.setKeyObtentionIterations("10");
         config.setPoolSize("1");
