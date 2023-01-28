@@ -10,18 +10,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @EnableJpaAuditing
 @SpringBootApplication
-public class LogitApplication implements WebMvcConfigurer {
+public class LogitApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(LogitApplication.class, args);
 	}
 
-	@Autowired
-	private JwtInterceptor jwtInterceptor;
 
-	@Override
-	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(jwtInterceptor).addPathPatterns("/**") // 기본 적용 경로
-				.excludePathPatterns("/user/login/**"); // 적용 제외 경로
-	}
+
+
 }
