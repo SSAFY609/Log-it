@@ -1,4 +1,4 @@
 FROM adoptopenjdk/openjdk8
-ARG JAR_FILE=/build/libs/demo-0.0.1-SNAPSHOT.jar
-COPY ${JAR_FILE} /build/libs/demo-0.0.1-SNAPSHOT.jar
-ENTRYPOINT ["java", "-jar","/build/libs/demo-0.0.1-SNAPSHOT.jar"]
+ARG JAR_FILE=/build/libs/back-0.0.1-SNAPSHOT.jar
+COPY ${JAR_FILE} /build/libs/back-0.0.1-SNAPSHOT.jar
+ENTRYPOINT ["java", "-jar","/build/libs/back-0.0.1-SNAPSHOT.jar"]
