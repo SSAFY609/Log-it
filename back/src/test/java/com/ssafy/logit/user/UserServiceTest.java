@@ -31,7 +31,7 @@ class UserServiceTest {
                             .deleted(false).build();
         when(userRepo.save(any())).thenReturn(userDto.toEntity());
 
-        userService.saveUser(userDto);
+        userService.saveUser(userDto,true);
     }
 
     @Test
