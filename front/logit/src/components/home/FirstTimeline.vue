@@ -3,32 +3,53 @@
     <div class="box">
         <h1 class="welcome">날짜를 선택해 ✔</h1>
         <h1 class="welcome" style="margin-bottom: 100px">타임라인에 일정을 추가해보세요</h1>
-        <div class="show-btn">
+        <div class="show-btn" v-show="this.is_click">
             <div v-if="this.choose_date" style="margin-bottom: 20px; font-size:30px">
                 {{ choose_date }}
             </div>
             <div>
-                <span class="add-event nosee"><v-btn>성장여정추가</v-btn></span>
-                <span class="add-job nosee"><v-btn>취업여정추가</v-btn></span>
+                <span class="add-event"><v-btn>성장여정추가</v-btn></span>
+                <span class="add-job"><v-btn>취업여정추가</v-btn></span>
             </div>
         </div>
-        <div class="bar">
-            <div class="hori-bar" v-for="index in 7" :key="index">
-                <div class="today-date" v-if="index == 4">
-                    {{ date[index-1] }}
-                </div>
-                <div class="date" v-else>
-                    {{ date[index-1] }}
-                </div>
-                <span class="circle">
-                    <!-- <div class="add-event nosee"><button>성장여정추가</button></div> -->
-                    <div class="hover"><button @click="show(index)" style="font-size:large">+</button></div>
-                    <!-- <div class="add-job nosee"><button>취업여정추가</button></div> -->
-                </span>
-            </div>
+        <!-- <v-btn @click="dialog=true">열기</v-btn>
+        <v-dialog v-model="dialog">
+          <v-card>
+            <v-card-text>
+              모달창열렸땀
+            </v-card-text>
+            <v-card-actions>
+              <v-btn color="primary" block @click="dialog = false">닫기</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog> -->
+        <div class="bar-box">
+          <div class="bar">
+              <div class="hori-bar" v-for="index in 7" :key="index">
+                  <div class="today-date" v-if="index == 4">
+                      {{ date[index-1] }}
+                  </div>
+                  <div class="date" v-else>
+                      {{ date[index-1] }}
+                  </div>
+                  <span class="circle">
+                      <v-menu open-on-hover transition="slide-y-transition">
+                        <template v-slot:activator="{ props }"><button class="hover" v-bind="props" style="font-size:large">+</button></template>
+                        <v-list>
+                          <v-list-item>
+                            <v-list-item-title>성장 여정 추가</v-list-item-title>
+                          </v-list-item>
+                          <v-list-item>
+                            <v-list-item-title>취업 여정 추가</v-list-item-title>
+                          </v-list-item>
+                        </v-list>
+                      </v-menu>
+                  </span>
+              </div>
+          </div>
         </div>
     </div>
-  </div>
+  </div> 
 </template>
 
 <script>
@@ -40,6 +61,8 @@ export default {
           day: ['일', '월', '화', '수', '목', '금', '토'],
           is_show: false,
           choose_date: '',
+          is_click: false,
+          dialog: false,
       }
   },
   methods: {
@@ -51,14 +74,7 @@ export default {
       show(index){
           const idx = index - 1;
           this.choose_date = this.date[idx];
-          if(!this.is_show){
-              this.is_show = true;
-              const btn1 = document.querySelector(".add-event");
-              const btn2 = document.querySelector(".add-job");
-              btn1.classList.toggle('nosee');
-              btn2.classList.toggle('nosee');
-
-          }
+          this.is_click = true;
 
           // const btn1 = document.querySelector(".add-event");
           // const btn2 = document.querySelector(".add-job");
@@ -106,6 +122,12 @@ export default {
   font-size: 50px;
 }
 
+.bar-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 
 .bar {
   display: flex;
@@ -123,8 +145,7 @@ export default {
 }
 
 .hover {
-  display: none;
-  color:#a6a6a6 ;
+  color:white ;
 }
 
 .hover button {
@@ -199,8 +220,12 @@ export default {
   top: -22px;
 }
 
-.circle:hover >.hover{
-  display: block;
+.today-date ~.circle:hover button {
+  color: #ffb272;
+}
+
+.circle:hover button{
+  color: #a6a6a6;
 }
 
 /**.circle:hover >.add-event{
