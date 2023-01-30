@@ -28,7 +28,7 @@ import UserProfile from '../components/user/UserProfile.vue'
 import UserFindPassword from '../components/user/UserFindPassword.vue'
 import PageSetting from '../components/etc/PageSetting.vue'
 import DeveloperList from '../components/etc/DeveloperList.vue'
-
+import UserData from '../components/user/UserData.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -172,6 +172,11 @@ const router = createRouter({
           path: 'findpw',
           name: 'UserFindPassword',
           component: UserFindPassword
+        },
+        {
+          path: 'data',
+          name: 'UserData',
+          component:UserData
         }
       ]
     },

@@ -22,7 +22,7 @@
             <span class="signup-link-Login"> 로그인 바로가기</span>
           </router-link>
         </div>
-      </v-form>
+      </v-form> 
     </div>
   </div>
 </template>
