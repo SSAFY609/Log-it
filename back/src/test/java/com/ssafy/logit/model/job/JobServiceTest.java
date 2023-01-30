@@ -28,8 +28,8 @@ class JobServiceTest {
     UserRepository userRepo;
     @BeforeEach
     void initInstance(){
-        User user = new User( 1L,"test1", "abc@abc.com", "1234", 8, "123", null, 1, null);
-        User user2 = new User(2L,"test2", "abc@abc.com", "1234", 8, "123", null, 1,null);
+        User user = new User( 1L,"test1", "abc@abc.com", "1234", 8, "123", null, false, null);
+        User user2 = new User(2L,"test2", "abc@abc.com", "1234", 8, "123", null,false ,null);
 
         userRepo.save(user);
         userRepo.save(user2);
