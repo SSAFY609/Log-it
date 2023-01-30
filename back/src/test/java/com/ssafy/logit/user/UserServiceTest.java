@@ -21,7 +21,7 @@ class UserServiceTest {
     private UserService userService;
 
     @Test
-    void saveUser() {
+    void regist() {
         UserDto userDto = UserDto.builder()
                             .name("테스트 회원")
                             .email("test@test.com")
@@ -31,7 +31,7 @@ class UserServiceTest {
                             .deleted(false).build();
         when(userRepo.save(any())).thenReturn(userDto.toEntity());
 
-        userService.saveUser(userDto,true);
+        userService.saveUser(userDto, true);
     }
 
     @Test

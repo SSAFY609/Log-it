@@ -129,18 +129,13 @@ public class UserController {
     @PostMapping
     public ResponseEntity<String> saveUser(@RequestBody UserDto userDto, @RequestAttribute String email) throws Exception {
         try {
-            // 해당하는 회원 없을 경우 <회원 가입>, 있을 경우 <회원 정보 수정>
-            boolean regist = true;
-            if(userService.getUser(userDto.getEmail()) != null) {
-                regist = false;
-
-                // 토큰 사용자 인증
-                if(!userDto.getEmail().equals(email)) {
-                    return new ResponseEntity<>(UNAUTHORIZED, HttpStatus.UNAUTHORIZED);
-                }
+            // 토큰 사용자 인증
+            if(userDto.getEmail().equals(email)) {
+                userService.saveUser(userDto, false);
+                return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(UNAUTHORIZED, HttpStatus.UNAUTHORIZED);
             }
-            userService.saveUser(userDto, regist);
-            return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<String>(FAIL, HttpStatus.OK);

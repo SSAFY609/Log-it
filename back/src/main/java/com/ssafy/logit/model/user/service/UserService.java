@@ -89,6 +89,8 @@ public class UserService {
         return pw;
     }
 
+    // 회원이 있을 때는 update, 회원이 없을 때는 regist
+    // => regist 변수로 판단
     @Transactional
     public void saveUser(UserDto userDto, boolean regist) {
         Optional<User> user = userRepo.findByEmail(userDto.getEmail());
