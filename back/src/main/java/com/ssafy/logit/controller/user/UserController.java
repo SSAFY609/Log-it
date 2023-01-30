@@ -1,7 +1,9 @@
 package com.ssafy.logit.controller.user;
 
 import com.ssafy.logit.jwt.JwtUtil;
+import com.ssafy.logit.model.user.dto.MailDto;
 import com.ssafy.logit.model.user.dto.UserDto;
+import com.ssafy.logit.model.user.service.MailService;
 import com.ssafy.logit.model.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,21 @@ public class UserController {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private MailService mailService;
+
+    // 회원 가입
+    @PostMapping("/regist")
+    public ResponseEntity<String> regist(@RequestBody UserDto userDto) throws Exception {
+        try {
+            userService.saveUser(userDto, false);
+            return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(FAIL, HttpStatus.OK);
+        }
+    }
 
     // 로그인
     @PostMapping("/login")
@@ -79,7 +96,27 @@ public class UserController {
         }
     }
 
-    // 회원 삽입 or 수정
+    // 비밀번호 찾기 (임시 비밀번호 발급 후 이메일 전송)
+    @PostMapping("/sendPw")
+    public ResponseEntity<String> sendPwEmail(@RequestParam("email") String email) {
+        UserDto userDto = userService.getUser(email);
+        if(userDto != null) {
+            String tmpPw = userService.getTmpPw();
+            userDto.setPw(tmpPw);
+            userService.saveUser(userDto, true);
+            // 전송
+            MailDto mailDto = mailService.createMail(tmpPw, email);
+            log.info("생성된 mailDto : " + mailDto.getToAddress() + mailDto.getFromAddress() + mailDto.getTitle());
+            mailService.sendMail(mailDto);
+
+            log.info("임시 비밀번호 전송 완료");
+            return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(NONE, HttpStatus.OK);
+        }
+    }
+
+    // 회원 수정
     @PostMapping
     public ResponseEntity<String> saveUser(@RequestBody UserDto userDto, @RequestAttribute String email) throws Exception {
         try {

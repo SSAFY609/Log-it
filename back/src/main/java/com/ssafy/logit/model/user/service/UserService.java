@@ -72,6 +72,23 @@ public class UserService {
         }
     }
 
+    public String getTmpPw() {
+        char[] charSet = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+                'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+        String pw = "";
+
+        // 문자 배열 길이의 값을 랜덤으로 10개 뽑아 조합
+        int idx = 0;
+        for(int i = 0; i < 10; i++) {
+            idx = (int)(charSet.length * Math.random());
+            pw += charSet[idx];
+        }
+
+        System.out.println("===== getTmpPw =====");
+        return pw;
+    }
+
     @Transactional
     public void saveUser(UserDto userDto, boolean regist) {
         Optional<User> user = userRepo.findByEmail(userDto.getEmail());
