@@ -11,6 +11,7 @@ import javax.persistence.*;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name="users")
 public class User extends DateTime {
 
     @Id
