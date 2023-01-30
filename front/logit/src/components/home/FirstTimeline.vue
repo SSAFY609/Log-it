@@ -33,14 +33,14 @@
                       {{ date[index-1] }}
                   </div>
                   <span class="circle">
-                      <v-menu open-on-hover transition="slide-y-transition">
-                        <template v-slot:activator="{ props }"><button class="hover" v-bind="props" style="font-size:large">+</button></template>
+                      <v-menu open-on-click transition="slide-y-transition">
+                        <template v-slot:activator="{ props }"><button class="hover" v-bind="props" style="font-size:large" @click="choose_date = real_date[index-1]">+</button></template>
                         <v-list>
                           <v-list-item>
-                            <v-list-item-title>성장 여정 추가</v-list-item-title>
+                            <v-list-item-title><router-link :to="{name: 'EventCreate', query: {st: date_to_str}}">성장 여정 추가</router-link></v-list-item-title>
                           </v-list-item>
                           <v-list-item>
-                            <v-list-item-title>취업 여정 추가</v-list-item-title>
+                            <v-list-item-title><router-link :to="{name: 'JobCreate', query: {st: date_to_str}}">취업 여정 추가</router-link></v-list-item-title>
                           </v-list-item>
                         </v-list>
                       </v-menu>
@@ -57,13 +57,22 @@ export default {
   name: 'FirstTimeline',
   data() {
       return {
+          real_date: [],
           date: [],
           day: ['일', '월', '화', '수', '목', '금', '토'],
           is_show: false,
-          choose_date: '',
+          choose_date: new Date(),
           is_click: false,
           dialog: false,
       }
+  },
+  computed: {
+    date_to_str() {
+      const year = this.choose_date.getFullYear();
+      const month = this.choose_date.getMonth()+1;
+      const date = this.choose_date.getDate();
+      return `${year}-${month >= 10 ? month : '0' + month}-${date >= 10 ? date : '0' + date}`;
+    }
   },
   methods: {
       addDays(date, days) {
@@ -80,6 +89,9 @@ export default {
           // const btn2 = document.querySelector(".add-job");
           // btn1.classList.toggle('nosee');
           // btn2.classList.toggle('nosee');
+      },
+      open_menu(i) {
+        console.log(i)
       }
   },
   created(){
@@ -87,9 +99,11 @@ export default {
       for (let i=-3; i<4; i++){
           if(i == 0){
               const day = today.getDay();
+              this.real_date.push(today);
               this.date.push(`오늘(${this.day[day]})`);
           }else{
               const target = this.addDays(today, i);
+              this.real_date.push(target);
               // const year = target.getFullYear();
               const month = target.getMonth() + 1;
               const date = target.getDate();
@@ -97,7 +111,7 @@ export default {
               this.date.push(`${month >= 10 ? month : '0' + month}/${date >= 10 ? date : '0' + date}(${this.day[day]})`);
           }
       }
-      console.log(this.date);
+      // console.log(this.date);
   }
 }
 </script>

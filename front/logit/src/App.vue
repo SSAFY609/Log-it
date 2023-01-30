@@ -215,5 +215,9 @@ export default {
 display: none;
 }
 
+/* 나중에 성장일지 v-chip의 배경색 바꾸기 위한 과정.....
+.v-chip__underlay {
+    background: red;
+} */
 
 </style>

@@ -2,19 +2,12 @@
   <div class="container">
     <div class="event-create-box">
         <div class="event-create-title">
-            성장 여정 추가
+            취업 여정 추가
         </div>
         <div class="category-title">
-            ✔ 카테고리 선택 또는 생성
+            ✔ 어떤 기업을 목표로 하시나요?
         </div>
-        <v-chip-group filter class="category" column>
-            <v-chip size="large" v-for="i in state.categorys" :value="i" :key="i" @click="select_chip(i), flag = false" >
-                {{ i }}
-            </v-chip>
-            <v-chip size="large" @click="flag = !flag, select_category=''">카테고리 생성하기</v-chip>
-        </v-chip-group>
-        <div v-show="!flag" style="height: 78px"></div>
-        <div v-show="flag"><v-text-field label="생성할 카테고리를 입력하세요" v-model="select_category"></v-text-field></div>
+        <div><v-text-field label="ex) 카카오" v-model="company_name"></v-text-field></div>
         <div class="category-title">
             ✔ 이벤트 기간 설정
         </div>
@@ -31,47 +24,30 @@
 
 <script>
 export default {
-    name: 'EventCreate',
-    props: {
-        date: {
-            type: String,
-        }
-    },
+    name: 'JobCreate',
     data() {
         return {
-            flag: false,
-            select_category: "",
+            company_name: "",
             start_date: null,
             end_date: null,
         }
     },
     methods: {
-        select_chip(i) {
-            this.select_category = i;
-        },
         create() {
-            if (!this.select_category) {
-                alert('선택된 카테고리가 없습니다.')
+            if (!this.company_name) {
+                alert('기업명을 입력해주세요.')
             } else if (!this.start_date || !this.end_date) {
-                alert('선택된 날짜가 없습니다.')
+                alert('날짜를 선택해 주세요.')
             } else {
-                console.log(this.select_category)
+                console.log(this.company_name)
                 console.log(this.start_date)
                 console.log(this.end_date)
             }
         }
     },
     created() {
-        this.start_date = this.$route.query.st
+        this.start_date = this.$route.query.st;
     },
-    setup() {
-        const state = {
-            categorys: ['알고리즘 IM형', '알고리즘 A형', 'JAVA', 'Python', '일타싸피', '월말평가', '관통프로젝트', '싸피레이스'],
-        }
-        return {
-            state,
-        }
-    }
 
 }
 </script>
@@ -106,7 +82,7 @@ export default {
 }
 
 .category-title {
-    margin-top: 30px;
+    margin-top: 50px;
     margin-bottom: 20px;
     font-size: 20px;
     text-align: start;
@@ -119,8 +95,13 @@ export default {
 
 .select-date {
     display: flex;
+    justify-content: space-between;
     align-items: center;
     font-size: 25px;
+}
+
+.select-date >div >div {
+    width: 40%;
 }
 
 .create_btn_box {
@@ -131,7 +112,7 @@ export default {
     justify-content: center;
     align-items: center;
     margin: 0 auto;
-    margin-top: 20px;
+    margin-top: 80px;
   }
   .create_btn_text {
     margin-top: 2px;
