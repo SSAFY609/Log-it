@@ -5,6 +5,8 @@ import com.ssafy.logit.model.user.dto.MailDto;
 import com.ssafy.logit.model.user.dto.UserDto;
 import com.ssafy.logit.model.user.service.MailService;
 import com.ssafy.logit.model.user.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/user")
+@Tag(name="user", description="회원 API")
 public class UserController {
 
     private static final String SUCCESS = "success";
@@ -36,6 +39,7 @@ public class UserController {
     private MailService mailService;
 
     // 회원 가입
+    @Operation(summary = "회원가입", description = "회원 정보 저장 (JWT 인증x)")
     @PostMapping("/regist")
     public ResponseEntity<String> regist(@RequestBody UserDto userDto) throws Exception {
         try {
@@ -48,6 +52,7 @@ public class UserController {
     }
 
     // 로그인
+    @Operation(summary = "로그인", description = "회원 정보 저장 (JWT 인증x)")
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody UserDto userDto) throws Exception {
         log.info("login user info : {}", userDto);
@@ -66,6 +71,7 @@ public class UserController {
     }
 
     // 토큰 재발급
+    @Operation(summary = "토큰 재발급", description = "refresh 토큰 확인 후 access 토큰 재발급")
     @PostMapping("/refresh")
     public ResponseEntity<Map<String, Object>> refreshToken(@RequestParam String email) {
         Map<String, Object> resultMap = new HashMap<>();
@@ -84,6 +90,7 @@ public class UserController {
     }
 
     // 로그아웃
+    @Operation(summary = "로그아웃", description = "로그아웃하고 토큰 null로 변환")
     @PostMapping("/logout")
     public ResponseEntity<String> logout(@RequestAttribute String email) {
         try {
@@ -97,6 +104,7 @@ public class UserController {
     }
 
     // 비밀번호 찾기 (임시 비밀번호 발급 후 이메일 전송)
+    @Operation(summary = "비밀번호 찾기", description = "임시 비밀번호 발급 후 이메일 전송")
     @PostMapping("/sendPw")
     public ResponseEntity<String> sendPwEmail(@RequestParam("email") String email) {
         UserDto userDto = userService.getUser(email);
@@ -117,6 +125,7 @@ public class UserController {
     }
 
     // 회원 수정
+    @Operation(summary = "회원 수정", description = "회원 정보 수정")
     @PostMapping
     public ResponseEntity<String> saveUser(@RequestBody UserDto userDto, @RequestAttribute String email) throws Exception {
         try {
@@ -139,18 +148,21 @@ public class UserController {
     }
 
     // 전체 회원 조회
+    @Operation(summary = "전체 회원 조회", description = "전체 회원 조회")
     @GetMapping("/get")
     public ResponseEntity<List<UserDto>> getAllUser() throws Exception {
         return new ResponseEntity<List<UserDto>>(userService.getAllUser(), HttpStatus.OK);
     }
 
     // email로 회원 조회
+    @Operation(summary = "회원 조회", description = "email로 한 명의 회원 조회")
     @GetMapping
     public ResponseEntity<UserDto> getUser(@RequestAttribute String email) throws Exception {
         return new ResponseEntity<UserDto>(userService.getUser(email), HttpStatus.OK);
     }
 
-    // 회원 삭제 (실제 삭제x, isDeleted 1로 업데이트)
+    // 회원 삭제 (실제 삭제x, deleted 1로 업데이트)
+    @Operation(summary = "회원 삭제", description = "id로 회원 삭제 (실제 삭제x, deleted 1로 업데이트)")
     @PutMapping("/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable Long id, @RequestAttribute String email) throws  Exception {
         try {
@@ -174,6 +186,7 @@ public class UserController {
     }
 
     // 회원 삭제 (실제 삭제) - 회원 이용 불가 !!
+    @Operation(summary = "회원 삭제", description = "id로 회원 실제 삭제 (DB에서 해당 회원 삭제)")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> dropUser(@PathVariable Long id) throws Exception {
         boolean result = userService.dropUser(id);
