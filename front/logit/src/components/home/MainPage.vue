@@ -36,7 +36,7 @@ export default {
     name: 'MainPage',
     setup() {
       const state = {
-        loginUser: null,
+        loginUser: {name: '이성훈'},
       }
       return {
         state,

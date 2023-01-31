@@ -1,6 +1,6 @@
 
 /* 아웃라인 보고싶지 않으면 주석처리 */
-/*   
+  
   .lay1 {
     outline: 1px dashed crimson;
   }
@@ -9,7 +9,7 @@
   }
   .lay3 {
     outline: 1px dashed green;
-  } */
+  }
 
 
   .first {
