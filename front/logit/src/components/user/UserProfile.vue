@@ -5,19 +5,23 @@
       <v-form ref="form" v-model="valid" lazy-validation>
      <!-- 프로필 사진 선택 폼-->
          <div class="profile-input-form" >
-            <img :src="require('@/assets/profiles/scale (4).png')" @click="selProf"
+            <img :src="require(`@/assets/profiles/scale (${state.id}).png`)" @click="selProf"
                class="profile-input-img"/>
          </div>
          <div class="profile-input-icon" @click="selProf" >
             <v-icon size="large">mdi-lead-pencil</v-icon>
          </div>
      <!-- 닉네임 입력 칸-->
-        
+     {{ user.email }}
+     {{ user.password }}
+     {{ user.profile }}
+     {{ user.uName }}
+     {{ user.sfNum }}
         <div @click="signProf" class="profile-button b_lightgray_l">
           <div>다음</div>
         </div>
         <div class="profile-link">
-          <router-link :to="{ name: 'UserPassword' }">
+          <router-link :to="{ name: 'UserPassword'}">
             <span class="profile-link-data"> 뒤로가기</span>
           </router-link>
         </div>
@@ -27,18 +31,36 @@
   </template>
   
   <script>
+  import { useRoute, useRouter } from 'vue-router'
+
   export default {
-   name: 'UserProfile',
-   data: () => ({
-      preview: '',
-      saveFile:null,
-      fileList:[]
-}),
-   methods: {
-      selProf() { 
-         this.$router.push("photo");
+  name: 'UserProfile',
+  props: ["user"],
+  
+  setup(props) {
+    const route = useRoute();
+    const router = useRouter();
+      const state = {
+        preview: '',
+        id: ''
       }
-     } 
+    console.log(props.user);
+    //console.log(route.params.id);
+    //console.log(typeof (route.params.id))
+    state.id = route.params.id
+    const signProf = () => {
+        router.push({ name: 'UserData' });
+      }
+    const selProf = () => {
+        router.push({ name: 'UserPhoto' });
+      }
+      
+      return {
+      state,
+        signProf,
+        selProf
+      }
+  }
 }
 
   </script>
@@ -55,7 +77,8 @@
    width:165px;
    height: 165px;
    border-radius: 90px;
-   box-shadow: 1px 1px 5px 0.3px;
+   box-shadow: 1px 1px 0.2px 0.3px;
+
 }
 .profile-input-img:hover{
    cursor: pointer;
@@ -74,8 +97,9 @@
    background-color: white;
    border: 1px solid rgb(209, 209, 209);
    top:-43px;
-   left: 200px;
-   box-shadow: 1px 1px 3px 0.3px;
+   left: 210px;
+   box-shadow: 1px 1px 2px 0.3px;
+   
 }
 
 .profile-input{
@@ -99,10 +123,7 @@
 .color {
   background-color: #ff0a54;
 }
-.Profile-container {
-  position: relative;
-  margin-top: 12px;
-}
+
 .profile-title {
   padding: 25px;
 }

@@ -161,12 +161,14 @@ const router = createRouter({
         {
           path: 'photo',
           name: 'UserPhoto',
-          component: UserPhoto
+          component: UserPhoto,
+          props:true
         },
         {
-          path: 'profile',
+          path: 'profile/:id',
           name: 'UserProfile',
-          component: UserProfile
+          component: UserProfile,
+          props: true
         },
         {
           path: 'findpw',

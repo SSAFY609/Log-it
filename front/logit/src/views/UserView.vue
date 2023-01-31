@@ -7,14 +7,34 @@
               height="50">
               </v-img>
          </div>
-         <router-view></router-view>
+         <router-view @updateUserProfile="updateUserProfile" :user="user"></router-view>
       </div>
     </div>
   </template>
   
   <script>
+import { ref } from 'vue';
   export default {
-     name: 'UserView',
+   name: 'UserView',
+   setup() { 
+      const user = ref({
+         email: "이메일 ",
+         password: "암호 ",
+         profile: "프로필",
+         uName: "이름",
+         sfNum: "학번 ",
+      });
+
+      const updateUserProfile = (i) => {
+         console.log(user.profile);
+         console.log("이야ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ")
+         console.log(i)
+      }
+      return {
+         user,
+         updateUserProfile
+      }
+   }
   }
   </script>
   

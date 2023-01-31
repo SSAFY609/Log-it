@@ -65,7 +65,7 @@
         alert("입력된 암호가 일치하지 않습니다.");
         return;
       }
-      this.$router.push("profile");
+      this.$router.push({name: 'UserProfile', params: {id : 1, password: this.password}});
     },
 
     async chkPw() {

@@ -15,11 +15,13 @@
           :key="i"
           @click="selProf"
           class="profile-input-img"
-        >
-          <img
-            :src="require(`@/assets/profiles/scale (${i}).png`)"
-            width="110"
-          />
+          >          
+            <router-link @click="onClicked(i)" :to="{ name: 'UserProfile', params: { id: i } }">
+            <img
+              :src="require(`@/assets/profiles/scale (${i}).png`)"
+              width="110"
+            />
+          </router-link>
           <!-- </v-col> -->
         </v-col>
       </div>
@@ -29,23 +31,31 @@
 
 <script>
 export default {
-  name: "UserPhoto",
-  data: () => ({}),
-  methods: {
-    imgUrl(num) {
-      return `@/assets/profiles/scale (${num}).png`;
-    },
-  },
-  computed: {},
+  name: 'UserPhoto',
+  props:["user"],
+  setup(props,{emit}) {
+    const onClicked = (i) => {
+      console.log(props.user);
+      emit('updateUserProfile', i);
+    };
+
+    return {
+      onClicked
+    }
+  }
 };
 </script>
 <style scoped>
+.profile-input-img{
+  margin-right: 33px;
+}
 .profile-scroll {
+  display: flex;
+  flex-wrap: wrap;
   margin-left: 5px;
-  height: 350px;
+  height: 420px;
   width: 420px;
   overflow-y: scroll;
-  margin-top: -10px;
 }
 .profile-container {
   height: 85%;
@@ -61,6 +71,7 @@ export default {
   padding: 25px;
   font-size: 51px;
   font-family: AppleB;
-  margin-top: -13px;
+  margin-top: -45px;
+  margin-bottom: -30px;
 }
 </style>
