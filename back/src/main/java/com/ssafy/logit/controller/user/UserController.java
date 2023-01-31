@@ -3,6 +3,7 @@ package com.ssafy.logit.controller.user;
 import com.ssafy.logit.jwt.JwtUtil;
 import com.ssafy.logit.model.user.dto.MailDto;
 import com.ssafy.logit.model.user.dto.UserDto;
+import com.ssafy.logit.model.user.service.ImageService;
 import com.ssafy.logit.model.user.service.MailService;
 import com.ssafy.logit.model.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +39,9 @@ public class UserController {
 
     @Autowired
     private MailService mailService;
+
+    @Autowired
+    private ImageService imageService;
 
     // 회원 가입
     @Operation(summary = "회원가입", description = "회원 정보 저장 (JWT 인증x)")
@@ -127,7 +132,7 @@ public class UserController {
     // 회원 수정
     @Operation(summary = "회원 수정", description = "회원 정보 수정")
     @PostMapping
-    public ResponseEntity<String> saveUser(@RequestBody UserDto userDto, @RequestAttribute String email) throws Exception {
+    public ResponseEntity<String> updateUser(@RequestBody UserDto userDto, @RequestAttribute String email) throws Exception {
         try {
             // 토큰 사용자 인증
             if(userDto.getEmail().equals(email)) {
@@ -150,7 +155,7 @@ public class UserController {
     }
 
     // email로 회원 조회
-    @Operation(summary = "회원 조회", description = "email로 한 명의 회원 조회")
+    @Operation(summary = "회원 조회", description = "email로 회원 단건 조회")
     @GetMapping
     public ResponseEntity<UserDto> getUser(@RequestAttribute String email) throws Exception {
         return new ResponseEntity<UserDto>(userService.getUser(email), HttpStatus.OK);
@@ -190,6 +195,45 @@ public class UserController {
                 return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(NONE, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(FAIL, HttpStatus.OK);
+        }
+    }
+
+    @Operation(summary = "프로필 이미지 업로드", description = "프로필 이미지 업로드")
+    @PostMapping("/uploadImage")
+    public ResponseEntity<String> uploadImage(@RequestBody MultipartFile multipartFile, @RequestAttribute String email) throws Exception {
+        try {
+            String fileUrl = imageService.uploadImage(multipartFile, userService.getUser(email));
+            if(fileUrl.equals(FAIL)) {
+                return new ResponseEntity<String>(FAIL, HttpStatus.OK);
+            } else {
+                log.info("이미지 업로드 성공! [url] " + fileUrl);
+                return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(FAIL, HttpStatus.OK);
+        }
+    }
+
+    // 프로필 이미지 삭제 (S3에서 삭제 및 image 속성 null로 업데이트)
+    @Operation(summary = "프로필 이미지 삭제", description = "S3에서 삭제 및 image 속성 null로 업데이트")
+    @DeleteMapping("/deleteImage/{id}")
+    public ResponseEntity<String> dropImage(@PathVariable Long id, @RequestAttribute String email) throws Exception {
+        boolean result = imageService.dropImage(userService.getUser(id).getImage(), id);
+        try {
+            // 토큰 사용자 인증
+            if(userService.getUser(id).getId().equals(email)) {
+                if(result) {
+                    return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>(NONE, HttpStatus.OK);
+                }
+            } else {
+                return new ResponseEntity<>(UNAUTHORIZED, HttpStatus.UNAUTHORIZED);
             }
         } catch (Exception e) {
             e.printStackTrace();

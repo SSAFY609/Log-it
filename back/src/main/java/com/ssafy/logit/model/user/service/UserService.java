@@ -4,7 +4,6 @@ import com.ssafy.logit.jwt.JwtUtil;
 import com.ssafy.logit.model.user.dto.UserDto;
 import com.ssafy.logit.model.user.entity.User;
 import com.ssafy.logit.model.user.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
