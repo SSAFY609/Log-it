@@ -15,8 +15,11 @@
           :key="i"
           @click="selProf"
           class="profile-input-img"
-          >          
-            <router-link @click="onClicked(i)" :to="{ name: 'UserProfile', params: { id: i } }">
+        >
+          <router-link
+            @click="onClicked(i)"
+            :to="{ name: 'UserProfile', params: { id: i } }"
+          >
             <img
               :src="require(`@/assets/profiles/scale (${i}).png`)"
               width="110"
@@ -31,22 +34,21 @@
 
 <script>
 export default {
-  name: 'UserPhoto',
-  props:["user"],
-  setup(props,{emit}) {
+  name: "UserPhoto",
+  props: ["user"],
+  setup(props, { emit }) {
     const onClicked = (i) => {
-      console.log(props.user);
-      emit('updateUserProfile', i);
+      emit("updateUserProfile", i);
     };
 
     return {
-      onClicked
-    }
-  }
+      onClicked,
+    };
+  },
 };
 </script>
 <style scoped>
-.profile-input-img{
+.profile-input-img {
   margin-right: 33px;
 }
 .profile-scroll {
