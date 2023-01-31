@@ -50,7 +50,7 @@ export default {
 
 
   .first {
-    font-family: AppleL, AppleM, AppleB, AppleH;
+    font-family: AppleL, AppleM, AppleB, AppleH, event;
     height: 100%;
   }
   /* 아래로 내려갈수록 두꺼운 글씨체 */
@@ -70,6 +70,12 @@ export default {
   font-family:'AppleH';
   src: url('assets/fonts/AppleSDGothicNeoH.ttf') format('truetype');
   }
+  /* 이벤트용 폰트 */
+  @font-face {
+  font-family:'event';
+  src: url('assets/fonts/나눔손글씨 고딕 아니고 고딩.ttf') format('truetype');
+  }
+
   h1 {
     font-family: AppleB;
   }

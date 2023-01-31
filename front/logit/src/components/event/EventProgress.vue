@@ -22,6 +22,37 @@
         </div>
       </div>
     </div>
+    <div class="progress">
+      <v-timeline side="end" align="center" line-thickness="5">
+        <v-timeline-item
+          class="progress-item"
+          v-for="item in items"
+          dot-color="rgb(255, 225, 121)"
+          :key="item.id"
+          size="small"
+        >
+          <div class="memo-box">
+            <div class="memo-date">{{item.date}}</div>
+            <div class="memo" @click="dialog = true">
+              <div v-if="!create_content">텍스트를 입력하세요</div>
+              <div else>{{ create_content }}</div>
+            </div>
+          </div>
+        </v-timeline-item>
+      </v-timeline> 
+      <v-dialog
+        v-model="dialog"
+        class="memo-dialog"
+      >
+        <div class="memo-dialog memo-bg">
+          <textarea name="" id="" cols="30" rows="10" v-model="create_content" placeholder="텍스트를 입력하세요"></textarea>
+          <div>
+            <v-icon size="large" @click="create">mdi-check</v-icon>
+            <!-- <v-icon size="large" @click="dialog=false">mdi-close</v-icon> -->
+          </div>
+        </div>
+      </v-dialog>
+    </div>
   </div>
 </template>
 
@@ -57,6 +88,22 @@ export default {
         period: 0,
         week: 0,
         rest: 0,
+        items: [
+          {
+            id: 1,
+            color: 'rgba(0, 0, 0, 0.5)',
+            icon: 'mdi-information',
+            date: '오늘 (월)'
+          },
+          {
+            id: 2,
+            color: 'error',
+            icon: 'mdi-alert-circle',
+            date: '2023-01-31 (화)'
+          },
+        ],
+        dialog: false,
+        create_content: ''
       }
     },
     computed: {
@@ -76,7 +123,6 @@ export default {
       getDateDiff(d1, d2) {
         // d1이 시작 날짜, d2가 종료 날짜
         const diffDate = d2.getTime() - d1.getTime();
-        
         return diffDate / (1000 * 60 * 60 * 24) + 1; // 밀리세컨 * 초 * 분 * 시 = 일
       },
       addDays(date, days) {
@@ -84,7 +130,11 @@ export default {
           clone.setDate(date.getDate() + days)
           return clone;
       },
-    },
+      create() {
+        console.log(this.create_content);
+        this.dialog = false;
+      }
+     },
     created() {
       const st = this.event.start_date;
       const ed = this.event.end_date;
@@ -99,10 +149,10 @@ export default {
         }
         const target = this.addDays(st, i);
         if (this.progress[idx].date.toLocaleDateString() == target.toLocaleDateString()) {
-          this.grass.push('memo');
+          this.grass.push('done');
           idx += 1;
         } else {
-          this.grass.push('square');
+          this.grass.push('not');
         }
       }
       console.log(this.grass)
@@ -134,7 +184,9 @@ export default {
   height: 100%;
   width:100%;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  /* justify-content: center; */
 }
 
 .title {
@@ -175,7 +227,7 @@ export default {
   margin: 10px 0;
 }
 
-.square {
+.not {
   background-color: rgb(241, 241, 241);
   border: 2px solid rgb(192, 192, 192);
   border-radius: 2px;
@@ -185,7 +237,7 @@ export default {
   margin-bottom: 10px;
 }
 
-.memo {
+.done {
   /* background-image: url('../../assets/images/memo_grass.png'); */
   /* background-image: url('../../assets/images/memo_grass2.png'); */
   background-image: url('../../assets/images/memo_yellow_size.png');
@@ -193,5 +245,64 @@ export default {
   height: 35px;
   margin-right: 25px;
   margin-bottom: 10px;
+}
+
+.progress {
+  margin-top: 100px;
+}
+
+.progress-item {
+  margin-bottom: 30px;
+}
+
+.memo-box {
+  display: flex;
+  align-items: center;
+  font-family: event;
+  font-size: 25px;
+}
+.memo-date {
+  width: 200px;
+}
+
+.memo {
+  background-image: url('../../assets/images/memo_large.png');
+  /* margin-left: 200px; */
+  width: 450px;
+  height: 410px;
+  padding: 50px 60px;
+}
+
+.memo :hover {
+  cursor: pointer;
+}
+
+.memo-dialog {
+  display: flex;
+  width: 730px;
+  height: 710px;
+}
+
+.memo-bg {
+  background-image: url('../../assets/images/memo_create_bg.png');
+  font-family: event;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.memo-bg >textarea {
+  width: 93%;
+  height: 90%;
+  font-size: 25px;
+  outline: none;
+  resize: none;
+}
+
+.icon {
+  height: 30px;
+  width: 30px;
 }
 </style>
