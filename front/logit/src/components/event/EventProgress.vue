@@ -26,16 +26,16 @@
       <v-timeline side="end" align="center" line-thickness="5">
         <v-timeline-item
           class="progress-item"
-          v-for="item in items"
+          v-for=" (item, index) in items"
           dot-color="rgb(255, 225, 121)"
           :key="item.id"
           size="small"
         >
           <div class="memo-box">
             <div class="memo-date">{{item.date}}</div>
-            <div class="memo" @click="dialog = true">
-              <div v-if="!create_content">텍스트를 입력하세요</div>
-              <div else>{{ create_content }}</div>
+            <div class="memo" @click="dialog = true, create_content = item.content, now_idx = index">
+              <!-- <div v-if="!create_content">텍스트를 입력하세요</div> -->
+              <div>{{ item.content }}</div>
             </div>
           </div>
         </v-timeline-item>
@@ -45,7 +45,7 @@
         class="memo-dialog"
       >
         <div class="memo-dialog memo-bg">
-          <textarea name="" id="" cols="30" rows="10" v-model="create_content" placeholder="텍스트를 입력하세요"></textarea>
+          <textarea name="" id="" cols="30" rows="10" wrap="hard" v-model="create_content" placeholder="텍스트를 입력하세요"></textarea>
           <div>
             <v-icon size="large" @click="create">mdi-check</v-icon>
             <!-- <v-icon size="large" @click="dialog=false">mdi-close</v-icon> -->
@@ -69,8 +69,8 @@ export default {
         },
         progress: [
           {progress_id: 1, event_id: 1, date: new Date(2023, 0, 17), content: '열심히 했따ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ', photo: 'url'},
-          {progress_id: 2, event_id: 1, date: new Date(2023, 0, 18), content: '열심히 했따ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ', photo: 'url'},
-          {progress_id: 3, event_id: 1, date: new Date(2023, 0, 19), content: '열심히 했따ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ', photo: 'url'},
+          {progress_id: 2, event_id: 1, date: new Date(2023, 0, 18), content: '안녕하세요 111111111111', photo: 'url'},
+          {progress_id: 3, event_id: 1, date: new Date(2023, 0, 19), content: '안녕하이 2222222222222222222', photo: 'url'},
           {progress_id: 4, event_id: 1, date: new Date(2023, 0, 24), content: '열심히 했따ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ', photo: 'url'},
           {progress_id: 5, event_id: 1, date: new Date(2023, 0, 26), content: '열심히 했따ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ', photo: 'url'},
           {progress_id: 6, event_id: 1, date: new Date(2023, 0, 27), content: '열심히 했따ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ', photo: 'url'},
@@ -80,30 +80,20 @@ export default {
           {progress_id: 10, event_id: 1, date: new Date(2023, 1, 2), content: '열심히 했따ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ', photo: 'url'},
           {progress_id: 11, event_id: 1, date: new Date(2023, 1, 4), content: '열심히 했따ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ', photo: 'url'},
           {progress_id: 12, event_id: 1, date: new Date(2023, 1, 5), content: '열심히 했따ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ', photo: 'url'},
-          {progress_id: 13, event_id: 1, date: new Date(2023, 1, 7), content: '열심히 했따ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ', photo: 'url'},
+          {progress_id: 13, event_id: 1, date: new Date(2023, 1, 7), content: '그래그래', photo: 'url'},
           {progress_id: 14, event_id: 1, date: new Date(2023, 1, 10), content: '열심히 했따ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ', photo: 'url'},
-          {progress_id: 15, event_id: 1, date: new Date(2023, 1, 11), content: '열심히 했따ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ', photo: 'url'},
+          {progress_id: 15, event_id: 1, date: new Date(2023, 1, 11), content: '화이팅이다', photo: 'url'},
         ],
         grass: [],
         period: 0,
         week: 0,
         rest: 0,
-        items: [
-          {
-            id: 1,
-            color: 'rgba(0, 0, 0, 0.5)',
-            icon: 'mdi-information',
-            date: '오늘 (월)'
-          },
-          {
-            id: 2,
-            color: 'error',
-            icon: 'mdi-alert-circle',
-            date: '2023-01-31 (화)'
-          },
-        ],
+        items: [],
         dialog: false,
-        create_content: ''
+        create_content: '',
+        day: ['일', '월', '화', '수', '목', '금', '토'],
+        now_idx: 0
+
       }
     },
     computed: {
@@ -117,7 +107,7 @@ export default {
         const month2 = ed.getMonth() + 1;
         const date2 = ed.getDate();
         return `${year1}년 ${month1}월 ${date1}일 ~ ${year2}년 ${month2}월 ${date2}일`
-      }
+      },
     },
     methods: {
       getDateDiff(d1, d2) {
@@ -126,15 +116,23 @@ export default {
         return diffDate / (1000 * 60 * 60 * 24) + 1; // 밀리세컨 * 초 * 분 * 시 = 일
       },
       addDays(date, days) {
-          const clone = new Date(date);
-          clone.setDate(date.getDate() + days)
-          return clone;
+        const clone = new Date(date);
+        clone.setDate(date.getDate() + days)
+        return clone;
       },
       create() {
+        this.items[this.now_idx].content = this.create_content;
         console.log(this.create_content);
         this.dialog = false;
+      },
+      date_after(i) {
+        const year = i.getFullYear();
+        const month = i.getMonth() + 1;
+        const date = i.getDate();
+        const day = i.getDay();
+        return `${year}-${month >= 10 ? month : '0' + month}-${date >= 10 ? date : '0' + date} (${this.day[day]})`;
       }
-     },
+    },
     created() {
       const st = this.event.start_date;
       const ed = this.event.end_date;
@@ -150,12 +148,18 @@ export default {
         const target = this.addDays(st, i);
         if (this.progress[idx].date.toLocaleDateString() == target.toLocaleDateString()) {
           this.grass.push('done');
+          const str = this.date_after(this.progress[idx].date);
+          this.items.push({
+            date: str,
+            content: this.progress[idx].content
+          })
           idx += 1;
         } else {
           this.grass.push('not');
         }
       }
-      console.log(this.grass)
+      this.items.reverse()
+      console.log(this.items)
     }
 
 
