@@ -1,6 +1,6 @@
 package com.ssafy.logit.model.util;
 
-import com.ssafy.logit.model.util.dto.EventDate;
+import com.ssafy.logit.model.common.EventDate;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
