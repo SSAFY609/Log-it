@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@mdi/font": "5.9.55",
+    "@vueup/vue-quill": "^1.0.1",
     "core-js": "^3.8.3",
     "roboto-fontface": "*",
     "swiper": "^8.4.6",
