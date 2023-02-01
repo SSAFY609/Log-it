@@ -1,7 +1,7 @@
 
 /* 아웃라인 보고싶지 않으면 주석처리 */
   
-  .lay1 {
+  /* .lay1 {
     outline: 1px dashed crimson;
   }
   .lay2 {
@@ -9,7 +9,7 @@
   }
   .lay3 {
     outline: 1px dashed green;
-  }
+  } */
 
 
   .first {
@@ -35,9 +35,9 @@
   }
     /* 이벤트용 폰트 */
   @font-face {
-      font-family:'event';
-      src: url('assets/fonts/나눔손글씨 고딕 아니고 고딩.ttf') format('truetype');
-      }
+  font-family:'event';
+  src: url('../fonts/나눔손글씨 고딕 아니고 고딩.ttf') format('truetype');
+  }
     
 
 

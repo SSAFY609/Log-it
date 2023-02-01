@@ -3,7 +3,7 @@
     <h2 class="signup-title">계정 생성</h2>
     <div class="signup-email fill-height">
       <v-form ref="form" v-model="valid" lazy-validation @keyup="chkEmail">
-        <div style="margin-bottom: 5px">&nbsp;&nbsp;이메일을 입력해주세요.</div>
+        <div class="fs" style="margin-bottom: 5px">&nbsp;&nbsp;이메일을 입력해주세요.</div>
         <v-text-field
           v-model="email_tmp"
           :rules="rules2"
@@ -97,6 +97,7 @@ export default {
 </script>
 
 <style>
+
 .none {
   display: none;
 }

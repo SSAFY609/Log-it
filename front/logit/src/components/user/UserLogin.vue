@@ -52,9 +52,9 @@
           </div>
         </div>
         <div class="login-form-link">
-          <div>
+          <router-link class="text-color"  :to="{name:'UserFindPassword'}">
             <span>비밀번호를 잊으셨습니까?</span>
-          </div>
+          </router-link>
          
           <div class="login-form-link-signup">
             <span>Log-it이 처음인가요?
@@ -116,6 +116,9 @@
 }
   </script >
   <style scoped>
+    .text-color{
+      color:#393939;
+    }
 .login-form-link-signup{
   margin-top: 9px;
 }

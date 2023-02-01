@@ -30,7 +30,7 @@
 
 <script>
 import { useRouter } from "vue-router";
-import { reactive } from "vue";
+import { reactive, onBeforeMount} from "vue";
 
 export default {
   name: "UserProfile",
@@ -42,13 +42,20 @@ export default {
       id: "1",
     });
     const selProf = () => {
+      
       console.log(props.user.profile);
       router.push({ name: "UserPhoto" });
     };
+
+    onBeforeMount(() => {
+      state.id = props.user.profile;
+    })
+
     return {
       state,
       selProf,
     };
+    
   },
   methods: {
     signProf() {
