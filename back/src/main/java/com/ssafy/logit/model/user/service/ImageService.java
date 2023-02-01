@@ -2,6 +2,7 @@ package com.ssafy.logit.model.user.service;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.Upload;
@@ -29,6 +30,9 @@ public class ImageService {
 
     @Value("${s3.url}")
     private String bucketUrl;
+
+    @Value("${s3.region}")
+    private String region;
 
     @Autowired
     private AmazonS3 amazonS3;
@@ -60,12 +64,13 @@ public class ImageService {
 
             // db에 저장
             if(userDto.getImage() != null) {
-                // 원래 이미지 삭제하는 동작
+                dropImage(userDto.getId());
             }
             userDto.setImage(saveFileName);
             userRepo.save(userDto.toEntity());
-        } catch (StringIndexOutOfBoundsException e) {
-            url = "fail";
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         return url;
     }
@@ -90,25 +95,26 @@ public class ImageService {
             log.error(amazonClientException.getMessage());
         }
     }
-}
 
-// 이제 디비에 저장된게 파일 이름이니까..!! 바로 삭제하면 됨!!
-//    public Boolean dropImage(String fileUrl, Long id) throws Exception {
-//        // 키 구하기
-//        String fileKey = fileUrl.substring(49); // 폴더/파일.확장자
-//        System.out.println(">>>>>>>>>>>>> fileKey : " + fileKey);
-//        final AmazonS3 s3 = AmazonS3ClientBuilder.standard().withRegion(region).build();
-//
-//        // fileKey 속성 null로 변환 및 s3에서 기존 파일(프로필 사진) 삭제
-//        UserDto userDto;
-//        if(userRepo.findById(id).isPresent()) {
-//            userDto = userRepo.findById(id).get().toDto();
-//            userDto.setImage(null);
-//            userRepo.save(userDto.toEntity());
-//            s3.deleteObject(bucket, fileKey);
-//            return true;
-//        } else {
-//            return false;
-//        }
-//    }
-//}
+    // 이미지 삭제
+    public void dropImage(Long id) throws Exception {
+        UserDto userDto = userRepo.findById(id).get().toDto();
+
+        // 기존 프로필 사진
+        String fileKey = userDto.getImage();
+        System.out.println(">>>>>>>>>>>> fileKey : " + fileKey);
+
+        // 아마존 S3 객체 생성
+        final AmazonS3 s3 = AmazonS3ClientBuilder.standard().withRegion(region).build();
+
+        // 기존 프로필 사진 삭제 (db의 image 속성 null로 변경, S3에 올라가있는 사진 삭제)
+        try {
+            userDto.setImage(null);
+            userRepo.save(userDto.toEntity());
+            s3.deleteObject(bucket, fileKey);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+}
