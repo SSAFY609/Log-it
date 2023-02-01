@@ -168,7 +168,7 @@ const router = createRouter({
           props: true,
         },
         {
-          path: "profile/:id",
+          path: "profile",
           name: "UserProfile",
           component: UserProfile,
           props: true,

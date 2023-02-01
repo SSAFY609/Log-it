@@ -29,20 +29,18 @@
 </template>
 
 <script>
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
+import { reactive } from "vue";
+
 export default {
   name: "UserProfile",
   props: ["user"],
   setup(props) {
-    const route = useRoute();
     const router = useRouter();
-    const state = {
+    const state = reactive({
       preview: "",
-      id: "",
-    };
-
-    state.id = route.params.id;
-
+      id: "1",
+    });
     const selProf = () => {
       console.log(props.user.profile);
       router.push({ name: "UserPhoto" });

@@ -69,7 +69,7 @@ export default {
         alert("입력된 암호가 일치하지 않습니다.");
         return;
       }
-      this.$router.push({ name: "UserProfile", params: { id: 1 } });
+      this.$router.push({ name: "UserProfile"});
     },
 
     async chkPw() {
