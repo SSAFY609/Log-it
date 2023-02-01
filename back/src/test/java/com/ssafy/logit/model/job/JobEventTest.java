@@ -32,8 +32,8 @@ class JobEventTest {
 //        LocalDate now = LocalDate.now();
 //        LocalDate after = now.plusDays(5);
 
-        JobEvent jobEvent1 = JobEvent.createJobEvent(null, "company1", "인턴", false, null);
-        JobEvent jobEvent2 = JobEvent.createJobEvent(null, "company2", "신입", false, null);
+        JobEvent jobEvent1 = JobEvent.createJobEvent(null, "company1", "인턴",  null);
+        JobEvent jobEvent2 = JobEvent.createJobEvent(null, "company2", "신입",  null);
 
         em.persist(jobEvent1);
         em.persist(jobEvent2);

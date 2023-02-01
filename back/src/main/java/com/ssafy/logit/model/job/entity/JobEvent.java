@@ -1,7 +1,9 @@
 package com.ssafy.logit.model.job.entity;
 
+
+import com.ssafy.logit.model.common.ResultStatus;
 import com.ssafy.logit.model.user.entity.User;
-import com.ssafy.logit.model.util.dto.EventDate;
+import com.ssafy.logit.model.common.EventDate;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,28 +29,29 @@ public class JobEvent {
 
     @Column(length = 30)
     private String type;
-    private boolean result;
 
+    @Enumerated(EnumType.STRING)
+    private ResultStatus resultStatus;
     @Embedded
     private EventDate eventDate;
 
     // 생성 메소드 //
-    public static JobEvent createJobEvent(User user,String companyName, String type, boolean result,EventDate eventDate){
+    public static JobEvent createJobEvent(User user,String companyName, String type,EventDate eventDate){
         JobEvent jobEvent = new JobEvent();
         jobEvent.user = user;
         jobEvent.companyName = companyName;
         jobEvent.type = type;
-        jobEvent.result = result;
+        jobEvent.resultStatus = ResultStatus.INPROGRESS;
         jobEvent.eventDate = eventDate;
 
         return jobEvent;
     }
 
     // 수정 메소드 //
-    public JobEvent updateInfo(String companyName,String type,boolean result, EventDate eventDate){
+    public JobEvent updateInfo(String companyName,String type,ResultStatus resultStatus, EventDate eventDate){
         this.companyName = companyName;
         this.type = type;
-        this.result = result;
+        this.resultStatus = resultStatus;
         this.eventDate = eventDate;
         return this;
     }
