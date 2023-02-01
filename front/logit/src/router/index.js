@@ -28,6 +28,7 @@ import UserPassword from '../components/user/UserPassword.vue'
 import UserPhoto from '../components/user/UserPhoto.vue'
 import UserProfile from '../components/user/UserProfile.vue'
 import UserFindPassword from '../components/user/UserFindPassword.vue'
+import UserData from '../components/user/UserData.vue'
 import PageSetting from '../components/etc/PageSetting.vue'
 import DeveloperList from '../components/etc/DeveloperList.vue'
 
