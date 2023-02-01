@@ -33,6 +33,14 @@
   font-family:'AppleH';
   src: url('../fonts/AppleSDGothicNeoH.ttf') format('truetype');
   }
+    /* 이벤트용 폰트 */
+  @font-face {
+      font-family:'event';
+      src: url('assets/fonts/나눔손글씨 고딕 아니고 고딩.ttf') format('truetype');
+      }
+    
+
+
   h1 {
     font-family: AppleH;
   }
@@ -139,3 +147,43 @@
     cursor: pointer;
     background-color: #c7c7c7;
   }
+
+  /* 나중에 성장일지 v-chip의 배경색 바꾸기 위한 과정.....
+.v-chip__underlay {
+    background: red;
+} */
+/* .swiper-button-prev {
+  color: #ffffff;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  background-color: #c4c4c4;
+  left: 10% !important;
+  top: 45.9%;
+}
+
+.swiper-button-prev::before{
+  content: '<';
+  font-size: large;
+  color: #ffffff;
+}
+
+.swiper-button-next {
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  background-color: #c4c4c4;
+  right: 10% !important;
+  top: 45.9%;
+}
+
+.swiper-button-next::before{
+  content: '>';
+  font-size: large;
+  color: #ffffff;
+} */
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+display: none;
+}
