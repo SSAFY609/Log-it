@@ -4,6 +4,7 @@
       <div class="title">
         <div class="event-title">{{ event.category }}</div>
         <div class="event-date">{{ date_to_str }}</div>
+        <div> 이성훈 님 외 3명 참여중 <v-icon>mdi-account-multiple-plus</v-icon></div>
       </div>
       <div class="grass-box">
         <div class="grass">
@@ -179,7 +180,8 @@ export default {
       let idx = 0;
       for (let i=0; i<this.period ;i++) {
         if (idx == this.progress.length){
-          break;
+          this.grass.push('not');
+          continue
         }
         const target = this.addDays(st, i);
         if (this.progress[idx].date.toLocaleDateString() == target.toLocaleDateString()) {
@@ -195,7 +197,7 @@ export default {
         }
       }
       this.items.reverse()
-      console.log(this.items)
+      console.log(this.grass)
     }
 
 
