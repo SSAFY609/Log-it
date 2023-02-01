@@ -22,7 +22,6 @@
           label="예) 080000"
           counter
         ></v-text-field>
-        <span class="data-chkText"></span>
         <div @click="signup" class="data-button b_lightgray_l">
           <div>게정 생성</div>
         </div>
@@ -46,7 +45,9 @@ export default {
     ssafyNum: "",
   }),
   methods: {
-    signup() {},
+    signup() {
+      this.$router.push("signup");
+    },
     async chkPw() {
       const validate = await this.$refs.form.validate();
       if (validate.valid) {

@@ -69,7 +69,7 @@ export default {
         alert("입력된 암호가 일치하지 않습니다.");
         return;
       }
-      this.$router.push({ name: "UserProfile"});
+      this.$router.push({ name: "UserProfile" });
     },
 
     async chkPw() {
@@ -86,9 +86,10 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .password-input {
   margin-top: -10px;
+  font-size: 14px;
 }
 .password-link-Email {
   color: #9d9d9d;
@@ -131,6 +132,7 @@ Email {
   background-color: #ff0a54;
 }
 .password-container {
+  font-family: appleL;
   position: relative;
   margin-top: 12px;
 }

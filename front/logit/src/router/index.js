@@ -29,6 +29,8 @@ import UserPhoto from '../components/user/UserPhoto.vue'
 import UserProfile from '../components/user/UserProfile.vue'
 import UserFindPassword from '../components/user/UserFindPassword.vue'
 import UserData from '../components/user/UserData.vue'
+import UserPasswordReset from '../components/user/UserPasswordReset.vue'
+import UserSignupComplete from '../components/user/UserSignupComplete.vue'
 import PageSetting from '../components/etc/PageSetting.vue'
 import DeveloperList from '../components/etc/DeveloperList.vue'
 
@@ -198,6 +200,18 @@ const router = createRouter({
           component: UserData,
           props: true,
         },
+        {
+          path: "reset",
+          name: "UserPasswordReset",
+          component: UserPasswordReset,
+          props:true,
+        },
+        {
+          path: "signup",
+          name: "UserSignupComplete",
+          component: UserSignupComplete,
+          props:true,
+        }
       ],
     },
     {

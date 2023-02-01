@@ -59,6 +59,14 @@ export default {
   width: 420px;
   overflow-y: scroll;
 }
+.profile-scroll::-webkit-scrollbar{
+  background: none;
+  width:10px;
+}
+.profile-scroll::-webkit-scrollbar-thumb{
+  background-color: #7d7d7da8;
+  border-radius: 10px;
+}
 .profile-container {
   height: 85%;
   margin-top: 12px;
