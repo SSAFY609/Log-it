@@ -1,34 +1,36 @@
-import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
-import SearchView from "../views/SearchView.vue";
-import EventView from "../views/EventView.vue";
-import JobView from "../views/JobView.vue";
-import ProfileView from "../views/ProfileView.vue";
-import UserView from "../views/UserView.vue";
-import EtcView from "../views/EtcView.vue";
-import MainPage from "../components/home/MainPage.vue";
-import FirstTimeline from "../components/home/FirstTimeline.vue";
-import TimeLine from "../components/home/TimeLine.vue";
-import SearchResult from "../components/search/SearchResult.vue";
-import EventList from "../components/event/EventList.vue";
-import EventProgress from "../components/event/EventProgress.vue";
-import ProgressCreate from "../components/event/ProgressCreate.vue";
-import ProgressDetail from "../components/event/ProgressDetail.vue";
-import JobList from "../components/job/JobList.vue";
-import JobProgress from "../components/job/JobProgress.vue";
-import ProfilePage from "../components/profile/ProfilePage.vue";
-import UpdateProfile from "../components/profile/UpdateProfile.vue";
-import CheckPassword from "../components/profile/CheckPassword.vue";
-import UpdatePassword from "../components/profile/UpdatePassword.vue";
-import UserLogin from "../components/user/UserLogin.vue";
-import UserEmail from "../components/user/UserEmail.vue";
-import UserPassword from "../components/user/UserPassword.vue";
-import UserPhoto from "../components/user/UserPhoto.vue";
-import UserProfile from "../components/user/UserProfile.vue";
-import UserFindPassword from "../components/user/UserFindPassword.vue";
-import PageSetting from "../components/etc/PageSetting.vue";
-import DeveloperList from "../components/etc/DeveloperList.vue";
-import UserData from "../components/user/UserData.vue";
+import { createRouter, createWebHistory } from 'vue-router'
+import HomeView from '../views/HomeView.vue'
+import SearchView from '../views/SearchView.vue'
+import EventView from '../views/EventView.vue'
+import JobView from '../views/JobView.vue'
+import ProfileView from '../views/ProfileView.vue'
+import UserView from '../views/UserView.vue'
+import EtcView from '../views/EtcView.vue'
+import MainPage from '../components/home/MainPage.vue'
+import FirstTimeline from '../components/home/FirstTimeline.vue'
+import TimeLine from '../components/home/TimeLine.vue'
+import SearchResult from '../components/search/SearchResult.vue'
+import EventList from '../components/event/EventList.vue'
+import EventCreate from '../components/event/EventCreate.vue'
+import EventProgress from '../components/event/EventProgress.vue'
+import ProgressCreate from '../components/event/ProgressCreate.vue'
+import ProgressDetail from '../components/event/ProgressDetail.vue'
+import JobCreate from '../components/job/JobCreate.vue'
+import JobList from '../components/job/JobList.vue'
+import JobProgress from '../components/job/JobProgress.vue'
+import ProfilePage from '../components/profile/ProfilePage.vue'
+import UpdateProfile from '../components/profile/UpdateProfile.vue'
+import CheckPassword from '../components/profile/CheckPassword.vue'
+import UpdatePassword from '../components/profile/UpdatePassword.vue'
+import UserLogin from '../components/user/UserLogin.vue'
+import UserEmail from '../components/user/UserEmail.vue'
+import UserPassword from '../components/user/UserPassword.vue'
+import UserPhoto from '../components/user/UserPhoto.vue'
+import UserProfile from '../components/user/UserProfile.vue'
+import UserFindPassword from '../components/user/UserFindPassword.vue'
+import PageSetting from '../components/etc/PageSetting.vue'
+import DeveloperList from '../components/etc/DeveloperList.vue'
+
 
 const router = createRouter({
   history: createWebHistory(),
@@ -78,9 +80,15 @@ const router = createRouter({
           component: EventList,
         },
         {
-          path: ":eventId",
-          name: "EventProgress",
-          component: EventProgress,
+          path: 'create',
+          name: 'EventCreate',
+          component: EventCreate,
+          props: true,
+        },
+        {
+          path: ':eventId',
+          name: 'EventProgress',
+          component: EventProgress
         },
         {
           path: ":eventId/create",
@@ -100,9 +108,14 @@ const router = createRouter({
       component: JobView,
       children: [
         {
-          path: "",
-          name: "JobList",
-          component: JobList,
+          path: 'create',
+          name: 'JobCreate',
+          component: JobCreate
+        },
+        {
+          path: '',
+          name: 'JobList',
+          component: JobList
         },
         {
           path: ":jobId",

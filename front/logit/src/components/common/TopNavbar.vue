@@ -47,7 +47,7 @@ export default {
     align-items: center;
     padding: 0 10px;
     border-bottom: 0.5px solid rgba(216, 216, 216, 0.6);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(5px);
   }
 
   .slider_box {
