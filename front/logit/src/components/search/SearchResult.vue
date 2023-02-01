@@ -1,6 +1,7 @@
 <template>
-    <div>SearchResult</div>
-  </template>
+    <div class="container">SearchResult</div>
+    
+</template>
   
   <script>
   export default {
@@ -8,6 +9,11 @@
   }
   </script>
   
-  <style>
+  <style scoped>
+  .container {
+   background-color: green;
+   width: 1000px;
+   height: 1000px;
+  }
   
   </style>

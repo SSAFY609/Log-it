@@ -4,10 +4,22 @@
       <div @click="openSidebar" class="slider_hover slider_box b_lightgray"><v-icon class="silder_icon f_white">mdi-chevron-double-right</v-icon></div>
     </div>
     <div class="right_box lay3">
+<<<<<<< HEAD
       <div @click="openSearch" class="search_box right_box_items hover_cursor">
         <div class="search_icon_box"><v-icon class="search_icon">mdi-magnify</v-icon></div>
         <div class="search_content_box">
           <div class="search_content">검색</div>        
+=======
+      <div class="search_box_container lay1">
+        <div @click="openSearch" class="search_box right_box_items hover_cursor  lay2">
+          <v-icon class="search_icon lay3">mdi-magnify</v-icon>
+          <div class="search_content lay3">검색</div>
+          <v-autocomplete class="search_input_text nosee" autofocus
+            clearable
+            variant="null"
+            :items=state.SearchList
+          ></v-autocomplete>
+>>>>>>> ca20e4e5b61e6da372cac24e77ae38c6e10e105e
         </div>
       </div>
 
@@ -29,6 +41,7 @@
             <li>설정</li>
             <li>친구목록</li>
             <li>프로필</li>
+
             <li>로그아웃</li>
           </ul>
         </div>
@@ -52,6 +65,25 @@ export default {
         name: "이성훈",
         num: "848212",  
       },
+      SearchList: [
+        "알고리즘",
+        "알고리즘A형",
+        "알고리즘B형",
+        "알고리즘IM형",
+        "관통프로젝트",
+        "알고리즘A동생",
+        "알고리즘B동생",
+        "알고리즘A누나",
+        "알고리즘B누나",
+        "이성훈",
+        "공진호",
+        "김설희",
+        "김나현",
+        "오하늘",
+        "최강혁",
+        "김신일",
+      ]
+        // loginUser: null,
     }
     const openSidebar = () => {
       const eventTarget1 = document.querySelector('.SideNavbar_box')
@@ -63,14 +95,28 @@ export default {
     const openProfile = () => {
       const target = document.querySelector('.profile_slider_box')
       
-      console.log(target)
+
 
       target.classList.toggle('nosee')
     }
     const openSearch = () => {
+<<<<<<< HEAD
       const target = document.querySelector('.open_search_box')
 
       target.classList.toggle('nosee')
+=======
+
+      const target = document.querySelector('.search_box')
+      const target2 = document.querySelector('.search_input_text') 
+      const target3 = document.querySelector('.search_content') 
+
+      target.classList.add('max_animation')
+      target2.style.display="inline-block"
+      target2.focus()
+      target3.classList.add('nosee')
+
+      
+>>>>>>> ca20e4e5b61e6da372cac24e77ae38c6e10e105e
     }
     return {
       state,
@@ -113,7 +159,11 @@ export default {
     align-items: center;
   }
   .right_box {
+<<<<<<< HEAD
     width: 500px;
+=======
+    width: 620px;
+>>>>>>> ca20e4e5b61e6da372cac24e77ae38c6e10e105e
     height: 50px;
     display: flex;
     align-items: center;
@@ -122,11 +172,11 @@ export default {
     height: 100%;
   }
   .search_box {
-    width: 100px;
+    width: 70px;
     height: 40px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: start;
     border-radius: 4px;
     margin-right: 10px;
     background-color: red;
@@ -148,6 +198,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: end;
+
   }
   .login_btn {
     width: 100px;
@@ -164,24 +215,20 @@ export default {
     margin-top: 2px;
     font-size: 16px;
   }
-  .search_icon_box {
-    width: 36px;
-    height: 36px;  
-    display: flex;
-    align-items: center;
-    margin-left: 0px;
-  }
   .search_icon {
-    font-size: 26px;
+    width: 40px;
+    height: 100%;
+    font-size: 20px;
+    padding-right: 0px;
+    margin-right:0px;
+
 
   }
   .search_content {
-    height: 26px;
+    height: 100%;
     width: 60px;
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    font-size: 20px;
+    font-size: 18px;
+    padding-top: 6px;
   }
 
   .search_content_box {
@@ -200,7 +247,12 @@ export default {
   }
   .profile_id {
     margin-right: 10px;
-    font-size: 20px;
+    margin-top: 2px;
+    font-size: 18px;
+    width: 154px;
+    display: flex;
+    justify-content: end;
+    border-left: 1.5px solid lightgray;
   }
   .profile_slider_box {
     margin: 0 auto;
@@ -211,7 +263,7 @@ export default {
     top: 60px;
     background-color: #ffffff;
     backdrop-filter: blur(20px);
-    outline: 1px solid #b9b9b9;
+
     box-shadow: 4px 4px 20px 4px rgba(59, 59, 59, 0.1);
     
 
@@ -234,7 +286,45 @@ export default {
     font-weight: 900;
     cursor: pointer;
   }
+<<<<<<< HEAD
 
+
+=======
+  .search_box_container{
+    width: 400px;
+    height: 100%;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+  }
+
+  .max_animation {
+  animation-duration: 0.4s;
+  animation-name: maxAnimation;
+  animation-fill-mode:forwards;
+  animation-direction: alternate;
+  background-color: #efefef;
+}
+
+
+@keyframes maxAnimation {
+  from {
+    width: 100px;
+  }
+>>>>>>> ca20e4e5b61e6da372cac24e77ae38c6e10e105e
+
+  to {    
+    width: 400px
+  }
+}
+
+input:focus {outline: none;} 
+
+.search_input_text {
+  height: 100%;
+  background-color: none;
+  margin-bottom: 14px;
+}
 
 
 </style>

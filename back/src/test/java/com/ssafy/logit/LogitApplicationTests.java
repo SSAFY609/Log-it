@@ -9,5 +9,4 @@ class LogitApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }
