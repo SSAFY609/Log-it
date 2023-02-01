@@ -1,5 +1,6 @@
 package com.ssafy.logit.controller.job;
 
+import com.ssafy.logit.model.common.ResultDto;
 import com.ssafy.logit.model.job.dto.CreateJobEventRequest;
 import com.ssafy.logit.model.job.dto.CreateJobEventResponse;
 import com.ssafy.logit.model.job.dto.UpdateJobEventRequest;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -42,13 +44,26 @@ public class JobController {
 
     @Operation(summary = "취업 이벤트 모두 조회", description = "해당 유저의 취업 이벤트를 모두 조회")
     @GetMapping
-    public ResponseEntity<CreateJobEventResponse> getAll(@RequestAttribute String email){
+    public ResponseEntity<ResultDto> getAll(@RequestAttribute String email){
         User user = userService.getUser(email).toEntity();
+        System.out.println("user.getName() = " + user.getName());
+
         List<JobEvent> events = jobService.getEvents(user);
+        for (JobEvent event : events) {
+            System.out.println("event = " + event);
+        }
 
-//        List<CreateJobEventResponse>
 
-        return new ResponseEntity<>(null, HttpStatus.CREATED);
+        List<CreateJobEventResponse> collect = events.stream()
+                .map(o -> new CreateJobEventResponse(o))
+                .collect(Collectors.toList());
+
+        for (CreateJobEventResponse createJobEventResponse : collect) {
+            System.out.println("createJobEventResponse = " + createJobEventResponse);
+        }
+        ResultDto resultDto = new ResultDto(collect.size(), collect);
+
+        return new ResponseEntity<>(new ResultDto(collect.size(),collect), HttpStatus.OK);
     }
 
 

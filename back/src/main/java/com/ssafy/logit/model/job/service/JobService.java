@@ -24,7 +24,6 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 @Slf4j
 public class JobService {
-    private final UserRepository userRepository;
     private final JobRepository jobRepository;
 
     public List<JobEvent> getEvents(User user) {
@@ -35,8 +34,6 @@ public class JobService {
 
     @Transactional
     public JobEvent create(User user, CreateJobEventRequest request) {
-
-
         String type = request.getType();
         String companyName = request.getCompanyName();
         EventDate eventDate = EventDate.createEventDate(request.getStartDate(), request.getEndDate());
@@ -80,19 +77,5 @@ public class JobService {
         }
     }
 
-//    @Transactional
-//    public JobEvent create(Long userId, CreateJobEventRequest jobEvent) {
-//        User user = userRepo.findById(userId).get();
-////        JobEvent jobEvent = JobEvent.createJobEvent(user, jobEvent.)
-//        jobRepository.finb
-//
-//    }
 
-
-//    @Transactional
-//    public void save(Long userId, JobEvent jobEvent) {
-//        User user = userRepo.findById(userId).get();
-//        jobRepository.save(user, jobEvent);
-//
-//    }
 }
