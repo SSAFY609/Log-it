@@ -26,7 +26,7 @@
          email: "이메일 ",
          password: "암호 ",
          profile: "1",
-         uName: "이름",
+         uName: "오하늘",
          sfNum: "학번 ",
       });
 
@@ -49,10 +49,10 @@
    background-color: EDEDED;
   }
   .user-box {
-   margin: 60px 0px;
+   margin-top: 50px;
    background-color: white;
    border-radius: 20px;
-   width: 500px;
+   width: 470px;
    height: 600px;
   }
   </style>
