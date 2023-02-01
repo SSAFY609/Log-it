@@ -89,8 +89,10 @@ public class UserService {
         return pw;
     }
 
+    // 회원이 있을 때는 update, 회원이 없을 때는 regist
+    // => regist 변수로 판단
     @Transactional
-    public void saveUser(UserDto userDto, boolean regist) {
+    public UserDto saveUser(UserDto userDto, boolean regist) {
         Optional<User> user = userRepo.findByEmail(userDto.getEmail());
         if(user.isPresent() && !regist) { // update
             System.out.println("===== updateUser =====");
@@ -99,6 +101,7 @@ public class UserService {
             System.out.println("===== insertUser =====");
             userRepo.save(userDto.toEntity());
         }
+        return userDto;
     }
 
     public List<UserDto> getAllUser() {

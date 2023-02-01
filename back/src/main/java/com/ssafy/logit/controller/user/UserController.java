@@ -3,13 +3,17 @@ package com.ssafy.logit.controller.user;
 import com.ssafy.logit.jwt.JwtUtil;
 import com.ssafy.logit.model.user.dto.MailDto;
 import com.ssafy.logit.model.user.dto.UserDto;
+import com.ssafy.logit.model.user.service.ImageService;
 import com.ssafy.logit.model.user.service.MailService;
 import com.ssafy.logit.model.user.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +22,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/user")
+@Tag(name="user", description="회원 API")
 public class UserController {
 
     private static final String SUCCESS = "success";
@@ -35,7 +40,11 @@ public class UserController {
     @Autowired
     private MailService mailService;
 
+    @Autowired
+    private ImageService imageService;
+
     // 회원 가입
+    @Operation(summary = "회원가입", description = "회원 정보 저장 (JWT 인증x)")
     @PostMapping("/regist")
     public ResponseEntity<String> regist(@RequestBody UserDto userDto) throws Exception {
         try {
@@ -48,6 +57,7 @@ public class UserController {
     }
 
     // 로그인
+    @Operation(summary = "로그인", description = "회원 정보 저장 (JWT 인증x)")
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody UserDto userDto) throws Exception {
         log.info("login user info : {}", userDto);
@@ -66,6 +76,7 @@ public class UserController {
     }
 
     // 토큰 재발급
+    @Operation(summary = "토큰 재발급", description = "refresh 토큰 확인 후 access 토큰 재발급")
     @PostMapping("/refresh")
     public ResponseEntity<Map<String, Object>> refreshToken(@RequestParam String email) {
         Map<String, Object> resultMap = new HashMap<>();
@@ -84,6 +95,7 @@ public class UserController {
     }
 
     // 로그아웃
+    @Operation(summary = "로그아웃", description = "로그아웃하고 토큰 null로 변환")
     @PostMapping("/logout")
     public ResponseEntity<String> logout(@RequestAttribute String email) {
         try {
@@ -97,6 +109,7 @@ public class UserController {
     }
 
     // 비밀번호 찾기 (임시 비밀번호 발급 후 이메일 전송)
+    @Operation(summary = "비밀번호 찾기", description = "임시 비밀번호 발급 후 이메일 전송")
     @PostMapping("/sendPw")
     public ResponseEntity<String> sendPwEmail(@RequestParam("email") String email) {
         UserDto userDto = userService.getUser(email);
@@ -117,21 +130,17 @@ public class UserController {
     }
 
     // 회원 수정
+    @Operation(summary = "회원 수정", description = "회원 정보 수정")
     @PostMapping
-    public ResponseEntity<String> saveUser(@RequestBody UserDto userDto, @RequestAttribute String email) throws Exception {
+    public ResponseEntity<String> updateUser(@RequestBody UserDto userDto, @RequestAttribute String email) throws Exception {
         try {
-            // 해당하는 회원 없을 경우 <회원 가입>, 있을 경우 <회원 정보 수정>
-            boolean regist = true;
-            if(userService.getUser(userDto.getEmail()) != null) {
-                regist = false;
-
-                // 토큰 사용자 인증
-                if(!userDto.getEmail().equals(email)) {
-                    return new ResponseEntity<>(UNAUTHORIZED, HttpStatus.UNAUTHORIZED);
-                }
+            // 토큰 사용자 인증
+            if(userDto.getEmail().equals(email)) {
+                userService.saveUser(userDto, false);
+                return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(UNAUTHORIZED, HttpStatus.UNAUTHORIZED);
             }
-            userService.saveUser(userDto, regist);
-            return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<String>(FAIL, HttpStatus.OK);
@@ -139,18 +148,21 @@ public class UserController {
     }
 
     // 전체 회원 조회
+    @Operation(summary = "전체 회원 조회", description = "전체 회원 조회")
     @GetMapping("/get")
     public ResponseEntity<List<UserDto>> getAllUser() throws Exception {
         return new ResponseEntity<List<UserDto>>(userService.getAllUser(), HttpStatus.OK);
     }
 
     // email로 회원 조회
+    @Operation(summary = "회원 조회", description = "email로 회원 단건 조회")
     @GetMapping
     public ResponseEntity<UserDto> getUser(@RequestAttribute String email) throws Exception {
         return new ResponseEntity<UserDto>(userService.getUser(email), HttpStatus.OK);
     }
 
-    // 회원 삭제 (실제 삭제x, isDeleted 1로 업데이트)
+    // 회원 삭제 (실제 삭제x, deleted 1로 업데이트)
+    @Operation(summary = "회원 삭제", description = "id로 회원 삭제 (실제 삭제x, deleted 1로 업데이트)")
     @PutMapping("/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable Long id, @RequestAttribute String email) throws  Exception {
         try {
@@ -174,6 +186,7 @@ public class UserController {
     }
 
     // 회원 삭제 (실제 삭제) - 회원 이용 불가 !!
+    @Operation(summary = "회원 삭제", description = "id로 회원 실제 삭제 (DB에서 해당 회원 삭제)")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> dropUser(@PathVariable Long id) throws Exception {
         boolean result = userService.dropUser(id);
@@ -188,4 +201,44 @@ public class UserController {
             return new ResponseEntity<String>(FAIL, HttpStatus.OK);
         }
     }
+
+    @Operation(summary = "프로필 이미지 업로드", description = "프로필 이미지 업로드")
+    @PostMapping("/uploadImage")
+    public ResponseEntity<String> uploadImage(@RequestBody MultipartFile multipartFile, @RequestAttribute String email) throws Exception {
+        try {
+            log.info("MultipartFile : " + multipartFile);
+            String fileUrl = imageService.uploadImage(multipartFile, userService.getUser(email));
+            if(fileUrl.equals(FAIL)) {
+                return new ResponseEntity<String>(FAIL, HttpStatus.OK);
+            } else {
+                log.info("이미지 업로드 성공! url : " + fileUrl);
+                return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(FAIL, HttpStatus.OK);
+        }
+    }
+
+//    // 프로필 이미지 삭제 (S3에서 삭제 및 image 속성 null로 업데이트)
+//    @Operation(summary = "프로필 이미지 삭제", description = "S3에서 삭제 및 image 속성 null로 업데이트")
+//    @DeleteMapping("/deleteImage/{id}")
+//    public ResponseEntity<String> dropImage(@PathVariable Long id, @RequestAttribute String email) throws Exception {
+//        boolean result = imageService.dropImage(userService.getUser(id).getImage(), id);
+//        try {
+//            // 토큰 사용자 인증
+//            if(userService.getUser(id).getId().equals(email)) {
+//                if(result) {
+//                    return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
+//                } else {
+//                    return new ResponseEntity<>(NONE, HttpStatus.OK);
+//                }
+//            } else {
+//                return new ResponseEntity<>(UNAUTHORIZED, HttpStatus.UNAUTHORIZED);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return new ResponseEntity<String>(FAIL, HttpStatus.OK);
+//        }
+//    }
 }

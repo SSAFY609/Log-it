@@ -51,6 +51,8 @@ public class JwtUtil {
     public Map<String, Object> checkAndGetClaims(final String jwt) {
         Jws<Claims> claims = Jwts.parser().setSigningKey(salt.getBytes()).parseClaimsJws(jwt);
         log.trace("claims : {}", claims);
+        log.trace("salt : " + salt + " expireMin" + expireMin);
+        log.trace("claims.getBody() : " + claims.getBody());
         return claims.getBody();
     }
 }

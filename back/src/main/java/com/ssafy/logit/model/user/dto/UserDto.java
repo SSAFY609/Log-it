@@ -1,29 +1,53 @@
 package com.ssafy.logit.model.user.dto;
 
 import com.ssafy.logit.model.user.entity.User;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
+@Schema(description = "회원")
 @Data
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDto {
 
+    @Schema(description = "아이디 (auto_increment)")
     private Long id;
+
+    @Schema(description = "이름")
     private String name;
+
+    @Schema(description = "이메일")
     private String email;
+
+    @Schema(description = "비밀번호")
     private String pw;
+
+    @Schema(description = "기수")
     private int flag;
+
+    @Schema(description = "학번")
     private String studentNo;
+
+    @Schema(description = "프로필 이미지")
     private String image;
+
+    @Schema(description = "탈퇴 여부")
     private boolean deleted;
+
+    @Schema(description = "가입 시간")
     private LocalDateTime createdTime;
+
+    @Schema(description = "마지막 업데이트 시간")
     private LocalDateTime loginTime;
 
+    @Schema(description = "access 토큰")
     private String authToken; // 사용자 인증 정보 토큰
+
+    @Schema(description = "refresh 토큰")
     private String refreshToken; // authToken 갱신을 위한 토큰
 
     // List<Entity> -> List<DTO> 변환을 위함

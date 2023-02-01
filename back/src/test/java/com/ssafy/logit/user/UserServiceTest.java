@@ -8,8 +8,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import java.util.Optional;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -21,32 +25,71 @@ class UserServiceTest {
     private UserService userService;
 
     @Test
-    void saveUser() {
+    void insertUser() {
+        // given
         UserDto userDto = UserDto.builder()
-                            .name("테스트 회원")
-                            .email("test@test.com")
-                            .pw("1234")
-                            .flag(8)
-                            .studentNo("0800000")
-                            .deleted(false).build();
-        when(userRepo.save(any())).thenReturn(userDto.toEntity());
+                .email("test@gmail.com")
+                .pw("1234").build();
 
-        userService.saveUser(userDto,true);
-    }
+        when(userRepo.save(any())).thenReturn(userDto.toEntity()); // Mock 객체 주입
 
-    @Test
-    void getAllUser() {
+        // when
+        UserDto result = userService.saveUser(userDto, true);
+
+        // then
+        verify(userRepo, times(1)).save(any());
+        assertThat(result).isEqualTo(userDto);
     }
 
     @Test
     void getUser() {
+        // given
+        UserDto userDto = UserDto.builder()
+                .email("test@gmail.com")
+                .pw("1234").build();
+
+        when(userRepo.findByEmail("test@gmail.com")).thenReturn(Optional.ofNullable(userDto.toEntity()));
+
+        // when
+        UserDto result = userService.getUser("test@gmail.com");
+
+        // then
+        verify(userRepo, times(2)).findByEmail(any());
+        assertThat(result).isEqualTo(userDto);
     }
 
     @Test
-    void deleteUser() {
+    void updateUser() {
+        // given
+        UserDto userDto = UserDto.builder()
+                .email("test@gmail.com")
+                .pw("1234").build();
+
+        when(userRepo.save(any())).thenReturn(userDto.toEntity()); // Mock 객체 주입
+
+        // when
+        userDto.setPw("0000");
+        UserDto result = userService.saveUser(userDto, false);
+
+        // then
+        verify(userRepo, times(1)).save(any());
+        assertThat(result).isEqualTo(userDto);
+        assertThat(result.getPw()).isEqualTo("0000");
     }
 
     @Test
     void dropUser() {
+        // given
+        UserDto userDto = UserDto.builder()
+                .id(1L)
+                .email("test@gmail.com")
+                .pw("1234").build();
+        given(userRepo.findById(anyLong())).willReturn(Optional.of(userDto.toEntity()));
+
+        // when
+        boolean result = userService.dropUser(1L);
+
+        // then
+        verify(userRepo).deleteById(anyLong());
     }
 }
