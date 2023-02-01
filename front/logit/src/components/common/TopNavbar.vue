@@ -4,18 +4,37 @@
       <div @click="openSidebar" class="slider_hover slider_box b_lightgray"><v-icon class="silder_icon f_white">mdi-chevron-double-right</v-icon></div>
     </div>
     <div class="right_box lay3">
-      <div class="search_box right_box_items hover_cursor">
-        <div class="search_icon_box"><v-icon class="search_icon">mdi-magnify</v-icon></div>
-        <div class="search_content_box">
-          <div class="search_content">검색</div>
+      <div class="search_box_container lay1">
+        <div class="search_box right_box_items hover_cursor max_animation">
+          <div class="search_icon_box"><v-icon class="search_icon">mdi-magnify</v-icon></div>
+          <div class="search_content_box">
+            <div class="search_content">검색</div>        
+          </div>  
         </div>
       </div>
-      <div class="login_btn_box right_box_items">
+
+      <div v-if="!state.loginUser" class="login_btn_box right_box_items">
         <router-link :to="{name: 'UserLogin'}" class="login_btn b_main btn_hover">
           <div class="login_btn_text f_white">로그인</div>
         </router-link>
       </div>
-      <div class="profile_box right_box_items"></div>
+      <div v-else class="profile_box right_box_items lay1">
+        <div @click="openProfile" class="profile_id lay2 hover_cursor ">{{state.loginUser.name}} 님</div>
+        <div @click="openProfile" class="profile_img_box hover_cursor lay2">
+          <v-img class="logo_img"
+            :src="require('../../assets/profiles/scale (3).png')"
+            height="110"
+          />    
+        </div>
+        <div class="profile_slider_box lay3 nosee">
+          <ul>
+            <li>설정</li>
+            <li>친구목록</li>
+            <li>프로필</li>
+            <li>로그아웃</li>
+          </ul>
+        </div>
+      </div>
     </div>
     
 
@@ -26,17 +45,37 @@
 
 export default {
   name: 'TopNavbar',
-  methods: {
-    openSidebar() {
+
+
+  setup() {
+    const state = {
+      loginUser: {
+        id: "leesh132",
+        name: "이성훈",
+        num: "848212",  
+      },
+    }
+    const openSidebar = () => {
       const eventTarget1 = document.querySelector('.SideNavbar_box')
       const eventTarget2 = document.querySelector('.SideNavbar_space')
 
       eventTarget1.classList.toggle('nosee')
       eventTarget2.classList.toggle('nosee')
     }
+    const openProfile = () => {
+      const target = document.querySelector('.profile_slider_box')
+      
+      console.log(target)
+
+      target.classList.toggle('nosee')
+    }
+    return {
+      state,
+      openSidebar,
+      openProfile,
+    }
   }
-  
-}
+} 
 </script>
 <style scoped>
   .container {
@@ -55,7 +94,7 @@ export default {
     height: 40px;
     border-radius: 8px;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
     
   }
@@ -70,13 +109,13 @@ export default {
     align-items: center;
   }
   .right_box {
-    width: 300px;
+    width: 600px;
     height: 50px;
     display: flex;
     align-items: center;
   }
   .right_box_items {
-    height: 40px;
+    height: 100%;
   }
   .search_box {
     width: 100px;
@@ -91,17 +130,19 @@ export default {
     background-color: #efefef;
   }
   .login_btn_box {
-    width: 200px;
+    width: 220px;
     height: 36px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: end;
     border-left: 1.5px solid lightgray;
     
   }
   .profile_box {
-    width: 230px;
-    display: none;
+    width: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: end;
   }
   .login_btn {
     width: 100px;
@@ -136,13 +177,82 @@ export default {
     justify-content: start;
     align-items: center;
     font-size: 20px;
-    
   }
+
   .search_content_box {
     width: 40px;
     height: 36px;  
     display: flex;
     align-items: center;
     justify-content: center;
+  } 
+  .profile_img_box {
+    width: 46px;
+    height: 46px;
+    border-radius: 50px;
+    background-color: gray;
+    margin-right: 10px;
   }
+  .profile_id {
+    margin-right: 10px;
+    font-size: 20px;
+  }
+  .profile_slider_box {
+    margin: 0 auto;
+    width: 140px;
+    height: 160px;
+    position: absolute;
+    border-radius: 6px;
+    top: 60px;
+    background-color: #ffffff;
+    backdrop-filter: blur(20px);
+    outline: 1px solid #b9b9b9;
+    box-shadow: 4px 4px 20px 4px rgba(59, 59, 59, 0.1);
+    
+
+  }
+  li {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    height: 40px;
+    width:140px;
+    list-style-type: none;
+    border-radius: 4px;
+    padding-left: 20px;
+
+    
+  }
+  li:hover {
+    background-color: #efefef;
+    color:#191919;
+    font-weight: 900;
+    cursor: pointer;
+  }
+  .search_box_container{
+    width: 400px;
+    height: 100%;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+  }
+
+  .max_animation {
+  animation-duration: 2s;
+  animation-name: max_animation;
+  animation-fill-mode:forwards;
+  animation-direction: alternate;
+}
+
+@keyframes max_animation {
+  from {
+    width: 100px;
+  }
+
+  to {
+    width: 400px
+  }
+}
+
+
 </style>

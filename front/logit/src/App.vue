@@ -26,14 +26,9 @@ export default {
   methods: {
 
   },
-
-  data: () => ({
-
-  }),
-
-
 }
 </script>
 <style>
+@import "@/assets/style/app.css";
 
 </style>
