@@ -4,6 +4,7 @@
       <div class="title">
         <div class="event-title">{{ event.category }}</div>
         <div class="event-date">{{ date_to_str }}</div>
+        <div> 이성훈 님 외 3명 참여중 <v-icon>mdi-account-multiple-plus</v-icon></div>
       </div>
       <div class="grass-box">
         <div class="grass">
@@ -35,7 +36,7 @@
             <div class="memo-date">{{item.date}}</div>
             <div class="memo" @click="dialog = true, create_content = item.content, now_idx = index">
               <!-- <div v-if="!create_content">텍스트를 입력하세요</div> -->
-              <div>{{ item.content }}</div>
+              <div v-html="item.content"></div>
             </div>
           </div>
         </v-timeline-item>
@@ -45,8 +46,28 @@
         class="memo-dialog"
       >
         <div class="memo-dialog memo-bg">
-          <textarea name="" id="" cols="30" rows="10" wrap="hard" v-model="create_content" placeholder="텍스트를 입력하세요"></textarea>
-          <div>
+          <!-- <textarea name="" id="" cols="30" rows="10" wrap="hard" v-model="create_content" placeholder="텍스트를 입력하세요"></textarea> -->
+          <div v-if="update" style="width:100%; text-align:right;"><v-icon @click="update_content">mdi-pencil</v-icon></div>
+          <div v-else style="height: 26.5px"></div>
+          <div v-if="update" class="detail-form">
+            <QuillEditor v-show="update" 
+              class="text-editor" 
+              theme="bubble"
+              v-model:content="create_content"
+              content-type="html"
+              toolbar="essential" 
+              :read-only="update" />
+          </div>
+          <div v-else class="detail-form">
+            <QuillEditor v-show="update" 
+              class="text-editor" 
+              theme="bubble"
+              v-model:content="create_content"
+              content-type="html"
+              toolbar="essential" 
+              :read-only="update" />
+          </div>
+          <div class="check">
             <v-icon size="large" @click="create">mdi-check</v-icon>
             <!-- <v-icon size="large" @click="dialog=false">mdi-close</v-icon> -->
           </div>
@@ -57,6 +78,9 @@
 </template>
 
 <script>
+import {QuillEditor} from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.bubble.css';
+
 export default {
     name: 'EventProgress',
     data() {
@@ -92,9 +116,12 @@ export default {
         dialog: false,
         create_content: '',
         day: ['일', '월', '화', '수', '목', '금', '토'],
-        now_idx: 0
-
+        now_idx: 0,
+        update: true,
       }
+    },
+    components: {
+      QuillEditor,
     },
     computed: {
       date_to_str() {
@@ -123,6 +150,7 @@ export default {
       create() {
         this.items[this.now_idx].content = this.create_content;
         console.log(this.create_content);
+        this.update = true;
         this.dialog = false;
       },
       date_after(i) {
@@ -131,6 +159,15 @@ export default {
         const date = i.getDate();
         const day = i.getDay();
         return `${year}-${month >= 10 ? month : '0' + month}-${date >= 10 ? date : '0' + date} (${this.day[day]})`;
+      },
+      update_content() {
+        this.update = false;
+        console.log('일단 여기옴')
+        const eventTarget1 = document.querySelector('.text-editor');
+        console.log(eventTarget1);
+        eventTarget1.classList.remove('ql-disabled');
+        console.log(eventTarget1);
+
       }
     },
     created() {
@@ -143,7 +180,8 @@ export default {
       let idx = 0;
       for (let i=0; i<this.period ;i++) {
         if (idx == this.progress.length){
-          break;
+          this.grass.push('not');
+          continue
         }
         const target = this.addDays(st, i);
         if (this.progress[idx].date.toLocaleDateString() == target.toLocaleDateString()) {
@@ -159,7 +197,7 @@ export default {
         }
       }
       this.items.reverse()
-      console.log(this.items)
+      console.log(this.grass)
     }
 
 
@@ -168,6 +206,10 @@ export default {
 </script>
 
 <style scoped>
+
+h1 {
+  font-family: event;
+}
 
 .test {
   background-image: url('../../assets/images/memo_grass.png');
@@ -263,7 +305,7 @@ export default {
   display: flex;
   align-items: center;
   font-family: event;
-  font-size: 25px;
+  font-size: 20px;
 }
 .memo-date {
   width: 200px;
@@ -274,7 +316,14 @@ export default {
   /* margin-left: 200px; */
   width: 450px;
   height: 410px;
-  padding: 50px 60px;
+  /* padding: 50px 60px; */
+}
+
+.memo >div {
+  width: 330px;
+  height: 300px;
+  margin: 50px 60px;
+  overflow: hidden;
 }
 
 .memo :hover {
@@ -283,18 +332,24 @@ export default {
 
 .memo-dialog {
   display: flex;
-  width: 730px;
+  width: 680px;
   height: 710px;
 }
 
 .memo-bg {
   background-image: url('../../assets/images/memo_create_bg.png');
   font-family: event;
-  padding: 50px;
+  padding: 43px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+}
+
+.detail-form {
+  width: 100%;
+  height: 90%;
+  font-size: 20px;
 }
 
 .memo-bg >textarea {
@@ -308,5 +363,10 @@ export default {
 .icon {
   height: 30px;
   width: 30px;
+}
+
+.check {
+  position: absolute;
+  top: 606px;
 }
 </style>

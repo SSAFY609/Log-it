@@ -187,3 +187,50 @@
 .swiper-button-prev::after {
 display: none;
 }
+
+/* Quill 사용을 위한 CSS */
+.text-editor {
+  font-size: 20px !important;
+  font-family: event !important;
+  height: 90% !important;
+  width: 96%;
+}
+
+.text-editor h1, .memo h1 {
+  font-family: event;
+}
+
+.text-editor pre, .memo pre {
+  font-size: 18px !important;
+  font-family: appleL !important;
+  background-color: rgba(213, 203, 128, 0.7) !important;
+  color: #000000 !important;
+}
+
+.text-editor blockquote, .memo blockquote {
+  border-left: 4px solid #666 !important;
+  background-color: #a5a5a536 !important;
+  font-size: 25px !important;
+}
+
+/* 나중에 스크롤바 한번 해보자 */
+
+.ql-editor::-webkit-scrollbar {
+  background: none;
+  width: 10px;
+}
+
+.ql-editor::-webkit-scrollbar-thumb {
+  background-color: #7d7d7da8;
+  border-radius: 10px;
+}
+
+body::-webkit-scrollbar {
+  background: none;
+  width: 10px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: #7d7d7da8;
+  border-radius: 10px;
+}
