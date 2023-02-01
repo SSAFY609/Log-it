@@ -206,11 +206,12 @@ public class UserController {
     @PostMapping("/uploadImage")
     public ResponseEntity<String> uploadImage(@RequestBody MultipartFile multipartFile, @RequestAttribute String email) throws Exception {
         try {
+            log.info("MultipartFile : " + multipartFile);
             String fileUrl = imageService.uploadImage(multipartFile, userService.getUser(email));
             if(fileUrl.equals(FAIL)) {
                 return new ResponseEntity<String>(FAIL, HttpStatus.OK);
             } else {
-                log.info("이미지 업로드 성공! [url] " + fileUrl);
+                log.info("이미지 업로드 성공! url : " + fileUrl);
                 return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
             }
         } catch (Exception e) {
@@ -219,25 +220,25 @@ public class UserController {
         }
     }
 
-    // 프로필 이미지 삭제 (S3에서 삭제 및 image 속성 null로 업데이트)
-    @Operation(summary = "프로필 이미지 삭제", description = "S3에서 삭제 및 image 속성 null로 업데이트")
-    @DeleteMapping("/deleteImage/{id}")
-    public ResponseEntity<String> dropImage(@PathVariable Long id, @RequestAttribute String email) throws Exception {
-        boolean result = imageService.dropImage(userService.getUser(id).getImage(), id);
-        try {
-            // 토큰 사용자 인증
-            if(userService.getUser(id).getId().equals(email)) {
-                if(result) {
-                    return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
-                } else {
-                    return new ResponseEntity<>(NONE, HttpStatus.OK);
-                }
-            } else {
-                return new ResponseEntity<>(UNAUTHORIZED, HttpStatus.UNAUTHORIZED);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<String>(FAIL, HttpStatus.OK);
-        }
-    }
+//    // 프로필 이미지 삭제 (S3에서 삭제 및 image 속성 null로 업데이트)
+//    @Operation(summary = "프로필 이미지 삭제", description = "S3에서 삭제 및 image 속성 null로 업데이트")
+//    @DeleteMapping("/deleteImage/{id}")
+//    public ResponseEntity<String> dropImage(@PathVariable Long id, @RequestAttribute String email) throws Exception {
+//        boolean result = imageService.dropImage(userService.getUser(id).getImage(), id);
+//        try {
+//            // 토큰 사용자 인증
+//            if(userService.getUser(id).getId().equals(email)) {
+//                if(result) {
+//                    return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
+//                } else {
+//                    return new ResponseEntity<>(NONE, HttpStatus.OK);
+//                }
+//            } else {
+//                return new ResponseEntity<>(UNAUTHORIZED, HttpStatus.UNAUTHORIZED);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return new ResponseEntity<String>(FAIL, HttpStatus.OK);
+//        }
+//    }
 }

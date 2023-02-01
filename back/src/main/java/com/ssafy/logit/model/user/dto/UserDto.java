@@ -50,9 +50,6 @@ public class UserDto {
     @Schema(description = "refresh 토큰")
     private String refreshToken; // authToken 갱신을 위한 토큰
 
-    @Schema(description = "refresh 토큰")
-    private String imageUrl;
-
     // List<Entity> -> List<DTO> 변환을 위함
     public UserDto(User user) {
         this.id = user.getId();
