@@ -58,6 +58,7 @@ public class UserDto {
         this.pw = user.getPw();
         this.flag = user.getFlag();
         this.studentNo = user.getStudentNo();
+        this.image = user.getImage();
         this.deleted = user.isDeleted();
         this.createdTime = user.getCreatedTime();
         this.loginTime = user.getLoginTime();

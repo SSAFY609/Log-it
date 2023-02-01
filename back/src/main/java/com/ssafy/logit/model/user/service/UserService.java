@@ -5,6 +5,7 @@ import com.ssafy.logit.model.user.dto.UserDto;
 import com.ssafy.logit.model.user.entity.User;
 import com.ssafy.logit.model.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,9 +25,20 @@ public class UserService {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public UserDto login(String email, String pw) {
         Optional<User> user = userRepo.findByEmail(email);
-        if(user.isPresent() && user.get().getPw().equals(pw)) {
+        System.out.println("user 로그인 정보 !!! : " + user);
+        System.out.println("입력한 pw : " + pw);
+
+        // 암호화 (입력받은 pw를 인코딩한 값이 기존에 저장된 값과 같은지 확인하기 위함)
+        String encodingPw = passwordEncoder.encode(pw);
+        System.out.println("encodingPw !!! : " + encodingPw);
+
+        // 해당 email의 회원이 존재하며, 입력받은 비밀번호가 db에 저장된 비밀번호(암호화된)와 matches 되면 로그인
+        if(user.isPresent() && passwordEncoder.matches(pw, user.get().getPw())) {
             // 인증 성공 시 auth-token과 refresh-token 함께 발급
             System.out.println("===== login =====");
             String authToken = jwtUtil.createAuthToken(email);
@@ -93,12 +105,19 @@ public class UserService {
     // => regist 변수로 판단
     @Transactional
     public UserDto saveUser(UserDto userDto, boolean regist) {
+        // 객체 찾기(존재하는지 확인)
         Optional<User> user = userRepo.findByEmail(userDto.getEmail());
+        System.out.println(user);
+        
+        // 비밀번호 암호화
+        userDto.setPw(passwordEncoder.encode(userDto.getPw()));
+        System.out.println("[saveUser] userDto : " + userDto);
+        
         if(user.isPresent() && !regist) { // update
             System.out.println("===== updateUser =====");
             userRepo.save(userDto.updateUser(user.get().getId(), userDto));
-        } else { // insert
-            System.out.println("===== insertUser =====");
+        } else { // regist
+            System.out.println("===== registUser =====");
             userRepo.save(userDto.toEntity());
         }
         return userDto;
