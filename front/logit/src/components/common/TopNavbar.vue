@@ -4,16 +4,13 @@
       <div @click="openSidebar" class="slider_hover slider_box b_lightgray"><v-icon class="silder_icon f_white">mdi-chevron-double-right</v-icon></div>
     </div>
     <div class="right_box lay3">
-      <div class="search_box right_box_items hover_cursor">
+      <div @click="openSearch" class="search_box right_box_items hover_cursor">
         <div class="search_icon_box"><v-icon class="search_icon">mdi-magnify</v-icon></div>
         <div class="search_content_box">
           <div class="search_content">검색</div>        
         </div>
-        
       </div>
-      <div class="open_search_box lay2">
-          <div class="open_search_inner lay1">검색2</div>
-      </div>
+
       <div v-if="!state.loginUser" class="login_btn_box right_box_items">
         <router-link :to="{name: 'UserLogin'}" class="login_btn b_main btn_hover">
           <div class="login_btn_text f_white">로그인</div>
@@ -70,10 +67,16 @@ export default {
 
       target.classList.toggle('nosee')
     }
+    const openSearch = () => {
+      const target = document.querySelector('.open_search_box')
+
+      target.classList.toggle('nosee')
+    }
     return {
       state,
       openSidebar,
       openProfile,
+      openSearch,
     }
   }
 } 
@@ -110,7 +113,7 @@ export default {
     align-items: center;
   }
   .right_box {
-    width: 300px;
+    width: 500px;
     height: 50px;
     display: flex;
     align-items: center;
@@ -126,6 +129,7 @@ export default {
     justify-content: center;
     border-radius: 4px;
     margin-right: 10px;
+    background-color: red;
   }
   .search_box:hover {
     background-color: #efefef;
@@ -231,22 +235,6 @@ export default {
     cursor: pointer;
   }
 
-  .open_search_box {
-    position: absolute;
-    display: flex;
-    top: 0px;
-    right: 210px;
-    width: 400px;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-  }
-  .open_search_inner {
-    width: 380px;
-    height: 40px;
-    background-color: #efefef;
-    border-radius: 4px;
 
-  }
 
 </style>
