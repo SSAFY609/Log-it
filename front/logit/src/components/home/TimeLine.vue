@@ -392,6 +392,7 @@ export default {
 .event {
   display: block;
   position: absolute;
+  border-radius: 4px;
   height: 30px;
   font-size: 20px;
 }

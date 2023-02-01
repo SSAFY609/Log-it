@@ -11,9 +11,11 @@ import FirstTimeline from '../components/home/FirstTimeline.vue'
 import TimeLine from '../components/home/TimeLine.vue'
 import SearchResult from '../components/search/SearchResult.vue'
 import EventList from '../components/event/EventList.vue'
+import EventCreate from '../components/event/EventCreate.vue'
 import EventProgress from '../components/event/EventProgress.vue'
 import ProgressCreate from '../components/event/ProgressCreate.vue'
 import ProgressDetail from '../components/event/ProgressDetail.vue'
+import JobCreate from '../components/job/JobCreate.vue'
 import JobList from '../components/job/JobList.vue'
 import JobProgress from '../components/job/JobProgress.vue'
 import ProfilePage from '../components/profile/ProfilePage.vue'
@@ -78,6 +80,12 @@ const router = createRouter({
           component: EventList
         },
         {
+          path: 'create',
+          name: 'EventCreate',
+          component: EventCreate,
+          props: true,
+        },
+        {
           path: ':eventId',
           name: 'EventProgress',
           component: EventProgress
@@ -99,6 +107,11 @@ const router = createRouter({
       name: 'JobView',
       component: JobView,
       children: [
+        {
+          path: 'create',
+          name: 'JobCreate',
+          component: JobCreate
+        },
         {
           path: '',
           name: 'JobList',
