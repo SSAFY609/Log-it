@@ -11,7 +11,7 @@
             <v-chip size="large" v-for="i in state.categorys" :value="i" :key="i" @click="select_chip(i), flag = false" >
                 {{ i }}
             </v-chip>
-            <v-chip size="large" @click="flag = !flag, select_category=''">카테고리 생성하기</v-chip>
+            <v-chip size="large" @click="flag = !flag, select_category=''">카테고리 생성</v-chip>
         </v-chip-group>
         <div v-show="!flag" style="height: 78px"></div>
         <div v-show="flag"><v-text-field label="생성할 카테고리를 입력하세요" v-model="select_category"></v-text-field></div>
