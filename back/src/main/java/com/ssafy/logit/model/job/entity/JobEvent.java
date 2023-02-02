@@ -13,11 +13,12 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name="jobevent")
 public class JobEvent {
 
     @Id
     @GeneratedValue
-    @Column(name="job_event_id")
+    @Column(name="jobevent_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
