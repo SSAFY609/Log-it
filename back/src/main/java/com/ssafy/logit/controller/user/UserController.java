@@ -48,7 +48,7 @@ public class UserController {
     @PostMapping("/regist")
     public ResponseEntity<String> regist(@RequestBody UserDto userDto) throws Exception {
         try {
-            userService.saveUser(userDto, false);
+            userService.saveUser(userDto, true);
             return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();

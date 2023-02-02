@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private static final String SUCCESS = "success";
+    private static final String FAIL = "fail";
     private static final String DELETED = "deleted";
     private static final String NONE = "none";
 
@@ -107,7 +108,6 @@ public class UserService {
     public UserDto saveUser(UserDto userDto, boolean regist) {
         // 객체 찾기(존재하는지 확인)
         Optional<User> user = userRepo.findByEmail(userDto.getEmail());
-        System.out.println(user);
         
         // 비밀번호 암호화
         userDto.setPw(passwordEncoder.encode(userDto.getPw()));
