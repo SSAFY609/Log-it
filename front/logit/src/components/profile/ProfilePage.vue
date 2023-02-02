@@ -3,27 +3,95 @@
     <div class="profile-title">프로필</div>
     <div class="profile-main">
       <div class="profile-main-form">
-        <v-form>
-          <span>이메일</span>
-          <v-text-field v-model="email"></v-text-field>
-          <span>이름</span>
-          <v-text-field v-model="name"></v-text-field>
-          <span>학번</span>
-          <v-text-field v-model="ssafyNum"></v-text-field>
+        <v-form disabled>
+          <div class="profile-main-form-text">
+            <div class="profile-main-form-text-email">
+              <div>이메일</div>
+              <v-text-field v-model="email"
+              density="compact" ></v-text-field>
+            </div>
+            <div class="m-top-d">
+              <div>이름</div>
+              <v-text-field v-model="name"
+              density="compact" ></v-text-field>
+            </div>
+            <div class="m-top-d">
+              <div>학번</div>
+              <v-text-field v-model="ssafyNum"
+              density="compact"></v-text-field>
+            </div>
+          </div>
           <div class="profile-main-button">
-            <div class="profile-main-button-user">정보 수정</div>
-            <div class="profile-main-button-password">비밀번호 변경</div>
+            <router-link :to="{ name: 'UpdateProfile' }">
+              <v-btn
+                width="120"
+                height="40"
+                rounded="lg"
+                color="#858585"
+                class="profile-main-button-user"
+                style="color:white; font-size:15px"
+              >
+              <div class="profile-main-button-text">정보 수정</div>
+              </v-btn>
+            </router-link>
+            <router-link :to="{ name: 'CheckPassword' }">
+            <v-btn
+              height="40"
+              rounded="lg"
+              color="#858585"
+              style="color:white; font-size:15px"
+              class="profile-main-button-password"
+            >
+            <div class="profile-main-button-text">비밀번호 변경</div>
+            </v-btn>
+            </router-link>
           </div>
         </v-form>
       </div>
-      <div class="profile-main-photo">
-        <img :src="require(`@/assets/profiles/scale (3).png`)" width="200" />
+      <div class="profile-main-photo" @click="onShow">
+        <img  :src="require(`@/assets/profiles/scale (3).png`)" width="200" />
       </div>
     </div>
-    <div class="profile-input-icon" @click="selProf">
+    <div class="profile-input-icon" @click="onShow">
       <v-icon size="large">mdi-lead-pencil</v-icon>
     </div>
-    <div class="profile-photo"></div>
+    <div v-show="photo" class="profile-photo ">
+      <v-sheet
+       class="mx-auto"
+        max-width="990"
+       >
+    <v-slide-group
+      v-model="model"
+      class="pa-4"
+      selected-class="bg-primary"
+      show-arrows
+      
+    >
+      <v-slide-group-item
+        v-for="n in 36"
+        :key="n"
+        v-slot="{ isSelected, toggle, selectedClass }"
+      >
+        <v-img
+          color="grey-lighten-1"
+          :src="require(`@/assets/profiles/scale (1).png`)"
+          :class="['ma-4', selectedClass]"
+           class="hover_cursor hover_bigger" 
+           style="border-radius:55px;"
+
+          @click="toggle"
+        >
+          <div class="d-flex fill-height align-center justify-center">
+            <v-fade-transition>
+              <v-img class="hover_cursor"  v-if="isSelected" :src="require(`@/assets/profiles/scale (1).png`)" height="110"
+          width="110" style="filter:brightness(65%); border-radius:55px;"></v-img>
+            </v-fade-transition>
+          </div>
+        </v-img>
+      </v-slide-group-item>
+    </v-slide-group>
+  </v-sheet>
+    </div>
   </div>
 </template>
 
@@ -34,14 +102,39 @@ export default {
     name: "이름",
     email: "asdas@gmail.com",
     ssafyNum: "084182",
+    model: null,
+    photo: false,
   }),
   methods: {
-    selProf() {},
+    onShow() {
+      this.photo = !this.photo;
+    },
   },
 };
 </script>
 
 <style scoped>
+.profile-main-button-text{
+  margin-top: 3px;
+}
+.img_box {
+  width: 200px;
+  margin: 100px;
+  background-color: red;
+  
+}
+.hover_bigger {
+  height: 110px;
+  width: 110px;
+}
+.hover_bigger:hover{
+  border-radius: 50%;
+  height: 114px;
+  width:114px;
+}
+.m-top-d{
+  margin-top:-5px;
+}
 .profile-input-icon:hover {
   cursor: pointer;
 }
@@ -51,34 +144,41 @@ export default {
   align-items: center;
   border-radius: 30px;
   position: relative;
-  width: 47px;
-  height: 47px;
+  width: 49px;
+  height: 49px;
   background-color: white;
   border: 1px solid rgb(209, 209, 209);
-  top: -120px;
+  top: -100px;
   left: 215px;
   box-shadow: 1px 1px 2px 0.3px;
 }
 
 .profile-main-button {
-  width: 250px;
+ 
+  margin-top: 20px;
+  justify-content: space-between;
+  width: 270px;
   height: 30px;
   display: flex;
-  background-color: purple;
 }
 .profile-main-photo {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 250px;
-  height: 300px;
-  background-color: blue;
+  width: 270px;
+  height: 290px;
+}
+.profile-main-photo:hover{
+  cursor: pointer;
+}
+.profile-main-form-text{
+  font-family: appleM;
+  font-size: 14px;
 }
 .profile-main-form {
-  padding-top: 30px;
-  width: 250px;
-  height: 300px;
-  background-color: green;
+  
+  width: 270px;
+  height: 290px;
 }
 .profile-title {
   font-family: appleB;
@@ -86,24 +186,23 @@ export default {
   text-align: center;
   width: 300px;
   height: 80px;
-  background-color: red;
 }
 .profile-main {
+  margin-top: 15px;
   align-items: center;
   display: flex;
   justify-content: space-evenly;
   width: 640px;
-  height: 350px;
-  background-color: orange;
+  height: 300px;
 }
 .profile-photo {
-  margin-top: -50px;
+  margin-top: -30px;
   width: 1200px;
   height: 200px;
-  background-color: yellow;
 }
 .profile-container {
-  margin-top: 120px;
+  font-family: appleB;
+  margin-top: 95px;
   display: flex;
   flex-direction: column;
   align-items: center;
