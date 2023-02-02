@@ -55,6 +55,7 @@
 import { Swiper, SwiperSlide } from "vue-awesome-swiper";
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
 import { reactive, onBeforeMount, onMounted } from "vue";
+import { useStore } from "vuex";
 
 import "swiper/css";
   
@@ -73,7 +74,6 @@ export default {
       }
   },
   setup(){
-
       const state = reactive({
           date: [],
           dates: [],
@@ -83,16 +83,18 @@ export default {
           is_show: false,
           choose_date: '',
           slide: 0,
-          events: [
-              {event_id: 4, start_date: new Date(2023,0,10), end_date: new Date(2023,1,10), name: 'SQLD 시험 준비'},
-              {event_id: 1, start_date: new Date(2023,0,16), end_date: new Date(2023,2,12), name: '알고리즘 IM형'},
-              {event_id: 2, start_date: new Date(2023,1,8), end_date: new Date(2023,3,13), name: '정보처리기사'},
-              {event_id: 3, start_date: new Date(2023,0,24), end_date: new Date(2023,1,7), name: '알고리즘 A형'},
-          ],
+          // events: [
+          //     {event_id: 4, start_date: new Date(2023,0,10), end_date: new Date(2023,1,10), name: 'SQLD 시험 준비'},
+          //     {event_id: 1, start_date: new Date(2023,0,16), end_date: new Date(2023,2,12), name: '알고리즘 IM형'},
+          //     {event_id: 2, start_date: new Date(2023,1,8), end_date: new Date(2023,3,13), name: '정보처리기사'},
+          //     {event_id: 3, start_date: new Date(2023,0,24), end_date: new Date(2023,1,7), name: '알고리즘 A형'},
+          // ],
           start: ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'],
           period: ['one', 'two', 'three', 'four', 'five', 'six', 'seven'],
           swiper: null,
       })
+
+      const store = useStore()
 
       const onSwiper = (swiper) => {
         // this.swiper = swiper;
@@ -105,8 +107,11 @@ export default {
       };
       
       onBeforeMount(()=>{
+        // vuex에 접근해서 events 가공하기............. 후하 이게 근데 되려나 싶기도 하공,,,,
+        const events = store.state.temp.events;
+
           // event 가져와서 start_date 순으로 정렬 (오름차순)
-          const events = state.events;
+          // const events = state.events;
           events.sort((a, b) => {
             return a.start_date - b.start_date;
           });
@@ -115,11 +120,11 @@ export default {
           let st = events.reduce((prev,curr) => {
               return prev.start_date <= curr.start_date ? prev : curr;
           })
-          console.log(st.start_date.toLocaleDateString());
+          // console.log(st.start_date.toLocaleDateString());
           let ed = events.reduce((prev, curr) => {
               return curr.end_date <= prev.end_date ? prev : curr;
           })
-          console.log(ed.end_date.toLocaleDateString());
+          // console.log(ed.end_date.toLocaleDateString());
 
           state.st = st.start_date;
           state.ed = ed.end_date;
@@ -224,8 +229,8 @@ export default {
               new_date = addDays(new_date, 7);
               idx += 1;
           }
-          console.log(state.slide)
-          console.log(state.dates);
+          // console.log(state.slide)
+          // console.log(state.dates);
 
           // for (let i=-3; i<4; i++){
           //     if(i == 0){
@@ -244,7 +249,6 @@ export default {
       })
 
       onMounted(()=>{
-        console.log('onMounted?');
         console.log(state.slide);
         state.swiper.slideTo(state.slide)
       })
