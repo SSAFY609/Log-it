@@ -25,6 +25,9 @@ import java.util.UUID;
 @Service
 public class ImageService {
 
+    private static final String FAIL = "fail";
+    private static final String DEFAULT_IMAGE = "1";
+
     @Value("${s3.bucket}")
     private String bucket;
 
@@ -44,7 +47,6 @@ public class ImageService {
     @Transactional
     public String uploadImage(MultipartFile multipartFile, UserDto userDto) throws IOException {
         String origName = multipartFile.getOriginalFilename();
-        String url;
         try {
             // 확장자 찾고, 파일 이름 암호화
             final String ext = origName.substring(origName.lastIndexOf('.'));
@@ -57,22 +59,20 @@ public class ImageService {
 
             // S3 파일 업로드 및 주소 할당
             uploadOnS3(saveFileName, file);
-            url = bucketUrl + "/" + saveFileName;
+            String url = bucketUrl + "/" + saveFileName;
 
             // 파일 삭제
             file.delete();
 
             // db에 저장
-            if(userDto.getImage() != null) {
-                dropImage(userDto.getId());
-            }
+            dropImage(userDto.getId());
             userDto.setImage(saveFileName);
             userRepo.save(userDto.toEntity());
+            return url;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
+            return FAIL;
         }
-        return url;
     }
 
     // uuid 생성
@@ -97,24 +97,38 @@ public class ImageService {
     }
 
     // 이미지 삭제
-    public void dropImage(Long id) throws Exception {
+    public void dropImage(long id) throws Exception {
         UserDto userDto = userRepo.findById(id).get().toDto();
 
         // 기존 프로필 사진
         String fileKey = userDto.getImage();
         System.out.println(">>>>>>>>>>>> fileKey : " + fileKey);
 
-        // 아마존 S3 객체 생성
-        final AmazonS3 s3 = AmazonS3ClientBuilder.standard().withRegion(region).build();
-
-        // 기존 프로필 사진 삭제 (db의 image 속성 null로 변경, S3에 올라가있는 사진 삭제)
         try {
-            userDto.setImage(null);
+            if(fileKey.length() > 2) { // 기존 프로필 사진이 파일인 경우
+                // 아마존 S3 객체 생성 및 S3에서 이미지 삭제
+                final AmazonS3 s3 = AmazonS3ClientBuilder.standard().withRegion(region).build();
+                s3.deleteObject(bucket, fileKey);
+            }
+            // 기존 프로필 사진 삭제 (db의 image 속성 "1"(default 이미지)로 변경)
+            userDto.setImage(DEFAULT_IMAGE);
             userRepo.save(userDto.toEntity());
-            s3.deleteObject(bucket, fileKey);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
+        }
+    }
+
+    // default 이미지로 변경
+    public String uploadDefaultImage(String defaultImage, UserDto userDto) {
+        try {
+            dropImage(userDto.getId());
+            userDto.setImage(defaultImage);
+            userRepo.save(userDto.toEntity());
+            return defaultImage;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return FAIL;
         }
     }
 }

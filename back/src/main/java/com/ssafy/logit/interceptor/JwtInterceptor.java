@@ -36,13 +36,10 @@ public class JwtInterceptor implements HandlerInterceptor {
 
         // 유효한 토큰이면 진행, 그렇지 않으면 예외를 발생
         if(authToken != null) {
-            System.out.println("@@@@@@@@@@@ authToken 확인 - jwtInterceptor @@@@@@@@@@@" + authToken);
+            System.out.println("===== authToken 확인 - jwtInterceptor =====" + authToken);
             Map<String, Object> info = jwtUtil.checkAndGetClaims(authToken);
-            log.info("하위!!!" + info);
-            System.out.println("@@@@@@@@@@@ 여기까지 왔음 - jwtInterceptor @@@@@@@@@@@");
             Object info_email = info.get("user");
             String email = (String)info_email;
-            System.out.println("?????? email ???????" + email);
             request.setAttribute("email", email);
             return true;
         } else {

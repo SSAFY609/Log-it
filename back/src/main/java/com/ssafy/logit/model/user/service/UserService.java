@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private static final String SUCCESS = "success";
+    private static final String FAIL = "fail";
     private static final String DELETED = "deleted";
     private static final String NONE = "none";
 
@@ -107,7 +108,6 @@ public class UserService {
     public UserDto saveUser(UserDto userDto, boolean regist) {
         // 객체 찾기(존재하는지 확인)
         Optional<User> user = userRepo.findByEmail(userDto.getEmail());
-        System.out.println(user);
         
         // 비밀번호 암호화
         userDto.setPw(passwordEncoder.encode(userDto.getPw()));
@@ -124,9 +124,14 @@ public class UserService {
     }
 
     public List<UserDto> getAllUser() {
-        // findAll()의 반환형은 List<User>이므로, stream 사용하여 List<UserDto>로 변환
-        System.out.println("===== getAllUser =====");
-        return userRepo.findAll().stream().map(UserDto::new).collect(Collectors.toList());
+        List<User> userList = userRepo.findAll();
+        if(userList.size() > 0) {
+            System.out.println("===== getAllUser =====");
+            return userRepo.findAll().stream().map(UserDto::new).collect(Collectors.toList());
+        } else  {
+            System.out.println("getAllUser : 사용자 없음");
+            return null;
+        }
     }
 
     public UserDto getUser(String email) {
@@ -145,6 +150,17 @@ public class UserService {
             return userRepo.findById(id).get().toDto();
         } else {
             System.out.println("getUser : " + id + "에 해당하는 사용자 없음");
+            return null;
+        }
+    }
+
+    public List<UserDto> searchUser(String name) {
+        List<User> userList = userRepo.findByName(name);
+        if(userList.size() > 0) {
+            System.out.println("===== searchUser =====");
+            return userList.stream().map(UserDto::new).collect(Collectors.toList());
+        } else {
+            System.out.println("searchUser : " + name + "에 해당하는 사용자 없음");
             return null;
         }
     }
