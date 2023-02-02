@@ -3,10 +3,8 @@
     <div class="profile-title">비밀번호 변경</div>
     <div class="profile-main">
       <div class="profile-main-form">
-          <div class="profile-main-form-text">
-       
-        <v-form ref="form" v-model="valid"
-        lazy-validation @keyup="chkPw" >
+        <div class="profile-main-form-text">
+          <v-form ref="form" v-model="valid" lazy-validation @keyup="chkPw">
             <div class="profile-main-form-text-email">
               <div>새 비밀번호를 입력해주세요.</div>
               <v-text-field
@@ -20,7 +18,7 @@
                 counter
                 @click:append-inner="show1 = !show1"
               ></v-text-field>
-              </div>
+            </div>
             <div class="m-top-d">
               <div>새 비밀번호를 다시 입력해주세요.</div>
               <v-text-field
@@ -34,23 +32,22 @@
               ></v-text-field>
             </div>
           </v-form>
-          </div>
-          <div class="profile-main-button">
-            <router-link :to="{ name: 'UpdatePassword' }">
-              <v-btn
-                width="380"
-                height="47"
-                rounded="lg"
-                color="#858585"
-                class="profile-main-button-user"
-                style="color:white; font-size:15px;
-                 margin-top:10px;"
-                @click="modifyPw"
-              >
-                다음
-              </v-btn>
-            </router-link>
-          </div>
+        </div>
+        <div class="profile-main-button">
+          <router-link :to="{ name: 'ProfilePage' }">
+            <v-btn
+              width="380"
+              height="50"
+              rounded="lg"
+              color="#FF0A54 "
+              class="profile-main-button-user"
+              style="color: white; font-size: 15px; margin-top: 15px"
+              @click="modifyPw"
+            >
+              다음
+            </v-btn>
+          </router-link>
+        </div>
       </div>
     </div>
   </div>
@@ -72,7 +69,7 @@ export default {
     password: "",
     show1: false,
     show2: false,
-    password_tmp:""
+    password_tmp: "",
   }),
   methods: {
     onShow() {
@@ -91,29 +88,27 @@ export default {
       }
       this.$router.push({ name: "ProfilePage" });
     },
-  }
-}
+  },
+};
 </script>
 
 <style scoped>
-
 .img_box {
   width: 200px;
   margin: 100px;
   background-color: red;
-  
 }
 .hover_bigger {
   height: 110px;
   width: 110px;
 }
-.hover_bigger:hover{
+.hover_bigger:hover {
   border-radius: 50%;
   height: 114px;
-  width:114px;
+  width: 114px;
 }
-.m-top-d{
-  margin-top:10px;
+.m-top-d {
+  margin-top: 20px;
 }
 
 .profile-main-button {
@@ -124,7 +119,7 @@ export default {
   display: flex;
 }
 
-.profile-main-form-text{
+.profile-main-form-text {
   font-family: appleM;
   font-size: 14px;
 }
@@ -133,15 +128,14 @@ export default {
   height: 290px;
 }
 .profile-title {
-  
- font-family: appleB;
+  font-family: appleB;
   font-size: 45px;
   text-align: center;
   width: 300px;
   height: 80px;
 }
 .profile-main {
-  margin-top:20px;
+  margin-top: 50px;
   align-items: center;
   display: flex;
   justify-content: space-evenly;

@@ -51,10 +51,8 @@ export default {
     async chkPw() {
       const validate = await this.$refs.form.validate();
       if (validate.valid) {
-        console.log("여기?");
         document.querySelector(".data-button").classList.add("color");
       } else {
-        console.log("홀롤롤롤로");
         document.querySelector(".data-button").classList.remove("color");
       }
     },

@@ -1,14 +1,12 @@
 <template>
   <div class="profile-container">
     <h2 class="profile-title">프로필 생성</h2>
+
+    <label className="input-file-button" for="input-file"> 업로드 </label>
+    <input type="file" id="input-file" style="display: none" />
+    <div>{{ state.image }}</div>
     <div class="profile-scroll-container fill-height">
       <div class="profile-scroll">
-        <!-- <span
-          v-for="i in 36"
-          :key="i"
-          @click="selProf"
-          class="profile-input-img"
-        > -->
         <v-col
           cols="3"
           v-for="i in 36"
@@ -33,21 +31,41 @@
 </template>
 
 <script>
+import { reactive } from "vue";
 export default {
   name: "UserPhoto",
   props: ["user"],
   setup(props, { emit }) {
+    const state = reactive({});
     const onClicked = (i) => {
       emit("updateUserProfile", i);
     };
-
+    const selectFile = () => {};
     return {
+      selectFile,
+      state,
       onClicked,
     };
   },
 };
 </script>
 <style scoped>
+.filebox input[type="file"] {
+  position: absolute;
+  width: 0;
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+}
+
+.input-file-button {
+  padding: 6px 25px;
+  background-color: #ff6600;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+}
 .profile-input-img {
   margin-right: 33px;
 }
@@ -59,11 +77,11 @@ export default {
   width: 420px;
   overflow-y: scroll;
 }
-.profile-scroll::-webkit-scrollbar{
+.profile-scroll::-webkit-scrollbar {
   background: none;
-  width:10px;
+  width: 10px;
 }
-.profile-scroll::-webkit-scrollbar-thumb{
+.profile-scroll::-webkit-scrollbar-thumb {
   background-color: #7d7d7da8;
   border-radius: 10px;
 }
