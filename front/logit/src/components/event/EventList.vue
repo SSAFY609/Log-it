@@ -1,47 +1,33 @@
 <template>
   <div class="container">
-    <div class="header">
-      <div class="title">
-        <div class="event-title">{{ event.category }}</div>
-        <div class="event-date">{{ date_to_str }}</div>
-      </div>
-      <div class="grass-box">
-        <div class="grass">
-          <div class="days">
-            <div v-for="i in 15" :key="i" class="day">{{ i }}</div>
-          </div>
-          <div v-for="i in week" :key="i" class="week">
-            <div v-for="j in 15" class="square" :key="j"></div>
-          </div>
-          <div class="week">
-            <div v-for="j in rest" :key="j" class="square"></div>
-          </div>
-        </div>
-      </div>
+    <div class="event-list">
+      <router-link :to="{name: 'EventProgress', params: {eventId: event.event_id}}" class="event hover_cursor" v-for="event in events" :key="event.event_id">
+        <div class="event-title">{{ event.name }}</div>
+        <div class="event-date">{{ date_to_str(event.start_date, event.end_date) }}</div>
+        <v-chip v-if="event.done" variant="outlined" color="rgb(27, 182, 40)">완료</v-chip>
+        <v-chip v-else variant="outlined" color="rgb(245, 21, 107)">진행중</v-chip>
+      </router-link>
+      <div v-if="events.length%2 == 1" class="event-else"></div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 export default {
     name: 'EventList',
     data() {
       return {
-        event: {
-          event_id: 1,
-          category: '알고리즘 IM형',
-          start_date: new Date(2023, 0, 16),
-          end_date: new Date(2023,2,12)
-        },
-        period: 0,
-        week: 0,
-        rest: 0,
+        // period: 0,
+        // week: 0,
+        // rest: 0,
       }
     },
     computed: {
-      date_to_str() {
-        const st = this.event.start_date;
-        const ed = this.event.end_date;
+      ...mapState("temp", ["events"])
+    },
+    methods: {
+      date_to_str(st, ed) {
         const year1 = st.getFullYear();
         const month1 = st.getMonth() + 1;
         const date1 = st.getDate();
@@ -49,9 +35,8 @@ export default {
         const month2 = ed.getMonth() + 1;
         const date2 = ed.getDate();
         return `${year1}년 ${month1}월 ${date1}일 ~ ${year2}년 ${month2}월 ${date2}일`
-      }
-    },
-    methods: {
+      },
+
       getDateDiff(d1, d2) {
         // d1이 시작 날짜, d2가 종료 날짜
         const diffDate = d2.getTime() - d1.getTime();
@@ -60,11 +45,11 @@ export default {
       }
     },
     created() {
-      const st = this.event.start_date;
-      const ed = this.event.end_date;
-      this.period = this.getDateDiff(st, ed);
-      this.week = parseInt(this.period / 15);
-      this.rest = this.period % 15;
+      // const st = this.event.start_date;
+      // const ed = this.event.end_date;
+      // this.period = this.getDateDiff(st, ed);
+      // this.week = parseInt(this.period / 15);
+      // this.rest = this.period % 15;
     }
 
 }
@@ -72,70 +57,59 @@ export default {
 
 <style scoped>
 
-.test {
-  background-image: url('../../assets/images/memo_grass.png');
-  width: 30px;
-  height: 30px;
-}
-
-.header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 200px;
-}
-
 .container {
   /* background-color: gold; */
-  margin-top: 150px;
-  height: 100%;
+  margin-top: 100px;
+  /* height: 100%; */
   width:100%;
   display: flex;
   justify-content: center;
+  text-align: center;
+  padding: 0 100px;
 }
 
-.title {
-  text-align: center;
-  margin-right: 100px;
+.event-list {
+  display: flex;
+  /* flex-direction: column; */
+  justify-content: center;
+  /* align-items: center; */
+  flex-wrap: wrap;
+  width: 80%;
+  /* height: 200px; */
+}
+
+.event {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(219, 219, 219, 0.194);
+  border-radius: 20px;
+  height: 200px;
+  width: 500px;
+  margin: 10px;
+  /* margin-right: 100px; */
+}
+
+.event-else {
+  background-color: white;
+  height: 200px;
+  width: 500px;
+  margin: 10px;
+}
+
+.event:hover {
+  background-color: rgba(219, 219, 219, 0.335);
 }
 
 .event-title {
   font-family: appleH;
-  font-size: 60px;
+  font-size: 40px;
 }
 
 .event-date {
   font-size: 20px;
+  margin-bottom: 10px;
 }
 
-.days {
-  display: flex;
-  align-items: flex-end;
-}
-
-.day {
-  font-size: large;
-  height: 35px;
-  width: 35px;
-  margin-right: 25px;
-  text-align: center;
-}
-
-.day >span{
-  font-size: large;
-}
-
-.week {
-  display: flex;
-  margin: 10px 0;
-}
-
-.square {
-  background-color: rgb(241, 241, 241);
-  border: 2px solid rgb(192, 192, 192);
-  border-radius: 2px;
-  height: 35px;
-  width: 35px;
-  margin-right: 25px;
-}
 </style>
