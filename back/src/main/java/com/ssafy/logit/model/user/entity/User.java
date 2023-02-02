@@ -3,6 +3,7 @@ package com.ssafy.logit.model.user.entity;
 import com.ssafy.logit.model.user.dto.UserDto;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -33,7 +34,7 @@ public class User extends DateTime {
     @Column(length = 10)
     private String studentNo;
 
-    @Column(length = 200)
+    @Column(length = 200, nullable = false)
     private String image;
 
     private boolean deleted;
