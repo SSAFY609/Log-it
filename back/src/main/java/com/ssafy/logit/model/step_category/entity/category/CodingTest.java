@@ -1,6 +1,5 @@
 package com.ssafy.logit.model.step_category.entity.category;
 
-import com.ssafy.logit.model.step_category.entity.StepCategory;
 import lombok.Getter;
 
 import javax.persistence.Entity;
@@ -11,7 +10,7 @@ import javax.validation.constraints.Max;
 
 @Entity
 @Getter
-public class CodingTest extends StepCategory {
+public class CodingTest {
 
     @Id
     @GeneratedValue
