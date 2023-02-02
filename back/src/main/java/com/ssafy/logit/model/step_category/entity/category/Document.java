@@ -11,7 +11,7 @@ import javax.validation.constraints.Max;
 
 @Entity
 @Getter
-public class Document extends StepCategory {
+public class Document {
 
     @Id
     @GeneratedValue

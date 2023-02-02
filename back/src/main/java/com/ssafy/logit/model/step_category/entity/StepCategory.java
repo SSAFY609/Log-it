@@ -14,7 +14,6 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Setter(value = AccessLevel.PRIVATE)
-@Inheritance(strategy = InheritanceType.JOINED)
 public class StepCategory {
 
     @Id
@@ -25,6 +24,7 @@ public class StepCategory {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "jobevent_id")
     private JobEvent jobEvent;
+
     private LocalDate typeDate;
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
@@ -33,8 +33,6 @@ public class StepCategory {
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
     private JobCategory jobCategory;
-
-
 
     // 생성 메소드 //
     public static StepCategory createCategory(JobEvent jobEvent,LocalDate typeDate,ResultStatus resultStatus,JobCategory jobCategory){
