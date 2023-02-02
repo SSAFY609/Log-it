@@ -161,6 +161,13 @@ public class UserController {
         return new ResponseEntity<UserDto>(userService.getUser(email), HttpStatus.OK);
     }
 
+    // name으로 회원 조회
+    @Operation(summary = "회원 조회", description = "name으로 단건 조회 (JWT 인증x)")
+    @GetMapping("/search")
+    public ResponseEntity<List<UserDto>> searchUser(@RequestParam String name) throws Exception {
+        return new ResponseEntity<List<UserDto>>(userService.searchUser(name), HttpStatus.OK);
+    }
+
     // 회원 삭제 (실제 삭제x, deleted 1로 업데이트)
     @Operation(summary = "회원 삭제", description = "id로 회원 삭제 (실제 삭제x, deleted 1로 업데이트)")
     @PutMapping("/{id}")
