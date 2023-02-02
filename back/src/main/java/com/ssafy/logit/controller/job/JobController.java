@@ -46,22 +46,11 @@ public class JobController {
     @GetMapping
     public ResponseEntity<ResultDto> getAll(@RequestAttribute String email){
         User user = userService.getUser(email).toEntity();
-        System.out.println("user.getName() = " + user.getName());
-
         List<JobEvent> events = jobService.getEvents(user);
-        for (JobEvent event : events) {
-            System.out.println("event = " + event);
-        }
-
 
         List<CreateJobEventResponse> collect = events.stream()
                 .map(o -> new CreateJobEventResponse(o))
                 .collect(Collectors.toList());
-
-        for (CreateJobEventResponse createJobEventResponse : collect) {
-            System.out.println("createJobEventResponse = " + createJobEventResponse);
-        }
-        ResultDto resultDto = new ResultDto(collect.size(), collect);
 
         return new ResponseEntity<>(new ResultDto(collect.size(),collect), HttpStatus.OK);
     }
@@ -69,7 +58,7 @@ public class JobController {
 
     @Operation(summary = "취업 이벤트 수정", description = "id값을 이용하여 취업 이벤트 수정합니다")
     @PutMapping("/{id}")
-    public ResponseEntity<CreateJobEventResponse> put(@RequestAttribute String email,@PathVariable Long id,@RequestBody UpdateJobEventRequest request){
+    public ResponseEntity<CreateJobEventResponse> put(@RequestAttribute String email,@PathVariable Long id,@RequestBody  @Validated UpdateJobEventRequest request){
         User user = userService.getUser(email).toEntity();
         JobEvent jobEvent = jobService.update(user,id, request);
         CreateJobEventResponse createJobEventResponse = new CreateJobEventResponse(jobEvent);
@@ -79,7 +68,7 @@ public class JobController {
 
     @Operation(summary = "취업 이벤트 삭제", description = "id값을 이용하여 취업 이벤트 삭제합니다.")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String,String>> delete(@RequestAttribute String email,@PathVariable Long id, @RequestBody CreateJobEventRequest request){
+    public ResponseEntity<Map<String,String>> delete(@RequestAttribute String email,@PathVariable Long id, @RequestBody  @Validated CreateJobEventRequest request){
         User user = userService.getUser(email).toEntity();
         jobService.delete(user,id);
         Map<String,String>  hm = new ConcurrentHashMap<>();
