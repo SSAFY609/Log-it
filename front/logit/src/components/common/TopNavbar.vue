@@ -4,12 +4,6 @@
       <div @click="openSidebar" class="slider_hover slider_box b_lightgray"><v-icon class="silder_icon f_white">mdi-chevron-double-right</v-icon></div>
     </div>
     <div class="right_box lay3">
-<<<<<<< HEAD
-      <div @click="openSearch" class="search_box right_box_items hover_cursor">
-        <div class="search_icon_box"><v-icon class="search_icon">mdi-magnify</v-icon></div>
-        <div class="search_content_box">
-          <div class="search_content">검색</div>        
-=======
       <div class="search_box_container lay1">
         <div @click="openSearch" class="search_box right_box_items hover_cursor  lay2">
           <v-icon class="search_icon lay3">mdi-magnify</v-icon>
@@ -19,7 +13,6 @@
             variant="null"
             :items=state.SearchList
           ></v-autocomplete>
->>>>>>> ca20e4e5b61e6da372cac24e77ae38c6e10e105e
         </div>
       </div>
 
@@ -100,12 +93,6 @@ export default {
       target.classList.toggle('nosee')
     }
     const openSearch = () => {
-<<<<<<< HEAD
-      const target = document.querySelector('.open_search_box')
-
-      target.classList.toggle('nosee')
-=======
-
       const target = document.querySelector('.search_box')
       const target2 = document.querySelector('.search_input_text') 
       const target3 = document.querySelector('.search_content') 
@@ -115,8 +102,7 @@ export default {
       target2.focus()
       target3.classList.add('nosee')
 
-      
->>>>>>> ca20e4e5b61e6da372cac24e77ae38c6e10e105e
+    
     }
     return {
       state,
@@ -159,11 +145,7 @@ export default {
     align-items: center;
   }
   .right_box {
-<<<<<<< HEAD
-    width: 500px;
-=======
     width: 620px;
->>>>>>> ca20e4e5b61e6da372cac24e77ae38c6e10e105e
     height: 50px;
     display: flex;
     align-items: center;
@@ -286,10 +268,7 @@ export default {
     font-weight: 900;
     cursor: pointer;
   }
-<<<<<<< HEAD
 
-
-=======
   .search_box_container{
     width: 400px;
     height: 100%;
@@ -311,8 +290,6 @@ export default {
   from {
     width: 100px;
   }
->>>>>>> ca20e4e5b61e6da372cac24e77ae38c6e10e105e
-
   to {    
     width: 400px
   }
