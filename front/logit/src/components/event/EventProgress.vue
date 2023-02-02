@@ -5,7 +5,7 @@
         <div class="event-title">{{ event.name }}</div>
         <div class="event-date">{{ date_to_str(event.start_date, event.end_date) }}</div>
         <div v-if="eventUsers.users.length == 1"> {{ eventUsers.owner.name }} 님 참여중 <v-icon @click="dialog1 = true">mdi-account-multiple-plus</v-icon></div>
-        <div v-else> {{ eventUsers.owner.name }} 님 외 {{ eventUsers.users.length - 1 }}명 참여중 <v-icon @click="dialog1 = true">mdi-account-multiple-plus</v-icon></div>
+        <div v-else> {{ eventUsers.owner.name }} 님 외 {{ eventUsers.users.length - 1 }}명 참여중 <v-icon @click="member = true">mdi-account-multiple-plus</v-icon></div>
       </div>
       <div class="grass-box">
         <div class="grass">
@@ -26,32 +26,67 @@
     </div>
     <div class="progress">
       <v-timeline side="end" align="center" line-thickness="5">
+        <v-timeline-item v-if="!today" class="progress-item" dot-color="rgb(255, 225, 121)" size="small">
+          <div class="memo-box">
+            <div class="memo-date">{{date_after(new Date())}}</div>
+            <div class="memo" @click="dialog = true, update = false, now_idx = -1">
+              <div>텍스트를 입력하세요</div>
+            </div>
+          </div>
+        </v-timeline-item>
         <v-timeline-item
           class="progress-item"
-          v-for=" (item, index) in progress"
+          v-for=" (item, index) in copy_progress"
           dot-color="rgb(255, 225, 121)"
           :key="item.id"
           size="small"
         >
           <div class="memo-box">
             <div class="memo-date">{{date_after(item.date)}}</div>
-            <div class="memo" @click="dialog2 = true, create_content = item.content, now_idx = index">
-              <!-- <div v-if="!create_content">텍스트를 입력하세요</div> -->
+            <div class="memo" @click="dialog = true, create_content = item.content, now_idx = index">
               <div v-html="item.content"></div>
             </div>
           </div>
         </v-timeline-item>
       </v-timeline> 
       <v-dialog
-        v-model="dialog1"
-        class="memo-dialog"
+        v-model="member"
+        class="member-dialog"
       >
-        <div>
-          멤버 화면
-        </div>
+        <v-card class="member-dialog member-box">
+          <v-card-title class="member-title">{{event.name}} 참여 목록</v-card-title>
+          <div v-for="user in eventUsers.users" :key="user.user_id" class="member-list">
+            <v-avatar>
+              <v-img :src="require(`@/assets/profiles/scale (${user.profile}).png`)"></v-img>
+            </v-avatar> 
+            {{ user.name }}
+            <v-chip v-if="user.name == eventUsers.owner.name">주인</v-chip>
+            <v-chip v-else>멤버</v-chip>
+          </div>
+          <v-card-actions style="justify-content:space-between">
+            <div>
+              <v-avatar><v-icon>mdi-plus</v-icon></v-avatar>
+              추가하기
+            </div>
+            <v-btn
+              :icon="show ? 'mdi-chevron-up' : 'mdi-chevron-down'"
+              @click="show = !show"
+              style="text-align:right"
+            ></v-btn>
+          </v-card-actions>
+          <v-expand-transition>
+            <div v-show="show">
+              <v-divider></v-divider>
+      
+              <v-card-text>
+                I'm a thing. But, like most politicians, he promised more than he could deliver. You won't have time for sleeping, soldier, not with all the bed making you'll be doing. Then we'll go with that data file! Hey, you add a one and two zeros to that or we walk! You're going to do his laundry? I've got to find a way to escape.
+              </v-card-text>
+            </div>
+          </v-expand-transition>
+        </v-card>
       </v-dialog>
       <v-dialog
-        v-model="dialog2"
+        v-model="dialog"
         class="memo-dialog"
       >
         <div class="memo-dialog memo-bg">
@@ -74,6 +109,7 @@
               v-model:content="create_content"
               content-type="html"
               toolbar="essential" 
+              placeholder="텍스트를 입력하세요"
               :read-only="false" />
           </div>
           <div class="check">
@@ -96,38 +132,27 @@ export default {
     data() {
       return {
         eventId: 0,
-        // progress: [
-        //   {progress_id: 1, event_id: 1, date: new Date(2023, 0, 17), content: '열심히 했따ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ', photo: 'url'},
-        //   {progress_id: 2, event_id: 1, date: new Date(2023, 0, 18), content: '안녕하세요 111111111111', photo: 'url'},
-        //   {progress_id: 3, event_id: 1, date: new Date(2023, 0, 19), content: '안녕하이 2222222222222222222', photo: 'url'},
-        //   {progress_id: 4, event_id: 1, date: new Date(2023, 0, 24), content: '열심히 했따ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ', photo: 'url'},
-        //   {progress_id: 5, event_id: 1, date: new Date(2023, 0, 26), content: '열심히 했따ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ', photo: 'url'},
-        //   {progress_id: 6, event_id: 1, date: new Date(2023, 0, 27), content: '열심히 했따ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ', photo: 'url'},
-        //   {progress_id: 7, event_id: 1, date: new Date(2023, 0, 29), content: '열심히 했따ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ', photo: 'url'},
-        //   {progress_id: 8, event_id: 1, date: new Date(2023, 0, 30), content: '열심히 했따ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ', photo: 'url'},
-        //   {progress_id: 9, event_id: 1, date: new Date(2023, 1, 1), content: '열심히 했따ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ', photo: 'url'},
-        //   {progress_id: 10, event_id: 1, date: new Date(2023, 1, 2), content: '열심히 했따ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ', photo: 'url'},
-        //   {progress_id: 11, event_id: 1, date: new Date(2023, 1, 4), content: '열심히 했따ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ', photo: 'url'},
-        //   {progress_id: 12, event_id: 1, date: new Date(2023, 1, 5), content: '열심히 했따ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ', photo: 'url'},
-        //   {progress_id: 13, event_id: 1, date: new Date(2023, 1, 7), content: '그래그래', photo: 'url'},
-        //   {progress_id: 14, event_id: 1, date: new Date(2023, 1, 10), content: '열심히 했따ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ', photo: 'url'},
-        //   {progress_id: 15, event_id: 1, date: new Date(2023, 1, 11), content: '화이팅이다', photo: 'url'},
-        // ],
         grass: [],
+        copy_progress: [],
         period: 0,
-        dialog1: false,
-        dialog2: false,
+        member: false,
+        dialog: false,
         create_content: '',
         day: ['일', '월', '화', '수', '목', '금', '토'],
         update_mode: true,
         today: false,
+        show: false,
       }
     },
     components: {
       QuillEditor,
     },
     computed: {
-      ...mapState('temp', ['loginUser', 'event', 'eventUsers', 'progress'])
+      ...mapState('temp', ['loginUser', 'event', 'eventUsers', 'progress']),
+      
+      change_image(id){
+        return `@assets/profiles/scale (${id}).png`;
+      }
     },
     methods: {
       date_to_str(st, ed) {
@@ -150,16 +175,27 @@ export default {
         return clone;
       },
       create() {
-        this.items[this.now_idx].content = this.create_content;
-        console.log(this.create_content);
+        // create
+        if (this.now_idx == -1){
+          //create 요청
+        }
+        // 나머지는 update 요청
+        else{
+          this.items[this.now_idx].content = this.create_content;
+          console.log(this.create_content);
+        }
         this.update_mode = false;
-        this.dialog2 = false;
+        this.dialog = false;
       },
       date_after(i) {
+        const today = new Date();
         const year = i.getFullYear();
         const month = i.getMonth() + 1;
         const date = i.getDate();
         const day = i.getDay();
+        if (today.toLocaleDateString() == i.toLocaleDateString()){
+          return `오늘 (${this.day[day]})`;
+        }
         return `${year}-${month >= 10 ? month : '0' + month}-${date >= 10 ? date : '0' + date} (${this.day[day]})`;
       },
       update_content() {
@@ -188,7 +224,7 @@ export default {
       const st = this.event.start_date;
       const ed = this.event.end_date;
       this.period = this.getDateDiff(st, ed);
-
+      
       let idx = 0;
       for (let i=0; i<this.period ;i++) {
         if (idx == this.progress.length){
@@ -213,7 +249,10 @@ export default {
         } 
       }
 
+      this.copy_progress = [...this.progress].reverse();
       console.log(this.today)
+      console.log(this.progress)
+      console.log(this.copy_progress)
       
     }
 
@@ -308,6 +347,29 @@ h1 {
   height: 35px;
   margin-right: 25px;
   margin-bottom: 10px;
+}
+
+.member-dialog {
+  font-family: appleL;
+  display: flex;
+  border-radius: 15px;
+  width: 500px;
+}
+
+.member-box {
+  padding: 35px;
+}
+
+.member-title {
+  font-family: appleB;
+  font-size: 35px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.member-list {
+  height: 60px;
+  padding: 0.5rem;
 }
 
 .progress {

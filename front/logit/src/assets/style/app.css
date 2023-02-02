@@ -191,7 +191,7 @@ display: none;
 
 /* Quill 사용을 위한 CSS */
 .text-editor {
-  font-size: 20px !important;
+  font-size: 25px !important;
   font-family: event !important;
   height: 90% !important;
   width: 96%;
