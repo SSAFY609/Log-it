@@ -111,7 +111,7 @@ public class UserController {
     // 비밀번호 찾기 (임시 비밀번호 발급 후 이메일 전송)
     @Operation(summary = "비밀번호 찾기", description = "임시 비밀번호 발급 후 이메일 전송")
     @PostMapping("/sendPw")
-    public ResponseEntity<String> sendPwEmail(@RequestParam("email") String email) {
+    public ResponseEntity<String> sendPwEmail(@RequestAttribute String email) {
         UserDto userDto = userService.getUser(email);
         if(userDto != null) {
             String tmpPw = userService.getTmpPw();
