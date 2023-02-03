@@ -1,11 +1,13 @@
 package com.ssafy.logit.model.step_category.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ssafy.logit.model.common.ResultStatus;
 import com.ssafy.logit.model.job.entity.JobEvent;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -25,6 +27,8 @@ public class StepCategory {
     @JoinColumn(name = "jobevent_id")
     private JobEvent jobEvent;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate typeDate;
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
