@@ -1,11 +1,9 @@
 package com.ssafy.logit.model.step_category.entity.category;
 
+import com.ssafy.logit.model.step_category.entity.StepCategory;
 import lombok.Getter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Max;
 
 
@@ -17,6 +15,11 @@ public class CodingTest {
     @GeneratedValue
     @Column(name="codingtest_id")
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "step_category_id")
+    private StepCategory stepCategory;
+
     @Max(1000)
     private String content;
     @Max(30)
