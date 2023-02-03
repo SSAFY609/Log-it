@@ -6,5 +6,6 @@ public enum InterviewCategory {
     ALGORITHM,
     OS,
     PROJECT,
-    CHARACTER
+    CHARACTER,
+    ETC
 }

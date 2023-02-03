@@ -8,18 +8,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.Max;
 
-
 @Entity
 @Getter
-public class CodingTest {
-
+public class StepEtc {
     @Id
     @GeneratedValue
-    @Column(name="codingtest_id")
+    @Column(name = "stepetc_id")
     private Long id;
-    @Max(1000)
+
+    @Max(3000)
     private String content;
-    @Max(30)
-    private String algoCategory;
+
 
 }

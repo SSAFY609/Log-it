@@ -37,7 +37,7 @@ public class StepCategory {
     // 생성 메소드 //
     public static StepCategory createCategory(JobEvent jobEvent,LocalDate typeDate,JobCategory jobCategory){
         StepCategory stepCategory = new StepCategory();
-        stepCategory.setJobEvent(jobEvent);
+        stepCategory.jobEvent=jobEvent;
         stepCategory.setTypeDate(typeDate);
         stepCategory.setResultStatus(ResultStatus.INPROGRESS);
         stepCategory.setJobCategory(jobCategory);

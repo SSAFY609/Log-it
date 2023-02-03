@@ -11,15 +11,13 @@ import javax.validation.constraints.Max;
 
 @Entity
 @Getter
-public class CodingTest {
-
+public class Interview {
     @Id
     @GeneratedValue
-    @Column(name="codingtest_id")
-    private Long id;
-    @Max(1000)
-    private String content;
-    @Max(30)
-    private String algoCategory;
+    @Column(name = "interview_id")
+    private  Long id;
+
+    @Max(50)
+    private String name;
 
 }
