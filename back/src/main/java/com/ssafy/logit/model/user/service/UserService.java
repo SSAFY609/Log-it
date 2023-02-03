@@ -17,8 +17,10 @@ public class UserService {
 
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
-    private static final String DELETED = "deleted";
-    private static final String NONE = "none";
+    private static final String DELETED = "이미 삭제됨";
+    private static final String NONE = "사용자 없음";
+    private static final String IS_LOGINED = "이미 로그인된 사용자";
+    private static final String PW_FAIL = "비밀번호 틀림";
 
     @Autowired
     private UserRepository userRepo;
@@ -29,7 +31,7 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public UserDto login(String email, String pw) {
+    public Map<String, Object> login(String email, String pw) {
         Optional<User> user = userRepo.findByEmail(email);
         System.out.println("user 로그인 정보 !!! : " + user);
         System.out.println("입력한 pw : " + pw);
@@ -39,12 +41,17 @@ public class UserService {
         System.out.println("encodingPw !!! : " + encodingPw);
 
         // 해당 email의 회원이 존재하며, 입력받은 비밀번호가 db에 저장된 비밀번호(암호화된)와 matches 되면 로그인
+        Map<String, Object> result = new HashMap<>();
         if(user.isPresent()) {
             UserDto userDto = user.get().toDto();
             if(!passwordEncoder.matches(pw, user.get().getPw())) {
-                throw new RuntimeException("login : 비밀번호가 틀렸음");
+                result.put("type", FAIL);
+                result.put("result", PW_FAIL);
+                System.out.println("login : 비밀번호가 틀렸음");
             } else if(userDto.getRefreshToken() != null) {
-                throw new RuntimeException("login : 이미 로그인된 사용자");
+                result.put("type", FAIL);
+                result.put("result", IS_LOGINED);
+                System.out.println("login : 이미 로그인된 사용자");
             } else {
                 // 인증 성공 시 auth-token과 refresh-token 함께 발급
                 System.out.println("===== login =====");
@@ -54,11 +61,26 @@ public class UserService {
 
                 userDto.setRefreshToken(refreshToken);
                 userDto.setAuthToken(authToken);
-                return userDto;
+                result.put("type", SUCCESS);
+                result.put("result", userDto);
+                result.put("refreshToken", refreshToken);
+                result.put("authToken", authToken);
+                result.put("id", userDto.getId());
+                result.put("name", userDto.getName());
+                result.put("pw", userDto.getPw());
+                result.put("flag", userDto.getFlag());
+                result.put("student_no", userDto.getStudentNo());
+                result.put("image", userDto.getImage());
+                result.put("deleted", userDto.isDeleted());
+                result.put("created_time", userDto.getCreatedTime());
+                result.put("login_time", userDto.getLoginTime());
             }
         } else {
-            throw new RuntimeException("login : " + email + "에 해당하는 사용자 없음");
+            result.put("type", FAIL);
+            result.put("result", NONE);
+            System.out.println("login : " + email + "에 해당하는 사용자 없음");
         }
+        return result;
     }
 
     @Transactional
