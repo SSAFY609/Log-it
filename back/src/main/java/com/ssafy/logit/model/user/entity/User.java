@@ -3,7 +3,6 @@ package com.ssafy.logit.model.user.entity;
 import com.ssafy.logit.model.user.dto.UserDto;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 

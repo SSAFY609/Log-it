@@ -5,13 +5,11 @@ import com.ssafy.logit.model.user.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @SpringBootTest
-// @Rollback(false)
 public class UserDBTest {
 
     @Autowired
@@ -27,7 +25,8 @@ public class UserDBTest {
                         .email("ssafy@ssafy.com")
                         .pw("1234")
                         .flag(8)
-                        .studentNo("0812345").build();
+                        .studentNo("0812345")
+                        .image("1").build();
         System.out.println(user.getName());
         userRepo.save(user);
     }
@@ -54,7 +53,8 @@ public class UserDBTest {
                         .email("ssafy2@ssafy.com")
                         .pw("1234")
                         .flag(8)
-                        .studentNo("0812345").build();
+                        .studentNo("0812345")
+                        .image("1").build();
         System.out.println(user.getName());
         userRepo.save(user);
     }
@@ -64,6 +64,15 @@ public class UserDBTest {
     @Transactional
     void delete() {
         System.out.println("===== delete =====");
+        User user = User.builder()
+                .name("김싸피")
+                .email("ssafy@ssafy.com")
+                .pw("1234")
+                .flag(8)
+                .studentNo("0812345")
+                .image("1").build();
+        System.out.println(user.getName());
+        userRepo.save(user);
         userRepo.deleteById(1L);
     }
 }
