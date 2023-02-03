@@ -7,7 +7,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -24,12 +28,17 @@ class UserServiceTest {
     @InjectMocks
     private UserService userService;
 
+    @Spy
+    private PasswordEncoder mockPasswordEncoder = new MockPasswordEncoder();
+
     @Test
     void insertUser() {
         // given
         UserDto userDto = UserDto.builder()
+                .name("테스트 유저")
                 .email("test@gmail.com")
-                .pw("1234").build();
+                .pw("1234")
+                .image("1").build();
 
         when(userRepo.save(any())).thenReturn(userDto.toEntity()); // Mock 객체 주입
 
@@ -62,8 +71,10 @@ class UserServiceTest {
     void updateUser() {
         // given
         UserDto userDto = UserDto.builder()
+                .name("테스트 유저")
                 .email("test@gmail.com")
-                .pw("1234").build();
+                .pw("1234")
+                .image("1").build();
 
         when(userRepo.save(any())).thenReturn(userDto.toEntity()); // Mock 객체 주입
 
@@ -91,5 +102,18 @@ class UserServiceTest {
 
         // then
         verify(userRepo).deleteById(anyLong());
+    }
+
+    // 테스트를 위한 MockPasswordEncoder 구현
+    private class MockPasswordEncoder implements PasswordEncoder {
+        @Override
+        public String encode(CharSequence rawPassword) {
+            return new StringBuilder(rawPassword).reverse().toString();
+        }
+
+        @Override
+        public boolean matches(CharSequence rawPassword, String encodedPassword) {
+            return encode(rawPassword).equals(encodedPassword);
+        }
     }
 }
