@@ -29,7 +29,7 @@
         <v-timeline-item v-if="!today" class="progress-item" dot-color="rgb(255, 225, 121)" size="small">
           <div class="memo-box">
             <div class="memo-date">{{date_after(new Date())}}</div>
-            <div class="memo" @click="dialog = true, update = false, now_idx = -1">
+            <div class="memo" @click="dialog = true, update_mode = true, now_idx = -1">
               <div>텍스트를 입력하세요</div>
             </div>
           </div>
@@ -63,24 +63,25 @@
             <v-chip v-if="user.name == eventUsers.owner.name">주인</v-chip>
             <v-chip v-else>멤버</v-chip>
           </div>
-          <v-card-actions style="justify-content:space-between">
+          <v-card-actions style="justify-content:space-between" class="hover_cursor" @click="show = !show">
             <div>
               <v-avatar><v-icon>mdi-plus</v-icon></v-avatar>
               추가하기
             </div>
             <v-btn
               :icon="show ? 'mdi-chevron-up' : 'mdi-chevron-down'"
-              @click="show = !show"
+              
               style="text-align:right"
             ></v-btn>
           </v-card-actions>
           <v-expand-transition>
             <div v-show="show">
               <v-divider></v-divider>
-      
-              <v-card-text>
-                I'm a thing. But, like most politicians, he promised more than he could deliver. You won't have time for sleeping, soldier, not with all the bed making you'll be doing. Then we'll go with that data file! Hey, you add a one and two zeros to that or we walk! You're going to do his laundry? I've got to find a way to escape.
-              </v-card-text>
+              <v-autocomplete
+                clearable
+                :items="allUsers"
+                placeholder="이름 검색"
+              ></v-autocomplete>
             </div>
           </v-expand-transition>
         </v-card>
@@ -89,20 +90,34 @@
         v-model="dialog"
         class="memo-dialog"
       >
-        <div class="memo-dialog memo-bg">
-          <!-- <textarea name="" id="" cols="30" rows="10" wrap="hard" v-model="create_content" placeholder="텍스트를 입력하세요"></textarea> -->
-          <div v-if="update" style="width:100%; text-align:right;"><v-icon @click="update_content">mdi-pencil</v-icon></div>
-          <div v-else style="height: 26.5px"></div>
-          <div v-if="!update_mode" class="detail-form">
-            <QuillEditor 
-              class="text-editor" 
-              theme="bubble"
-              v-model:content="create_content"
-              content-type="html"
-              toolbar="essential" 
-              :read-only="true" />
-          </div>
-          <div v-else class="detail-form">
+        <swiper v-if="!update_mode" 
+          :effect="'cards'"
+          :grabCursor="false"
+          :cssMode="false"
+          :modules="modules"
+          class="mySwiper">
+          
+          <swiper-slide v-for="i in 7" :key="i" class="slide">
+            <div class="memo-bg">
+              <div v-if="!update_mode" style="width:100%; text-align:right;"><v-icon @click="update_mode = true">mdi-pencil</v-icon></div>
+              <div v-else style="height: 25.5px"></div>
+              <div class="detail-form">
+                <QuillEditor 
+                  class="text-editor" 
+                  theme="bubble"
+                  v-model:content="create_content"
+                  content-type="html"
+                  toolbar="essential" 
+                  :read-only="true" />
+              </div>
+              <div class="check">
+                <v-icon size="large" @click="dialog = false">mdi-close</v-icon>
+              </div>
+            </div>
+          </swiper-slide>
+        </swiper>
+        <div v-else class="memo-dialog">
+          <div class="detail-form memo-bg">
             <QuillEditor 
               class="text-editor" 
               theme="bubble"
@@ -111,10 +126,9 @@
               toolbar="essential" 
               placeholder="텍스트를 입력하세요"
               :read-only="false" />
-          </div>
-          <div class="check">
-            <v-icon size="large" @click="create">mdi-check</v-icon>
-            <!-- <v-icon size="large" @click="dialog=false">mdi-close</v-icon> -->
+            <div class="check">
+              <v-icon size="large" @click="create">mdi-check</v-icon>
+            </div>
           </div>
         </div>
       </v-dialog>
@@ -123,9 +137,17 @@
 </template>
 
 <script>
-import {QuillEditor} from '@vueup/vue-quill'
+import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.bubble.css';
+import { Swiper, SwiperSlide } from 'swiper/vue';
 import { mapState } from 'vuex';
+import { EffectCards } from 'swiper';
+
+import 'swiper/css';
+
+import 'swiper/css/effect-cards';
+
+// import './style.css';
 
 export default {
     name: 'EventProgress',
@@ -134,21 +156,29 @@ export default {
         eventId: 0,
         grass: [],
         copy_progress: [],
+        allUsers: [],
         period: 0,
         member: false,
         dialog: false,
         create_content: '',
         day: ['일', '월', '화', '수', '목', '금', '토'],
-        update_mode: true,
+        update_mode: false,
         today: false,
         show: false,
       }
     },
     components: {
       QuillEditor,
+      Swiper,
+      SwiperSlide,
+    },
+    setup() {
+      return {
+        modules: [EffectCards],
+      };
     },
     computed: {
-      ...mapState('temp', ['loginUser', 'event', 'eventUsers', 'progress']),
+      ...mapState('temp', ['loginUser', 'event', 'eventUsers', 'progress', 'users']),
       
       change_image(id){
         return `@assets/profiles/scale (${id}).png`;
@@ -181,11 +211,11 @@ export default {
         }
         // 나머지는 update 요청
         else{
-          this.items[this.now_idx].content = this.create_content;
+          this.copy_progress[this.now_idx].content = this.create_content;
           console.log(this.create_content);
         }
+        // this.dialog = false;
         this.update_mode = false;
-        this.dialog = false;
       },
       date_after(i) {
         const today = new Date();
@@ -199,13 +229,7 @@ export default {
         return `${year}-${month >= 10 ? month : '0' + month}-${date >= 10 ? date : '0' + date} (${this.day[day]})`;
       },
       update_content() {
-        this.update = false;
-        console.log('일단 여기옴')
-        const eventTarget1 = document.querySelector('.text-editor');
-        console.log(eventTarget1);
-        eventTarget1.classList.remove('ql-disabled');
-        console.log(eventTarget1);
-
+        this.update_mode = true;
       }
     },
     created() {
@@ -239,7 +263,9 @@ export default {
           this.grass.push('not');
         }
       }
-      console.log(this.grass)
+
+      // 잔디 확인용 테스트
+      // console.log(this.grass)
       
       const today = new Date()
       for(let i=0; i<this.progress.length; i++){
@@ -250,10 +276,11 @@ export default {
       }
 
       this.copy_progress = [...this.progress].reverse();
-      console.log(this.today)
-      console.log(this.progress)
-      console.log(this.copy_progress)
-      
+
+      for(let i=0; i<this.users.length; i++){
+        const user = `${this.users[i].name} (${this.users[i].email})`
+        this.allUsers.push(user)
+      }
     }
 
 
@@ -263,15 +290,21 @@ export default {
 
 <style scoped>
 
-h1 {
-  font-family: event;
+.mySwiper {
+  width: 680px;
+  height: 710px;
 }
 
-.test {
-  background-image: url('../../assets/images/memo_grass.png');
-  width: 30px;
-  height: 30px;
+.slide {
+  width: 680px;
+  height: 710px;
+  /* background-color: white; */
 }
+
+h1 {
+  font-family: galaxy;
+}
+
 
 .header {
   display: flex;
@@ -383,7 +416,7 @@ h1 {
 .memo-box {
   display: flex;
   align-items: center;
-  font-family: event;
+  font-family: galaxy;
   font-size: 25px;
 }
 .memo-date {
@@ -394,6 +427,9 @@ h1 {
 
 .memo {
   background-image: url('../../assets/images/memo_large.png');
+  /* background-color: rgb(255, 255, 177);
+  box-shadow: 1px 1px 10px 0.1px rgba(125, 124, 83, 0.738); */
+
   /* margin-left: 200px; */
   width: 450px;
   height: 410px;
@@ -413,23 +449,26 @@ h1 {
 
 .memo-dialog {
   display: flex;
-  width: 680px;
-  height: 710px;
+  width: 650px;
+  height: 700px;
 }
 
 .memo-bg {
-  background-image: url('../../assets/images/memo_create_bg.png');
-  font-family: event;
-  padding: 43px;
+  /* background-image: url('../../assets/images/memo_create_bg.png'); */
+  background-color: rgb(255, 255, 155);
+  font-family: galaxy;
+  padding: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  width: 600px;
+  height: 620px;
 }
 
 .detail-form {
   width: 100%;
-  height: 90%;
+  height: 100%;
   font-size: 25px;
 }
 
@@ -447,7 +486,7 @@ h1 {
 }
 
 .check {
-  position: absolute;
-  top: 606px;
+  /* position: absolute; */
+  top: 610px;
 }
 </style>

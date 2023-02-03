@@ -13,7 +13,7 @@
 
 
   .first {
-    font-family: AppleL, AppleM, AppleB, AppleH;
+    font-family: AppleL, AppleM, AppleB, AppleH, event, galaxy;
     height: 100%;
   }
   /* 아래로 내려갈수록 두꺼운 글씨체 */
@@ -38,6 +38,11 @@
   font-family:'event';
   src: url('../fonts/나눔손글씨 고딕 아니고 고딩.ttf') format('truetype');
   }
+  @font-face {
+  font-family:'galaxy';
+  src: url('../fonts/갤럭시X온글잎 이해.ttf') format('truetype');
+  }
+
     
 
 
@@ -191,14 +196,14 @@ display: none;
 
 /* Quill 사용을 위한 CSS */
 .text-editor {
-  font-size: 25px !important;
-  font-family: event !important;
+  font-size: 26px !important;
+  font-family: galaxy !important;
   height: 90% !important;
   width: 96%;
 }
 
 .text-editor h1, .memo h1 {
-  font-family: event;
+  font-family: galaxy;
 }
 
 .text-editor pre, .memo pre {
@@ -211,7 +216,7 @@ display: none;
 .text-editor blockquote, .memo blockquote {
   border-left: 4px solid #666 !important;
   background-color: #a5a5a536 !important;
-  font-size: 25px !important;
+  font-size: 26px !important;
 }
 
 /* 나중에 스크롤바 한번 해보자 */

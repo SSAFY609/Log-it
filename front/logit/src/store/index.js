@@ -6,7 +6,6 @@ import temp from './modules/temp.js'
 
 export default createStore({
   state: {
-    
   },
   getters: {
   },
