@@ -1,6 +1,6 @@
 
 /* 아웃라인 보고싶지 않으면 주석처리 */
-/*   
+  
   .lay1 {
     outline: 1px dashed crimson;
   }
@@ -9,7 +9,7 @@
   }
   .lay3 {
     outline: 1px dashed green;
-  } */
+  }
 
 
   .first {
@@ -190,7 +190,13 @@ display: none;
 
 /* Quill 사용을 위한 CSS */
 .text-editor {
-  font-size: 20px !important;
+  font-size: 26px !important;
+  font-family: event !important;
+  height: 90% !important;
+  width: 96%;
+}
+.text-editor2 {
+  font-size: 26px !important;
   font-family: event !important;
   height: 90% !important;
   width: 96%;
@@ -233,4 +239,8 @@ body::-webkit-scrollbar {
 body::-webkit-scrollbar-thumb {
   background-color: #7d7d7da8;
   border-radius: 10px;
+}
+
+.v-field__input {
+ font-size: 14px!important;
 }

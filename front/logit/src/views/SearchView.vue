@@ -1,13 +1,12 @@
 <template>
    <div class="container">
       <div class="search_big_box">
-         <v-icon class="search_icon lay3">mdi-magnify</v-icon>
          <div class="v_search_box lay3">
             <v-autocomplete class="search_input_text" 
             :items=state.SearchList
             autofocus
             clearable
-            variant="under"
+            variant="solo"
             prefix
             
             ></v-autocomplete>
@@ -55,7 +54,6 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      background-color: rgba(161, 215, 240, 0.445);
    }
 
    .search_big_box {

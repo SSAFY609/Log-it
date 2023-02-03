@@ -10,7 +10,7 @@
           <div class="search_content lay3">검색</div>
           <v-autocomplete class="search_input_text nosee" autofocus
             clearable
-            variant="null"
+            variant="solo "
             :items=state.SearchList
           ></v-autocomplete>
         </div>
@@ -161,7 +161,6 @@ export default {
     justify-content: start;
     border-radius: 4px;
     margin-right: 10px;
-    background-color: red;
   }
   .search_box:hover {
     background-color: #efefef;
