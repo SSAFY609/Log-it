@@ -76,7 +76,7 @@ export default {
   data: () => ({
     rules2: [
       (value) => !!value || "",
-      (value) => (value || "").length <= 20 || "Max 20 characters",
+      (value) => (value || "").length <= 1 || "Max 20 characters",
       (value) => {
         const pattern =
           /^(([^<script>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -85,7 +85,7 @@ export default {
     ],
     rules1: {
       required: (value) => !!value || "",
-      min: (v) => v.length >= 8 || "최소 8자리 이상 입력해주세요.",
+      min: (v) => v.length >= 1 || "최소 8자리 이상 입력해주세요.",
     },
     user: {
       email: "",
@@ -110,10 +110,9 @@ export default {
       }
     },
       login() {
-        //alert("로그인 기능을 구현하지 않았습니다.");
         const user = {
-          email: this.user.email,
-          pw: this.user.pw
+          email: 'ssafy2@naver.com',
+          pw: '1234',
         }
         this.$store.dispatch('login', user);
     },

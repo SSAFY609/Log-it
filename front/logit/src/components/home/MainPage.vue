@@ -8,12 +8,12 @@
         />
       </div>
       <div>
-        <div v-if="state.loginUser == null">
-          <h1>당신의 새로운 여정.</h1>
+        <div v-if="!loginUser.name">
+          <h1>당신의 새로운 여정</h1>
           <h1>매일 기록해보세요</h1>
         </div>
         <div v-else>
-          <h1>{{ state.loginUser.name }} 님 환영합니다.</h1>
+          <h1>{{ loginUser.name }} 님 환영합니다.</h1>
           <h1>지금 바로 기록해보세요.</h1>
         </div>
         <p>진행중인 이벤트와 취업여정을 기록하면서 달라진 나의 모습을 발견하세요.</p>
@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
     name: 'MainPage',
     setup() {
@@ -41,6 +43,13 @@ export default {
       return {
         state,
       }
+  },
+    computed: { 
+      ...mapState(['loginUser'])
+  },
+  created() {
+    console.log(this.$store.state.loginUser);
+    console.log(this.loginUser);
     }
     
     
