@@ -28,6 +28,7 @@
 </template>
 
 <script>
+
 export default {
   name: "UserEmail",
   data: () => ({
@@ -67,29 +68,16 @@ export default {
       // 이메일 유효성 검사 완료하면
       if (validate.valid) {
         // 이메일 중복 검사
-        // 중복될 경우 -> "이미 사용중인 이메일입니다" + 버튼 비활성화
-        // 중복이 아닐 경우 -> "사용할 수 있는 이메일입니다." + 버튼 활성화
-        var params = new URLSearchParams();
-        params.append("email", this.email_tmp);
-        //http.post("URL,params")
-        //.then((res=>{
-        //if(res.data.response==" 실패"){
-        // this.email_help='이미 사용중인 이메일입니다.'
-        // document.querySelector(".signup-button").classList.remove("color");
-        // return;
-        //}
-        // this.email = this.email_tmp
-        // this.email_help = '${this.email}는 사용 가능한 이메일입니다.'
-        //}))
+   
+   
+
         this.email_help = "asd@asd.com은 사용 가능한 이메일입니다.";
         document.querySelector(".signup-email-chkText").innerHTML =
-          this.email_help;
-        //  document.querySelector(".signup-email-chkText").add("animation");
+        this.email_help;
         document.querySelector(".signup-button").classList.add("color");
       } else {
         document.querySelector(".signup-email-chkText").innerHTML = "";
         document.querySelector(".signup-button").classList.remove("color");
-        //  document.querySelector(".signup-email-chkText").remove("animation");
       }
     },
   },

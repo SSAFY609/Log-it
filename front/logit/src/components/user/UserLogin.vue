@@ -6,7 +6,7 @@
         <v-form ref="form" lazy-validation @keyup="loginCheck">
           <!-- 이메일 입력 칸-->
           <v-text-field
-            v-model="email"
+            v-model="user.email"
             :rules="rules2"
             class="mb-2"
             counter
@@ -14,7 +14,7 @@
           ></v-text-field>
           <!-- 비밀번호 입력 칸-->
           <v-text-field
-            v-model="password"
+            v-model="user.pw"
             :append-inner-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
             :rules="[rules1.required, rules1.min]"
             :type="show1 ? 'text' : 'password'"
@@ -87,8 +87,11 @@ export default {
       required: (value) => !!value || "",
       min: (v) => v.length >= 8 || "최소 8자리 이상 입력해주세요.",
     },
-    email: "",
-    password: "",
+    user: {
+      email: "",
+      pw: "",
+        },
+
     show1: false,
     show2: true,
   }),
@@ -106,12 +109,17 @@ export default {
           .classList.remove("color");
       }
     },
-    login() {
-      alert("로그인 기능을 구현하지 않았습니다.");
+      login() {
+        //alert("로그인 기능을 구현하지 않았습니다.");
+        const user = {
+          email: this.user.email,
+          pw: this.user.pw
+        }
+        this.$store.dispatch('login', user);
     },
-    kakaoLogin() {},
-    googleLogin() {},
-    toSignup() {
+      kakaoLogin() {},
+      googleLogin() {},
+      toSignup() {
       this.$router.push("email");
     },
   },

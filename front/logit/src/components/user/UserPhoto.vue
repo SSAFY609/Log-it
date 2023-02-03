@@ -1,10 +1,11 @@
 <template>
   <div class="profile-container">
     <h2 class="profile-title">프로필 생성</h2>
-
+    <!--
     <label className="input-file-button" for="input-file"> 업로드 </label>
-    <input type="file" id="input-file" style="display: none" />
+    <input @change="selectFile" type="file" id="input-file" style="display: none" />
     <div>{{ state.image }}</div>
+    -->
     <div class="profile-scroll-container fill-height">
       <div class="profile-scroll">
         <v-col
@@ -36,11 +37,15 @@ export default {
   name: "UserPhoto",
   props: ["user"],
   setup(props, { emit }) {
-    const state = reactive({});
+    const state = reactive({
+      image:"",
+    });
     const onClicked = (i) => {
       emit("updateUserProfile", i);
     };
-    const selectFile = () => {};
+    const selectFile = () => {
+
+    };
     return {
       selectFile,
       state,
