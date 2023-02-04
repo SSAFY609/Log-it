@@ -1,14 +1,12 @@
 package com.ssafy.logit.controller.step_category;
 
 
-import com.ssafy.logit.model.job.service.JobService;
 import com.ssafy.logit.model.step_category.dto.CreateStepCategoryRequest;
 import com.ssafy.logit.model.step_category.dto.CreateStepCategoryResponse;
 import com.ssafy.logit.model.step_category.dto.UpdateStepCategoryRequest;
 import com.ssafy.logit.model.step_category.entity.StepCategory;
 import com.ssafy.logit.model.step_category.service.StepCategoryService;
 import com.ssafy.logit.model.user.entity.User;
-import com.ssafy.logit.model.user.repository.UserRepository;
 import com.ssafy.logit.model.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,9 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class StepCategoryController {
     private final StepCategoryService stepCategoryService;
-    private final JobService jobService;
     private final UserService userService;
-    private final UserRepository userRepository;
 
 
     @Operation(summary = "채용 전형 생성 ", description = "채용 전형 데이터를 생성합니다. RequestBody에 취업이벤트의 id가 필요합니다.")
