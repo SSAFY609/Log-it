@@ -22,4 +22,27 @@ public class StepEtc {
     private String content;
 
 
+    // private setter //
+    private void setStepCategory(StepCategory stepCategory) {
+        this.stepCategory = stepCategory;
+    }
+
+    private void setContent(String content) {
+        this.content = content;
+    }
+
+
+    // 생성 메소드 //
+    public static StepEtc create(StepCategory stepCategory, String content) {
+        StepEtc stepEtc = new StepEtc();
+        stepEtc.setStepCategory(stepCategory);
+        stepEtc.setContent(content);
+        return stepEtc;
+    }
+
+    // 수정 메소드 //
+    public StepEtc update(String content) {
+        this.setContent(content);
+        return this;
+    }
 }
