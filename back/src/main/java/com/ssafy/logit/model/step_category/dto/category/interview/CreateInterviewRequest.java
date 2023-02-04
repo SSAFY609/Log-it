@@ -11,6 +11,6 @@ public class CreateInterviewRequest {
 
     @NotNull
     private Long stepId;
-    @Max(1000)
+    @Max(50)
     private String name;
 }
