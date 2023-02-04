@@ -1,3 +1,4 @@
+import router from "@/router";
 import axiosConnector from "@/utils/axios-connector";
 
 
@@ -17,6 +18,12 @@ const event = {
         },
     },
     mutations: {
+        CREATE_EVENT(context, payload){
+            // state.event = payload
+            // payload를 eventId로 할지, 등록한 event로 할지,,, 
+            // 그냥 id만 반환해도 될듯 어차피 eventId로 getEvent할거니깡
+            router.push({name: 'EventProgress', params: {eventId: payload.eventId}})
+        },
         GET_EVENTS(state, payload){
             state.events = payload
         },
@@ -31,6 +38,16 @@ const event = {
         }
     },
     actions: {
+        // 성장 여정 추가
+        createEvent({commit}, event){
+            axiosConnector.post(`event`, event
+            ).then((res)=>{
+                commit('CREATE_EVENT', res.data)
+            }).catch((err)=>{
+                console.log(err)
+            })
+        },
+
         // 회원에 해당하는 모든 이벤트 가져오기
         getEvents({commit}, email) {
             const data = {
@@ -103,6 +120,10 @@ const event = {
         },
         // 이벤트에 과정 추가
         // createProgress({commit}, )
+
+        // 이벤트에 과정 수정
+
+        // 이벤트에 과정 삭제
     }
 
 }

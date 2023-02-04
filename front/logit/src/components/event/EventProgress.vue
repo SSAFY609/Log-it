@@ -62,9 +62,9 @@
             <span style="margin: 0px 10px">
               {{ user.name }}
             </span>
-            <v-chip v-if="user.name == eventUsers.owner.name">호스트</v-chip>
+            <v-chip v-if="user.name == eventUsers.owner.name" color="#FF0A54">호스트</v-chip>
             <div v-else class="member">
-              <v-chip>멤버</v-chip>
+              <v-chip color="#2d8bff">멤버</v-chip>
               <v-icon v-if="is_host" color="red" class="member-delete" @click="member_delete(user.email)">mdi-close</v-icon>
             </div>
           </div>
@@ -80,13 +80,17 @@
             ></v-btn>
           </v-card-actions>
           <v-expand-transition>
-            <div v-show="show">
+            <div v-show="show" style="text-align: center;">
               <v-divider></v-divider>
               <v-autocomplete
+                class="search-user"
                 clearable
                 :items="allUsers"
                 placeholder="이름 검색"
+                v-model:model-value="search_user"
+                hide-no-data
               ></v-autocomplete>
+              <v-btn color="#FF0A54" style="color:white" @click="addEventUser"><v-icon style="margin-right:5px">mdi-send</v-icon>초대하기</v-btn>
             </div>
           </v-expand-transition>
         </v-card>
@@ -171,6 +175,7 @@ export default {
         today: false,
         show: false,
         is_host: false,
+        search_user: null,
       }
     },
     components: {
@@ -240,17 +245,36 @@ export default {
       member_delete(email){
         console.log(email, this.event.event_id);
         // this.$store.dispatch('deleteEventUser', this.event.event_id, email);
+      },
+      addEventUser(){
+        if(!this.search_user){
+          alert('선택된 유저가 없습니다.')
+        } else {
+          const arr = this.search_user.split(' ');
+          const name = arr[0];
+          const email = arr[1].slice(1,-1);
+          console.log(`이름은 ${name} 이메일은 ${email}`);
+          const eventUser = {
+            eventId: this.event.event_id,
+            email: email,
+          }
+          console.log(eventUser);
+          // this.$store.dispatch('addEventUser', eventUser);
+
+          // 추가하기 버튼 누르면 어디까지 닫아야 하남,,,,??
+          // this.show = false;
+          // this.member = false;
+        }
       }
     },
     created() {
       // 파람스로 이벤트 아이디 추출
       this.eventId = this.$route.params.eventId;
-      console.log(this.eventId)
 
       // 이벤트 아이디에 해당하는 호출.....
-      // this.$store.dispatch('event/getEvent', 4);
-      // this.$store.dispatch('event/getEventUsers', eventId);
-      // this.$store.dispatch('event/getProgress', eventId);
+      // this.$store.dispatch('event/getEvent', this.eventId);
+      // this.$store.dispatch('event/getEventUsers', this.eventId);
+      // this.$store.dispatch('event/getProgress', this.eventId);
 
 
       // 잔디를 구성하기 위한 작업,,,,
@@ -434,6 +458,10 @@ h1 {
 
 .member-delete:hover{
   background-color: rgba(255, 182, 182, 0.34);
+}
+
+.search-user div {
+  font-family: appleL;
 }
 
 .progress {

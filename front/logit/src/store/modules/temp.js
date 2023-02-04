@@ -7,6 +7,7 @@
 const temp = {
   namespaced: true,
   state: {
+    sidebar: true,
     loginUser: {user_id: 1, name: '이성훈'},
     users: [{user_id: 1, name: '이성훈', profile: '1', email: 'tjdgns@naver.com'},{user_id: 2, name: '김나현', profile: '10', email: 'skgus@naver.com'},{user_id: 3, name: '오하늘', profile: '4', email: 'sky5@naver.com'}],
     event: {event_id: 1, start_date: new Date(2023,0,16), end_date: new Date(2023,1,12), name: '알고리즘 IM형', done: false},
@@ -16,7 +17,7 @@ const temp = {
       {event_id: 1, start_date: new Date(2023,0,16), end_date: new Date(2023,1,12), name: '알고리즘 IM형', done: false},
       {event_id: 3, start_date: new Date(2023,0,24), end_date: new Date(2023,1,7), name: '알고리즘 A형', done: false},
       {event_id: 2, start_date: new Date(2023,1,8), end_date: new Date(2023,3,13), name: '정보처리기사', done: false},
-      {event_id: 2, start_date: new Date(2023,1,8), end_date: new Date(2023,3,13), name: '정보처리기사', done: false},
+      // {event_id: 2, start_date: new Date(2023,1,8), end_date: new Date(2023,3,13), name: '정보처리기사', done: false},
     ],
     progress: [
       {writer: {user_id: 1, name: '이성훈'}, progress_id: 1, event_id: 1, date: new Date(2023, 0, 17), content: '열심히 했따ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ'},
@@ -39,8 +40,20 @@ const temp = {
   getters: {
   },
   mutations: {
+    CLOSE_SIDEBAR(state){
+      state.sidebar = false;
+    },
+    OPEN_SIDEBAR(state){
+      state.sidebar = true;
+    }
   },
   actions: {
+    closeSidebar({commit}){
+      commit('CLOSE_SIDEBAR');
+    },
+    openSidebar({commit}){
+      commit('OPEN_SIDEBAR');
+    }
   },
 }
 

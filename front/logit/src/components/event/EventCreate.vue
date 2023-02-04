@@ -8,10 +8,10 @@
             ✔ 카테고리 선택 또는 생성
         </div>
         <v-chip-group filter class="category" column>
-            <v-chip size="large" v-for="i in state.categorys" :value="i" :key="i" @click="select_chip(i), flag = false" >
+            <v-chip color="#FF0A54" size="large" v-for="i in state.categorys" :value="i" :key="i" @click="select_chip(i), flag = false" >
                 {{ i }}
             </v-chip>
-            <v-chip size="large" @click="flag = !flag, select_category=''">카테고리 생성</v-chip>
+            <v-chip color="#FF0A54" size="large" @click="flag = !flag, select_category=''">카테고리 생성</v-chip>
         </v-chip-group>
         <div v-show="!flag" style="height: 78px"></div>
         <div v-show="flag"><v-text-field label="생성할 카테고리를 입력하세요" v-model="select_category"></v-text-field></div>
@@ -47,7 +47,11 @@ export default {
     },
     methods: {
         select_chip(i) {
-            this.select_category = i;
+            if(this.select_category == i){
+                this.select_category = ''
+            } else {
+                this.select_category = i;
+            }
         },
         create() {
             if (!this.select_category) {
@@ -55,9 +59,14 @@ export default {
             } else if (!this.start_date || !this.end_date) {
                 alert('선택된 날짜가 없습니다.')
             } else {
-                console.log(this.select_category)
-                console.log(this.start_date)
-                console.log(this.end_date)
+                const event = {
+                    category: this.select_category,
+                    start_date: this.start_date,
+                    end_date: this.end_date,
+                }
+                // this.$store.dispatch('event/createEvent', event)
+                console.log(event)
+                this.$router.push({name: 'EventProgress', params: {eventId: 1}})
             }
         }
     },

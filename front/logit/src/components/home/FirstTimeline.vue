@@ -33,7 +33,7 @@
                       {{ date[index-1] }}
                   </div>
                   <span class="circle">
-                      <v-menu open-on-click :location="start" transition="slide-y-transition">
+                      <v-menu open-on-click location="top" transition="slide-y-transition">
                         <template v-slot:activator="{ props }"><button class="hover" v-bind="props" style="font-size:large" @click="choose_date = real_date[index-1]">+</button></template>
                         <v-list>
                           <v-list-item class="list-item">
