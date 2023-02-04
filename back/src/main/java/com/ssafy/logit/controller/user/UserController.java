@@ -241,7 +241,7 @@ public class UserController {
     @DeleteMapping("/deleteImage")
     public ResponseEntity<String> dropImage(@RequestAttribute String email) throws Exception {
         try {
-            UUID id = userService.getUser(email).getId();
+            Long id = userService.getUser(email).getId();
             imageService.dropImage(id);
             log.info("{}의 프로필 이미지 삭제 성공", email);
             return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
