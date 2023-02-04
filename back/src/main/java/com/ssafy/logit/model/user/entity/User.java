@@ -1,12 +1,12 @@
 package com.ssafy.logit.model.user.entity;
 
 import com.ssafy.logit.model.user.dto.UserDto;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.UUID;
 
 @Entity
 @Data
@@ -17,10 +17,9 @@ import java.util.UUID;
 public class User extends DateTime {
 
     @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(name = "user_id", columnDefinition = "BINARY(16)")
-    private UUID id;
+    @GeneratedValue
+    @Column(name = "user_id")
+    private Long id;
 
     @Column(length = 10)
     private String name;

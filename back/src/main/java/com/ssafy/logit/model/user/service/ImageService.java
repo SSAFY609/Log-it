@@ -97,7 +97,7 @@ public class ImageService {
     }
 
     // 이미지 삭제
-    public void dropImage(long id) throws Exception {
+    public void dropImage(Long id) throws Exception {
         UserDto userDto = userRepo.findById(id).get().toDto();
 
         // 기존 프로필 사진

@@ -16,7 +16,7 @@ import java.util.UUID;
 public class UserDto {
 
     @Schema(description = "아이디 (auto_increment)")
-    private UUID id;
+    private Long id;
 
     @Schema(description = "이름")
     private String name;
@@ -66,7 +66,7 @@ public class UserDto {
         this.refreshToken = user.getRefreshToken();
     }
 
-    public User updateUser(UUID id, UserDto userDto) {
+    public User updateUser(Long id, UserDto userDto) {
         return User.builder()
                 .id(id)
                 .name(userDto.getName())
