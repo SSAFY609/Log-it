@@ -3,6 +3,8 @@ import { createStore } from 'vuex'
 // import router from '@/router'
 
 import temp from './modules/temp.js'
+import event from './modules/event.js'
+import timeline from './modules/timeline.js'
 
 export default createStore({
   state: {
@@ -15,5 +17,7 @@ export default createStore({
   },
   modules: {
     temp: temp,
+    event: event,
+    timeline: timeline,
   }
 })

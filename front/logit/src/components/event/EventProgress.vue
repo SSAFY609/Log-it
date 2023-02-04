@@ -117,7 +117,7 @@
           </swiper-slide>
         </swiper>
         <div v-else class="memo-dialog">
-          <div class="detail-form memo-bg">
+          <div class="detail-form memo-bg memo-create">
             <QuillEditor 
               class="text-editor" 
               theme="bubble"
@@ -462,7 +462,7 @@ h1 {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  width: 600px;
+  width: 599px;
   height: 620px;
 }
 
@@ -472,6 +472,11 @@ h1 {
   font-size: 25px;
 }
 
+.memo-create {
+  width: 650px;
+  height: 700px;
+  font-size: 25px;
+}
 .memo-bg >textarea {
   width: 93%;
   height: 90%;
