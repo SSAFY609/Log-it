@@ -68,15 +68,6 @@ public class UserController {
         // 생성된 토큰 정보를 클라이언트에게 전달
         resultMap.put("jwt-auth-token", loginUser.getAuthToken());
         resultMap.put("jwt-refresh-token", loginUser.getRefreshToken());
-        resultMap.put("id", loginUser.getId());
-        resultMap.put("name", loginUser.getName());
-        resultMap.put("pw", loginUser.getPw());
-        resultMap.put("flag", loginUser.getFlag());
-        resultMap.put("student_no", loginUser.getStudentNo());
-        resultMap.put("image", loginUser.getImage());
-        resultMap.put("deleted", loginUser.isDeleted());
-        resultMap.put("created_time", loginUser.getCreatedTime());
-        resultMap.put("login_time", loginUser.getLoginTime());
 
         // 정보 확인을 위해 클라이언트로 전달
         Map<String, Object> authToken_info = jwtUtil.checkAndGetClaims(loginUser.getAuthToken());
