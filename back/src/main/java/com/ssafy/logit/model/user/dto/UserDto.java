@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Schema(description = "회원")
 @Data
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 public class UserDto {
 
     @Schema(description = "아이디 (auto_increment)")
-    private Long id;
+    private UUID id;
 
     @Schema(description = "이름")
     private String name;
@@ -65,7 +66,7 @@ public class UserDto {
         this.refreshToken = user.getRefreshToken();
     }
 
-    public User updateUser(Long id, UserDto userDto) {
+    public User updateUser(UUID id, UserDto userDto) {
         return User.builder()
                 .id(id)
                 .name(userDto.getName())

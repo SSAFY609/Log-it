@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -249,7 +250,7 @@ public class UserController {
     @DeleteMapping("/deleteImage")
     public ResponseEntity<String> dropImage(@RequestAttribute String email) throws Exception {
         try {
-            Long id = userService.getUser(email).getId();
+            UUID id = userService.getUser(email).getId();
             imageService.dropImage(id);
             log.info("{}의 프로필 이미지 삭제 성공", email);
             return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
