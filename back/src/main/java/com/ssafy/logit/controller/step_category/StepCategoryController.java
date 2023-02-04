@@ -4,6 +4,7 @@ package com.ssafy.logit.controller.step_category;
 import com.ssafy.logit.model.job.service.JobService;
 import com.ssafy.logit.model.step_category.dto.CreateStepCategoryRequest;
 import com.ssafy.logit.model.step_category.dto.CreateStepCategoryResponse;
+import com.ssafy.logit.model.step_category.dto.UpdateStepCategoryRequest;
 import com.ssafy.logit.model.step_category.entity.StepCategory;
 import com.ssafy.logit.model.step_category.service.StepCategoryService;
 import com.ssafy.logit.model.user.entity.User;
@@ -52,7 +53,7 @@ public class StepCategoryController {
     @PutMapping("/{id}")
     public ResponseEntity<CreateStepCategoryResponse> update(
             @RequestAttribute String email
-            , @PathVariable Long id, @RequestBody @Validated CreateStepCategoryRequest request) {
+            , @PathVariable Long id, @RequestBody @Validated UpdateStepCategoryRequest request) {
         log.info("채용 전형 수정 Controller {} ",request);
         User user = getUser(email);
         StepCategory updateCategory = stepCategoryService.update(user, id, request);

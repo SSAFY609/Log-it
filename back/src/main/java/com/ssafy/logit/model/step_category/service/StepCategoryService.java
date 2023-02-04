@@ -5,6 +5,7 @@ import com.ssafy.logit.exception.DifferentUserException;
 import com.ssafy.logit.model.job.entity.JobEvent;
 import com.ssafy.logit.model.job.repository.JobRepository;
 import com.ssafy.logit.model.step_category.dto.CreateStepCategoryRequest;
+import com.ssafy.logit.model.step_category.dto.UpdateStepCategoryRequest;
 import com.ssafy.logit.model.step_category.entity.StepCategory;
 import com.ssafy.logit.model.step_category.repository.StepCategoryRepository;
 import com.ssafy.logit.model.user.entity.User;
@@ -53,7 +54,7 @@ public class StepCategoryService {
     }
 
     @Transactional
-    public StepCategory update(User user, Long id, CreateStepCategoryRequest request) {
+    public StepCategory update(User user, Long id, UpdateStepCategoryRequest request) {
 
         StepCategory stepCategory = stepCategoryRepository.findById(id).orElseThrow(NoSuchElementException::new);
         checkUser(user, stepCategory);
