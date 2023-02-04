@@ -22,4 +22,31 @@ public class Interview {
     @Max(50)
     private String name;
 
+    // private setter
+    private void setStepCategory(StepCategory stepCategory) {
+        if(stepCategory!=null){
+        this.stepCategory = stepCategory;
+        }
+        throw new IllegalStateException();
+    }
+
+    private void setName(String name) {
+        this.name = name;
+    }
+
+
+    // 생성 메소드 //
+    public static Interview create(StepCategory stepCategory, String name){
+        Interview interview = new Interview();
+        interview.setStepCategory(stepCategory);
+        interview.setName(name);
+        return interview;
+    }
+
+    // 수정 메소드 //
+    public Interview update(String name){
+        this.setName(name);
+        return this;
+    }
+
 }
