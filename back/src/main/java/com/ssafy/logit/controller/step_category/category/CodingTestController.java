@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/coding-test")
+@RequestMapping("/step-category/coding-test")
 @Tag(name = "coding-test", description = "전형(코테) API")
 @Slf4j
 public class CodingTestController {
