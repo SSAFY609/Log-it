@@ -3,6 +3,7 @@ package com.ssafy.logit.controller.step_category.category;
 
 import com.ssafy.logit.model.step_category.dto.category.interview.CreateInterviewRequest;
 import com.ssafy.logit.model.step_category.dto.category.interview.InterviewResponse;
+import com.ssafy.logit.model.step_category.dto.category.interview.UpdateInterviewRequest;
 import com.ssafy.logit.model.step_category.entity.StepCategory;
 import com.ssafy.logit.model.step_category.entity.category.Interview;
 import com.ssafy.logit.model.step_category.service.StepCategoryService;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
-@RequestMapping("/step-category/interivew")
+@RequestMapping("/step-category/interview")
 @RequiredArgsConstructor
 @Tag(name = "interview API", description = "채용전형(면접) API")
 public class InterviewController {
@@ -34,6 +35,7 @@ public class InterviewController {
                                                     @Validated @RequestBody CreateInterviewRequest request) {
         User user = getUser(email);
         StepCategory stepCategory = stepCategoryService.get(request.getStepId());
+        System.out.println("stepCategory.getId() = " + stepCategory.getId());
         Interview interview = interviewService.create(user, stepCategory, request);
         InterviewResponse response = new InterviewResponse(interview);
 
@@ -50,7 +52,7 @@ public class InterviewController {
     @PutMapping("/{id}")
     public ResponseEntity<InterviewResponse> update(@RequestAttribute String email,
                                                     @PathVariable Long id,
-                                                    @Validated @RequestBody CreateInterviewRequest request) {
+                                                    @Validated @RequestBody UpdateInterviewRequest request) {
         User user = getUser(email);
         Interview updateInterview = interviewService.update(user, id, request);
         InterviewResponse interviewResponse = new InterviewResponse(updateInterview);
