@@ -8,16 +8,11 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class DocumentRequest {
-
-
+public class CreateDocumentRequest {
     @NotNull
     private Long stepId;
     @Max(300)
     private String question;
     @Max(2000)
     private String content;
-
-    private InterviewCategory interviewCategory;
-
 }
