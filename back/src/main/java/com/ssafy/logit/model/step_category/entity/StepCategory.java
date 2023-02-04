@@ -49,8 +49,7 @@ public class StepCategory {
     }
 
     // 수정 메소드 //
-    public StepCategory updateCategory(JobEvent jobEvent,LocalDate typeDate,ResultStatus resultStatus){
-        this.setJobEvent(jobEvent);
+    public StepCategory updateCategory(LocalDate typeDate,ResultStatus resultStatus){
         this.setTypeDate(typeDate);
         this.setResultStatus(resultStatus);
         return this;
