@@ -58,10 +58,15 @@
           <div v-for="user in eventUsers.users" :key="user.user_id" class="member-list">
             <v-avatar>
               <v-img :src="require(`@/assets/profiles/scale (${user.profile}).png`)"></v-img>
-            </v-avatar> 
-            {{ user.name }}
-            <v-chip v-if="user.name == eventUsers.owner.name">주인</v-chip>
-            <v-chip v-else>멤버</v-chip>
+            </v-avatar>
+            <span style="margin: 0px 10px">
+              {{ user.name }}
+            </span>
+            <v-chip v-if="user.name == eventUsers.owner.name">호스트</v-chip>
+            <div v-else class="member">
+              <v-chip>멤버</v-chip>
+              <v-icon v-if="is_host" color="red" class="member-delete" @click="member_delete(user.email)">mdi-close</v-icon>
+            </div>
           </div>
           <v-card-actions style="justify-content:space-between" class="hover_cursor" @click="show = !show">
             <div>
@@ -165,6 +170,7 @@ export default {
         update_mode: false,
         today: false,
         show: false,
+        is_host: false,
       }
     },
     components: {
@@ -230,16 +236,21 @@ export default {
       },
       update_content() {
         this.update_mode = true;
+      },
+      member_delete(email){
+        console.log(email, this.event.event_id);
+        // this.$store.dispatch('deleteEventUser', this.event.event_id, email);
       }
     },
     created() {
       // 파람스로 이벤트 아이디 추출
       this.eventId = this.$route.params.eventId;
+      console.log(this.eventId)
 
       // 이벤트 아이디에 해당하는 호출.....
-      // this.$store.dispatch('temp/getEvent', eventId);
-      // this.$store.dispatch('temp/getEventUsers', eventId);
-      // this.$store.dispatch('temp/getProgress', eventId);
+      // this.$store.dispatch('event/getEvent', 4);
+      // this.$store.dispatch('event/getEventUsers', eventId);
+      // this.$store.dispatch('event/getProgress', eventId);
 
 
       // 잔디를 구성하기 위한 작업,,,,
@@ -401,8 +412,28 @@ h1 {
 }
 
 .member-list {
+  display: flex;
+  align-items: center;
   height: 60px;
   padding: 0.5rem;
+}
+
+.member {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 300px;
+}
+
+.member-delete{
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.member-delete:hover{
+  background-color: rgba(255, 182, 182, 0.34);
 }
 
 .progress {

@@ -43,6 +43,11 @@ const event = {
                 console.log(err)
             })
         },
+
+        // test를 위해 앞에 {commit}을 지웠더니 payload가 안넘어오는 error 발생,,,,
+        // 무조건 앞자리는 context, 두번째 자리가 payload의 자리라고 한다... 와우 넘 신기해
+        // 관통때, mutation에서 값을 못 받아오는 이유가 이거였군... 신기
+
         // 이벤트 아이디에 해당하는 모든 이벤트 가져오기
         getEvent({commit}, eventId) {
             axiosConnector.get(`event/${eventId}`

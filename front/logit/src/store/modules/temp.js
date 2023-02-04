@@ -10,7 +10,7 @@ const temp = {
     loginUser: {user_id: 1, name: '이성훈'},
     users: [{user_id: 1, name: '이성훈', profile: '1', email: 'tjdgns@naver.com'},{user_id: 2, name: '김나현', profile: '10', email: 'skgus@naver.com'},{user_id: 3, name: '오하늘', profile: '4', email: 'sky5@naver.com'}],
     event: {event_id: 1, start_date: new Date(2023,0,16), end_date: new Date(2023,1,12), name: '알고리즘 IM형', done: false},
-    eventUsers: {owner: {user_id: 1, name: '이성훈'}, users: [{user_id: 1, name: '이성훈', profile: '1'},{user_id: 2, name: '김나현', profile: '10'},{user_id: 3, name: '오하늘', profile: '4'}]},
+    eventUsers: {owner: {user_id: 1, name: '이성훈'}, users: [{user_id: 1, name: '이성훈', profile: '1', email: 'tjdgns@naver.com'},{user_id: 2, name: '김나현', profile: '10', email: 'skgus@naver.com'},{user_id: 3, name: '오하늘', profile: '4', email: 'sky5@naver.com'}]},
     events: [
       {event_id: 4, start_date: new Date(2023,0,10), end_date: new Date(2023,1,10), name: 'SQLD 시험 준비', done: true},
       {event_id: 1, start_date: new Date(2023,0,16), end_date: new Date(2023,1,12), name: '알고리즘 IM형', done: false},
