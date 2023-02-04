@@ -14,16 +14,19 @@ import com.ssafy.logit.model.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CodingTestService {
     private final StepCategoryRepository stepCategoryRepository;
     private final CodingTestRepository codingTestRepository;
 
+    @Transactional
     public CodingTest create(User user, CreateCodingTestRequest request){
         StepCategory stepCategory = stepCategoryRepository.findById(request.getStepId()).orElseThrow(NoSuchElementException::new);
         checkUser(user, stepCategory);
@@ -39,13 +42,14 @@ public class CodingTestService {
         return codingTest;
     }
 
+    @Transactional
     public CodingTest update(User user , Long id, UpdateCodingTestRequest request){
         CodingTest codingTest = codingTestRepository.findById(id).orElseThrow(NoSuchElementException::new);
         checkUser(user, codingTest);
         CodingTest updateCodingTest = codingTest.update(request.getAlgoContent(), request.getAlgoCategory());
         return updateCodingTest;
     }
-
+    @Transactional
     public void delete(User user,Long id){
         CodingTest codingTest = codingTestRepository.findById(id).orElseThrow(NoSuchElementException::new);
         checkUser(user, codingTest);
