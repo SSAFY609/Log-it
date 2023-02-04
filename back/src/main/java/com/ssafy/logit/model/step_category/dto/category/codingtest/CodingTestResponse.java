@@ -1,4 +1,4 @@
-package com.ssafy.logit.model.step_category.dto.category;
+package com.ssafy.logit.model.step_category.dto.category.codingtest;
 import com.ssafy.logit.model.step_category.entity.category.CodingTest;
 import lombok.Data;
 
