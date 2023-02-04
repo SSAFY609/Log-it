@@ -7,12 +7,11 @@ import javax.validation.constraints.NotNull;
 
 
 @Data
-public class CodingTestRequest {
+public class CreateCodingTestRequest {
     @NotNull
     private Long stepId;
     @Max(1000)
     private String algoContent;
     @Max(30)
-    private String category;
-
+    private String algoCategory;
 }

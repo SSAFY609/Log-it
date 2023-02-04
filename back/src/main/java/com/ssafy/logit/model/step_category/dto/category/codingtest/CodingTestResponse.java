@@ -1,19 +1,18 @@
 package com.ssafy.logit.model.step_category.dto.category.codingtest;
+
 import com.ssafy.logit.model.step_category.entity.category.CodingTest;
 import lombok.Data;
-
-import javax.validation.constraints.Max;
 
 
 @Data
 public class CodingTestResponse {
-    @Max(1000)
+    private Long id;
     private String content;
-    @Max(30)
     private String category;
 
     // 생성자
     public CodingTestResponse(CodingTest codingTest) {
+        this.id = codingTest.getId();
         this.content = codingTest.getContent();
         this.category = codingTest.getAlgoCategory();
     }
