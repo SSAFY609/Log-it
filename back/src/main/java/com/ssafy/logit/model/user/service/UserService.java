@@ -181,4 +181,8 @@ public class UserService {
             return false;
         }
     }
+
+    public User getUserEntity(String email){
+        return userRepo.findByEmail(email).orElseThrow(NoSuchElementException::new);
+    }
 }
