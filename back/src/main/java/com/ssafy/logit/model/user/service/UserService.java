@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private static final String SUCCESS = "success";
+    private static final String FAIL = "fail";
     private static final String DELETED = "deleted";
     private static final String NONE = "none";
 
@@ -38,13 +39,23 @@ public class UserService {
         System.out.println("encodingPw !!! : " + encodingPw);
 
         // 해당 email의 회원이 존재하며, 입력받은 비밀번호가 db에 저장된 비밀번호(암호화된)와 matches 되면 로그인
-        if(user.isPresent() && passwordEncoder.matches(pw, user.get().getPw())) {
-            // 인증 성공 시 auth-token과 refresh-token 함께 발급
-            System.out.println("===== login =====");
-            String authToken = jwtUtil.createAuthToken(email);
-            String refreshToken = jwtUtil.createRefreshToken();
-            saveRefreshToken(email, refreshToken);
-            return UserDto.builder().email(email).refreshToken(refreshToken).authToken(authToken).build();
+        if(user.isPresent()) {
+            UserDto userDto = user.get().toDto();
+            if(!passwordEncoder.matches(pw, user.get().getPw())) {
+                throw new RuntimeException("login : 비밀번호가 틀렸음");
+            } else if(userDto.getRefreshToken() != null) {
+                throw new RuntimeException("login : 이미 로그인된 사용자");
+            } else {
+                // 인증 성공 시 auth-token과 refresh-token 함께 발급
+                System.out.println("===== login =====");
+                String authToken = jwtUtil.createAuthToken(email);
+                String refreshToken = jwtUtil.createRefreshToken();
+                saveRefreshToken(email, refreshToken);
+
+                userDto.setRefreshToken(refreshToken);
+                userDto.setAuthToken(authToken);
+                return userDto;
+            }
         } else {
             throw new RuntimeException("login : " + email + "에 해당하는 사용자 없음");
         }
@@ -107,7 +118,6 @@ public class UserService {
     public UserDto saveUser(UserDto userDto, boolean regist) {
         // 객체 찾기(존재하는지 확인)
         Optional<User> user = userRepo.findByEmail(userDto.getEmail());
-        System.out.println(user);
         
         // 비밀번호 암호화
         userDto.setPw(passwordEncoder.encode(userDto.getPw()));
@@ -124,9 +134,14 @@ public class UserService {
     }
 
     public List<UserDto> getAllUser() {
-        // findAll()의 반환형은 List<User>이므로, stream 사용하여 List<UserDto>로 변환
-        System.out.println("===== getAllUser =====");
-        return userRepo.findAll().stream().map(UserDto::new).collect(Collectors.toList());
+        List<User> userList = userRepo.findAll();
+        if(userList.size() > 0) {
+            System.out.println("===== getAllUser =====");
+            return userRepo.findAll().stream().map(UserDto::new).collect(Collectors.toList());
+        } else  {
+            System.out.println("getAllUser : 사용자 없음");
+            return null;
+        }
     }
 
     public UserDto getUser(String email) {
@@ -145,6 +160,17 @@ public class UserService {
             return userRepo.findById(id).get().toDto();
         } else {
             System.out.println("getUser : " + id + "에 해당하는 사용자 없음");
+            return null;
+        }
+    }
+
+    public List<UserDto> searchUser(String name) {
+        List<User> userList = userRepo.findByName(name);
+        if(userList.size() > 0) {
+            System.out.println("===== searchUser =====");
+            return userList.stream().map(UserDto::new).collect(Collectors.toList());
+        } else {
+            System.out.println("searchUser : " + name + "에 해당하는 사용자 없음");
             return null;
         }
     }

@@ -33,7 +33,7 @@ public class User extends DateTime {
     @Column(length = 10)
     private String studentNo;
 
-    @Column(length = 200)
+    @Column(length = 200, nullable = false)
     private String image;
 
     private boolean deleted;
