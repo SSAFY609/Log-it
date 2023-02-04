@@ -3,6 +3,7 @@ package com.ssafy.logit.model.step_category.service.category;
 import com.ssafy.logit.exception.DifferentUserException;
 import com.ssafy.logit.exception.WrongCategoryException;
 import com.ssafy.logit.model.step_category.dto.category.interview.CreateInterviewRequest;
+import com.ssafy.logit.model.step_category.dto.category.interview.UpdateInterviewRequest;
 import com.ssafy.logit.model.step_category.entity.JobCategory;
 import com.ssafy.logit.model.step_category.entity.StepCategory;
 import com.ssafy.logit.model.step_category.entity.category.Interview;
@@ -35,7 +36,7 @@ public class InterviewService {
 
 
     @Transactional
-    public Interview update(User user, Long id, CreateInterviewRequest request){
+    public Interview update(User user, Long id, UpdateInterviewRequest request){
         Interview interview = interviewRepository.findById(id).orElseThrow(NoSuchElementException::new);
         checkUser(user,interview);
         Interview updateInterview = interview.update( request.getName());
