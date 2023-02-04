@@ -39,23 +39,13 @@ public class UserService {
         System.out.println("encodingPw !!! : " + encodingPw);
 
         // 해당 email의 회원이 존재하며, 입력받은 비밀번호가 db에 저장된 비밀번호(암호화된)와 matches 되면 로그인
-        if(user.isPresent()) {
-            UserDto userDto = user.get().toDto();
-            if(!passwordEncoder.matches(pw, user.get().getPw())) {
-                throw new RuntimeException("login : 비밀번호가 틀렸음");
-            } else if(userDto.getRefreshToken() != null) {
-                throw new RuntimeException("login : 이미 로그인된 사용자");
-            } else {
-                // 인증 성공 시 auth-token과 refresh-token 함께 발급
-                System.out.println("===== login =====");
-                String authToken = jwtUtil.createAuthToken(email);
-                String refreshToken = jwtUtil.createRefreshToken();
-                saveRefreshToken(email, refreshToken);
-
-                userDto.setRefreshToken(refreshToken);
-                userDto.setAuthToken(authToken);
-                return userDto;
-            }
+        if(user.isPresent() && passwordEncoder.matches(pw, user.get().getPw())) {
+            // 인증 성공 시 auth-token과 refresh-token 함께 발급
+            System.out.println("===== login =====");
+            String authToken = jwtUtil.createAuthToken(email);
+            String refreshToken = jwtUtil.createRefreshToken();
+            saveRefreshToken(email, refreshToken);
+            return UserDto.builder().email(email).refreshToken(refreshToken).authToken(authToken).build();
         } else {
             throw new RuntimeException("login : " + email + "에 해당하는 사용자 없음");
         }
@@ -206,5 +196,9 @@ public class UserService {
             System.out.println("dropUser : " + id + "에 해당하는 사용자 없음");
             return false;
         }
+    }
+
+    public User getUserEntity(String email){
+        return userRepo.findByEmail(email).orElseThrow(NoSuchElementException::new);
     }
 }
