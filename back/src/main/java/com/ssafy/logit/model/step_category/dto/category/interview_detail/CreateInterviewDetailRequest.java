@@ -15,7 +15,7 @@ public class CreateInterviewDetailRequest {
 
 
     @NotNull
-    private Long stepId;
+    private Long interviewId;
     @Max(200)
     private String question;
     @Max(1000)

@@ -11,14 +11,14 @@ public class InterviewDetailResponse {
 
     private Long id;
     private String question;
-    private String content;
+    private String answer;
     private InterviewCategory interviewCategory;
 
     // 생성자
     public InterviewDetailResponse(InterviewDetail interviewDetail){
         this.id = interviewDetail.getId();
         this.question = interviewDetail.getQuestion();
-        this.content = interviewDetail.getContent();
+        this.answer = interviewDetail.getAnswer();
         this.interviewCategory = interviewDetail.getInterviewCategory();
     }
 
