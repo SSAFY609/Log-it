@@ -1,7 +1,9 @@
 package com.ssafy.logit.model.user.entity;
 
 import com.ssafy.logit.model.user.dto.UserDto;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
@@ -15,7 +17,7 @@ import javax.persistence.*;
 public class User extends DateTime {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "user_id")
     private Long id;
 
