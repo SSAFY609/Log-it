@@ -3,6 +3,7 @@ package com.ssafy.logit.controller.user;
 import com.ssafy.logit.jwt.JwtUtil;
 import com.ssafy.logit.model.user.dto.MailDto;
 import com.ssafy.logit.model.user.dto.UserDto;
+import com.ssafy.logit.model.user.entity.User;
 import com.ssafy.logit.model.user.service.ImageService;
 import com.ssafy.logit.model.user.service.MailService;
 import com.ssafy.logit.model.user.service.UserService;
@@ -29,8 +30,10 @@ public class UserController {
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
     private static final String UNAUTHORIZED = "unauthorized";
-    private static final String DELETED = "deleted";
-    private static final String NONE = "none";
+    private static final String DELETED = "이미 삭제됨";
+    private static final String NONE = "사용자 없음";
+    private static final String IS_LOGINED = "이미 로그인된 사용자";
+    private static final String PW_FAIL = "비밀번호 틀림";
 
     @Autowired
     private UserService userService;
@@ -63,17 +66,37 @@ public class UserController {
     public ResponseEntity<Map<String, Object>> login(@RequestBody UserDto userDto) throws Exception {
         log.info("login user info : {}", userDto);
         Map<String, Object> resultMap = new HashMap<>();
-        UserDto loginUser = userService.login(userDto.getEmail(), userDto.getPw());
+        Map<String, Object> resultLogin = userService.login(userDto.getEmail(), userDto.getPw());
 
-        // 생성된 토큰 정보를 클라이언트에게 전달
-        resultMap.put("jwt-auth-token", loginUser.getAuthToken());
-        resultMap.put("jwt-refresh-token", loginUser.getRefreshToken());
+        if(resultLogin.get("type").equals(FAIL)) {
+            if(resultLogin.get("result").equals(NONE)) { // 사용자 없음
+                resultMap.put("result", NONE);
+            } else if(resultLogin.get("result").equals(PW_FAIL)) { // 비밀번호 틀림
+                resultMap.put("result", PW_FAIL);
+            } else { // 이미 로그인됨
+                resultMap.put("result", IS_LOGINED);
+            }
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+        } else {
+            // 생성된 토큰 정보를 클라이언트에게 전달
+            resultMap.put("jwt-auth-token", resultLogin.get("authToken"));
+            resultMap.put("jwt-refresh-token", resultLogin.get("refreshToken"));
+            resultMap.put("id", resultLogin.get("id"));
+            resultMap.put("name", resultLogin.get("name"));
+            resultMap.put("pw", resultLogin.get("pw"));
+            resultMap.put("flag", resultLogin.get("flag"));
+            resultMap.put("student_no", resultLogin.get("student_no"));
+            resultMap.put("image", resultLogin.get("image"));
+            resultMap.put("deleted", resultLogin.get("deleted"));
+            resultMap.put("created_time", resultLogin.get("created_time"));
+            resultMap.put("login_time", resultLogin.get("login_time"));
 
-        // 정보 확인을 위해 클라이언트로 전달
-        Map<String, Object> authToken_info = jwtUtil.checkAndGetClaims(loginUser.getAuthToken());
-        resultMap.putAll(authToken_info);
+            // 정보 확인을 위해 클라이언트로 전달
+            Map<String, Object> authToken_info = jwtUtil.checkAndGetClaims((String)resultLogin.get("refreshToken"));
+            resultMap.putAll(authToken_info);
 
-        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+        }
     }
 
     // 토큰 재발급
