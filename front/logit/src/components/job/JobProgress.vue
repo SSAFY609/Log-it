@@ -8,26 +8,29 @@
       </div>
       <div class="tab_area lay3">
         <div v-for="i in datas.category" :key="i">
-          <div class="tab_item_box f_main selected_item hover_cursor">{{ i }}</div>
+          <div class="tab_item_box f_main hover_cursor" @click="clickTab">{{ i }}</div>
         </div>
         <div class="add_btn f_main hover_cursor">+전형 추가</div>
       </div>
       <div class="contents_area">
         <div v-if="clicked=='서류'" class="contents_box lay2">
-          {{datas.details[0].answer}}
-          <div class="q_input_area">
-            <div class="q_input_box">
-              <input class="q_text" type="text" placeholder="질문을 추가하세요." autofocus>
-            </div>
-            <div class="a_input_box">
-              <textarea  class="a_text" placeholder="답변을 작성하세요."></textarea>
-            </div>
-            
+          
+          <!-- 인풋창이 추가될 영역 -->
+          <div id="addedArea">
+  
           </div>
-          <div class="q_btn">+문답추가</div>
-          서류전형
+
+
+          
+          <div class="q_btn btn_hover" @click="addQuestion">
+            <v-icon class="f_icon plus_icon">mdi-plus</v-icon>
+          </div>
+          
+          <br>
+          서류전형<br>
+          {{datas.details[0].answer}}
         </div>
-        <div v-if="clicked=='코테'" class="contents_box lay2">
+        <div v-if="clicked=='코딩테스트'" class="contents_box lay2">
           코딩테스트
         </div>
         <div v-if="clicked=='면접'" class="contents_box lay2">
@@ -48,6 +51,14 @@
  <script>
 
 
+const htmlText = `<div class="q_input_area">
+            <div class="q_input_box">
+              <input class="q_text" type="text" placeholder="질문을 추가하세요." autofocus>
+            </div>
+            <div class="a_input_box">
+              <textarea  class="a_text" placeholder="답변을 작성하세요."></textarea>
+            </div>  
+          </div>`
 
  export default {
     name: 'JobProgress',
@@ -66,7 +77,7 @@
         text: '서류전형은 어쩌구 저쩌구 더미 데이터이다!!!',
         create_content: '',
         update: false,
-        clicked: '서류',
+        clicked: '',
         datas: {
           name: "카카오",
           startDate: "2021-01-03",
@@ -79,6 +90,32 @@
         }
       }
     },
+
+    methods: {
+      addQuestion() {
+        const target = document.getElementById('addedArea')
+
+        target.innerHTML= htmlText
+      },
+      clickTab() {
+
+        event.target.classList.add('selected_item')
+        if(event.target.innerText === '서류') {
+          console.log('서류걸림')
+          this.clicked='서류'
+        } else if (event.target.innerText === '코딩테스트') {
+          console.log('코테걸림')
+          this.clicked='코딩테스트'
+        } else if (event.target.innerText === '면접') {
+          console.log('면접걸리')
+          this.clicked='면접'
+        } else {
+          console.log('아무것도 안걸림')
+        }
+
+      }
+    }
+
  }
  </script>
  
@@ -154,7 +191,7 @@ span {
   margin-top: 16px;
   width: 800px;
   height: 590px;
-  background-color: rgb(255, 248, 254);
+  background-color: #F6F6F6;
   border-radius: 6px;
   display: flex;
   flex-direction: column;
@@ -167,7 +204,7 @@ span {
   height: 500px;
 }
 .q_btn {
-  width: 100px;
+  width: 40px;
   height: 40px;
   background-color: #FF0A54;
   display: flex;
@@ -179,11 +216,10 @@ span {
 .q_input_area {
   width: 100%;
   height: 400px;
-  background-color: green;
 }
 .q_input_box {
   height: 50px;
-  background-color: beige;
+  background-color: rgba(255,255,255,0.8);
   display: flex;
 
 }
@@ -191,21 +227,20 @@ span {
   height: 300px;
   margin-top: 10px;
   border-radius: 6px;
-  background-color: rgba(255,255,255,0.8);
   
 }
 
 input{
   padding-left: 12px;
   width: 700px;
-  background-color: rgba(255,255,255,0.8);
   border-radius: 6px;
 }
 textarea {
   padding-left: 12px;
+  padding-top: 14px;
   width: 700px;
   height: 100%;
-  background-color: rgba(255,255,255,0.8);
+  background-color:  rgba(255,255,255,0.8);
   border-radius: 6px;
 }
 
@@ -219,7 +254,10 @@ textarea:focus {
 .a_text {
   width: 700px;
   height: 100%;
-  display: block;
+}
+
+.plus_icon {
+  color: white;
 }
 
  </style>

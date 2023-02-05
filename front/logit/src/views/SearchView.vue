@@ -1,6 +1,6 @@
 <template>
    <div class="container">
-      <div class="background-area" @click="modal=false"></div>
+      <div v-if="modal" class="background-area" @click="modal=false"></div>
       <div class="search_big_area">
          <div class="search_big_box">
             <input class="search_input" type="text"
