@@ -29,7 +29,7 @@
         <v-timeline-item v-if="!today" class="progress-item" dot-color="rgb(255, 225, 121)" size="small">
           <div class="memo-box">
             <div class="memo-date">{{date_after(new Date())}}</div>
-            <div class="memo" @click="dialog = true, update_mode = true, update_content = ''">
+            <div class="memo" @click="dialog = true, update_mode = true, now_idx = -1">
               <div>텍스트를 입력하세요</div>
             </div>
           </div>
@@ -38,13 +38,13 @@
           class="progress-item"
           v-for=" (item, index) in copy_progress"
           dot-color="rgb(255, 225, 121)"
-          :key="item.progressId"
+          :key="item.id"
           size="small"
         >
           <div class="memo-box">
             <div class="memo-date">{{date_after(item.date)}}</div>
-            <div class="memo" @click="dialog = true, create_content = item.contents, now_idx = index">
-              <div v-html="item.contents[0].content"></div>
+            <div class="memo" @click="dialog = true, create_content = item.content, now_idx = index">
+              <div v-html="item.content"></div>
             </div>
           </div>
         </v-timeline-item>
@@ -106,15 +106,15 @@
           :modules="modules"
           class="mySwiper">
           
-          <swiper-slide v-for="(item, index) in create_content" :key="item" class="slide">
+          <swiper-slide v-for="i in 7" :key="i" class="slide">
             <div class="memo-bg">
-              <div v-if="!update_mode" style="width:100%; text-align:right;"><v-icon @click="update_mode = true, update_content = create_content[index].content">mdi-pencil</v-icon></div>
+              <div v-if="!update_mode" style="width:100%; text-align:right;"><v-icon @click="update_mode = true">mdi-pencil</v-icon></div>
               <div v-else style="height: 25.5px"></div>
               <div class="detail-form">
                 <QuillEditor 
                   class="text-editor" 
                   theme="bubble"
-                  v-model:content="item.content"
+                  v-model:content="create_content"
                   content-type="html"
                   toolbar="essential" 
                   :read-only="true" />
@@ -130,7 +130,7 @@
             <QuillEditor 
               class="text-editor" 
               theme="bubble"
-              v-model:content="update_content"
+              v-model:content="create_content"
               content-type="html"
               toolbar="essential" 
               placeholder="텍스트를 입력하세요"
@@ -170,14 +170,12 @@ export default {
         member: false,
         dialog: false,
         create_content: '',
-        update_content: '',
         day: ['일', '월', '화', '수', '목', '금', '토'],
         update_mode: false,
         today: false,
         show: false,
         is_host: false,
         search_user: null,
-        update_idx: 0
       }
     },
     components: {
@@ -191,7 +189,7 @@ export default {
       };
     },
     computed: {
-      ...mapState('temp', ['loginUser', 'event', 'eventUsers', 'shareProgress', 'users']),
+      ...mapState('temp', ['loginUser', 'event', 'eventUsers', 'progress', 'users']),
       
       change_image(id){
         return `@assets/profiles/scale (${id}).png`;
@@ -224,8 +222,8 @@ export default {
         }
         // 나머지는 update 요청
         else{
-          // this.copy_progress[this.now_idx].content = this.create_content;
-          console.log(this.update_content);
+          this.copy_progress[this.now_idx].content = this.create_content;
+          console.log(this.create_content);
         }
         // this.dialog = false;
         this.update_mode = false;
@@ -241,9 +239,9 @@ export default {
         }
         return `${year}-${month >= 10 ? month : '0' + month}-${date >= 10 ? date : '0' + date} (${this.day[day]})`;
       },
-      // update_content() {
-      //   this.update_mode = true;
-      // },
+      update_content() {
+        this.update_mode = true;
+      },
       member_delete(email){
         console.log(email, this.event.event_id);
         // this.$store.dispatch('deleteEventUser', this.event.event_id, email);
@@ -288,12 +286,12 @@ export default {
       
       let idx = 0;
       for (let i=0; i<this.period ;i++) {
-        if (idx == this.shareProgress.length){
+        if (idx == this.progress.length){
           this.grass.push('not');
           continue
         }
         const target = this.addDays(st, i);
-        if (this.shareProgress[idx].date.toLocaleDateString() == target.toLocaleDateString()) {
+        if (this.progress[idx].date.toLocaleDateString() == target.toLocaleDateString()) {
           this.grass.push('done');
           idx += 1;
         } else {
@@ -305,14 +303,14 @@ export default {
       // console.log(this.grass)
       
       const today = new Date()
-      for(let i=0; i<this.shareProgress.length; i++){
-        if (this.shareProgress[i].date.toLocaleDateString() == today.toLocaleDateString()) {
+      for(let i=0; i<this.progress.length; i++){
+        if (this.progress[i].date.toLocaleDateString() == today.toLocaleDateString()) {
           this.today = true;
           break;
         } 
       }
 
-      this.copy_progress = [...this.shareProgress].reverse();
+      this.copy_progress = [...this.progress].reverse();
 
       for(let i=0; i<this.users.length; i++){
         const user = `${this.users[i].name} (${this.users[i].email})`

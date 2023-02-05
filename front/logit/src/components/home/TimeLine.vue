@@ -29,9 +29,9 @@
           >
               <swiper-slide v-for="(date, index) in state.dates" :key="index">
                   <div class="grow">
-                    <div v-for="(data, index) in date.growths" :key="index" :class="`event ${data.start} ${data.period} floor${index + 1}`">
+                    <router-link :to="{name: 'EventProgress', params: {eventId: data.eventId}}" v-for="(data, index) in date.growths" :key="index" :class="`event ${data.start} ${data.period} floor${index + 1}`">
                       {{ data.title }}
-                    </div>
+                    </router-link>
                   </div>
                   <div class="bar">
                       <div class="hori-bar" v-for="(d, index) in date.str" :key="index">
@@ -191,6 +191,7 @@ export default {
                 const sd = events[i].start_date;
                 const ed = events[i].end_date;
                 const name = events[i].name;
+                const eventId = events[i].event_id;
                 if (sd < push_date.sun) {
                   if (ed < push_date.sun) {
                     continue;
@@ -199,14 +200,16 @@ export default {
                     const event = {
                       start: state.start[0],
                       period: state.period[week],
-                      title: name
+                      title: name,
+                      eventId: eventId,
                     };
                     push_date.growths.push(event);
                   } else {
                     const event = {
                       start: state.start[0],
                       period: state.period[6],
-                      title: name
+                      title: name,
+                      eventId: eventId,
                     };
                     push_date.growths.push(event);
                   }
@@ -217,7 +220,8 @@ export default {
                     const event = {
                       start: state.start[st_week],
                       period: state.period[ed_week - st_week],
-                      title: name
+                      title: name,
+                      eventId: eventId,
                     };
                     push_date.growths.push(event);
                   } else {
@@ -225,7 +229,8 @@ export default {
                     const event = {
                       start: state.start[st_week],
                       period: state.period[6 - st_week],
-                      title: name
+                      title: name,
+                      eventId: eventId,
                     };
                     push_date.growths.push(event);
                   }

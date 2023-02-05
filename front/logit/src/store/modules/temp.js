@@ -35,6 +35,27 @@ const temp = {
       // {writer: {user_id: 1, name: '이성훈'}, progress_id: 13, event_id: 1, date: new Date(2023, 1, 7), content: '그래그래'},
       // {writer: {user_id: 1, name: '이성훈'}, progress_id: 14, event_id: 1, date: new Date(2023, 1, 10), content: '열심히 ㅏㅏ'},
       // {writer: {user_id: 1, name: '이성훈'}, progress_id: 15, event_id: 1, date: new Date(2023, 1, 11), content: '화이팅이다'},
+    ],
+    shareProgress: [
+      {date: new Date(2023, 0, 17), progressId: 1, contents: [
+        {email: 'tjdgns@naver.com', name: '이성훈', content: '안녕하세요안녕하세요안녕하세요'},
+        {email: 'skgus@naver.com', name: '김나현', content: '2222222222222222222222222222'},
+        {email: '5sky@naver.com', name: '오하늘', content: '뀨어엉암;ㄻ라ㅓㅁ라머라머00'},
+      ]},
+      {date: new Date(2023, 0, 18), progressId: 1, contents: [
+        {email: 'tjdgns@naver.com', name: '이성훈', content: '안녕하세요안녕하세요안녕하세요'},
+        {email: '5sky@naver.com', name: '오하늘', content: '뀨어엉암;ㄻ라ㅓㅁ라머라머00'},
+      ]},
+      {date: new Date(2023, 0, 19), progressId: 1, contents: [
+        {email: 'tjdgns@naver.com', name: '이성훈', content: '안녕하세요안녕하세요안녕하세요'},
+        {email: 'skgus@naver.com', name: '김나현', content: '2222222222222222222222222222'},
+      ]},
+      {date: new Date(2023, 1, 1), progressId: 1, contents: [
+        {email: 'tjdgns@naver.com', name: '이성훈', content: '안녕하세요안녕하세요안녕하세요'},
+      ]},
+      {date: new Date(2023, 1, 3), progressId: 1, contents: [
+        {email: 'tjdgns@naver.com', name: '이성훈', content: '안녕하세요안녕하세요안녕하세요'},
+      ]},
     ]
   },
   getters: {
