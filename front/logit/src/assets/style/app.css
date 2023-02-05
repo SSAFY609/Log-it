@@ -244,3 +244,8 @@ body::-webkit-scrollbar-thumb {
 .v-field__input {
  font-size: 14px!important;
 }
+
+ul, li {
+  list-style:none;
+  padding-left:0px;
+}

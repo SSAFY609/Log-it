@@ -10,7 +10,6 @@
           <div class="search_content lay3">검색</div>
           <v-autocomplete class="search_input_text nosee" autofocus
             clearable
-            variant="solo "
             :items=state.SearchList
           ></v-autocomplete>
         </div>
