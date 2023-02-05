@@ -45,14 +45,18 @@
           </div>
         </v-form>
       </div>
-    <!-- 사용자 프로필 사진 -->
+      <!-- 사용자 프로필 사진 -->
       <div class="profile-main-photo" @click="onShow">
-        <img class="image-box"  :src="require(`@/assets/profiles/scale (${fileNum}).png`)" width="200" />
+        <img
+          class="image-box"
+          :src="require(`@/assets/profiles/scale (${fileNum}).png`)"
+          width="200"
+        />
       </div>
     </div>
     <div class="profile-input-icon" @click="onShow">
       <v-icon v-show="fileChk" size="large">mdi-lead-pencil</v-icon>
-      <v-icon v-show="!fileChk" style="font-size:200%;">mdi-check</v-icon>
+      <v-icon v-show="!fileChk" style="font-size: 200%">mdi-check</v-icon>
     </div>
     <!-- 아래 프로필 사진 선택 창-->
     <div v-show="photo" class="profile-photo">
@@ -63,18 +67,18 @@
           selected-class="bg-primary"
           show-arrows
         >
-          <v-slide-group-item
-            v-slot="{ isSelected, toggle, selectedClass }"
-          >
-          <label for="file" class="upload-btn">
-          <!-- 사용자 파일 업로드 선택 창-->  
-            <input @change="fileChg" id="file" type="file" accept="image/*"/>
+          <v-slide-group-item v-slot="{ isSelected, toggle, selectedClass }">
+            <label for="file" class="upload-btn">
+              <!-- 사용자 파일 업로드 선택 창-->
+              <input @change="fileChg" id="file" type="file" accept="image/*" />
               <div class="ma-4 select hover_cursor hover_bigger">
-                <v-icon class="profile_icon f_icon lay3 btn_clicked2">mdi-folder-plus-outline</v-icon>  
+                <v-icon class="profile_icon f_icon lay3 btn_clicked2"
+                  >mdi-folder-plus-outline</v-icon
+                >
               </div>
-          </label>
+            </label>
             <div v-for="i in 36" :key="i">
-          <!-- 디즈니 프로필 사진 선택 창-->
+              <!-- 디즈니 프로필 사진 선택 창-->
               <v-img
                 color="grey-lighten-1"
                 :src="require(`@/assets/profiles/scale (${i}).png`)"
@@ -107,7 +111,7 @@
 <script>
 export default {
   name: "ProfilePage",
-  
+
   data: () => ({
     name: "이름",
     email: "asdas@gmail.com",
@@ -117,45 +121,42 @@ export default {
     fileDOM: "",
     previews: "",
     fileNum: "3",
-    fileChk:"false"
+    fileChk: "false",
   }),
   methods: {
     onShow() {
       this.photo = !this.photo;
       this.fileChk = !this.fileChk;
     },
-    fileChg() { 
-      const fileDOM = document.querySelector('#file');
-      const previews = document.querySelectorAll('.image-box');
+    fileChg() {
+      const fileDOM = document.querySelector("#file");
+      const previews = document.querySelectorAll(".image-box");
       const imageSrc = URL.createObjectURL(fileDOM.files[0]);
       previews[0].src = imageSrc;
-      console.log(previews)
     },
     onClicked(i) {
       this.fileNum = i;
-     }
+    },
   },
 };
 </script>
 
-
 <style scoped>
-.image-box{
+.image-box {
   border-radius: 50%;
 }
-.profile_icon{
+.profile_icon {
   font-size: 50px;
-color:white
+  color: white;
 }
- .upload-btn {
-    display: inline-block;
-    cursor: pointer;
+.upload-btn {
+  display: inline-block;
+  cursor: pointer;
+}
+input[type="file"] {
+  display: none;
+}
 
- }
-  input[type=file] {
-      display: none;
-  }
-  
 .select {
   display: flex;
   justify-content: center;
@@ -163,7 +164,7 @@ color:white
   height: 110px;
   width: 110px;
   border-radius: 55px;
-  background-color: #FF0A54;
+  background-color: #ff0a54;
 }
 
 .profile-main-button-text {
@@ -217,8 +218,7 @@ color:white
   align-items: center;
   width: 270px;
   height: 290px;
-  object-fit:  block;
-
+  object-fit: block;
 }
 .profile-main-photo:hover {
   cursor: pointer;

@@ -3,9 +3,11 @@
     <h2 class="signup-title">계정 생성</h2>
     <div class="signup-email fill-height">
       <v-form ref="form" v-model="valid" lazy-validation @keyup="chkEmail">
-        <div class="fs" style="margin-bottom: 5px">&nbsp;&nbsp;이메일을 입력해주세요.</div>
+        <div class="fs" style="margin-bottom: 5px">
+          &nbsp;&nbsp;이메일을 입력해주세요.
+        </div>
         <v-text-field
-          v-model="email_tmp"
+          v-model="email"
           :rules="rules2"
           label="E-mail"
           class="mb-2"
@@ -22,26 +24,24 @@
             <span class="signup-link-Login"> 로그인 바로가기</span>
           </router-link>
         </div>
-      </v-form> 
+      </v-form>
     </div>
   </div>
 </template>
 
 <script>
-
 export default {
   name: "UserEmail",
   data: () => ({
     rules2: [
       (value) => !!value || "",
-      (value) => (value || "").length <= 20 || "Max 20 characters",
+      (value) => (value || "").length <= 20 || "최대 20자를 초과하였습니다.",
       (value) => {
         const pattern =
           /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return pattern.test(value) || "유효하지 않은 이메일 형식입니다.";
       },
     ],
-    email_tmp: "",
     email: "",
     email_help: "",
   }),
@@ -49,7 +49,7 @@ export default {
   methods: {
     // 계정생성 - 이메일
     signupEmail() {
-      if (!this.email_tmp.trim()) {
+      if (!this.email.trim()) {
         alert("입력된 이메일 주소가 없습니다.");
         return;
       }
@@ -59,7 +59,8 @@ export default {
         alert("이메일 주소를 확인해주세요.");
         return;
       }
-      this.$router.push("password");
+      this.$emit("updateUserEmail", this.email);
+      this.$router.push({ name: "UserPassword" });
     },
 
     // 이메일 검사 - 유효성 검사, 중복 검사,
@@ -68,12 +69,10 @@ export default {
       // 이메일 유효성 검사 완료하면
       if (validate.valid) {
         // 이메일 중복 검사
-   
-   
-
-        this.email_help = "asd@asd.com은 사용 가능한 이메일입니다.";
+        this.$store.dispatch("chkEmail", this.email);
+        this.email_help = `${this.email}은 사용 가능한 이메일입니다.`;
         document.querySelector(".signup-email-chkText").innerHTML =
-        this.email_help;
+          this.email_help;
         document.querySelector(".signup-button").classList.add("color");
       } else {
         document.querySelector(".signup-email-chkText").innerHTML = "";
@@ -85,7 +84,6 @@ export default {
 </script>
 
 <style>
-
 .none {
   display: none;
 }

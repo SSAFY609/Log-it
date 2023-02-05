@@ -90,8 +90,7 @@ export default {
     user: {
       email: "",
       pw: "",
-        },
-
+    },
     show1: false,
     show2: true,
   }),
@@ -109,16 +108,16 @@ export default {
           .classList.remove("color");
       }
     },
-      login() {
-        const user = {
-          email: 'ssafy2@naver.com',
-          pw: '1234',
-        }
-        this.$store.dispatch('login', user);
+    login() {
+      const user = {
+        email: this.email,
+        pw: this.pw,
+      };
+      this.$store.dispatch("login", user);
     },
-      kakaoLogin() {},
-      googleLogin() {},
-      toSignup() {
+    kakaoLogin() {},
+    googleLogin() {},
+    toSignup() {
       this.$router.push("email");
     },
   },

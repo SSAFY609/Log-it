@@ -7,11 +7,7 @@
         {{ state.uName }}님의 회원가입 축하드립니다.
       </div>
     </div>
-    <router-link
-      @click="signup"
-      :to="{ name: 'MainPage' }"
-      class="signup-button b_lightgray_l"
-    >
+    <router-link :to="{ name: 'MainPage' }" class="signup-button b_lightgray_l">
       <div>시작하기</div>
     </router-link>
   </div>
@@ -27,13 +23,12 @@ export default {
     const state = reactive({
       uName: "메렁",
     });
-    const signup = () => {};
+
     onBeforeMount(() => {
       state.uName = props.user.uName;
     });
     return {
       state,
-      signup,
     };
   },
 };

@@ -11,7 +11,12 @@
       </div>
       <router-view
         @updateUserProfile="updateUserProfile"
+        @updateUserPhoto="updateUserPhoto"
+        @updateUserEmail="updateUserEmail"
+        @updateUserPassword="updateUserPassword"
+        @updateUserData="updateUserData"
         :user="user"
+        @chgFileDOM="chgFileDOM"
       ></router-view>
     </div>
   </div>
@@ -22,20 +27,44 @@ import { reactive } from "vue";
 export default {
   name: "UserView",
   setup() {
+    const state = reactive({
+      fileDOM: "",
+    });
     const user = reactive({
       email: "이메일 ",
       password: "암호 ",
       profile: "1",
-      uName: "오하늘",
+      uName: "김나현(●'◡'●)",
       sfNum: "학번 ",
     });
-
-    const updateUserProfile = (i) => {
+    const chgFileDOM = (fileDOM) => {
+      state.fileDOM = fileDOM;
+    };
+    const updateUserEmail = (email) => {
+      user.email = email;
+    };
+    const updateUserPhoto = (i) => {
       user.profile = i;
     };
+    const updateUserPassword = (password) => {
+      user.password = password;
+    };
+    const updateUserData = (userName, ssafyNum) => {
+      user.uName = userName;
+      user.sfNum = ssafyNum;
+    };
+    const updateUserProfile = (id) => {
+      user.profile = id;
+    };
     return {
+      chgFileDOM,
+      state,
       user,
+      updateUserPhoto,
       updateUserProfile,
+      updateUserEmail,
+      updateUserPassword,
+      updateUserData,
     };
   },
 };

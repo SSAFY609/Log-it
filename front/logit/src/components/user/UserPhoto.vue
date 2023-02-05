@@ -1,13 +1,16 @@
 <template>
   <div class="profile-container">
     <h2 class="profile-title">프로필 생성</h2>
-    <!--
-    <label className="input-file-button" for="input-file"> 업로드 </label>
-    <input @change="selectFile" type="file" id="input-file" style="display: none" />
-    <div>{{ state.image }}</div>
-    -->
     <div class="profile-scroll-container fill-height">
       <div class="profile-scroll">
+        <label for="file" class="upload-btn">
+          <input @change="fileChg" id="file" type="file" accept="image/*" />
+          <div class="ma-4 select hover_cursor hover_bigger">
+            <v-icon class="profile_icon f_icon lay3 btn_clicked2"
+              >mdi-folder-plus-outline</v-icon
+            >
+          </div>
+        </label>
         <v-col
           cols="3"
           v-for="i in 36"
@@ -15,10 +18,7 @@
           @click="selProf"
           class="profile-input-img"
         >
-          <router-link
-            @click="onClicked(i)"
-            :to="{ name: 'UserProfile', params: { id: i } }"
-          >
+          <router-link @click="onClicked(i)" :to="{ name: 'UserProfile' }">
             <img
               :src="require(`@/assets/profiles/scale (${i}).png`)"
               width="110"
@@ -38,15 +38,19 @@ export default {
   props: ["user"],
   setup(props, { emit }) {
     const state = reactive({
-      image:"",
+      image: "",
     });
-    const onClicked = (i) => {
-      emit("updateUserProfile", i);
+    const fileChg = () => {
+      const fileDOM = document.querySelector("#file");
+      emit("chgFileDOM", fileDOM.files[0]);
     };
-    const selectFile = () => {
 
+    const onClicked = (i) => {
+      emit("updateUserPhoto", i);
     };
+    const selectFile = () => {};
     return {
+      fileChg,
       selectFile,
       state,
       onClicked,
@@ -55,6 +59,16 @@ export default {
 };
 </script>
 <style scoped>
+.select {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 110px;
+  width: 110px;
+  border-radius: 55px;
+  background-color: #ff0a54;
+}
+
 .filebox input[type="file"] {
   position: absolute;
   width: 0;

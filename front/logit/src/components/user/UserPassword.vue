@@ -69,6 +69,7 @@ export default {
         alert("입력된 암호가 일치하지 않습니다.");
         return;
       }
+      this.$emit("updateUserPassword", this.password);
       this.$router.push({ name: "UserProfile" });
     },
 
