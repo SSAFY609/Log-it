@@ -108,8 +108,16 @@
           
           <swiper-slide v-for="(item, index) in create_content" :key="item" class="slide">
             <div class="memo-bg">
-              <div v-if="!update_mode" style="width:100%; text-align:right;"><v-icon @click="update_mode = true, update_content = create_content[index].content">mdi-pencil</v-icon></div>
-              <div v-else style="height: 25.5px"></div>
+              <div class="writer">
+                <div>
+                  <v-avatar style="margin-right: 10px">
+                    <v-img :src="require(`@/assets/profiles/scale (${item.profile}).png`)"></v-img>
+                  </v-avatar>
+                  {{ item.name }}
+                </div>
+                <v-icon v-if="item.email == loginUser.email" @click="update_mode = true, update_content = create_content[index].content">mdi-pencil</v-icon>
+              </div>
+              <!-- <div v-else style="height: 25.5px"></div> -->
               <div class="detail-form">
                 <QuillEditor 
                   class="text-editor" 
@@ -525,6 +533,20 @@ h1 {
   text-align: center;
   width: 599px;
   height: 620px;
+}
+
+.writer {
+  display: flex;
+  font-family: appleL;
+  font-size: 20px;
+  justify-content: space-between;
+  align-items: center;
+  width:100%;
+}
+
+.writer>div{
+  display: flex;
+  align-items: center;
 }
 
 .detail-form {

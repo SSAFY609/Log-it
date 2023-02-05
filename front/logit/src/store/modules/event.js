@@ -119,11 +119,25 @@ const event = {
             })
         },
         // 이벤트에 과정 추가
-        // createProgress({commit}, )
-
+        createProgress({dispatch}, progress){
+            axiosConnector.post('progress', progress
+            ).then((res)=>{
+                // 이때 res.data는 eventId
+                dispatch('getProgress', res.data);
+            }).catch((err)=>{
+                console.log(err);
+            })
+        },
         // 이벤트에 과정 수정
-
-        // 이벤트에 과정 삭제
+        updateProgress({dispatch}, progress){
+            axiosConnector.put('progress', progress
+            ).then((res)=> {
+                dispatch('getProgress', res.data)
+            }).catch((err)=>{
+                console.log(err);
+            })
+        }
+        // 이벤트에 과정 삭제 => 그냥 안하면 어때,,, ? ㅋㅋㅋㅋ
     }
 
 }
