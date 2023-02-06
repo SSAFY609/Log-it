@@ -17,16 +17,16 @@ public class UpdateInterviewRequest {
     @Max(1000)
     private String answer;
 
-    private InterviewCategory interviewCategory;
+    private InterviewCategory category;
 
 
     @JsonSerialize(using = InterviewCategorySerializer.class)
     public InterviewCategory getInterviewCategory() {
-        return interviewCategory;
+        return category;
     }
 
     @JsonDeserialize(using = InterviewCategoryDeserializer.class)
-    public void setInterviewCategory(InterviewCategory interviewCategory) {
-        this.interviewCategory = interviewCategory;
+    public void setInterviewCategory(InterviewCategory category) {
+        this.category = category;
     }
 }
