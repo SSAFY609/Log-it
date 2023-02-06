@@ -20,6 +20,15 @@
   
           </div>
 
+          <div class="q_input_area">
+            <div class="q_input_box">
+              <input class="q_text" type="text" placeholder="질문을 추가하세요." autofocus>
+            </div>
+            <div class="a_input_box">
+              <textarea  class="a_text" placeholder="답변을 작성하세요." v-model="datas.details[0].answer"></textarea>
+            </div>  
+          </div>
+
 
           
           <div class="q_btn btn_hover" @click="addQuestion">

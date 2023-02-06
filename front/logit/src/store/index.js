@@ -2,6 +2,10 @@ import { createStore } from "vuex";
 import router from "@/router";
 import axios from "axios";
 
+import temp from './modules/temp.js'
+import event from "./modules/event.js";
+import timeline from "./modules/timeline.js";
+
 const baseURL = "http://localhost:9090/user";
 const getToken = () => {
   const token = sessionStorage.getItem("token");
@@ -60,5 +64,9 @@ export default createStore({
         });
     },
   },
-  modules: {},
+  modules: {
+    temp: temp,
+    event: event,
+    timeline: timeline,
+  },
 });
