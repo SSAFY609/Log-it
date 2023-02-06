@@ -3,12 +3,14 @@
     <h2 class="profile-title">프로필 생성</h2>
     <div class="profile-scroll-container fill-height">
       <div class="profile-scroll">
-        <!-- <span
-          v-for="i in 36"
-          :key="i"
-          @click="selProf"
-          class="profile-input-img"
-        > -->
+        <label for="file" class="upload-btn">
+          <input @change="fileChg" id="file" type="file" accept="image/*" />
+          <div class="ma-4 select hover_cursor hover_bigger">
+            <v-icon class="profile_icon f_icon lay3 btn_clicked2"
+              >mdi-folder-plus-outline</v-icon
+            >
+          </div>
+        </label>
         <v-col
           cols="3"
           v-for="i in 36"
@@ -16,10 +18,7 @@
           @click="selProf"
           class="profile-input-img"
         >
-          <router-link
-            @click="onClicked(i)"
-            :to="{ name: 'UserProfile', params: { id: i } }"
-          >
+          <router-link @click="onClicked(i)" :to="{ name: 'UserProfile' }">
             <img
               :src="require(`@/assets/profiles/scale (${i}).png`)"
               width="110"
@@ -33,21 +32,59 @@
 </template>
 
 <script>
+import { reactive } from "vue";
 export default {
   name: "UserPhoto",
   props: ["user"],
   setup(props, { emit }) {
-    const onClicked = (i) => {
-      emit("updateUserProfile", i);
+    const state = reactive({
+      image: "",
+    });
+    const fileChg = () => {
+      const fileDOM = document.querySelector("#file");
+      emit("chgFileDOM", fileDOM.files[0]);
     };
 
+    const onClicked = (i) => {
+      emit("updateUserPhoto", i);
+    };
+    const selectFile = () => {};
     return {
+      fileChg,
+      selectFile,
+      state,
       onClicked,
     };
   },
 };
 </script>
 <style scoped>
+.select {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 110px;
+  width: 110px;
+  border-radius: 55px;
+  background-color: #ff0a54;
+}
+
+.filebox input[type="file"] {
+  position: absolute;
+  width: 0;
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+}
+
+.input-file-button {
+  padding: 6px 25px;
+  background-color: #ff6600;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+}
 .profile-input-img {
   margin-right: 33px;
 }
@@ -58,6 +95,14 @@ export default {
   height: 420px;
   width: 420px;
   overflow-y: scroll;
+}
+.profile-scroll::-webkit-scrollbar {
+  background: none;
+  width: 10px;
+}
+.profile-scroll::-webkit-scrollbar-thumb {
+  background-color: #7d7d7da8;
+  border-radius: 10px;
 }
 .profile-container {
   height: 85%;

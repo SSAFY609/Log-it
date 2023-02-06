@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="box">
-        <h1 class="welcome">❤오하늘❤ 님의 타임라인</h1>
+        <h1 class="welcome">오하늘 님의 타임라인</h1>
         <div>
           <v-btn @click="goslide(0)"><v-icon>mdi-chevron-triple-left</v-icon></v-btn>
           <v-btn @click="nextSlide"><v-icon>mdi-chevron-double-left</v-icon></v-btn>
@@ -348,6 +348,7 @@ export default {
 .welcome {
   margin-bottom: 50px;
   font-size: 40px;
+  font-family: appleB;
 }
 
 .grow div{

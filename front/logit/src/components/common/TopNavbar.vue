@@ -31,7 +31,7 @@
             <li>설정</li>
             <li>친구목록</li>
             <li>프로필</li>
-            <li>로그아웃</li>
+            <li @click="logout">로그아웃</li>
           </ul>
         </div>
       </div>
@@ -42,17 +42,19 @@
 </template>
 
 <script>
-
 export default {
   name: 'TopNavbar',
-
-
+  methods: {
+    logout() {
+      this.$store.dispatch('logout')
+    },
+  },
   setup() {
     const state = {
       loginUser: {
         id: "leesh132",
         name: "이성훈",
-        num: "848212",  
+        num: "848212",
       },
     }
     const openSidebar = () => {
@@ -64,7 +66,7 @@ export default {
     }
     const openProfile = () => {
       const target = document.querySelector('.profile_slider_box')
-      
+
       console.log(target)
 
       target.classList.toggle('nosee')
@@ -74,8 +76,10 @@ export default {
       openSidebar,
       openProfile,
     }
-  }
-} 
+    
+  },
+}
+
 </script>
 <style scoped>
   .container {

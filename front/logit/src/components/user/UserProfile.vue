@@ -8,16 +8,18 @@
           <img
             :src="require(`@/assets/profiles/scale (${state.id}).png`)"
             @click="selProf"
-            class="profile-input-img"
+            class="profile-input-img image-box"
           />
         </div>
         <div class="profile-input-icon" @click="selProf">
           <v-icon size="large">mdi-lead-pencil</v-icon>
         </div>
         <!-- 닉네임 입력 칸-->
-        <div @click="signProf" class="profile-button b_lightgray_l">
-          <div>다음</div>
-        </div>
+        <router-link @click="signProf" :to="{ name: 'UserData' }">
+          <div @click="signProf" class="profile-button b_lightgray_l">
+            <div>다음</div>
+          </div>
+        </router-link>
         <div class="profile-link">
           <router-link :to="{ name: 'UserPassword' }">
             <span class="profile-link-data"> 뒤로가기</span>
@@ -30,31 +32,40 @@
 
 <script>
 import { useRouter } from "vue-router";
-import { reactive } from "vue";
+import { reactive, onBeforeMount } from "vue";
 
 export default {
   name: "UserProfile",
-  props: ["user"],
-  setup(props) {
+  props: ["user", "fileDOM"],
+  setup(props, { emit }) {
     const router = useRouter();
     const state = reactive({
       preview: "",
       id: "1",
     });
     const selProf = () => {
-      console.log(props.user.profile);
       router.push({ name: "UserPhoto" });
     };
+
+    onBeforeMount(() => {
+      console.log(props.fileDOM);
+      // const previews = document.querySelector(".image-box");
+      // const imageSrc = URL.createObjectURL(props.fileDOM);
+      // previews[0].src = imageSrc;
+      state.id = props.user.profile;
+    });
+    const signProf = () => {
+      emit("updateUserProfile", this.id);
+      router.push({ name: "UserData" });
+    };
+
     return {
       state,
       selProf,
+      signProf,
     };
   },
-  methods: {
-    signProf() {
-      this.$router.push({ name: "UserData" });
-    },
-  },
+  methods: {},
 };
 </script>
 

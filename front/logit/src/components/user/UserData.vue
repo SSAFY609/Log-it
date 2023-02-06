@@ -22,10 +22,11 @@
           label="예) 080000"
           counter
         ></v-text-field>
-        <span class="data-chkText"></span>
-        <div @click="signup" class="data-button b_lightgray_l">
-          <div>게정 생성</div>
-        </div>
+        <router-link @click="signup" :to="{ name: 'UserSignupComplete' }">
+          <div class="data-button b_lightgray_l">
+            <div>게정 생성</div>
+          </div>
+        </router-link>
         <div class="data-link">
           <span class="data-link-Email"> 뒤로가기</span>
         </div>
@@ -37,6 +38,26 @@
 <script>
 export default {
   name: "UserData",
+  props: ["user"],
+  setup(props, { emit }) {
+    const signup = () => {
+      emit("updateUserData", this.userName, this.ssafyNum);
+      // const user = {
+      //   email: props.user.email,
+      //   pw: props.user.pw,
+      //   image: props.user.profile,
+      //   name: props.user.uName,
+      //   studentNo: props.user.sfNum,
+      //   flag: 1,
+      //   isDeleted: 0,
+      // };
+      // store.dispatch("signup", user);
+    };
+    return {
+      signup,
+    };
+  },
+
   data: () => ({
     rules1: {
       required: (value) => !!value || "",
@@ -46,14 +67,11 @@ export default {
     ssafyNum: "",
   }),
   methods: {
-    signup() {},
     async chkPw() {
       const validate = await this.$refs.form.validate();
       if (validate.valid) {
-        console.log("여기?");
         document.querySelector(".data-button").classList.add("color");
       } else {
-        console.log("홀롤롤롤로");
         document.querySelector(".data-button").classList.remove("color");
       }
     },
