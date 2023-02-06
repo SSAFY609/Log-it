@@ -19,7 +19,7 @@
             <div v-for="j in rest" :key="j" class="square"></div>
           </div> -->
           <div class="week">
-            <div v-for="i in grass" :key="i" :class="i"></div>
+            <div v-for="i in grass" :key="i" :class="i" @click="check($event)"></div>
           </div>
         </div>
       </div>
@@ -29,7 +29,7 @@
         <v-timeline-item v-if="!today" class="progress-item" dot-color="rgb(255, 225, 121)" size="small">
           <div class="memo-box">
             <div class="memo-date">{{date_after(new Date())}}</div>
-            <div class="memo" @click="dialog = true, update_mode = true, update_content = ''">
+            <div class="memo" @click="dialog = true, update_mode = true, now_idx = -1, update_content = ''">
               <div>텍스트를 입력하세요</div>
             </div>
           </div>
@@ -41,9 +41,12 @@
           :key="item.progressId"
           size="small"
         >
-          <div class="memo-box">
+          <div class="memo-box" :id="`state${copy_progress.length - index - 1}`">
             <div class="memo-date">{{date_after(item.date)}}</div>
-            <div class="memo" @click="dialog = true, create_content = item.contents, now_idx = index">
+            <div v-if="item.contents[0].email == loginUser.email" class="memo" @click="dialog = true, memo_contents = item.contents, now_idx = index">
+              <div v-html="item.contents[0].content"></div>
+            </div>
+            <div v-else class="memo isMine" @click="dialog = true, memo_contents = item.contents, now_idx = index">
               <div v-html="item.contents[0].content"></div>
             </div>
           </div>
@@ -106,7 +109,7 @@
           :modules="modules"
           class="mySwiper">
           
-          <swiper-slide v-for="(item, index) in create_content" :key="item" class="slide">
+          <swiper-slide v-for="(item, index) in memo_contents" :key="item" class="slide">
             <div class="memo-bg">
               <div class="writer">
                 <div>
@@ -115,7 +118,7 @@
                   </v-avatar>
                   {{ item.name }}
                 </div>
-                <v-icon v-if="item.email == loginUser.email" @click="update_mode = true, update_content = create_content[index].content">mdi-pencil</v-icon>
+                <v-icon v-if="item.email == loginUser.email" @click="update_mode = true, update_content = memo_contents[index].content">mdi-pencil</v-icon>
               </div>
               <!-- <div v-else style="height: 25.5px"></div> -->
               <div class="detail-form">
@@ -138,13 +141,13 @@
             <QuillEditor 
               class="text-editor" 
               theme="bubble"
-              v-model:content="update_content"
+              v-model:content="write_content"
               content-type="html"
               toolbar="essential" 
               placeholder="텍스트를 입력하세요"
               :read-only="false" />
             <div class="check">
-              <v-icon size="large" @click="create">mdi-check</v-icon>
+              <v-icon size="large" @click="sendRequest">mdi-check</v-icon>
             </div>
           </div>
         </div>
@@ -177,15 +180,15 @@ export default {
         period: 0,
         member: false,
         dialog: false,
-        create_content: '',
-        update_content: '',
+        memo_contents: [],
+        write_content: '',
         day: ['일', '월', '화', '수', '목', '금', '토'],
         update_mode: false,
         today: false,
         show: false,
         is_host: false,
         search_user: null,
-        update_idx: 0
+        update_idx: 0,
       }
     },
     components: {
@@ -225,14 +228,16 @@ export default {
         clone.setDate(date.getDate() + days)
         return clone;
       },
-      create() {
+      sendRequest() {
         // create
         if (this.now_idx == -1){
           //create 요청
+          console.log('이건 create야')
         }
         // 나머지는 update 요청
         else{
           // this.copy_progress[this.now_idx].content = this.create_content;
+          console.log('이건 update야')
           console.log(this.update_content);
         }
         // this.dialog = false;
@@ -275,6 +280,17 @@ export default {
           // this.show = false;
           // this.member = false;
         }
+      },
+      check(event){
+        // console.log(event.target.classList)
+        if(event.target.classList.contains('done')){
+          const go = event.target.classList[1]
+          console.log(go)
+          // this.$refs['state3'].scrollIntoView({behavior: "smooth"})
+          // this.$refs['bottom'].scrollIntoView({behavior: "smooth"})
+          document.querySelector(`#state${go}`).scrollIntoView({behavior: "smooth"})
+          // window.scrollTo(0,100)
+        }
       }
     },
     created() {
@@ -302,7 +318,7 @@ export default {
         }
         const target = this.addDays(st, i);
         if (this.shareProgress[idx].date.toLocaleDateString() == target.toLocaleDateString()) {
-          this.grass.push('done');
+          this.grass.push(`done ${idx}`);
           idx += 1;
         } else {
           this.grass.push('not');
@@ -486,7 +502,7 @@ h1 {
   display: flex;
   align-items: center;
   font-family: galaxy;
-  font-size: 25px;
+  font-size: 22px;
 }
 .memo-date {
   width: 200px;
@@ -495,22 +511,39 @@ h1 {
 }
 
 .memo {
-  background-image: url('../../assets/images/memo_large.png');
+  /* background-image: url('../../assets/images/memo_large.png'); */
+  background-image: url('../../assets/images/post-it/default.png');
   /* background-color: rgb(255, 255, 177);
   box-shadow: 1px 1px 10px 0.1px rgba(125, 124, 83, 0.738); */
 
   /* margin-left: 200px; */
   width: 450px;
-  height: 410px;
+  height: 480px;
   /* padding: 50px 60px; */
 }
 
-.memo >div {
+.isMine {
+  background-image: url('../../assets/images/post-it/default2.png');
+}
+
+.memo>div {
   width: 330px;
   height: 300px;
-  margin: 50px 60px;
+  margin: 80px 60px;
   overflow: hidden;
+  word-wrap: break-word;
 }
+
+/* .memo>div::-webkit-scrollbar {
+  background: none;
+  width: 5px;
+  height: 10px;
+}
+
+.memo>div::-webkit-scrollbar-thumb {
+  background-color: #7d7d7d4b;
+  border-radius: 10px;
+} */
 
 .memo :hover {
   cursor: pointer;

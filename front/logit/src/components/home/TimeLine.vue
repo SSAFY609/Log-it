@@ -7,19 +7,7 @@
             <div class="user-name">{{ loginUser.name }}</div>
             님의 타임라인
           </h1>
-          <div class="buttons">
-            <!-- 네모모양이냐 원이냐 -->
-            <v-btn color="#464646" variant="outlined" @click="goslide(0)"><v-icon>mdi-chevron-triple-left</v-icon></v-btn>
-            <v-btn color="#464646" variant="outlined" @click="nextSlide"><v-icon>mdi-chevron-double-left</v-icon></v-btn>
-            <v-btn color="#ff417a" variant="outlined" @click="goslide(state.slide)"><v-icon>mdi-calendar-check</v-icon></v-btn>
-            <v-btn color="#464646" variant="outlined" @click="prevSlide(0)"><v-icon>mdi-chevron-double-right</v-icon></v-btn>
-            <v-btn color="#464646" variant="outlined" @click="goslide(-1)"><v-icon>mdi-chevron-triple-right</v-icon></v-btn>
-            <!-- <v-btn color="#717171" variant="outlined" @click="goslide(0)" icon="mdi-chevron-triple-left"></v-btn>
-            <v-btn color="#717171" variant="outlined" @click="nextSlide" icon="mdi-chevron-double-left"></v-btn>
-            <v-btn color="#ff417a" variant="outlined" @click="goslide(state.slide)" icon="mdi-calendar-check"></v-btn>
-            <v-btn color="#717171" variant="outlined" @click="prevSlide(0)" icon="mdi-chevron-double-right"></v-btn>
-            <v-btn color="#717171" variant="outlined" @click="goslide(-1)" icon="mdi-chevron-triple-right"></v-btn> -->
-          </div>
+          
           <swiper 
           class="mySwiper"
           :modules="modules"
@@ -50,6 +38,19 @@
                   </div>
               </swiper-slide>
           </swiper>
+          <div class="buttons">
+            <!-- 네모모양이냐 원이냐 -->
+            <v-btn color="#464646" variant="outlined" @click="goslide(0)"><v-icon>mdi-chevron-triple-left</v-icon></v-btn>
+            <v-btn color="#464646" variant="outlined" @click="nextSlide"><v-icon>mdi-chevron-double-left</v-icon></v-btn>
+            <v-btn color="#ff417a" variant="outlined" @click="goslide(state.slide)">Today</v-btn>
+            <v-btn color="#464646" variant="outlined" @click="prevSlide(0)"><v-icon>mdi-chevron-double-right</v-icon></v-btn>
+            <v-btn color="#464646" variant="outlined" @click="goslide(-1)"><v-icon>mdi-chevron-triple-right</v-icon></v-btn>
+            <!-- <v-btn color="#717171" variant="outlined" @click="goslide(0)" icon="mdi-chevron-triple-left"></v-btn>
+            <v-btn color="#717171" variant="outlined" @click="nextSlide" icon="mdi-chevron-double-left"></v-btn>
+            <v-btn color="#ff417a" variant="outlined" @click="goslide(state.slide)" size="large">오늘</v-btn>
+            <v-btn color="#717171" variant="outlined" @click="prevSlide(0)" icon="mdi-chevron-double-right"></v-btn>
+            <v-btn color="#717171" variant="outlined" @click="goslide(-1)" icon="mdi-chevron-triple-right"></v-btn> -->
+          </div>
       </div>
     </div>
   </div>
@@ -422,15 +423,16 @@ export default {
 }
 
 .buttons button{
-  margin: 10px 5px;
+  margin: 30px 5px;
 }
 
 .event {
   display: block;
   position: absolute;
-  border-radius: 4px;
+  border-radius: 50px;
   height: 30px;
   font-size: 20px;
+  /* color: white; */
 }
 
 .mon {
@@ -488,36 +490,48 @@ export default {
 
 .floor1 {
   top: 130px;
-  background-color: rgb(255, 197, 207);
+  /* background-color: rgb(255, 126, 147); */
+  background-color: #ff2c687b;
 }
 .floor2 {
   top: 95px;
-  background-color: rgb(255, 210, 155);
+  /* background-color: rgb(255, 185, 100); */
+  background-color: #fe196583;
 }
 .floor3 {
   top: 60px;
-  background-color: rgb(255, 255, 172);
+  /* background-color: rgb(255, 126, 147); */
+  background-color: #ff437e73;
 }
 
 .floor4 {
+  background-color: #ff1f6692;
   top: 25px;
-  background-color: rgb(183, 255, 183);
+  /* background-color: rgb(255, 210, 46); */
 }
 .floor-1 {
-  background-color: rgb(255, 197, 207);
+  /* background-color: rgb(27, 171, 255); */
+  background-color: #ff88aa74;
 }
 .floor-2 {
   top: 280px;
-  background-color: rgb(255, 210, 155);
+  /* background-color: rgb(255, 210, 155); */
+  /* background-color: rgb(255, 126, 147); */
+  background-color: #e1d71772;
 }
 .floor-3 {
   top: 315px;
-  background-color: rgb(255, 255, 172);
+  /* background-color: rgb(255, 255, 172); */
+  /* background-color: rgb(255, 185, 100); */
+  background-color: #fcff607e;
 }
 
 .floor-4 {
   top: 350px;
-  background-color: rgb(183, 255, 183);
+  /* background-color: rgb(255, 126, 147); */
+  /* background-color: rgb(183, 255, 183); */
+  background-color: #ffdd1f87;
+
 }
 
 .swiper-button-prev {
