@@ -34,6 +34,7 @@ public class UserController {
     private static final String NONE = "사용자 없음";
     private static final String IS_LOGINED = "이미 로그인된 사용자";
     private static final String PW_FAIL = "비밀번호 틀림";
+    private static final String PRESENT = "이미 가입된 사용자";
 
     @Autowired
     private UserService userService;
@@ -52,8 +53,12 @@ public class UserController {
     @PostMapping("/regist")
     public ResponseEntity<String> regist(@RequestBody UserDto userDto) throws Exception {
         try {
-            userService.saveUser(userDto, true);
-            return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+            Map<String, Object> resultMap = userService.saveUser(userDto, true);
+            if(resultMap.get("result") == PRESENT) { // 이미 가입된 사용자
+                return new ResponseEntity<String>(PRESENT, HttpStatus.NOT_ACCEPTABLE);
+            } else { // 회원가입 성공
+                return new ResponseEntity<String>(SUCCESS, HttpStatus.ACCEPTED);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<String>(FAIL, HttpStatus.OK);
