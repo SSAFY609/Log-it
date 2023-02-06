@@ -9,16 +9,16 @@
           </h1>
           <div class="buttons">
             <!-- 네모모양이냐 원이냐 -->
-            <!-- <v-btn color="#464646" variant="outlined" @click="goslide(0)"><v-icon>mdi-chevron-triple-left</v-icon></v-btn>
+            <v-btn color="#464646" variant="outlined" @click="goslide(0)"><v-icon>mdi-chevron-triple-left</v-icon></v-btn>
             <v-btn color="#464646" variant="outlined" @click="nextSlide"><v-icon>mdi-chevron-double-left</v-icon></v-btn>
             <v-btn color="#ff417a" variant="outlined" @click="goslide(state.slide)"><v-icon>mdi-calendar-check</v-icon></v-btn>
             <v-btn color="#464646" variant="outlined" @click="prevSlide(0)"><v-icon>mdi-chevron-double-right</v-icon></v-btn>
-            <v-btn color="#464646" variant="outlined" @click="goslide(-1)"><v-icon>mdi-chevron-triple-right</v-icon></v-btn> -->
-            <v-btn color="#717171" variant="outlined" @click="goslide(0)" icon="mdi-chevron-triple-left"></v-btn>
+            <v-btn color="#464646" variant="outlined" @click="goslide(-1)"><v-icon>mdi-chevron-triple-right</v-icon></v-btn>
+            <!-- <v-btn color="#717171" variant="outlined" @click="goslide(0)" icon="mdi-chevron-triple-left"></v-btn>
             <v-btn color="#717171" variant="outlined" @click="nextSlide" icon="mdi-chevron-double-left"></v-btn>
             <v-btn color="#ff417a" variant="outlined" @click="goslide(state.slide)" icon="mdi-calendar-check"></v-btn>
             <v-btn color="#717171" variant="outlined" @click="prevSlide(0)" icon="mdi-chevron-double-right"></v-btn>
-            <v-btn color="#717171" variant="outlined" @click="goslide(-1)" icon="mdi-chevron-triple-right"></v-btn>
+            <v-btn color="#717171" variant="outlined" @click="goslide(-1)" icon="mdi-chevron-triple-right"></v-btn> -->
           </div>
           <swiper 
           class="mySwiper"
@@ -375,8 +375,10 @@ export default {
 }
 
 .user-name {
-  font-size: 55px;
-  font-family: galaxy;
+  /* font-size: 55px; */
+  font-size: 45px;
+  /* font-family: galaxy; */
+  font-family: appleB;
   margin-right: 5px;
 }
 
