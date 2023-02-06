@@ -4,6 +4,7 @@ import com.ssafy.logit.jwt.JwtUtil;
 import com.ssafy.logit.model.user.dto.UserDto;
 import com.ssafy.logit.model.user.entity.User;
 import com.ssafy.logit.model.user.repository.UserRepository;
+import org.hibernate.event.internal.MergeContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ public class UserService {
     private static final String NONE = "사용자 없음";
     private static final String IS_LOGINED = "이미 로그인된 사용자";
     private static final String PW_FAIL = "비밀번호 틀림";
+    private static final String PRESENT = "이미 가입된 사용자";
 
     @Autowired
     private UserRepository userRepo;
@@ -134,25 +136,33 @@ public class UserService {
         return pw;
     }
 
-    // 회원이 있을 때는 update, 회원이 없을 때는 regist
-    // => regist 변수로 판단
+    // 회원이 있을 때는 update, 회원이 없을 때는 regist (regist 변수로 판단)
     @Transactional
-    public UserDto saveUser(UserDto userDto, boolean regist) {
+    public Map<String, Object> saveUser(UserDto userDto, boolean regist) {
         // 객체 찾기(존재하는지 확인)
         Optional<User> user = userRepo.findByEmail(userDto.getEmail());
         
         // 비밀번호 암호화
         userDto.setPw(passwordEncoder.encode(userDto.getPw()));
         System.out.println("[saveUser] userDto : " + userDto);
-        
-        if(user.isPresent() && !regist) { // update
+
+        Map<String, Object> resultMap = new HashMap<>();
+        if(user.isPresent() && regist) { //  이미 가입된 사용자의 이메일로 회원가입 시도
+            System.out.println("regist : 이미 가입된 사용자");
+            resultMap.put("result", PRESENT);
+        } else if(!user.isPresent() && !regist) { // 가입되지 않은 사용자의 이메일로 업데이트 시도
+            System.out.println("update : 가입되지 않은 사용자");
+            resultMap.put("result", NONE);
+        } else if(user.isPresent() && !regist) { // update
             System.out.println("===== updateUser =====");
             userRepo.save(userDto.updateUser(user.get().getId(), userDto));
+            resultMap.put("result", userDto);
         } else { // regist
             System.out.println("===== registUser =====");
             userRepo.save(userDto.toEntity());
+            resultMap.put("result", userDto);
         }
-        return userDto;
+        return resultMap;
     }
 
     public List<UserDto> getAllUser() {
