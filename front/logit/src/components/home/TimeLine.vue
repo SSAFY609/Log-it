@@ -375,10 +375,10 @@ export default {
 }
 
 .user-name {
-  /* font-size: 55px; */
-  font-size: 45px;
-  /* font-family: galaxy; */
-  font-family: appleB;
+  font-size: 55px;
+  /* font-size: 45px; */
+  font-family: galaxy;
+  /* font-family: appleB; */
   margin-right: 5px;
 }
 
