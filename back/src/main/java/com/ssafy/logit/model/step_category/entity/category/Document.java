@@ -5,7 +5,6 @@ import com.ssafy.logit.model.step_category.entity.StepCategory;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
