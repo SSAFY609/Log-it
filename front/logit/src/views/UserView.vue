@@ -16,7 +16,7 @@
         @updateUserPassword="updateUserPassword"
         @updateUserData="updateUserData"
         :user="user"
-        @chgFileDOM="chgFileDOM"
+        @chgFileDOM="updateUserProfile"
       ></router-view>
     </div>
   </div>
@@ -28,7 +28,7 @@ export default {
   name: "UserView",
   setup() {
     const state = reactive({
-      fileDOM: "",
+      imageSrc:"",
     });
     const user = reactive({
       email: "이메일 ",
@@ -37,8 +37,8 @@ export default {
       uName: "김나현(●'◡'●)",
       sfNum: "학번 ",
     });
-    const chgFileDOM = (fileDOM) => {
-      state.fileDOM = fileDOM;
+    const chgFileDOM = (imageSrc) => {
+      state.imageSrc = imageSrc;
     };
     const updateUserEmail = (email) => {
       user.email = email;

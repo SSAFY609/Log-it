@@ -110,9 +110,10 @@ export default {
     },
     login() {
       const user = {
-        email: this.email,
-        pw: this.pw,
+        email: this.user.email,
+        pw: this.user.pw,
       };
+      console.log(user)
       this.$store.dispatch("login", user);
     },
     kakaoLogin() {},

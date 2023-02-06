@@ -3,6 +3,7 @@
     <h2 class="profile-title">프로필 생성</h2>
     <div class="profile-scroll-container fill-height">
       <div class="profile-scroll">
+        <!-- 파일 업로드 부분
         <label for="file" class="upload-btn">
           <input @change="fileChg" id="file" type="file" accept="image/*" />
           <div class="ma-4 select hover_cursor hover_bigger">
@@ -11,6 +12,7 @@
             >
           </div>
         </label>
+        -->
         <v-col
           cols="3"
           v-for="i in 36"
@@ -40,17 +42,21 @@ export default {
     const state = reactive({
       image: "",
     });
-    const fileChg = () => {
-      const fileDOM = document.querySelector("#file");
-      emit("chgFileDOM", fileDOM.files[0]);
-    };
+    // 파일 업로드 함수 
+    // const fileChg = () => {
+    //   // const fileDOM = document.querySelector("#file");
+    //   // const imageSrc = URL.createObjectURL.createObjectURL(fileDOM.files[0]);
+    //   // emit("chgFileDOM", imageSrc);
+    //   // router.push({
+    //   //   name: 'UserProfile',
+    //   // })
+    // };
 
     const onClicked = (i) => {
       emit("updateUserPhoto", i);
     };
     const selectFile = () => {};
     return {
-      fileChg,
       selectFile,
       state,
       onClicked,
@@ -59,13 +65,25 @@ export default {
 };
 </script>
 <style scoped>
+.profile_icon {
+  font-size: 50px;
+  color: white;
+}
+.upload-btn {
+  display: inline-block;
+  cursor: pointer;
+}
+input[type="file"] {
+  display: none;
+}
+
 .select {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 110px;
-  width: 110px;
-  border-radius: 55px;
+  height: 107.2px;
+  width: 107.2px;
+  border-radius: 50%;
   background-color: #ff0a54;
 }
 

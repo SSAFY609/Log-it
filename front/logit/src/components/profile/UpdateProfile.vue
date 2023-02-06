@@ -23,7 +23,7 @@
         </div>
       <v-form disabled>
           <div class="profile-main-button">
-            <router-link :to="{ name: 'ProfilePage' }">
+            <div @click="updateUser">
               <v-btn
                 width="120"
                 height="40"
@@ -34,7 +34,7 @@
               >
                 <div class="profile-main-button-text">입력 저장</div>
               </v-btn>
-            </router-link>
+            </div>
             <router-link :to="{ name: 'CheckPassword' }">
               <v-btn
                 height="40"
@@ -55,8 +55,8 @@
       </div>
     </div>
     <div class="profile-input-icon" @click="onShow">
-      <v-icon v-show="fileChk" size="large">mdi-lead-pencil</v-icon>
-      <v-icon v-show="!fileChk" style="font-size:200%;">mdi-check</v-icon>
+      <v-icon v-show="!fileChk" size="large">mdi-lead-pencil</v-icon>
+      <v-icon @click="photoChg" v-show="fileChk" style="font-size:200%;">mdi-check</v-icon>
     </div>
     <!-- 아래 프로필 사진 선택 창-->
     <div v-show="photo" class="profile-photo">
@@ -109,6 +109,7 @@
 </template>
 
 <script>
+
 export default {
   name: "UpdateProfile",
   
@@ -121,9 +122,36 @@ export default {
     fileDOM: "",
     previews: "",
     fileNum: "3",
-    fileChk:"false"
+    fileChk: false,
+    uploadState: false,
+    imageSrc: "",
+    fileSrc:"",
   }),
   methods: {
+
+    updateUser() { 
+      // 파일 이미지 선택했을경우
+      if (uploadState) {
+        this.fileSrc = this.imageSrc;
+      } else { 
+        this.fileSrc = this.id;
+      }
+      const user = {
+        name: this.name, //수정
+        email: sessionStorage.getItme("user"), //로그인 된 이메일
+        studentNo: this.ssafyNum, //수정
+        image:this.fileSrc, //수정
+      }
+      this.$store.dispatch('uploadImage', user);
+    //   "name" : "김설희",
+    // "email" : "2750seolhee@naver.com",
+    // "pw" : "1234",
+    // "flag" : 8,
+    // "studentNo" : "0812345",
+    // "isDeleted" : 0,
+    //     "image" : "1"
+      this.$router.push('ProfilePage');
+    },
     onShow() {
       this.photo = !this.photo;
       this.fileChk = !this.fileChk;
@@ -131,11 +159,13 @@ export default {
     fileChg() { 
       const fileDOM = document.querySelector('#file');
       const previews = document.querySelectorAll('.image-box');
-      const imageSrc = URL.createObjectURL(fileDOM.files[0]);
+      this.imageSrc = URL.createObjectURL(fileDOM.files[0]);
+      this.uploadState = true;
+      console.log(this.uploadState)
       previews[0].src = imageSrc;
-      console.log(previews)
     },
     onClicked(i) {
+      this.uploadState = false;
       this.fileNum = i;
      }
   },

@@ -8,7 +8,7 @@
           <img
             :src="require(`@/assets/profiles/scale (${state.id}).png`)"
             @click="selProf"
-            class="profile-input-img image-box"
+            class="profile-input-img "
           />
         </div>
         <div class="profile-input-icon" @click="selProf">
@@ -36,11 +36,12 @@ import { reactive, onBeforeMount } from "vue";
 
 export default {
   name: "UserProfile",
-  props: ["user", "fileDOM"],
+  props: ["user", "imageSrc"],
   setup(props, { emit }) {
     const router = useRouter();
     const state = reactive({
       preview: "",
+      image:"",
       id: "1",
     });
     const selProf = () => {
@@ -48,10 +49,10 @@ export default {
     };
 
     onBeforeMount(() => {
-      console.log(props.fileDOM);
+      // 파일 업로드 
       // const previews = document.querySelector(".image-box");
-      // const imageSrc = URL.createObjectURL(props.fileDOM);
-      // previews[0].src = imageSrc;
+      // const image = URL.createObjectURL(props.imageSrc);
+      // previews[0].src = image;
       state.id = props.user.profile;
     });
     const signProf = () => {

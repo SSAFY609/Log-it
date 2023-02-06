@@ -1,14 +1,20 @@
-import { createStore } from "vuex";
-import router from "@/router";
-import axios from "axios";
+
+import { createStore } from 'vuex'
+import axios from 'axios'
+import router from '@/router'
+import axiosConnector from '@/utils/axios-connector';
+// import temp from './modules/temp.js'
+// import event from './modules/event.js'
+// import timeline from './modules/timeline.js'
+import user from './modules/user.js'
 
 const baseURL = "http://localhost:9090/user";
-const getToken = () => {
-  const token = sessionStorage.getItem("token");
-  return {
-    Authorization: `bearer ${token}`,
-  };
-};
+// const getToken = () => {
+//   const token = sessionStorage.getItem("token");
+//   return {
+//     Authorization: `bearer ${token}`,
+//   };
+// };
 export default createStore({
   state: {
     loginUser: {},
@@ -19,12 +25,14 @@ export default createStore({
       state.loginUser = payload;
       console.log(state.loginUser);
       sessionStorage.setItem("token", payload["jwt-auth-token"]);
+      sessionStorage.setItem("email", payload["user"]);
       router.push({ name: "MainPage" });
     },
     LOG_OUT(state) {
       sessionStorage.removeItem("token");
       state.loginUser = {};
     },
+
   },
   actions: {
     login({ commit }, user) {
@@ -43,22 +51,46 @@ export default createStore({
           console.log(err);
         });
     },
-    logout({ commit }) {
-      const URL = `${baseURL}/logout`;
-      axios({
-        url: URL,
-        method: "POST",
-        headers: getToken(),
+    signup(context, user) {
+      axiosConnector.post('user/regist', user
+      ).then(() => { 
+        alert("회원가입 성공했어 ~ ^^ ");
+        router.push({ name: "UserSignupComplete" });
+      }).catch((err) => {
+        alert("회원가입 실패했어 ~!!!");
+        console.log(err)
       })
-        .then(() => {
-          console.log("성공했어 ~크크큭 😋");
-          commit("LOG_OUT");
-        })
-        .catch((err) => {
-          alert("으악!!!!!!! 로그인 실패");
-          console.log(err);
-        });
+    },
+    logout({ commit }) {
+      // const URL = `${baseURL}/logout`;
+      axiosConnector.post('user/logout'
+      ).then(() => { 
+        console.log("성공했어 ~크크큭 😋");
+        commit("LOG_OUT");
+      }).catch((err) => { 
+        alert("으악!!!!!!! 로그아웃 실패");
+        console.log(err);
+      })
+      // axios({
+      //   url: URL,
+      //   method: "POST",
+      //   headers: getToken(),
+      // })
+      //   .then(() => {
+      //     console.log("성공했어 ~크크큭 😋");
+      //     commit("LOG_OUT");
+      //   })
+      //   .catch((err) => {
+      //     alert("으악!!!!!!! 로그인 실패");
+      //     console.log(err);
+      //   });
     },
   },
-  modules: {},
-});
+
+  modules: {
+    // temp: temp,
+    // event: event,
+    // timeline: timeline,
+    user:user,
+  }
+})

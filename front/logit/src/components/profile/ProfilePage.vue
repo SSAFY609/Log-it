@@ -248,7 +248,7 @@ input[type="file"] {
 }
 .profile-photo {
   margin-top: -30px;
-  width: 1200px;
+  width: 1000px;
   height: 200px;
 }
 .profile-container {
