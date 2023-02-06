@@ -2,6 +2,7 @@ package com.ssafy.logit.model.job.entity;
 
 
 import com.ssafy.logit.model.common.ResultStatus;
+import com.ssafy.logit.model.step_category.entity.StepCategory;
 import com.ssafy.logit.model.user.entity.User;
 import com.ssafy.logit.model.common.EventDate;
 import lombok.AccessLevel;
@@ -9,6 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -35,6 +38,11 @@ public class JobEvent {
     private ResultStatus resultStatus;
     @Embedded
     private EventDate eventDate;
+
+    @OneToMany(mappedBy = "jobEvent")
+    private List<StepCategory> stepCategoryList = new ArrayList<>();
+
+
 
     // 생성 메소드 //
     public static JobEvent createJobEvent(User user,String companyName, String type,EventDate eventDate){

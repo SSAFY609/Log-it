@@ -35,10 +35,8 @@ public class InterviewController {
                                                     @Validated @RequestBody CreateInterviewRequest request) {
         User user = getUser(email);
         StepCategory stepCategory = stepCategoryService.get(request.getStepId());
-        System.out.println("stepCategory.getId() = " + stepCategory.getId());
         Interview interview = interviewService.create(user, stepCategory, request);
         InterviewResponse response = new InterviewResponse(interview);
-
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 

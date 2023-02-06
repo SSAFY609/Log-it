@@ -23,7 +23,8 @@ public class StepEtc {
 
 
     // private setter //
-    private void setStepCategory(StepCategory stepCategory) {
+    private void addStepCategory(StepCategory stepCategory) {
+        stepCategory.getStepEtcList().add(this);
         this.stepCategory = stepCategory;
     }
 
@@ -35,7 +36,7 @@ public class StepEtc {
     // 생성 메소드 //
     public static StepEtc create(StepCategory stepCategory, String content) {
         StepEtc stepEtc = new StepEtc();
-        stepEtc.setStepCategory(stepCategory);
+        stepEtc.addStepCategory(stepCategory);
         stepEtc.setContent(content);
         return stepEtc;
     }

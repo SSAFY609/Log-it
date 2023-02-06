@@ -23,14 +23,11 @@ import java.util.NoSuchElementException;
 public class InterviewService {
     private final InterviewRepository interviewRepository;
 
-
     @Transactional
     public Interview create(User user, StepCategory stepCategory, CreateInterviewRequest request){
         checkUser(user, stepCategory);
-        checkCategory(stepCategory);
-        Interview interview = Interview.create(stepCategory, request.getName());
-        Interview saveInterview = interviewRepository.save(interview);
-
+        Interview interviewDetail = Interview.create(stepCategory, request.getQuestion(), request.getAnswer(), request.getInterviewCategory());
+        Interview saveInterview = interviewRepository.save(interviewDetail);
         return saveInterview;
     }
 
@@ -39,7 +36,7 @@ public class InterviewService {
     public Interview update(User user, Long id, UpdateInterviewRequest request){
         Interview interview = interviewRepository.findById(id).orElseThrow(NoSuchElementException::new);
         checkUser(user,interview);
-        Interview updateInterview = interview.update( request.getName());
+        Interview updateInterview = interview.update(request.getQuestion(), request.getAnswer(), request.getInterviewCategory());
         return updateInterview;
     }
 
@@ -52,11 +49,11 @@ public class InterviewService {
 
 
     public Interview get(Long id){
-        Interview interview = interviewRepository.findById(id).orElseThrow(NoSuchElementException::new);
-        return interview;
+        Interview interviewDetail = interviewRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        return interviewDetail;
     }
 
-    
+
     // 카테고리 체크
     private void checkCategory(StepCategory stepCategory) {
         if(stepCategory.getJobCategory()!= JobCategory.INTERVIEW){
@@ -66,19 +63,18 @@ public class InterviewService {
 
 
     // User 체크
-    private void checkUser(User user, Interview interview) {
-        if(user != interview.getStepCategory().getJobEvent().getUser()){
-            throw new DifferentUserException();
-        }
-    }
-
-    // User 체크
     private void checkUser(User user, StepCategory stepCategory) {
         if(user != stepCategory.getJobEvent().getUser()){
             throw new DifferentUserException();
         }
     }
 
+    // User 체크
+    private void checkUser(User user, Interview interview) {
+        if(user != interview.getStepCategory().getJobEvent().getUser()){
+            throw new DifferentUserException();
+        }
+    }
+
 
 }
-

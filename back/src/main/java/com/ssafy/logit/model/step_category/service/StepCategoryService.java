@@ -6,7 +6,12 @@ import com.ssafy.logit.model.job.entity.JobEvent;
 import com.ssafy.logit.model.job.repository.JobRepository;
 import com.ssafy.logit.model.step_category.dto.CreateStepCategoryRequest;
 import com.ssafy.logit.model.step_category.dto.UpdateStepCategoryRequest;
+import com.ssafy.logit.model.step_category.dto.category.codingtest.CodingTestResponse;
+import com.ssafy.logit.model.step_category.dto.category.document.DocumentResponse;
+import com.ssafy.logit.model.step_category.dto.category.etc.StepEtcResponse;
 import com.ssafy.logit.model.step_category.entity.StepCategory;
+import com.ssafy.logit.model.step_category.entity.category.Document;
+import com.ssafy.logit.model.step_category.entity.category.Interview;
 import com.ssafy.logit.model.step_category.repository.StepCategoryRepository;
 import com.ssafy.logit.model.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +19,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -56,6 +64,47 @@ public class StepCategoryService {
         StepCategory stepCategory = stepCategoryRepository.findById(id).orElseThrow(NoSuchElementException::new);
         checkUser(user, stepCategory);
         stepCategoryRepository.delete(stepCategory);
+    }
+
+    public List<StepCategory> findStepCategories(JobEvent jobEvent) {
+        List<StepCategory> stepCategoryList = jobEvent.getStepCategoryList();
+        for (StepCategory stepCategory : stepCategoryList) {
+            System.out.println("stepCategory = " + stepCategory);
+            System.out.println("stepCategory.getJobCategory() = " + stepCategory.getJobCategory());
+        }
+        return stepCategoryList;
+    }
+
+    public Object getStepCategory(StepCategory stepCategory) {
+        switch (stepCategory.getJobCategory()) {
+            case DOCUMENT:
+                Document document = stepCategory.getDocument();
+                if(document==null){
+                    return new ArrayList<>();
+                }
+                DocumentResponse documentResponse = new DocumentResponse(document);
+                return documentResponse;
+            case ETC:
+                List<StepEtcResponse> stepEtcListResponse = stepCategory.getStepEtcList()
+                        .stream()
+                        .map(o -> new StepEtcResponse(o))
+                        .collect(Collectors.toList());
+                return stepEtcListResponse;
+            case INTERVIEW:
+                List<Interview> interviewList = stepCategory.getInterviewList();
+//                for()
+                return null;
+
+            case CODINGTEST:
+                List<CodingTestResponse> codingTest = stepCategory.getCodingTestList()
+                        .stream()
+                        .map(o -> new CodingTestResponse(o))
+                        .collect(Collectors.toList());
+                return codingTest;
+        }
+
+        throw new NoSuchElementException();
+
     }
 
     private void checkUser(User user, StepCategory stepCategory) {

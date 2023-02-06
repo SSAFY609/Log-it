@@ -33,7 +33,7 @@ public class Document {
         this.id = id;
     }
 
-    private void setStepCategory(StepCategory stepCategory) {
+    private void addStepCategory(StepCategory stepCategory) {
         if(stepCategory ==null){
             throw new IllegalStateException();
         }
@@ -48,7 +48,7 @@ public class Document {
 
     public static Document create( StepCategory stepCategory, String question, String content){
         Document document = new Document();
-        document.setStepCategory(stepCategory);
+        document.addStepCategory(stepCategory);
         document.setQuestion(question);
         document.setContent(content);
 

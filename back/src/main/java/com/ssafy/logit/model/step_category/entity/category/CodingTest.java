@@ -5,6 +5,7 @@ import lombok.Getter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
+import java.util.NoSuchElementException;
 
 
 @Entity
@@ -27,10 +28,13 @@ public class CodingTest {
 
 
     // setter
-    private void setStepCategory(StepCategory stepCategory) {
+    private void addStepCategory(StepCategory stepCategory) {
+
         if (stepCategory != null) {
-            this.stepCategory = stepCategory;
+            throw new NoSuchElementException();
         }
+        stepCategory.getCodingTestList().add(this);
+        this.stepCategory = stepCategory;
     }
 
     private void setContent(String content) {
@@ -45,7 +49,7 @@ public class CodingTest {
     // 생성 메소드 //
     public static CodingTest createCodingTest(StepCategory stepCategory, String content, String category) {
         CodingTest codingTest = new CodingTest();
-        codingTest.setStepCategory(stepCategory);
+        codingTest.addStepCategory(stepCategory);
         codingTest.setContent(content);
         codingTest.setAlgoCategory(category);
         return codingTest;
@@ -57,8 +61,6 @@ public class CodingTest {
         this.setAlgoCategory(category);
         return this;
     }
-
-
 
 
 }

@@ -10,7 +10,6 @@ import com.ssafy.logit.model.job.dto.UpdateJobEventRequest;
 import com.ssafy.logit.model.job.entity.JobEvent;
 import com.ssafy.logit.model.job.repository.JobRepository;
 import com.ssafy.logit.model.user.entity.User;
-import com.ssafy.logit.model.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -64,7 +63,6 @@ public class JobService {
         checkUser(user, jobEvent);
         jobRepository.delete(jobEvent);
     }
-
 
     public CreateJobEventResponse get(Long jobEventId) {
         JobEvent jobEvent = jobRepository.findById(jobEventId).orElseThrow(NoSuchElementException::new);
