@@ -10,7 +10,6 @@
           <div class="search_content lay3">검색</div>
           <v-autocomplete class="search_input_text nosee" autofocus
             clearable
-            variant="null"
             :items=state.SearchList
           ></v-autocomplete>
         </div>
@@ -100,7 +99,6 @@ export default {
       target.classList.toggle('nosee')
     }
     const openSearch = () => {
-
       const target = document.querySelector('.search_box')
       const target2 = document.querySelector('.search_input_text') 
       const target3 = document.querySelector('.search_content') 
@@ -110,7 +108,7 @@ export default {
       target2.focus()
       target3.classList.add('nosee')
 
-      
+    
     }
     return {
       state,
@@ -275,6 +273,7 @@ export default {
     font-weight: 900;
     cursor: pointer;
   }
+
   .search_box_container{
     width: 400px;
     height: 100%;
@@ -296,7 +295,6 @@ export default {
   from {
     width: 100px;
   }
-
   to {    
     width: 400px
   }
