@@ -4,7 +4,6 @@ import com.ssafy.logit.jwt.JwtUtil;
 import com.ssafy.logit.model.user.dto.UserDto;
 import com.ssafy.logit.model.user.entity.User;
 import com.ssafy.logit.model.user.repository.UserRepository;
-import org.hibernate.event.internal.MergeContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
