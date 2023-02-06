@@ -26,11 +26,8 @@ public class Document {
     private String question;
 
     @Max(2000)
-    private String content;
+    private String answer;
 
-    private void setId(Long id) {
-        this.id = id;
-    }
 
     private void addStepCategory(StepCategory stepCategory) {
         if(stepCategory ==null){
@@ -41,22 +38,22 @@ public class Document {
     private void setQuestion(String question) {
         this.question = question;
     }
-    public void setContent(String content) {
-        this.content = content;
+    public void setAnswer(String answer) {
+        this.answer = answer;
     }
 
     public static Document create( StepCategory stepCategory, String question, String content){
         Document document = new Document();
         document.addStepCategory(stepCategory);
         document.setQuestion(question);
-        document.setContent(content);
+        document.setAnswer(content);
 
         return  document;
     }
 
     public Document update(String question,String content ){
         this.setQuestion(question);
-        this.setContent(content);
+        this.setAnswer(content);
         return this;
     }
 

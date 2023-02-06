@@ -9,12 +9,12 @@ public class DocumentResponse {
 
     private Long id;
     private String question;
-    private String content;
+    private String answer;
 
     // 생성자
     public DocumentResponse(Document document){
         this.id = document.getId();
         this.question = document.getQuestion();
-        this.content = document.getContent();
+        this.answer = document.getAnswer();
     }
 }
