@@ -150,7 +150,10 @@ public class UserService {
         if(user.isPresent() && regist) { //  이미 가입된 사용자의 이메일로 회원가입 시도
             System.out.println("regist : 이미 가입된 사용자");
             resultMap.put("result", PRESENT);
-        } else if(user.isPresent() || !regist) { // update
+        } else if(!user.isPresent() && !regist) { // 가입되지 않은 사용자의 이메일로 업데이트 시도
+            System.out.println("update : 가입되지 않은 사용자");
+            resultMap.put("result", NONE);
+        } else if(user.isPresent() && !regist) { // update
             System.out.println("===== updateUser =====");
             userRepo.save(userDto.updateUser(user.get().getId(), userDto));
             resultMap.put("result", userDto);

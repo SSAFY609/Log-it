@@ -10,6 +10,7 @@ import com.ssafy.logit.model.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.protocol.HTTP;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,7 @@ public class UserController {
     private static final String IS_LOGINED = "이미 로그인된 사용자";
     private static final String PW_FAIL = "비밀번호 틀림";
     private static final String PRESENT = "이미 가입된 사용자";
+    private static final String EXPIRED = "token expired";
 
     @Autowired
     private UserService userService;
@@ -109,18 +111,27 @@ public class UserController {
     @PostMapping("/refresh")
     public ResponseEntity<Map<String, Object>> refreshToken(@RequestParam String email) {
         Map<String, Object> resultMap = new HashMap<>();
-        String token = userService.getRefreshToken(email);
-        jwtUtil.checkAndGetClaims(token);
+        try {
+            if(userService.getUser(email) == null) {
+                resultMap.put("result", NONE);
+            } else {
+                String token = userService.getRefreshToken(email);
+                jwtUtil.checkAndGetClaims(token);
 
-        // refresh-token 확인 후 auth-token 재발급
-        if (token.equals(userService.getRefreshToken(email))) {
-            String authToken = jwtUtil.createAuthToken(email);
-            resultMap.put("jwt-auth-token", authToken);
-            Map<String, Object> info = jwtUtil.checkAndGetClaims(authToken);
-            resultMap.putAll(info);
+                // refresh-token 확인 후 auth-token 재발급
+                if (token.equals(userService.getRefreshToken(email))) {
+                    String authToken = jwtUtil.createAuthToken(email);
+                    resultMap.put("jwt-auth-token", authToken);
+                    Map<String, Object> info = jwtUtil.checkAndGetClaims(authToken);
+                    resultMap.putAll(info);
+                }
+            }
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMap.put("result", EXPIRED);
+            return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
         }
-
-        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.ACCEPTED);
     }
 
     // 로그아웃
@@ -163,12 +174,15 @@ public class UserController {
     @PostMapping
     public ResponseEntity<String> updateUser(@RequestBody UserDto userDto, @RequestAttribute String email) throws Exception {
         try {
-            // 토큰 사용자 인증
-            if(userDto.getEmail().equals(email)) {
-                userService.saveUser(userDto, false);
-                return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+            Map<String, Object> resultMap = userService.saveUser(userDto, false);
+            if(resultMap.get("result").equals(NONE)) { // 존재하지 않는 사용자
+                return new ResponseEntity<String>(NONE, HttpStatus.NOT_ACCEPTABLE);
             } else {
-                return new ResponseEntity<>(UNAUTHORIZED, HttpStatus.UNAUTHORIZED);
+                if(userDto.getEmail().equals(email)) { // 토큰 확인 후 업데이트
+                    return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+                } else { // 토큰과 일치하는 사용자 아님
+                    return new ResponseEntity<>(UNAUTHORIZED, HttpStatus.UNAUTHORIZED);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -197,23 +211,40 @@ public class UserController {
         return new ResponseEntity<List<UserDto>>(userService.searchUser(name), HttpStatus.OK);
     }
 
+    // email로 회원 조회
+    @Operation(summary = "이메일 중복 검사", description = "email로 이메일 중복 검사")
+    @GetMapping("/check")
+    public ResponseEntity<String> checkEmail(@RequestParam String email) throws Exception {
+        UserDto userDto = userService.getUser(email);
+        // 기존에 가입된 사용자와 이메일 중복 검사
+        if(userDto == null) {
+            return new ResponseEntity<>(NONE, HttpStatus.ACCEPTED);
+        } else {
+            return new ResponseEntity<>(PRESENT, HttpStatus.NOT_ACCEPTABLE);
+        }
+    }
+
     // 회원 삭제 (실제 삭제x, deleted 1로 업데이트)
     @Operation(summary = "회원 삭제", description = "id로 회원 삭제 (실제 삭제x, deleted 1로 업데이트)")
     @PutMapping("/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable Long id, @RequestAttribute String email) throws  Exception {
         try {
-            // 토큰 사용자 인증 후 회원 삭제
-            if(userService.getUser(id).getEmail().equals(email)) {
-                String result = userService.deleteUser(id);
-                if(result.equals(SUCCESS)) { // delete 성공
-                    return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
-                } else if(result.equals(DELETED)) { // 이미 delete 된 회원
-                    return new ResponseEntity<String>(DELETED, HttpStatus.OK);
-                } else { // 없는 회원
-                    return new ResponseEntity<String>(NONE, HttpStatus.OK);
-                }
+            if(userService.getUser(id) == null) { // 없는 회원
+                return new ResponseEntity<>(NONE, HttpStatus.NOT_ACCEPTABLE);
             } else {
-                return new ResponseEntity<>(UNAUTHORIZED, HttpStatus.UNAUTHORIZED);
+                // 토큰 사용자 인증 후 회원 삭제
+                if(userService.getUser(id).getEmail().equals(email)) {
+                    String result = userService.deleteUser(id);
+                    if(result.equals(SUCCESS)) { // delete 성공
+                        return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+                    } else if(result.equals(DELETED)) { // 이미 delete 된 회원
+                        return new ResponseEntity<String>(DELETED, HttpStatus.OK);
+                    } else {
+                        return new ResponseEntity<>(FAIL, HttpStatus.NOT_ACCEPTABLE);
+                    }
+                } else {
+                    return new ResponseEntity<>(UNAUTHORIZED, HttpStatus.UNAUTHORIZED);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

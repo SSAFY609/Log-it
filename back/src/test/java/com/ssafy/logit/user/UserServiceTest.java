@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Map;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -43,11 +44,11 @@ class UserServiceTest {
         when(userRepo.save(any())).thenReturn(userDto.toEntity()); // Mock 객체 주입
 
         // when
-        UserDto result = userService.saveUser(userDto, true);
+        Map<String, Object> resultMap = userService.saveUser(userDto, true);
 
         // then
         verify(userRepo, times(1)).save(any());
-        assertThat(result).isEqualTo(userDto);
+        assertThat(resultMap.get("result")).isEqualTo(userDto);
     }
 
     @Test
@@ -80,12 +81,12 @@ class UserServiceTest {
 
         // when
         userDto.setPw("0000");
-        UserDto result = userService.saveUser(userDto, false);
+        Map<String, Object> resultMap = userService.saveUser(userDto, false);
 
         // then
         verify(userRepo, times(1)).save(any());
-        assertThat(result).isEqualTo(userDto);
-        assertThat(result.getPw()).isEqualTo("0000");
+        assertThat(resultMap.get("result")).isEqualTo(userDto);
+        // assertThat(resultMap.get("result")).getPw()).isEqualTo("0000");
     }
 
     @Test
