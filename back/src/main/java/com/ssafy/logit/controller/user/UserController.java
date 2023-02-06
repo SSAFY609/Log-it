@@ -53,7 +53,7 @@ public class UserController {
     public ResponseEntity<String> regist(@RequestBody UserDto userDto) throws Exception {
         try {
             Map<String, Object> resultMap = userService.saveUser(userDto, true);
-            if(resultMap.get("result") == PRESENT) { // 이미 가입된 사용자
+            if(resultMap.get("result").equals(PRESENT)) { // 이미 가입된 사용자
                 return new ResponseEntity<String>(PRESENT, HttpStatus.NOT_ACCEPTABLE);
             } else { // 회원가입 성공
                 return new ResponseEntity<String>(SUCCESS, HttpStatus.ACCEPTED);
