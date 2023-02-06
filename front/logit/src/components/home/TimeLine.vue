@@ -23,11 +23,13 @@
                   </div>
                   <div class="bar">
                       <div class="hori-bar" v-for="(d, index) in date.str" :key="index">
-                          <div class="date">
+                          <div v-if="d.indexOf('오늘') != -1" class="date today-date">
+                              {{ d }}
+                          </div>
+                          <div v-else class="date">
                               {{ d }}
                           </div>
                           <span class="circle">
-                              <div class="hover"><button @click="show(index)" style="font-size:large">+</button></div>
                           </span>
                       </div>
                   </div>
@@ -403,6 +405,10 @@ export default {
   transition: all 200ms ease-in ;
 }
 
+.today~.circle {
+
+}
+
 .hover {
   display: none;
   color:#a6a6a6 ;
@@ -607,12 +613,12 @@ display: none;
 }
 
 .today-date ~.circle {
-  border-color: #ffb272;
+  border-color: #FF0A54;
 }
 
 .today-date ~.circle:hover {
-  border-color: #ffb272;
-  color: #ffb272;
+  border-color: #FF0A54;
+  color: #FF0A54;
 }
 
 .circle:hover {

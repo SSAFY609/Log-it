@@ -19,7 +19,12 @@
             <div v-for="j in rest" :key="j" class="square"></div>
           </div> -->
           <div class="week">
-            <div v-for="i in grass" :key="i" :class="i" @click="check($event)"></div>
+            <div v-for="i in grass" :key="i">
+              <div v-if="i=='not'" class="not"></div>
+              <div v-else :class="i.class" @click="check($event)">
+                <v-tooltip activator="parent" location="bottom">{{ i.date }}</v-tooltip>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -110,7 +115,7 @@
           class="mySwiper">
           
           <swiper-slide v-for="(item, index) in memo_contents" :key="item" class="slide">
-            <div class="memo-bg">
+            <div v-if="item.email == loginUser.email" class="memo-bg">
               <div class="writer">
                 <div>
                   <v-avatar style="margin-right: 10px">
@@ -119,6 +124,29 @@
                   {{ item.name }}
                 </div>
                 <v-icon v-if="item.email == loginUser.email" @click="update_mode = true, update_content = memo_contents[index].content">mdi-pencil</v-icon>
+              </div>
+              <!-- <div v-else style="height: 25.5px"></div> -->
+              <div class="detail-form">
+                <QuillEditor 
+                  class="text-editor" 
+                  theme="bubble"
+                  v-model:content="item.content"
+                  content-type="html"
+                  toolbar="essential" 
+                  :read-only="true" />
+              </div>
+              <div class="check">
+                <v-icon size="large" @click="dialog = false">mdi-close</v-icon>
+              </div>
+            </div>
+            <div v-else class="memo-bg pink">
+              <div class="writer">
+                <div>
+                  <v-avatar style="margin-right: 10px">
+                    <v-img :src="require(`@/assets/profiles/scale (${item.profile}).png`)"></v-img>
+                  </v-avatar>
+                  {{ item.name }}
+                </div>
               </div>
               <!-- <div v-else style="height: 25.5px"></div> -->
               <div class="detail-form">
@@ -152,6 +180,10 @@
           </div>
         </div>
       </v-dialog>
+    </div>
+    <div class="navi">
+      <v-btn variant="outlined" icon="mdi-chevron-up" @click="pageUp"></v-btn>
+      <v-btn variant="outlined" icon="mdi-chevron-down" @click="pageDown"></v-btn>
     </div>
   </div>
 </template>
@@ -288,9 +320,15 @@ export default {
           console.log(go)
           // this.$refs['state3'].scrollIntoView({behavior: "smooth"})
           // this.$refs['bottom'].scrollIntoView({behavior: "smooth"})
-          document.querySelector(`#state${go}`).scrollIntoView({behavior: "smooth"})
+          document.querySelector(`#state${go}`).scrollIntoView({behavior: "smooth", block: 'center'})
           // window.scrollTo(0,100)
         }
+      },
+      pageUp() {
+        window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+      },
+      pageDown() {
+        window.scrollTo({left: 0, top: document.body.scrollHeight, behavior: 'smooth'});
       }
     },
     created() {
@@ -318,7 +356,11 @@ export default {
         }
         const target = this.addDays(st, i);
         if (this.shareProgress[idx].date.toLocaleDateString() == target.toLocaleDateString()) {
-          this.grass.push(`done ${idx}`);
+          const data = {
+            class: `done ${idx}`,
+            date: target.toLocaleDateString()
+          }
+          this.grass.push(data);
           idx += 1;
         } else {
           this.grass.push('not');
@@ -441,6 +483,10 @@ h1 {
   height: 35px;
   margin-right: 25px;
   margin-bottom: 10px;
+}
+
+.done:hover{
+  cursor: pointer;
 }
 
 .member-dialog {
@@ -568,6 +614,10 @@ h1 {
   height: 620px;
 }
 
+.pink {
+  background-color: rgb(255, 199, 224);
+}
+
 .writer {
   display: flex;
   font-family: appleL;
@@ -609,5 +659,14 @@ h1 {
 .check {
   /* position: absolute; */
   top: 610px;
+}
+
+.navi {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  right: 8%;
+  bottom: 8%;
+  
 }
 </style>
