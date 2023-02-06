@@ -65,6 +65,6 @@ public class DocumentController {
 
 
     private User getUser(String email) {
-        return userService.getUser(email).toEntity();
+        return userService.getUserEntity(email);
     }
 }
