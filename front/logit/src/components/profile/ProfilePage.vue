@@ -54,12 +54,16 @@
         />
       </div>
     </div>
+    <!-- 프로필 사진 아이콘 -->
+    <!--
     <div class="profile-input-icon" @click="onShow">
       <v-icon v-show="fileChk" size="large">mdi-lead-pencil</v-icon>
       <v-icon v-show="!fileChk" style="font-size: 200%">mdi-check</v-icon>
     </div>
+    -->
     <!-- 아래 프로필 사진 선택 창-->
-    <div v-show="photo" class="profile-photo">
+    <!--
+     <div v-show="photo" class="profile-photo">
       <v-sheet class="mx-auto" max-width="990">
         <v-slide-group
           v-model="model"
@@ -68,8 +72,9 @@
           show-arrows
         >
           <v-slide-group-item v-slot="{ isSelected, toggle, selectedClass }">
-            <label for="file" class="upload-btn">
-              <!-- 사용자 파일 업로드 선택 창-->
+          -->
+    <!-- 사용자 파일 업로드 선택 창-->
+    <!--
               <input @change="fileChg" id="file" type="file" accept="image/*" />
               <div class="ma-4 select hover_cursor hover_bigger">
                 <v-icon class="profile_icon f_icon lay3 btn_clicked2"
@@ -78,7 +83,9 @@
               </div>
             </label>
             <div v-for="i in 36" :key="i">
-              <!-- 디즈니 프로필 사진 선택 창-->
+              -->
+    <!-- 디즈니 프로필 사진 선택 창-->
+    <!--
               <v-img
                 color="grey-lighten-1"
                 :src="require(`@/assets/profiles/scale (${i}).png`)"
@@ -104,40 +111,57 @@
           </v-slide-group-item>
         </v-slide-group>
       </v-sheet>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
+import { reactive, onBeforeMount } from "@vue/runtime-core";
 export default {
   name: "ProfilePage",
-
-  data: () => ({
-    name: "이름",
-    email: "asdas@gmail.com",
-    ssafyNum: "084182",
-    model: null,
-    photo: false,
-    fileDOM: "",
-    previews: "",
-    fileNum: "3",
-    fileChk: "false",
-  }),
-  methods: {
-    onShow() {
+  props: ["imageSrc"],
+  setup(props) {
+    const state = reactive({
+      name: "이름",
+      email: "asdas@gmail.com",
+      ssafyNum: "084182",
+      model: null,
+      photo: false,
+      fileName: "",
+      previews: "",
+      fileNum: "3",
+      fileChk: "false",
+    });
+    const onShow = () => {
       this.photo = !this.photo;
       this.fileChk = !this.fileChk;
-    },
-    fileChg() {
-      const fileDOM = document.querySelector("#file");
-      const previews = document.querySelectorAll(".image-box");
-      const imageSrc = URL.createObjectURL(fileDOM.files[0]);
-      previews[0].src = imageSrc;
-    },
-    onClicked(i) {
-      this.fileNum = i;
-    },
+    };
+    onBeforeMount(() => {
+      console.log(props.imageSrc);
+      state.fileNum = props.imageSrc;
+      console.log(state.fileNum);
+      if (state.fileNum.length < 3) {
+        this.fileName = require(`@/assets/profiles/scale (${state.fileNum}).png`);
+      } else {
+        const previews = document.querySelectorAll(".image-box");
+        previews[0].src = URL.createObjectURL(props.imageSrc.file[0]);
+      }
+    });
+    return {
+      onShow,
+      state,
+    };
   },
+
+  // fileChg() {
+  //   const fileDOM = document.querySelector("#file");
+  //   const previews = document.querySelectorAll(".image-box");
+  //   const imgSrc = URL.createObjectURL(fileDOM.files[0]);
+  //   previews[0].src = imgSrc;
+  // },
+  // onClicked(i) {
+  //   this.fileNum = i;
+  // },
 };
 </script>
 

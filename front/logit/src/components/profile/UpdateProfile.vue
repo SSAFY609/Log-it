@@ -3,14 +3,14 @@
     <div class="profile-title">프로필</div>
     <div class="profile-main">
       <div class="profile-main-form">
-          <div class="profile-main-form-text">
-        <v-form disabled>
+        <div class="profile-main-form-text">
+          <v-form disabled>
             <div class="profile-main-form-text-email">
               <div>이메일</div>
               <v-text-field v-model="email" density="compact"></v-text-field>
             </div>
-        </v-form>
-        <v-form>
+          </v-form>
+          <v-form>
             <div class="m-top-d">
               <div>이름</div>
               <v-text-field v-model="name" density="compact"></v-text-field>
@@ -21,7 +21,7 @@
             </div>
           </v-form>
         </div>
-      <v-form disabled>
+        <v-form disabled>
           <div class="profile-main-button">
             <div @click="updateUser">
               <v-btn
@@ -49,14 +49,20 @@
           </div>
         </v-form>
       </div>
-    <!-- 사용자 프로필 사진 -->
+      <!-- 사용자 프로필 사진 -->
       <div class="profile-main-photo" @click="onShow">
-        <img class="image-box"  :src="require(`@/assets/profiles/scale (${fileNum}).png`)" width="200" />
+        <img
+          class="image-box"
+          :src="require(`@/assets/profiles/scale (${fileNum}).png`)"
+          width="200"
+        />
       </div>
     </div>
     <div class="profile-input-icon" @click="onShow">
       <v-icon v-show="!fileChk" size="large">mdi-lead-pencil</v-icon>
-      <v-icon @click="photoChg" v-show="fileChk" style="font-size:200%;">mdi-check</v-icon>
+      <v-icon @click="photoChg" v-show="fileChk" style="font-size: 200%"
+        >mdi-check</v-icon
+      >
     </div>
     <!-- 아래 프로필 사진 선택 창-->
     <div v-show="photo" class="profile-photo">
@@ -67,18 +73,18 @@
           selected-class="bg-primary"
           show-arrows
         >
-          <v-slide-group-item
-            v-slot="{ isSelected, toggle, selectedClass }"
-          >
-          <label for="file" class="upload-btn">
-          <!-- 사용자 파일 업로드 선택 창-->  
-            <input @change="fileChg" id="file" type="file" accept="image/*"/>
+          <v-slide-group-item v-slot="{ isSelected, toggle, selectedClass }">
+            <label for="file" class="upload-btn">
+              <!-- 사용자 파일 업로드 선택 창-->
+              <input @change="fileChg" id="file" type="file" accept="image/*" />
               <div class="ma-4 select hover_cursor hover_bigger">
-                <v-icon class="profile_icon f_icon lay3 btn_clicked2">mdi-folder-plus-outline</v-icon>  
+                <v-icon class="profile_icon f_icon lay3 btn_clicked2"
+                  >mdi-folder-plus-outline</v-icon
+                >
               </div>
-          </label>
+            </label>
             <div v-for="i in 36" :key="i">
-          <!-- 디즈니 프로필 사진 선택 창-->
+              <!-- 디즈니 프로필 사진 선택 창-->
               <v-img
                 color="grey-lighten-1"
                 :src="require(`@/assets/profiles/scale (${i}).png`)"
@@ -109,10 +115,9 @@
 </template>
 
 <script>
-
 export default {
   name: "UpdateProfile",
-  
+
   data: () => ({
     name: "이름",
     email: "asdas@gmail.com",
@@ -125,70 +130,71 @@ export default {
     fileChk: false,
     uploadState: false,
     imageSrc: "",
-    fileSrc:"",
+    fileSrc: "",
   }),
   methods: {
-
-    updateUser() { 
+    updateUser() {
+      this.photo = !this.photo;
       // 파일 이미지 선택했을경우
-      if (uploadState) {
+      console.log("봐아앙");
+      if (this.uploadState) {
         this.fileSrc = this.imageSrc;
-      } else { 
+      } else {
         this.fileSrc = this.id;
       }
-      const user = {
-        name: this.name, //수정
-        email: sessionStorage.getItme("user"), //로그인 된 이메일
-        studentNo: this.ssafyNum, //수정
-        image:this.fileSrc, //수정
-      }
-      this.$store.dispatch('uploadImage', user);
-    //   "name" : "김설희",
-    // "email" : "2750seolhee@naver.com",
-    // "pw" : "1234",
-    // "flag" : 8,
-    // "studentNo" : "0812345",
-    // "isDeleted" : 0,
-    //     "image" : "1"
-      this.$router.push('ProfilePage');
+      console.log(this.imageSrc);
+      this.$emit("chgFileDOM", this.imageSrc);
+      // const user = {
+      //   name: this.name, //수정
+      //   email: sessionStorage.getItem("user"), //로그인 된 이메일
+      //   studentNo: this.ssafyNum, //수정
+      //   image: this.fileSrc, //수정
+      // };
+      // this.$store.dispatch("uploadImage", user);
+      //   "name" : "김설희",
+      // "email" : "2750seolhee@naver.com",
+      // "pw" : "1234",
+      // "flag" : 8,
+      // "studentNo" : "0812345",
+      // "isDeleted" : 0,
+      //     "image" : "1"
+      this.$router.push({ name: "ProfilePage" });
     },
     onShow() {
       this.photo = !this.photo;
       this.fileChk = !this.fileChk;
     },
-    fileChg() { 
-      const fileDOM = document.querySelector('#file');
-      const previews = document.querySelectorAll('.image-box');
+    fileChg() {
+      const fileDOM = document.querySelector("#file");
+      const previews = document.querySelectorAll(".image-box");
       this.imageSrc = URL.createObjectURL(fileDOM.files[0]);
+      previews[0].src = this.imageSrc;
       this.uploadState = true;
-      console.log(this.uploadState)
-      previews[0].src = imageSrc;
     },
     onClicked(i) {
       this.uploadState = false;
       this.fileNum = i;
-     }
+    },
   },
 };
 </script>
 
 <style scoped>
-.image-box{
+.image-box {
   border-radius: 50%;
 }
-.profile_icon{
+.profile_icon {
   font-size: 50px;
-color:white
+  color: white;
 }
- .upload-btn {
-    display: inline-block;
-    cursor: pointer;
+.upload-btn {
+  display: inline-block;
+  cursor: pointer;
+}
+input[type="file"] {
+  display: none;
+}
 
- }
-  input[type=file] {
-      display: none;
-  }
-  
 .select {
   display: flex;
   justify-content: center;
@@ -196,7 +202,7 @@ color:white
   height: 110px;
   width: 110px;
   border-radius: 55px;
-  background-color: #FF0A54;
+  background-color: #ff0a54;
 }
 
 .profile-main-button-text {
@@ -250,8 +256,7 @@ color:white
   align-items: center;
   width: 270px;
   height: 290px;
-  object-fit:  block;
-
+  object-fit: block;
 }
 .profile-main-photo:hover {
   cursor: pointer;

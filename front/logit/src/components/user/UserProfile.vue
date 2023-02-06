@@ -8,7 +8,7 @@
           <img
             :src="require(`@/assets/profiles/scale (${state.id}).png`)"
             @click="selProf"
-            class="profile-input-img "
+            class="profile-input-img"
           />
         </div>
         <div class="profile-input-icon" @click="selProf">
@@ -41,7 +41,7 @@ export default {
     const router = useRouter();
     const state = reactive({
       preview: "",
-      image:"",
+      image: "",
       id: "1",
     });
     const selProf = () => {
@@ -49,14 +49,14 @@ export default {
     };
 
     onBeforeMount(() => {
-      // 파일 업로드 
+      // 파일 업로드
       // const previews = document.querySelector(".image-box");
       // const image = URL.createObjectURL(props.imageSrc);
       // previews[0].src = image;
       state.id = props.user.profile;
     });
     const signProf = () => {
-      emit("updateUserProfile", this.id);
+      emit("updateUserProfile", state.id);
       router.push({ name: "UserData" });
     };
 
