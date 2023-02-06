@@ -25,12 +25,23 @@ import java.util.NoSuchElementException;
 public class JobService {
     private final JobRepository jobRepository;
 
+    /**
+     * 유저에 대한 모든 취업 이벤트 반환
+     * @param user
+     * @return
+     */
     public List<JobEvent> getEvents(User user) {
         List<JobEvent> result = jobRepository.findAllByUser(user);
         return result;
 
     }
 
+    /**
+     * request을 입력받아 취업이벤트 생성
+     * @param user
+     * @param request
+     * @return
+     */
     @Transactional
     public JobEvent create(User user, CreateJobEventRequest request) {
         String type = request.getType();
@@ -43,7 +54,13 @@ public class JobService {
     }
 
 
-
+    /**
+     * 취업이벤트 id와 request을 입력받아 취업이벤트 수정
+     * @param user
+     * @param jobEventId
+     * @param request
+     * @return
+     */
     @Transactional
     public JobEvent update(User user, Long jobEventId, UpdateJobEventRequest request) {
         JobEvent jobEvent = jobRepository.findById(jobEventId).orElseThrow(NoSuchElementException::new);
@@ -57,6 +74,23 @@ public class JobService {
         return updateEvent;
     }
 
+
+    /**
+     * 사용자의 취업 이벤트를 시작날짜를 기준으로 오름차순 정렬
+     * @param user
+     * @return
+     */
+    public List<JobEvent> getAllByStartDate(User user){
+        List<JobEvent> jobEvents = jobRepository.findAllByUserOrderByEventDateStartDate(user);
+        return jobEvents;
+    }
+
+    /**
+     * 취업여정 이벤트 삭제(유저 체크)
+     *
+     * @param user
+     * @param jobEventId
+     */
     @Transactional
     public void delete(User user, Long jobEventId) {
         JobEvent jobEvent = jobRepository.findById(jobEventId).orElseThrow(NoSuchElementException::new);
@@ -64,12 +98,23 @@ public class JobService {
         jobRepository.delete(jobEvent);
     }
 
+    /**
+     * 취업여정 이벤트를 입력받아 취업이벤트 응답dto로 반환
+     * @param jobEventId
+     * @return
+     */
+
     public CreateJobEventResponse get(Long jobEventId) {
         JobEvent jobEvent = jobRepository.findById(jobEventId).orElseThrow(NoSuchElementException::new);
         return new CreateJobEventResponse(jobEvent);
     }
 
-    private static void checkUser(User user, JobEvent jobEvent) {
+    /**
+     * 유저 확인 => 토큰의 유저와 비교
+     * @param user
+     * @param jobEvent
+     */
+    private void checkUser(User user, JobEvent jobEvent) {
         if (!jobEvent.getUser().equals(user)) {
             throw new DifferentUserException();
         }

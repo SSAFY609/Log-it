@@ -11,15 +11,11 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface  JobRepository extends JpaRepository<JobEvent,Long> {
+public interface JobRepository extends JpaRepository<JobEvent, Long> {
 
     List<JobEvent> findAllByUser(User user);
 
-
-//    List<JobEvent> findJobEventByEventDate
-
-
-
+    List<JobEvent> findAllByUserOrderByEventDateStartDate(User user);
 
     @Query("SELECT DISTINCT iv " +
             "FROM JobEvent j " +
@@ -38,14 +34,12 @@ public interface  JobRepository extends JpaRepository<JobEvent,Long> {
             "JOIN  j.stepCategoryList s " +
             " JOIN s.stepEtcList etc ")
     List<StepEtc> getStepEtc();
+
     @Query("SELECT DISTINCT c " +
             "FROM JobEvent j " +
             "JOIN  j.stepCategoryList s " +
-            "JOIN  s.codingTestList c " )
+            "JOIN  s.codingTestList c ")
     List<CodingTest> getCodingTest();
-
-
-
 
 
 }
