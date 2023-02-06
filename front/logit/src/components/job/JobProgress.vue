@@ -36,29 +36,45 @@
                     <div class="q_input_box">
                       <input class="q_text" type="text" placeholder="질문을 추가하세요." autofocus>
                     </div>
-                  <div class="a_input_box">
-                    <textarea  class="a_text" placeholder="답변을 작성하세요." v-model="datas.details[0].answer"></textarea>
-                  </div>  
-                </div>
-
-                <!-- 추가하기 버튼 -->
-                <div class="add_q_btn_box hover_cursor" @click="addQuestion">
-                  <div name="add_q_btn" id="add_q_btn" class="q_btn " >
-                    <v-icon class="f_icon plus_icon">mdi-plus</v-icon>
+                    <div class="a_input_box">
+                      <textarea  class="a_text" placeholder="답변을 작성하세요." v-model="datas.details[0].answer"></textarea>
+                    </div>  
                   </div>
-                  <p>추가하기</p>
+
+                  <!-- 추가하기 버튼 -->
+                  <div class="add_q_btn_box hover_cursor" @click="addQuestion">
+                    <div name="add_q_btn" id="add_q_btn" class="q_btn " >
+                     <v-icon class="f_icon plus_icon">mdi-plus</v-icon>
+                   </div>
+                    <p>추가하기</p>
+                  </div>
                 </div>
-              
-              
-              </div>
             </div>
 
 
 
               <div v-if="i.type=='코테'">
+                
+                
+                <!-- 인풋창 영역-->
+                <div class="ct_input_area">
+                  <v-autocomplete
+                    clearable
+                    chips
+                    label="Autocomplete"
+                    :items="algorithmTypes"
+                    multiple
+                    variant="solo"
+                ></v-autocomplete>
+                  
+
+                </div>
+
+
                 <div>{{ i.eventId }}</div>
                 <div>{{ i.eventName }}</div>
                 <div>{{ i.contents }}</div>
+                <div>{{ i.testType }}</div>
               </div>
 
 
@@ -110,6 +126,7 @@
         create_content: '',
         update: false,
         clicked: '',
+        algorithmTypes: ["dfs", "bfs","greedy", "tree", "stack", "que",],
         datas: {
           name: "카카오",
           startDate: "2021-01-03",
@@ -123,7 +140,7 @@
             ]
 
             },
-            {eventId: "2", eventName: "코딩테스트", type: "코테" , contents: "코딩테스트 내용입니다. 어쩌구 저쩌구"},
+            {eventId: "2", eventName: "코딩테스트", type: "코테" , testType: ["dfs", "greedy", "tree",], contents: "코딩테스트 내용입니다. 어쩌구 저쩌구"},
             {eventId: "3", eventName: "임원면접", type: "면접", boardList: [
               {bId: "01", question: "자기소개 해보세요.", answer: "안녕하십니까 저는 이성훈입니다."},
               {bId: "02", question: "우리 회사에 지원한 동기는?", answer: "돈을 많이 준다고 들었습니다만?"},
@@ -346,5 +363,12 @@ textarea:focus {
   font-family: appleM;
   margin-left: 10px;
   color: #464646;
+}
+.ct_input_area {
+  background-color: rgb(145, 255, 255);
+  width: 100%;
+  height: 300px;
+
+
 }
  </style>
