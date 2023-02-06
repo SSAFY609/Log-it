@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import { useStore } from 'vuex';
 
 export default {
   name: 'TopNavbar',
@@ -77,12 +78,18 @@ export default {
       ]
         // loginUser: null,
     }
+
+    const store = useStore();
+
     const openSidebar = () => {
       const eventTarget1 = document.querySelector('.SideNavbar_box')
       const eventTarget2 = document.querySelector('.SideNavbar_space')
 
       eventTarget1.classList.toggle('nosee')
       eventTarget2.classList.toggle('nosee')
+
+      store.dispatch('temp/openSidebar');
+
     }
     const openProfile = () => {
       const target = document.querySelector('.profile_slider_box')

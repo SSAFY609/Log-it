@@ -1,52 +1,56 @@
 <template>
-  <div class="container">
-    <div class="box">
-        <h1 class="welcome">오하늘 님의 타임라인</h1>
-        <div>
-          <v-btn @click="goslide(0)"><v-icon>mdi-chevron-triple-left</v-icon></v-btn>
-          <v-btn @click="nextSlide"><v-icon>mdi-chevron-double-left</v-icon></v-btn>
-          <v-btn @click="prevSlide(0)"><v-icon>mdi-chevron-double-right</v-icon></v-btn>
-          <v-btn @click="goslide(-1)"><v-icon>mdi-chevron-triple-right</v-icon></v-btn>
-        </div>
-        <swiper 
-        class="mySwiper"
-        :modules="modules"
-        :navigation="true"
-        :pagination="true"
-        @swiper="onSwiper"
-        >
-            <swiper-slide v-for="(date, index) in state.dates" :key="index">
-                <div class="grow">
-                  <div v-for="(data, index) in date.growths" :key="index" :class="`event ${data.start} ${data.period} floor${index + 1}`">
-                    {{ data.title }}
+  <div style="display:flex">
+    <div class="container">
+      <div v-if="sidebar" style="width:260px"></div>
+      <div class="box">
+          <h1 class="welcome">
+            <div class="user-name">{{ loginUser.name }}</div>
+            님의 타임라인
+          </h1>
+          <div class="buttons">
+            <!-- 네모모양이냐 원이냐 -->
+            <v-btn color="#464646" variant="outlined" @click="goslide(0)"><v-icon>mdi-chevron-triple-left</v-icon></v-btn>
+            <v-btn color="#464646" variant="outlined" @click="nextSlide"><v-icon>mdi-chevron-double-left</v-icon></v-btn>
+            <v-btn color="#ff417a" variant="outlined" @click="goslide(state.slide)"><v-icon>mdi-calendar-check</v-icon></v-btn>
+            <v-btn color="#464646" variant="outlined" @click="prevSlide(0)"><v-icon>mdi-chevron-double-right</v-icon></v-btn>
+            <v-btn color="#464646" variant="outlined" @click="goslide(-1)"><v-icon>mdi-chevron-triple-right</v-icon></v-btn>
+            <!-- <v-btn color="#717171" variant="outlined" @click="goslide(0)" icon="mdi-chevron-triple-left"></v-btn>
+            <v-btn color="#717171" variant="outlined" @click="nextSlide" icon="mdi-chevron-double-left"></v-btn>
+            <v-btn color="#ff417a" variant="outlined" @click="goslide(state.slide)" icon="mdi-calendar-check"></v-btn>
+            <v-btn color="#717171" variant="outlined" @click="prevSlide(0)" icon="mdi-chevron-double-right"></v-btn>
+            <v-btn color="#717171" variant="outlined" @click="goslide(-1)" icon="mdi-chevron-triple-right"></v-btn> -->
+          </div>
+          <swiper 
+          class="mySwiper"
+          :modules="modules"
+          :navigation="true"
+          :pagination="true"
+          @swiper="onSwiper"
+          >
+              <swiper-slide v-for="(date, index) in state.dates" :key="index">
+                  <div class="grow">
+                    <router-link :to="{name: 'EventProgress', params: {eventId: data.eventId}}" v-for="(data, index) in date.growths" :key="index" :class="`event ${data.start} ${data.period} floor${index + 1}`">
+                      {{ data.title }}
+                    </router-link>
                   </div>
-                </div>
-                <div class="bar">
-                    <div class="hori-bar" v-for="(d, index) in date.str" :key="index">
-                        <!-- <div class="today-date" v-if="index == 4">
-                            {{ date[index-1] }}
-                        </div> -->
-                        <div class="date">
-                            {{ d }}
-                        </div>
-                        <span class="circle">
-                            <div class="hover"><button @click="show(index)" style="font-size:large">+</button></div>
-                        </span>
+                  <div class="bar">
+                      <div class="hori-bar" v-for="(d, index) in date.str" :key="index">
+                          <div class="date">
+                              {{ d }}
+                          </div>
+                          <span class="circle">
+                              <div class="hover"><button @click="show(index)" style="font-size:large">+</button></div>
+                          </span>
+                      </div>
+                  </div>
+                  <div class="job">
+                    <div v-for="(data, index) in date.growths" :key="index" :class="`event ${data.start} ${data.period} floor-${index + 1}`">
+                      {{ data.title }}
                     </div>
-                </div>
-            </swiper-slide>
-            <!-- <div class="swiper-button-prev">전</div>
-            <div class="swiper-button-next">후</div> -->
-        </swiper>
-        <!-- <div class="show-btn">
-            <div v-if="this.choose_date" style="margin-bottom: 20px;">
-                {{ choose_date }}
-            </div>
-            <div>
-                <span class="add-event nosee"><button>성장여정추가</button></span>
-                <span class="add-job nosee"><button>취업여정추가</button></span>
-            </div>
-        </div> -->
+                  </div>
+              </swiper-slide>
+          </swiper>
+      </div>
     </div>
   </div>
 </template>
@@ -54,7 +58,8 @@
 <script>
 import { Swiper, SwiperSlide } from "vue-awesome-swiper";
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
-import { reactive, onBeforeMount, onMounted } from "vue";
+import { reactive, onBeforeMount, onMounted, computed } from "vue";
+import { useStore } from "vuex";
 
 import "swiper/css";
   
@@ -65,7 +70,8 @@ import "swiper/css/navigation";
 export default {
   name: 'FirstTimeline',
   components: {
-      Swiper, SwiperSlide,
+      Swiper, 
+      SwiperSlide,
   },
   data() {
       return {
@@ -73,7 +79,6 @@ export default {
       }
   },
   setup(){
-
       const state = reactive({
           date: [],
           dates: [],
@@ -83,16 +88,21 @@ export default {
           is_show: false,
           choose_date: '',
           slide: 0,
-          events: [
-              {event_id: 4, start_date: new Date(2023,0,10), end_date: new Date(2023,1,10), name: 'SQLD 시험 준비'},
-              {event_id: 1, start_date: new Date(2023,0,16), end_date: new Date(2023,2,12), name: '알고리즘 IM형'},
-              {event_id: 2, start_date: new Date(2023,1,8), end_date: new Date(2023,3,13), name: '정보처리기사'},
-              {event_id: 3, start_date: new Date(2023,0,24), end_date: new Date(2023,1,7), name: '알고리즘 A형'},
-          ],
+          // events: [
+          //     {event_id: 4, start_date: new Date(2023,0,10), end_date: new Date(2023,1,10), name: 'SQLD 시험 준비'},
+          //     {event_id: 1, start_date: new Date(2023,0,16), end_date: new Date(2023,2,12), name: '알고리즘 IM형'},
+          //     {event_id: 2, start_date: new Date(2023,1,8), end_date: new Date(2023,3,13), name: '정보처리기사'},
+          //     {event_id: 3, start_date: new Date(2023,0,24), end_date: new Date(2023,1,7), name: '알고리즘 A형'},
+          // ],
           start: ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'],
           period: ['one', 'two', 'three', 'four', 'five', 'six', 'seven'],
           swiper: null,
       })
+
+      const store = useStore()
+
+      const sidebar = computed(()=>store.state.temp.sidebar)
+      const loginUser = computed(()=>store.state.temp.loginUser)
 
       const onSwiper = (swiper) => {
         // this.swiper = swiper;
@@ -105,8 +115,11 @@ export default {
       };
       
       onBeforeMount(()=>{
+        // vuex에 접근해서 events 가공하기............. 후하 이게 근데 되려나 싶기도 하공,,,,
+        const events = store.state.temp.events;
+
           // event 가져와서 start_date 순으로 정렬 (오름차순)
-          const events = state.events;
+          // const events = state.events;
           events.sort((a, b) => {
             return a.start_date - b.start_date;
           });
@@ -115,11 +128,11 @@ export default {
           let st = events.reduce((prev,curr) => {
               return prev.start_date <= curr.start_date ? prev : curr;
           })
-          console.log(st.start_date.toLocaleDateString());
+          // console.log(st.start_date.toLocaleDateString());
           let ed = events.reduce((prev, curr) => {
               return curr.end_date <= prev.end_date ? prev : curr;
           })
-          console.log(ed.end_date.toLocaleDateString());
+          // console.log(ed.end_date.toLocaleDateString());
 
           state.st = st.start_date;
           state.ed = ed.end_date;
@@ -178,6 +191,7 @@ export default {
                 const sd = events[i].start_date;
                 const ed = events[i].end_date;
                 const name = events[i].name;
+                const eventId = events[i].event_id;
                 if (sd < push_date.sun) {
                   if (ed < push_date.sun) {
                     continue;
@@ -186,14 +200,16 @@ export default {
                     const event = {
                       start: state.start[0],
                       period: state.period[week],
-                      title: name
+                      title: name,
+                      eventId: eventId,
                     };
                     push_date.growths.push(event);
                   } else {
                     const event = {
                       start: state.start[0],
                       period: state.period[6],
-                      title: name
+                      title: name,
+                      eventId: eventId,
                     };
                     push_date.growths.push(event);
                   }
@@ -204,7 +220,8 @@ export default {
                     const event = {
                       start: state.start[st_week],
                       period: state.period[ed_week - st_week],
-                      title: name
+                      title: name,
+                      eventId: eventId,
                     };
                     push_date.growths.push(event);
                   } else {
@@ -212,7 +229,8 @@ export default {
                     const event = {
                       start: state.start[st_week],
                       period: state.period[6 - st_week],
-                      title: name
+                      title: name,
+                      eventId: eventId,
                     };
                     push_date.growths.push(event);
                   }
@@ -224,8 +242,8 @@ export default {
               new_date = addDays(new_date, 7);
               idx += 1;
           }
-          console.log(state.slide)
-          console.log(state.dates);
+          // console.log(state.slide)
+          // console.log(state.dates);
 
           // for (let i=-3; i<4; i++){
           //     if(i == 0){
@@ -244,7 +262,7 @@ export default {
       })
 
       onMounted(()=>{
-        console.log('onMounted?');
+        // 오늘이 있는 페이지로 이동
         console.log(state.slide);
         state.swiper.slideTo(state.slide)
       })
@@ -273,6 +291,8 @@ export default {
       return {
           onSwiper,
           state,
+          sidebar,
+          loginUser,
           addDays,
           prevSlide,
           nextSlide,
@@ -346,9 +366,20 @@ export default {
 }
 
 .welcome {
-  margin-bottom: 50px;
-  font-size: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 40px;
+  font-size: 45px;
   font-family: appleB;
+}
+
+.user-name {
+  /* font-size: 55px; */
+  font-size: 45px;
+  /* font-family: galaxy; */
+  font-family: appleB;
+  margin-right: 5px;
 }
 
 .grow div{
@@ -388,6 +419,10 @@ export default {
 
 .today-date button {
   color: #ffb272;
+}
+
+.buttons button{
+  margin: 10px 5px;
 }
 
 .event {
@@ -466,6 +501,22 @@ export default {
 
 .floor4 {
   top: 25px;
+  background-color: rgb(183, 255, 183);
+}
+.floor-1 {
+  background-color: rgb(255, 197, 207);
+}
+.floor-2 {
+  top: 280px;
+  background-color: rgb(255, 210, 155);
+}
+.floor-3 {
+  top: 315px;
+  background-color: rgb(255, 255, 172);
+}
+
+.floor-4 {
+  top: 350px;
   background-color: rgb(183, 255, 183);
 }
 

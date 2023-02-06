@@ -33,14 +33,14 @@
                       {{ date[index-1] }}
                   </div>
                   <span class="circle">
-                      <v-menu open-on-click transition="slide-y-transition">
+                      <v-menu open-on-click location="top" transition="slide-y-transition">
                         <template v-slot:activator="{ props }"><button class="hover" v-bind="props" style="font-size:large" @click="choose_date = real_date[index-1]">+</button></template>
                         <v-list>
-                          <v-list-item>
-                            <v-list-item-title><router-link :to="{name: 'EventCreate', query: {st: date_to_str}}">성장 여정 추가</router-link></v-list-item-title>
+                          <v-list-item class="list-item">
+                            <router-link :to="{name: 'EventCreate', query: {st: date_to_str}}">성장 여정 추가</router-link>
                           </v-list-item>
-                          <v-list-item>
-                            <v-list-item-title><router-link :to="{name: 'JobCreate', query: {st: date_to_str}}">취업 여정 추가</router-link></v-list-item-title>
+                          <v-list-item class="list-item">
+                            <router-link :to="{name: 'JobCreate', query: {st: date_to_str}}">취업 여정 추가</router-link>
                           </v-list-item>
                         </v-list>
                       </v-menu>
@@ -133,6 +133,7 @@ export default {
 
 .welcome {
   margin-bottom: 10px;
+  font-family: appleB;
   font-size: 50px;
 }
 
@@ -190,8 +191,13 @@ export default {
   top: 30px;
 }**/
 
-.nosee {
-  display: none;
+.list-item {
+  font-family: appleL;
+  font-size: 20px;
+}
+
+.list-item:hover {
+  background-color: rgba(133, 133, 133, 0.473);
 }
 
 /* .show-btn {

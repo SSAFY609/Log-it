@@ -92,6 +92,8 @@ export default {
 
       eventTarget1.classList.toggle('nosee')
       eventTarget2.classList.toggle('nosee')
+      
+      this.$store.dispatch(`temp/closeSidebar`)
     },
 
     btnClicked() {
