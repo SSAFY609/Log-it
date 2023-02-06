@@ -3,14 +3,12 @@ package com.ssafy.logit.controller.user;
 import com.ssafy.logit.jwt.JwtUtil;
 import com.ssafy.logit.model.user.dto.MailDto;
 import com.ssafy.logit.model.user.dto.UserDto;
-import com.ssafy.logit.model.user.entity.User;
 import com.ssafy.logit.model.user.service.ImageService;
 import com.ssafy.logit.model.user.service.MailService;
 import com.ssafy.logit.model.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.protocol.HTTP;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -163,9 +160,9 @@ public class UserController {
             mailService.sendMail(mailDto);
 
             log.info("임시 비밀번호 전송 완료");
-            return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
+            return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(NONE, HttpStatus.OK);
+            return new ResponseEntity<String>(NONE, HttpStatus.OK);
         }
     }
 
@@ -181,7 +178,7 @@ public class UserController {
                 if(userDto.getEmail().equals(email)) { // 토큰 확인 후 업데이트
                     return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
                 } else { // 토큰과 일치하는 사용자 아님
-                    return new ResponseEntity<>(UNAUTHORIZED, HttpStatus.UNAUTHORIZED);
+                    return new ResponseEntity<String>(UNAUTHORIZED, HttpStatus.UNAUTHORIZED);
                 }
             }
         } catch (Exception e) {
@@ -218,9 +215,9 @@ public class UserController {
         UserDto userDto = userService.getUser(email);
         // 기존에 가입된 사용자와 이메일 중복 검사
         if(userDto == null) {
-            return new ResponseEntity<>(NONE, HttpStatus.ACCEPTED);
+            return new ResponseEntity<String>(NONE, HttpStatus.ACCEPTED);
         } else {
-            return new ResponseEntity<>(PRESENT, HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<String>(PRESENT, HttpStatus.NOT_ACCEPTABLE);
         }
     }
 
@@ -240,10 +237,10 @@ public class UserController {
                     } else if(result.equals(DELETED)) { // 이미 delete 된 회원
                         return new ResponseEntity<String>(DELETED, HttpStatus.OK);
                     } else {
-                        return new ResponseEntity<>(FAIL, HttpStatus.NOT_ACCEPTABLE);
+                        return new ResponseEntity<String>(FAIL, HttpStatus.NOT_ACCEPTABLE);
                     }
                 } else {
-                    return new ResponseEntity<>(UNAUTHORIZED, HttpStatus.UNAUTHORIZED);
+                    return new ResponseEntity<String>(UNAUTHORIZED, HttpStatus.UNAUTHORIZED);
                 }
             }
         } catch (Exception e) {
@@ -259,9 +256,9 @@ public class UserController {
         boolean result = userService.dropUser(id);
         try {
             if(result) {
-                return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
+                return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
             } else {
-                return new ResponseEntity<>(NONE, HttpStatus.OK);
+                return new ResponseEntity<String>(NONE, HttpStatus.OK);
             }
         } catch (Exception e) {
             e.printStackTrace();
