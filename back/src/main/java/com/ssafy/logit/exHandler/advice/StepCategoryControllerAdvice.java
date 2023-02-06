@@ -2,6 +2,7 @@ package com.ssafy.logit.exHandler.advice;
 
 
 import com.ssafy.logit.exHandler.ErrorResult;
+import com.ssafy.logit.exception.WrongCategoryException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,5 +21,14 @@ public class StepCategoryControllerAdvice {
         ErrorResult errorResult = new ErrorResult("NoSuchElement",e.getMessage());
         return new ResponseEntity<>(errorResult, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResult> NoSuchElementHandler(WrongCategoryException e){
+        log.error("[WrongCategoryException] Handler");
+        ErrorResult errorResult = new ErrorResult("WrongCategory",e.getMessage());
+        return new ResponseEntity<>(errorResult, HttpStatus.BAD_REQUEST);
+    }
+
+
 
 }
