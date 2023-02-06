@@ -17,7 +17,6 @@ export default {
 
 <style scoped>
 .container {
-  /* background-color: gold; */
   height: 100%;
   width:100%;
   display: flex;

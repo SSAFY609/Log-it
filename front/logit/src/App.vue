@@ -17,6 +17,7 @@ import TopNavbar from './components/common/TopNavbar.vue';
 import SideNavbar from '@/components/common/SideNavbar.vue';
 
 export default {
+
   name: 'App',
   components: {
     TopNavbar,
