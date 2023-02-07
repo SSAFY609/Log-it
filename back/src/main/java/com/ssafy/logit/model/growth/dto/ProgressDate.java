@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Embeddable
 @Getter
 @Setter(AccessLevel.PROTECTED)
-public class PostDate {
+public class ProgressDate {
 
     @NotBlank
     @Schema(description = "글 작성 날짜")
@@ -22,9 +22,9 @@ public class PostDate {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate date;
 
-    public static PostDate createEventDate(LocalDate date){
-        PostDate postDate = new PostDate();
-        postDate.setDate(date);
-        return postDate;
+    public static ProgressDate createEventDate(LocalDate date){
+        ProgressDate progressDate = new ProgressDate();
+        progressDate.setDate(date);
+        return progressDate;
     }
 }
