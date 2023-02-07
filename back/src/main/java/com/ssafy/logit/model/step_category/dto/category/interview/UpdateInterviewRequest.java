@@ -14,6 +14,9 @@ import javax.validation.constraints.Max;
 @Schema(description = "채용전형(면접) 수정 요청")
 public class UpdateInterviewRequest {
 
+    @Schema(description = "채용면접 id")
+    private Long interviewId;
+
     @Max(200)
     @Schema(description = "질문")
     private String question;
