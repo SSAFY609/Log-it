@@ -22,6 +22,13 @@ import java.util.NoSuchElementException;
 public class StepEtcService {
     private final StepEtcRepository stepEtcRepository;
 
+    /**
+     * 채용전형(기타) 객체를 생성합니다.
+     * @param user
+     * @param stepCategory
+     * @param request
+     * @return
+     */
     @Transactional
     public StepEtc create(User user, StepCategory stepCategory, CreateStepEtcRequest request) {
         checkUser(user, stepCategory);
@@ -30,6 +37,13 @@ public class StepEtcService {
         return saveStepEtc;
     }
 
+    /**
+     * 채용전형(기타) 객체를 수정합니다.
+     * @param user
+     * @param id
+     * @param request
+     * @return
+     */
     @Transactional
     public StepEtc update(User user, Long id, UpdateStepEtcRequest request) {
         StepEtc stepEtc = stepEtcRepository.findById(id).orElseThrow(NoSuchElementException::new);
@@ -38,6 +52,11 @@ public class StepEtcService {
         return updateStepEtc;
     }
 
+    /**
+     * 채용전형(기타) 객체를 삭제합니다.
+     * @param user
+     * @param id
+     */
     @Transactional
     public void delete(User user, Long id) {
         StepEtc stepEtc = stepEtcRepository.findById(id).orElseThrow(NoSuchElementException::new);
@@ -46,11 +65,22 @@ public class StepEtcService {
     }
 
 
+    /**
+     * 채용전형(기타) 객체를 조회합니다.
+     * @param id
+     * @return
+     */
     public StepEtc get(Long id) {
         StepEtc stepEtc = stepEtcRepository.findById(id).orElseThrow(NoSuchElementException::new);
         return stepEtc;
     }
 
+    /**
+     * 채용전형(기타) 리스트를 받아 생성, 수정을 진행합니다.
+     * @param user
+     * @param stepCategory
+     * @param list
+     */
     @Transactional
     public void createUpdateAll(User user, StepCategory stepCategory, List<UpdateStepEtcRequest> list) {
         checkUser(user, stepCategory);
