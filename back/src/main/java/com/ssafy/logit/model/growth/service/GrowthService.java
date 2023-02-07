@@ -12,6 +12,7 @@ import com.ssafy.logit.model.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,11 +22,7 @@ public class GrowthService {
 
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
-    private static final String DELETED = "이미 삭제됨";
     private static final String NONE = "사용자 없음";
-    private static final String IS_LOGINED = "이미 로그인된 사용자";
-    private static final String PW_FAIL = "비밀번호 틀림";
-    private static final String PRESENT = "이미 가입된 사용자";
     private static final String NONE_EVENT = "성장 이벤트 없음";
 
     @Autowired
@@ -103,7 +100,7 @@ public class GrowthService {
             List<GrowthDto> growthDtoList = growthList.stream().map(GrowthDto::new).collect(Collectors.toList());
 
             // 내가 참여하는 이벤트 조회
-            List<GrowthUser> growthUserList= growthUserRepo.findMyEvent(userId);
+            List<GrowthUser> growthUserList= growthUserRepo.findMyEvent(userId, true);
             List<GrowthUserDto> growthUserDtoList = growthUserList.stream().map(GrowthUserDto::new).collect(Collectors.toList());
             for(int i = 0; i < growthUserDtoList.size(); i++) {
                 Optional<Growth> tmp = growthRepo.findById(growthUserDtoList.get(i).getGrowth().getGrowthId());
@@ -116,12 +113,56 @@ public class GrowthService {
         return null;
     }
 
-    // 한 개의 성장 이벤트 조회
+    // 한 개의 성장 이벤트 반환
     public GrowthDto getOneEvent(long growthUserId) {
         Optional<Growth> growth = growthRepo.findById(growthUserId);
         if(growth.isPresent()) {
             return growth.get().toDto();
         }
         return null;
+    }
+
+    // 내가 받은 초대에 대한 이벤트 객체들을 반환
+    public List<GrowthDto> getInvitation(String email) {
+        Optional<User> user = userRepo.findByEmail(email);
+        if(user.isPresent()) {
+            // 아직 수락하지 않은 초대 모두 조회
+            long userId = user.get().toDto().getId();
+            List<GrowthUser> growthUserList = growthUserRepo.findMyEvent(userId, false);
+            List<GrowthUserDto> growthUserDtoList = growthUserList.stream().map(GrowthUserDto::new).collect(Collectors.toList());
+
+            // 아직 수락하지 않은 초대의 이벤트 객체를 List로 만들어 반환
+            List<GrowthDto> growthDtoList  = new ArrayList<>();
+            for(int i = 0; i < growthUserList.size(); i++) {
+                Optional<Growth> growth = growthRepo.findById(growthUserList.get(i).toDto().getGrowth().getGrowthId());
+                if(growth.isPresent()) {
+                    growthDtoList.add(growth.get().toDto());
+                }
+            }
+            return growthDtoList;
+        }
+        return null;
+    }
+
+    public String acceptInvitation(long growthId, boolean accept, String email) {
+        Optional<User> user = userRepo.findByEmail(email);
+        if(user.isPresent()) {
+            long userId = user.get().toDto().getId();
+            long growthUserId = growthUserRepo.findEvent(userId, growthId);
+            Optional<GrowthUser> growthUser = growthUserRepo.findById(growthUserId);
+            if(growthUser.isPresent()) {
+                GrowthUserDto growthUserDto = growthUser.get().toDto();
+                if(accept) {
+                    growthUserDto.setType(true);
+                    growthUserRepo.save(growthUserDto.toEntity());
+                } else {
+                    growthUserRepo.delete(growthUser.get());
+                }
+                return SUCCESS;
+            } else {
+                return FAIL;
+            }
+        }
+        return FAIL;
     }
 }

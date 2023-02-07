@@ -90,4 +90,25 @@ public class GrowthController {
         List<GrowthDto> growthDtoList = growthService.getMyAllEvent(email);
         return new ResponseEntity<List<GrowthDto>>(growthDtoList, HttpStatus.OK);
     }
+
+    @Operation(summary = "내 초대 조회", description = "초대된 성장 이벤트 모두 조회")
+    @GetMapping("/invitation")
+    public ResponseEntity<List<GrowthDto>> getInvitation(@RequestAttribute String email) {
+        List<GrowthDto> growthDtoList = growthService.getInvitation(email);
+        return new ResponseEntity<List<GrowthDto>>(growthDtoList, HttpStatus.OK);
+    }
+
+//    @Operation()
+//    @PutMapping("/invitation/{growthId}/{accept}")
+//    public ResponseEntity<String> acceptInvitation(@PathVariable long growthId, @PathVariable boolean accept, @RequestAttribute String email) {
+//        String result = growthService.acceptInvitation(growthId, accept, email);
+//        return new ResponseEntity<String>(result, HttpStatus.OK);
+//    }
+
+    @Operation()
+    @PutMapping("/invitation")
+    public ResponseEntity<String> acceptInvitation(@RequestParam long growthId, @RequestParam boolean accept, @RequestAttribute String email) {
+        String result = growthService.acceptInvitation(growthId, accept, email);
+        return new ResponseEntity<String>(result, HttpStatus.OK);
+    }
 }
