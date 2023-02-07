@@ -7,23 +7,32 @@
           <v-form disabled>
             <div class="profile-main-form-text-email">
               <div>이메일</div>
-              <v-text-field v-model="state.email" density="compact"></v-text-field>
+              <v-text-field
+                v-model="state.email"
+                density="compact"
+              ></v-text-field>
             </div>
           </v-form>
           <v-form>
             <div class="m-top-d">
               <div>이름</div>
-              <v-text-field v-model="state.name" density="compact"></v-text-field>
+              <v-text-field
+                v-model="state.name"
+                density="compact"
+              ></v-text-field>
             </div>
             <div class="m-top-d">
               <div>학번</div>
-              <v-text-field v-model="state.studentNo" density="compact"></v-text-field>
+              <v-text-field
+                v-model="state.studentNo"
+                density="compact"
+              ></v-text-field>
             </div>
           </v-form>
         </div>
         <v-form disabled>
           <div class="profile-main-button">
-            <div >
+            <div>
               <v-btn
                 width="120"
                 height="40"
@@ -32,7 +41,9 @@
                 class="profile-main-button-user"
                 style="color: white; font-size: 15px"
               >
-                <div  @click="updateUser" class="profile-main-button-text">입력 저장</div>
+                <div @click="updateUser" class="profile-main-button-text">
+                  입력 저장
+                </div>
               </v-btn>
             </div>
             <router-link :to="{ name: 'CheckPassword' }">
@@ -51,10 +62,7 @@
       </div>
       <!-- 사용자 프로필 사진 -->
       <div class="profile-main-photo" @click="onShow">
-        <img
-          class="image-box"
-          width="200"
-        />
+        <img class="image-box" width="200" />
       </div>
     </div>
     <div class="profile-input-icon" @click="onShow">
@@ -114,21 +122,21 @@
 </template>
 
 <script>
-import { reactive,onMounted} from "@vue/runtime-core";
-// import { useRouter } from "vue-router"; 
+import { reactive, onMounted } from "@vue/runtime-core";
+// import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
 export default {
   name: "UpdateProfile",
-  props: ['fileSrc'],
+  props: ["fileSrc"],
   setup() {
     // const router = useRouter();
     const state = reactive({
       model: null,
-      email: '',
-      name: '',
-      studentNo: '',
-      profile: '',
+      email: "",
+      name: "",
+      studentNo: "",
+      image: "",
       pw: "",
       flag: "",
       isDeleted: "",
@@ -139,12 +147,9 @@ export default {
       fileChk: false,
       uploadState: false,
       imageSrc: "",
-      
-      
-    })
+    });
 
-    const store = useStore()
-
+    const store = useStore();
 
     // 업데이트 요청
     const updateUser = () => {
@@ -152,23 +157,22 @@ export default {
         email: state.email,
         name: state.name,
         studentNo: state.studentNo,
-        profile: state.profile,
+        image: state.image,
         pw: state.pw,
         flag: state.flag,
-        isDeleted:state.isDeleted
-      }
+        isDeleted: state.isDeleted,
+      };
       // console.log(store.state.loginUser)
       // console.log(user)
-      console.log("버튼 눌렀다.")
+      console.log("버튼 눌렀다.");
       store.dispatch("updateUser", user);
-      
-    }
+    };
 
     const onShow = () => {
       // console.log(state.photo);
       state.photo = !state.photo;
       state.fileChk = !state.fileChk;
-    }
+    };
 
     // 파일 업로드 했을 때, 변화 저장
     const fileChg = () => {
@@ -179,14 +183,14 @@ export default {
       previews[0].src = state.imageSrc;
       state.uploadState = true;
       state.profile = state.imageSrc;
-    }
+    };
 
     // 이미지 선택했을 때, 변화
     const onClicked = (i) => {
-      state.profile = `${i}`
+      state.profile = `${i}`;
       const previews = document.querySelector(".image-box");
-      previews.src = require(`@/assets/profiles/scale (${i}).png`)
-    }
+      previews.src = require(`@/assets/profiles/scale (${i}).png`);
+    };
 
     // 초기화면 세팅
     onMounted(() => {
@@ -195,16 +199,15 @@ export default {
       state.email = loginUser.email;
       state.name = loginUser.name;
       state.studentNo = loginUser.studentNo;
-      state.profile = loginUser.profile;
+      state.image = loginUser.image;
       state.pw = loginUser.pw;
       state.flag = loginUser.flag;
       state.isDeleted = loginUser.isDeleted;
-  
 
       if (loginUser.profile.length < 3) {
-        previews.src = require(`@/assets/profiles/scale (${loginUser.profile}).png`)
+        previews.src = require(`@/assets/profiles/scale (${loginUser.profile}).png`);
       } else {
-        previews.src = loginUser.profile
+        previews.src = loginUser.profile;
       }
     });
 
@@ -214,10 +217,9 @@ export default {
       onShow,
       fileChg,
       onClicked,
-    }
-  }
-}
-
+    };
+  },
+};
 </script>
 
 <style scoped>

@@ -59,14 +59,14 @@ export default {
   methods: {
     // 계정생성 - 암호
     signPw() {
-      if (!this.password_tmp.trim()) {
-        alert("입력된 암호가 없습니다.");
+      if (!this.password.trim() || !this.password_tmp.trim()) {
+        alert("입력한 비밀번호가 없습니다.");
         return;
       }
       if (
         !document.querySelector(".password-button").classList.contains("color")
       ) {
-        alert("입력된 암호가 일치하지 않습니다.");
+        alert("입력한 비밀번호가 일치하지 않습니다.");
         return;
       }
       this.$emit("updateUserPassword", this.password);

@@ -34,19 +34,18 @@
           </v-form>
         </div>
         <div class="profile-main-button">
-          <router-link :to="{ name: 'ProfilePage' }">
+          <div>
             <v-btn
               width="380"
               height="50"
               rounded="lg"
-              color="#FF0A54 "
               class="profile-main-button-user"
-              style="color: white; font-size: 15px; margin-top: 15px"
+              style="font-size: 15px; margin-top: 15px"
               @click="modifyPw"
             >
               다음
             </v-btn>
-          </router-link>
+          </div>
         </div>
       </div>
     </div>
@@ -54,49 +53,104 @@
 </template>
 
 <script>
+import { reactive } from "@vue/reactivity";
+import { useStore } from "vuex";
+import { onMounted } from "@vue/runtime-core";
 export default {
   name: "UpdatePassword",
-  data: () => ({
-    rules1: {
-      required: (value) => !!value || "",
-      min: (v) => v.length >= 8 || "최소 8자리 이상 입력해주세요.",
-    },
-    name: "이름",
-    email: "asdas@gmail.com",
-    ssafyNum: "084182",
-    model: null,
-    photo: false,
-    password: "",
-    show1: false,
-    show2: false,
-    password_tmp: "",
-  }),
-  methods: {
-    onShow() {
-      this.photo = !this.photo;
-    },
-    modifyPw() {
-      if (!this.password_tmp.trim()) {
-        alert("입력된 암호가 없습니다.");
+  setup() {
+    const store = useStore();
+    const state = reactive({
+      rules1: {
+        required: (value) => !!value || "",
+        min: (v) => v.length >= 8 || "최소 8자리 이상 입력해주세요.",
+      },
+      model: null,
+      password: "",
+      show1: false,
+      show2: false,
+      password_tmp: "",
+      pw: "",
+      email: "",
+      name: "",
+      flag: "",
+      studentNo: "",
+      isDeleted: "",
+      image: "",
+    });
+
+    // 다음 버튼 클릭
+    const modifyPw = () => {
+      if (!this.password.trim() || !this.password_tmp.trim()) {
+        alert("입력한 비밀번호가 없습니다.");
         return;
       }
       if (
-        !document.querySelector(".password-button").classList.contains("color")
+        !document
+          .querySelector(".profile-main-button-user")
+          .classList.contains("color")
       ) {
-        alert("입력된 암호가 일치하지 않습니다.");
+        alert("입력한 비밀번호가 일치하지 않습니다.");
         return;
       }
+      const user = {
+        pw: state.password_tmp,
+        email: state.email,
+        flag: state.flag,
+        studentNo: state.studentNo,
+        isDeleted: state.isDeleted,
+        image: state.image,
+      };
+      store.dispatch("updateUser", user);
       this.$router.push({ name: "ProfilePage" });
+    };
+    onMounted(() => {
+      const loginUser = store.state.loginUser;
+      state.email = loginUser.email;
+      state.name = loginUser.name;
+      state.flag = loginUser.flag;
+      state.studentNo = loginUser.studentNo;
+      state.isDeleted = loginUser.isDeleted;
+      state.image = loginUser.image;
+    });
+    return {
+      state,
+      modifyPw,
+    };
+  },
+  // 비밀번호 유효성 검사
+  methods: {
+    async chkPw() {
+      const validate = await this.$refs.form.validate();
+      if (validate.valid) {
+        if (this.password == this.password_tmp) {
+          document
+            .querySelector(".profile-main-button-user")
+            .classList.add("color");
+        }
+      } else {
+        document
+          .querySelector(".profile-main-button-user")
+          .classList.remove("color");
+      }
     },
   },
+
+  // 비밀번호 2개 유효성 검사
 };
 </script>
 
 <style scoped>
+.profile-main-button-user {
+  background-color: #ededed;
+  color: white;
+}
+.color {
+  background-color: #ff0a54 !important;
+}
 .img_box {
   width: 200px;
   margin: 100px;
-  background-color: red;
 }
 .hover_bigger {
   height: 110px;

@@ -8,7 +8,7 @@
             <div class="profile-main-form-text-email">
               <div>계속하려면 먼저 본인임을 인증하세요.</div>
               <v-text-field
-                v-model="email"
+                v-model="state.email"
                 density="comfortable"
               ></v-text-field>
             </div>
@@ -16,7 +16,7 @@
           <div class="m-top-d">
             <div>비밀번호 입력</div>
             <v-text-field
-              v-model="password"
+              v-model="state.password"
               :append-inner-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
               :type="show1 ? 'text' : 'password'"
               name="input-10-1"
@@ -26,7 +26,7 @@
           </div>
         </div>
         <div class="profile-main-button">
-          <router-link :to="{ name: 'UpdatePassword' }">
+          <div @click="chkPw">
             <v-btn
               width="380"
               height="50"
@@ -37,7 +37,7 @@
             >
               다음
             </v-btn>
-          </router-link>
+          </div>
         </div>
       </div>
     </div>
@@ -45,22 +45,43 @@
 </template>
 
 <script>
+import { reactive, onMounted } from "@vue/runtime-core";
+
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 export default {
   name: "CheckPassword",
-  data: () => ({
-    name: "이름",
-    email: "asdas@gmail.com",
-    ssafyNum: "084182",
-    model: null,
-    photo: false,
-    password: "",
-    show1: false,
-    show2: true,
-  }),
-  methods: {
-    onShow() {
-      this.photo = !this.photo;
-    },
+  setup() {
+    const state = reactive({
+      email: "",
+      model: null,
+      password: "",
+      userPassword: "",
+      show1: false,
+      show2: true,
+    });
+
+    const store = useStore();
+    const router = useRouter();
+
+    const chkPw = () => {
+      if (state.password == store.state.loginUser.password) {
+        router.push({ name: "UpdatePassword" });
+      } else {
+        alert("비밀번호를 다시 입력해주세요.");
+      }
+    };
+    // 초기화면 세팅
+    onMounted(() => {
+      const loginUser = store.state.loginUser;
+      console.log("여기까지와쑤요");
+      state.userPassword = loginUser.password;
+      state.email = loginUser.email;
+    });
+    return {
+      state,
+      chkPw,
+    };
   },
 };
 </script>
