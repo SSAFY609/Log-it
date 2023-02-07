@@ -49,10 +49,6 @@ public class UserService {
                 result.put("type", FAIL);
                 result.put("result", PW_FAIL);
                 System.out.println("login : 비밀번호가 틀렸음");
-            } else if(userDto.getRefreshToken() != null) {
-                result.put("type", FAIL);
-                result.put("result", IS_LOGINED);
-                System.out.println("login : 이미 로그인된 사용자");
             } else {
                 // 인증 성공 시 auth-token과 refresh-token 함께 발급
                 System.out.println("===== login =====");
