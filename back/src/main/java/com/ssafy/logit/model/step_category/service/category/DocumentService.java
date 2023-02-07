@@ -92,19 +92,16 @@ public class DocumentService {
      * @return
      */
     @Transactional
-    public List<Document> createUpdateAll(User user,StepCategory stepCategory, List<UpdateDocumentRequest> list) {
+    public void  createUpdateAll(User user,StepCategory stepCategory, List<UpdateDocumentRequest> list) {
         checkUser(user,stepCategory);
-        List<Document> results = new ArrayList<>();
         for (UpdateDocumentRequest request : list) {
             if(request.getDocumentId()==null){
                 Document document = Document.create(stepCategory, request.getQuestion(), request.getAnswer());
-                Document saveDocument = documentRepository.save(document);
-                documentRepository.save(saveDocument);
+                documentRepository.save(document);
             }else{
                 update(user, request.getDocumentId(), request);
             }
         }
-        return results;
     }
 
 
