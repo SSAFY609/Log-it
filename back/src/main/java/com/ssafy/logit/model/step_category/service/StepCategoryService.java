@@ -9,6 +9,7 @@ import com.ssafy.logit.model.step_category.dto.UpdateStepCategoryRequest;
 import com.ssafy.logit.model.step_category.dto.category.codingtest.CodingTestResponse;
 import com.ssafy.logit.model.step_category.dto.category.document.DocumentResponse;
 import com.ssafy.logit.model.step_category.dto.category.etc.StepEtcResponse;
+import com.ssafy.logit.model.step_category.dto.category.interview.InterviewResponse;
 import com.ssafy.logit.model.step_category.entity.StepCategory;
 import com.ssafy.logit.model.step_category.entity.category.Document;
 import com.ssafy.logit.model.step_category.entity.category.Interview;
@@ -40,7 +41,11 @@ public class StepCategoryService {
         User eventUser = jobEvent.getUser();
         checkUser(user, eventUser);
 
-        StepCategory stepCategory = StepCategory.createCategory(jobEvent, request.getTypeDate(), request.getJobCategory());
+        StepCategory stepCategory = StepCategory.createCategory(
+                jobEvent,
+                request.getTypeDate(),
+                request.getJobCategory(),
+                request.getName());
         StepCategory saveCategory = stepCategoryRepository.save(stepCategory);
 
         return saveCategory;
@@ -55,7 +60,7 @@ public class StepCategoryService {
     public StepCategory update(User user, Long id, UpdateStepCategoryRequest request) {
         StepCategory stepCategory = stepCategoryRepository.findById(id).orElseThrow(NoSuchElementException::new);
         checkUser(user, stepCategory);
-        StepCategory updateCategory = stepCategory.updateCategory(request.getTypeDate(), request.getResultStatus());
+        StepCategory updateCategory = stepCategory.updateCategory(request.getTypeDate(), request.getResultStatus(),request.getName());
         return updateCategory;
     }
 
@@ -68,10 +73,6 @@ public class StepCategoryService {
 
     public List<StepCategory> findStepCategories(JobEvent jobEvent) {
         List<StepCategory> stepCategoryList = jobEvent.getStepCategoryList();
-        for (StepCategory stepCategory : stepCategoryList) {
-            System.out.println("stepCategory = " + stepCategory);
-            System.out.println("stepCategory.getJobCategory() = " + stepCategory.getJobCategory());
-        }
         return stepCategoryList;
     }
 
@@ -91,9 +92,11 @@ public class StepCategoryService {
                         .collect(Collectors.toList());
                 return stepEtcListResponse;
             case INTERVIEW:
-                List<Interview> interviewList = stepCategory.getInterviewList();
-//                for()
-                return null;
+                List<InterviewResponse> interviewList = stepCategory.getInterviewList()
+                        .stream()
+                        .map(o->new InterviewResponse(o))
+                        .collect(Collectors.toList());
+                return interviewList;
 
             case CODINGTEST:
                 List<CodingTestResponse> codingTest = stepCategory.getCodingTestList()
