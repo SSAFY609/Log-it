@@ -3,7 +3,7 @@ package com.ssafy.logit.controller.step_category.category;
 
 import com.ssafy.logit.model.common.ResultDto;
 import com.ssafy.logit.model.step_category.dto.category.document.CreateDocumentRequest;
-import com.ssafy.logit.model.step_category.dto.category.document.CreateUpdateList;
+import com.ssafy.logit.model.step_category.dto.category.document.CreateUpdateDocumentList;
 import com.ssafy.logit.model.step_category.dto.category.document.DocumentResponse;
 import com.ssafy.logit.model.step_category.dto.category.document.UpdateDocumentRequest;
 import com.ssafy.logit.model.step_category.entity.StepCategory;
@@ -77,9 +77,9 @@ public class DocumentController {
     }
 
     @Operation(summary = "생성,수정 전부 처리", description = "request에 document객체 리스트를 담아 생성, 수정")
-    @PutMapping("/create-update-all")
+    @PostMapping("/create-update-all")
     public ResponseEntity<ResultDto> createUpdateAll(@RequestAttribute String email,
-                                                     @Validated @RequestBody CreateUpdateList documents) {
+                                                     @Validated @RequestBody CreateUpdateDocumentList documents) {
         User user = getUser(email);
         StepCategory stepCategory = stepCategoryService.get(documents.getStepId());
         documentService.createUpdateAll(user, stepCategory, documents.getList());
