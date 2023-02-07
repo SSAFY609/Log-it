@@ -270,21 +270,6 @@ export default {
         clone.setDate(date.getDate() + days)
         return clone;
       },
-      sendRequest() {
-        // create
-        if (this.now_idx == -1){
-          //create 요청
-          console.log('이건 create야')
-        }
-        // 나머지는 update 요청
-        else{
-          // this.copy_progress[this.now_idx].content = this.create_content;
-          console.log('이건 update야')
-          console.log(this.update_content);
-        }
-        // this.dialog = false;
-        this.update_mode = false;
-      },
       date_after(i) {
         const today = new Date();
         const year = i.getFullYear();
@@ -323,11 +308,33 @@ export default {
           // this.member = false;
         }
       },
+      sendRequest(){
+        // 이건 create 요청
+        if(this.now_idx == -1){
+          // const progress = {
+          //   growthId: this.growth.growthId,
+          //   date: new Date(),
+          //   email: this.loginUser.email,
+          //   content: this.write_content,
+          // }
+          // this.$store.dispatch('growth/createProgress', progress)
+        } 
+        // 이건 update 요청
+        else {
+          // const progress = {
+          //   growthId: this.growth.growthId,
+          //   date: new Date(),
+          //   email: this.loginUser.email,
+          //   content: this.write_content,
+          // }
+          // this.$store.dispatch('growth/updateProgress', progress)
+        }
+      },
       check(event){
         // console.log(event.target.classList)
         if(event.target.classList.contains('done')){
           const go = event.target.classList[1]
-          console.log(go)
+          // console.log(go)
           // this.$refs['state3'].scrollIntoView({behavior: "smooth"})
           // this.$refs['bottom'].scrollIntoView({behavior: "smooth"})
           document.querySelector(`#state${go}`).scrollIntoView({behavior: "smooth", block: 'center'})
@@ -602,7 +609,7 @@ h1 {
 .memo>div {
   width: 330px;
   height: 300px;
-  margin: 80px 60px;
+  margin: 110px 70px;
   overflow: hidden;
   word-wrap: break-word;
 }

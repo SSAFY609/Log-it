@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <button-view style="margin-top:50px"></button-view>
     <div class="event-list">
       <router-link :to="{name: 'GrowthProgress', params: {growthId: event.event_id}}" class="event hover_cursor" v-for="event in events" :key="event.event_id">
         <div class="event-title">{{ event.name }}</div>
@@ -14,8 +15,13 @@
 
 <script>
 import { mapState } from 'vuex';
+import buttonView from '@/components/etc/buttonView.vue'
+
 export default {
     name: 'GrowthList',
+    components: {
+      buttonView,
+    },
     data() {
       return {
         // period: 0,
