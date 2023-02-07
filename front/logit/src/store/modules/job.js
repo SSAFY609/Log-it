@@ -5,22 +5,10 @@ import axiosConnector from "@/utils/axios-connector";
 const job = {
     namespaced: true,
     state:{
-        jobs: [
-            {
-            jobId: '1',
-            category: '서류',
-            contents: '안녕하세요. 질문입니다'
-            },
-            {
-            jobId: '2',
-            category: '면접',
-            contents: '안녕하세요. 질문입니다'
-            },
-            
-
+        testList: [ "BFS", "DFS", "그래프 구현", "구현", "문자열", "정렬", "이분탐색", "자료구조", "완전탐색", "힙", "트리" , "그래프탐색", "동적 프로그래밍", "그리디", "백 트랙킹"
         ],
-        userId: '1212',
-        category: [11, 22, 33],
+
+    
     },
     getters: {
         getCategoryCnt(state) {

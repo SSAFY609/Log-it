@@ -67,7 +67,7 @@
                   전체 영역
                   <div class="option_types_area">
                     
-                    <div v-for="item in algorithmTypes" :key="item">
+                    <div v-for="item in testList" :key="item">
                       <div class="chip_container">
                         <v-chip
                           v-if="chip"
@@ -135,7 +135,7 @@ import { mapState } from 'vuex';
 
     },
     computed: {
-      ...mapState("job", ["jobs"])
+      ...mapState("job", ["testList"]),
     },
 
     data () {
