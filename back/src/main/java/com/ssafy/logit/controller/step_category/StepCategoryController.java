@@ -1,7 +1,6 @@
 package com.ssafy.logit.controller.step_category;
 
 
-import com.ssafy.logit.model.common.ResultDto;
 import com.ssafy.logit.model.job.entity.JobEvent;
 import com.ssafy.logit.model.job.repository.JobRepository;
 import com.ssafy.logit.model.step_category.dto.CreateStepCategoryRequest;
@@ -98,7 +97,6 @@ public class StepCategoryController {
                 results.size(),
                 results), HttpStatus.OK);
     }
-
 
 
     private User getUser(String email) {

@@ -18,7 +18,7 @@ public class Document {
     @Column(name = "document_id")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "step_category_id")
     private StepCategory stepCategory;
 
@@ -33,6 +33,7 @@ public class Document {
         if(stepCategory ==null){
             throw new IllegalStateException();
         }
+        stepCategory.getDocumentList().add(this);
         this.stepCategory = stepCategory;
     }
     private void setQuestion(String question) {

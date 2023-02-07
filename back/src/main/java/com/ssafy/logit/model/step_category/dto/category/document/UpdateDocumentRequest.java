@@ -9,6 +9,7 @@ import javax.validation.constraints.Max;
 @Schema(description = "서류 수정 요청")
 public class UpdateDocumentRequest {
 
+    private Long documentId;
     @Max(300)
     @Schema(description = "질문")
     private String question;

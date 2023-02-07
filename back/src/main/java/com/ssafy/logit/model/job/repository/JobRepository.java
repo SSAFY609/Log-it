@@ -26,7 +26,7 @@ public interface JobRepository extends JpaRepository<JobEvent, Long> {
     @Query("SELECT DISTINCT d " +
             "FROM JobEvent j " +
             "JOIN  j.stepCategoryList s " +
-            "JOIN  s.document d")
+            "JOIN  s.documentList d")
     List<Document> findAllDocuments();
 
     @Query("SELECT DISTINCT etc " +

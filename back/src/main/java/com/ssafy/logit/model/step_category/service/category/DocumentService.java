@@ -4,6 +4,7 @@ package com.ssafy.logit.model.step_category.service.category;
 import com.ssafy.logit.exception.DifferentUserException;
 import com.ssafy.logit.exception.WrongCategoryException;
 import com.ssafy.logit.model.step_category.dto.category.document.CreateDocumentRequest;
+import com.ssafy.logit.model.step_category.dto.category.document.UpdateDocumentRequest;
 import com.ssafy.logit.model.step_category.entity.JobCategory;
 import com.ssafy.logit.model.step_category.entity.StepCategory;
 import com.ssafy.logit.model.step_category.entity.category.Document;
@@ -14,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -51,7 +54,7 @@ public class DocumentService {
      * @return
      */
     @Transactional
-    public Document update(User user, Long id, CreateDocumentRequest request){
+    public Document update(User user, Long id, UpdateDocumentRequest request){
         Document document = documentRepository.findById(id).orElseThrow(NoSuchElementException::new);
         checkUser(user,document);
         Document updateDocument = document.update( request.getQuestion(), request.getAnswer());
@@ -81,6 +84,29 @@ public class DocumentService {
         return document;
     }
 
+    /**
+     *  서류리스트를 받아 생성, 수정을 진행합니다.
+     * @param user
+     * @param stepCategory
+     * @param list
+     * @return
+     */
+    @Transactional
+    public List<Document> createUpdateAll(User user,StepCategory stepCategory, List<UpdateDocumentRequest> list) {
+        checkUser(user,stepCategory);
+        List<Document> results = new ArrayList<>();
+        for (UpdateDocumentRequest request : list) {
+            if(request.getDocumentId()==null){
+                Document document = Document.create(stepCategory, request.getQuestion(), request.getAnswer());
+                Document saveDocument = documentRepository.save(document);
+                documentRepository.save(saveDocument);
+            }else{
+                update(user, request.getDocumentId(), request);
+            }
+        }
+        return results;
+    }
+
 
     //카테고리 체크
     private void checkCategory(StepCategory stepCategory) {
@@ -102,6 +128,7 @@ public class DocumentService {
             throw new DifferentUserException();
         }
     }
+
 
 
 }

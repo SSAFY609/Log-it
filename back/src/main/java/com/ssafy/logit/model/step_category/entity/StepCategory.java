@@ -48,8 +48,8 @@ public class StepCategory {
     @Column(length = 30)
     private String name;
 
-    @OneToOne(mappedBy = "stepCategory")
-    private Document document;
+    @OneToMany(mappedBy = "stepCategory")
+    private List<Document> documentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "stepCategory")
     private List<CodingTest> codingTestList = new ArrayList<>();

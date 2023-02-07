@@ -79,12 +79,11 @@ public class StepCategoryService {
     public Object getStepCategory(StepCategory stepCategory) {
         switch (stepCategory.getJobCategory()) {
             case DOCUMENT:
-                Document document = stepCategory.getDocument();
-                if(document==null){
-                    return new ArrayList<>();
-                }
-                DocumentResponse documentResponse = new DocumentResponse(document);
-                return documentResponse;
+                List<DocumentResponse> documentResponseList = stepCategory.getDocumentList()
+                        .stream()
+                        .map(o -> new DocumentResponse(o))
+                        .collect(Collectors.toList());
+                return documentResponseList;
             case ETC:
                 List<StepEtcResponse> stepEtcListResponse = stepCategory.getStepEtcList()
                         .stream()
