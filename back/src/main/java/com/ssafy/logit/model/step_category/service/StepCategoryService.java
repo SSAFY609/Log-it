@@ -11,8 +11,6 @@ import com.ssafy.logit.model.step_category.dto.category.document.DocumentRespons
 import com.ssafy.logit.model.step_category.dto.category.etc.StepEtcResponse;
 import com.ssafy.logit.model.step_category.dto.category.interview.InterviewResponse;
 import com.ssafy.logit.model.step_category.entity.StepCategory;
-import com.ssafy.logit.model.step_category.entity.category.Document;
-import com.ssafy.logit.model.step_category.entity.category.Interview;
 import com.ssafy.logit.model.step_category.repository.StepCategoryRepository;
 import com.ssafy.logit.model.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;

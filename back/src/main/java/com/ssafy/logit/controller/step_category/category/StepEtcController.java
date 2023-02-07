@@ -1,6 +1,8 @@
 package com.ssafy.logit.controller.step_category.category;
 
+import com.ssafy.logit.model.common.ResultDto;
 import com.ssafy.logit.model.step_category.dto.category.etc.CreateStepEtcRequest;
+import com.ssafy.logit.model.step_category.dto.category.etc.CreateUpdateStecEtcList;
 import com.ssafy.logit.model.step_category.dto.category.etc.StepEtcResponse;
 import com.ssafy.logit.model.step_category.dto.category.etc.UpdateStepEtcRequest;
 import com.ssafy.logit.model.step_category.entity.StepCategory;
@@ -9,6 +11,7 @@ import com.ssafy.logit.model.step_category.service.StepCategoryService;
 import com.ssafy.logit.model.step_category.service.category.StepEtcService;
 import com.ssafy.logit.model.user.entity.User;
 import com.ssafy.logit.model.user.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +19,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
@@ -63,6 +69,24 @@ public class StepEtcController {
         User user = getUser(email);
         stepEtcService.delete(user, id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Operation(summary = "생성,수정 전부 처리", description = "request에 document객체 리스트를 담아 생성, 수정")
+    @PostMapping("/create-update-all")
+    public ResponseEntity<ResultDto> createUpdateAll(@RequestAttribute String email,
+                                                     @Validated @RequestBody CreateUpdateStecEtcList documents) {
+        User user = getUser(email);
+        StepCategory stepCategory = stepCategoryService.get(documents.getStepId());
+        stepEtcService.createUpdateAll(user, stepCategory, documents.getList());
+
+        //  stepEtc 리스트
+        List<StepEtcResponse> results = stepCategory
+                .getStepEtcList()
+                .stream()
+                .map(o -> new StepEtcResponse(o))
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(new ResultDto(results.size(),results),HttpStatus.CREATED);
     }
 
     private User getUser(String email) {

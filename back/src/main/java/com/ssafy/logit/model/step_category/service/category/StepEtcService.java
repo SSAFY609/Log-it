@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -66,4 +67,15 @@ public class StepEtcService {
     }
 
 
+    public void createUpdateAll(User user, StepCategory stepCategory, List<UpdateStepEtcRequest> list) {
+        checkUser(user,stepCategory);
+        for (UpdateStepEtcRequest request : list) {
+            if(request.getEtcId()==null){
+                StepEtc stepEtc = StepEtc.create(stepCategory, request.getContent());
+                stepEtcRepository.save(stepEtc);
+            }else{
+                update(user, request.getEtcId(), request);
+            }
+        }
+    }
 }
