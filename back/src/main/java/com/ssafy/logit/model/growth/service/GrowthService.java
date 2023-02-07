@@ -43,6 +43,7 @@ public class GrowthService {
     @Autowired
     private CategoryRepository categoryRepo;
 
+    // 이벤트 등록
     public String registEvent(String email, GrowthDto growthDto) {
         Optional<User> user = userRepo.findByEmail(email);
         if (user.isPresent()) {
@@ -65,6 +66,7 @@ public class GrowthService {
         }
     }
 
+    // (위의 이벤트 등록 메소드에서 호출하여 사용) 이벤트 공유 완료 후 해당 이벤트에 대한 정보 저장
     public String shareEvent(long growthId, List<Long> userList) {
         int len = userList.size();
         for (int i = 0; i < len; i++) {
@@ -127,5 +129,38 @@ public class GrowthService {
         } else {
             return NONE_EVENT;
         }
+    }
+
+    // 내 모든 이벤트 반환 (참여 + 작성)
+    public List<GrowthDto> getMyAllEvent(String email) {
+        Optional<User> user = userRepo.findByEmail(email);
+        if(user.isPresent()) {
+            long userId = user.get().getId();
+
+            // 내가 작성한 이벤트 조회
+            List<Growth> growthList = growthRepo.findByUserId(userId);
+            List<GrowthDto> growthDtoList = growthList.stream().map(GrowthDto::new).collect(Collectors.toList());
+
+            // 내가 참여하는 이벤트 조회
+            List<GrowthUser> growthUserList= growthUserRepo.findMyEvent(userId);
+            List<GrowthUserDto> growthUserDtoList = growthUserList.stream().map(GrowthUserDto::new).collect(Collectors.toList());
+            for(int i = 0; i < growthUserDtoList.size(); i++) {
+                Optional<Growth> tmp = growthRepo.findById(growthUserDtoList.get(i).getGrowth().getGrowthId());
+                if(tmp.isPresent()) {
+                    growthDtoList.add(tmp.get().toDto());
+                }
+            }
+            return growthDtoList;
+        }
+        return null;
+    }
+
+    // 한 개의 성장 이벤트 조회
+    public GrowthDto getOneEvent(long growthUserId) {
+        Optional<Growth> growth = growthRepo.findById(growthUserId);
+        if(growth.isPresent()) {
+            return growth.get().toDto();
+        }
+        return null;
     }
 }

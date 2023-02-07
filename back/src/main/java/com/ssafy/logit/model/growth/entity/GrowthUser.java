@@ -20,11 +20,11 @@ public class GrowthUser {
     @GeneratedValue
     private long growthUserId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "growth_id")
     private Growth growth;
 

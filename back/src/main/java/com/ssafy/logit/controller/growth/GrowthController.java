@@ -1,6 +1,7 @@
 package com.ssafy.logit.controller.growth;
 
 import com.ssafy.logit.model.growth.dto.GrowthDto;
+import com.ssafy.logit.model.growth.dto.GrowthUserDto;
 import com.ssafy.logit.model.growth.dto.ProgressDto;
 import com.ssafy.logit.model.growth.entity.Progress;
 import com.ssafy.logit.model.growth.service.GrowthService;
@@ -70,15 +71,15 @@ public class GrowthController {
     @Operation(summary = "초대 후보 검색", description = "해당 이벤트에 참여하지 않는 회원을 모두 검색")
     @GetMapping("/invite/get")
     public ResponseEntity<List<UserDto>> getAllUser(@RequestParam long growthId, @RequestAttribute String email) throws Exception {
-        List<UserDto> userList = growthService.getAllUser(growthId, email);
-        return new ResponseEntity<List<UserDto>>(userList, HttpStatus.OK);
+        List<UserDto> userDtoList = growthService.getAllUser(growthId, email);
+        return new ResponseEntity<List<UserDto>>(userDtoList, HttpStatus.OK);
     }
 
     @Operation(summary = "초대 후보 이름 검색", description = "해당 이벤트에 참여하지 않는 회원 중 이름으로 검색")
     @GetMapping("/invite/search")
     public ResponseEntity<List<UserDto>> searchUser(@RequestBody Info info, @RequestAttribute String email) {
-        List<UserDto> userList = growthService.searchUser(info.growthId, email, info.userName);
-        return new ResponseEntity<List<UserDto>>(userList, HttpStatus.OK);
+        List<UserDto> userDtoList = growthService.searchUser(info.growthId, email, info.userName);
+        return new ResponseEntity<List<UserDto>>(userDtoList, HttpStatus.OK);
     }
 
     // 성장 이벤트 회원 초대
@@ -87,5 +88,13 @@ public class GrowthController {
     public ResponseEntity<String> inviteUser(@RequestBody Info info) throws Exception {
         String inviteResult = growthService.inviteUser(info.growthId, info.userId);
         return new ResponseEntity<String>(inviteResult, HttpStatus.OK);
+    }
+
+    // 내가 참여하는 모든 이벤트 조회
+    @Operation(summary = "내 이벤트 조회", description = "내가 작성한, 참여한 이벤트 모두 조회")
+    @GetMapping("/get")
+    public ResponseEntity<List<GrowthDto>> getMyAllEvent(@RequestAttribute String email) {
+        List<GrowthDto> growthDtoList = growthService.getMyAllEvent(email);
+        return new ResponseEntity<List<GrowthDto>>(growthDtoList, HttpStatus.OK);
     }
 }
