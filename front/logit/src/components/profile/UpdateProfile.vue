@@ -7,23 +7,23 @@
           <v-form disabled>
             <div class="profile-main-form-text-email">
               <div>이메일</div>
-              <v-text-field v-model="email" density="compact"></v-text-field>
+              <v-text-field v-model="loginUser.email" density="compact"></v-text-field>
             </div>
           </v-form>
           <v-form>
             <div class="m-top-d">
               <div>이름</div>
-              <v-text-field v-model="name" density="compact"></v-text-field>
+              <v-text-field v-model="loginUser.name" density="compact"></v-text-field>
             </div>
             <div class="m-top-d">
               <div>학번</div>
-              <v-text-field v-model="ssafyNum" density="compact"></v-text-field>
+              <v-text-field v-model="loginUser.studentNo" density="compact"></v-text-field>
             </div>
           </v-form>
         </div>
         <v-form disabled>
           <div class="profile-main-button">
-            <div @click="updateUser">
+            <div >
               <v-btn
                 width="120"
                 height="40"
@@ -32,7 +32,7 @@
                 class="profile-main-button-user"
                 style="color: white; font-size: 15px"
               >
-                <div class="profile-main-button-text">입력 저장</div>
+                <div  @click="updateUser" class="profile-main-button-text">입력 저장</div>
               </v-btn>
             </div>
             <router-link :to="{ name: 'CheckPassword' }">
@@ -53,7 +53,6 @@
       <div class="profile-main-photo" @click="onShow">
         <img
           class="image-box"
-          :src="require(`@/assets/profiles/scale (${fileNum}).png`)"
           width="200"
         />
       </div>
@@ -65,7 +64,7 @@
       >
     </div>
     <!-- 아래 프로필 사진 선택 창-->
-    <div v-show="photo" class="profile-photo">
+    <div v-show="state.photo" class="profile-photo">
       <v-sheet class="mx-auto" max-width="990">
         <v-slide-group
           v-model="model"
@@ -83,7 +82,7 @@
                 >
               </div>
             </label>
-            <div v-for="i in 36" :key="i">
+            <div @click="onClickedPt" v-for="i in 36" :key="i">
               <!-- 디즈니 프로필 사진 선택 창-->
               <v-img
                 color="grey-lighten-1"
@@ -115,68 +114,86 @@
 </template>
 
 <script>
+import { reactive,onMounted, computed} from "@vue/runtime-core";
+import { useRouter } from "vue-router"; 
+import { useStore } from "vuex";
+
 export default {
   name: "UpdateProfile",
+  props: ['fileSrc'],
+  setup() {
+    const router = useRouter();
+    const state = reactive({
+      model: null,
+      photo: false,
+      fileDOM: "",
+      previews: "",
+      fileNum: "",
+      fileChk: false,
+      uploadState: false,
+      imageSrc: "",
+    })
 
-  data: () => ({
-    name: "이름",
-    email: "asdas@gmail.com",
-    ssafyNum: "084182",
-    model: null,
-    photo: false,
-    fileDOM: "",
-    previews: "",
-    fileNum: "3",
-    fileChk: false,
-    uploadState: false,
-    imageSrc: "",
-    fileSrc: "",
-  }),
-  methods: {
-    updateUser() {
-      this.photo = !this.photo;
-      // 파일 이미지 선택했을경우
-      console.log("봐아앙");
-      if (this.uploadState) {
-        this.fileSrc = this.imageSrc;
-      } else {
-        this.fileSrc = this.id;
-      }
-      console.log(this.imageSrc);
-      this.$emit("chgFileDOM", this.imageSrc);
-      // const user = {
-      //   name: this.name, //수정
-      //   email: sessionStorage.getItem("user"), //로그인 된 이메일
-      //   studentNo: this.ssafyNum, //수정
-      //   image: this.fileSrc, //수정
-      // };
-      // this.$store.dispatch("uploadImage", user);
-      //   "name" : "김설희",
-      // "email" : "2750seolhee@naver.com",
-      // "pw" : "1234",
-      // "flag" : 8,
-      // "studentNo" : "0812345",
-      // "isDeleted" : 0,
-      //     "image" : "1"
-      this.$router.push({ name: "ProfilePage" });
-    },
-    onShow() {
-      this.photo = !this.photo;
-      this.fileChk = !this.fileChk;
-    },
-    fileChg() {
+    const store = useStore()
+
+    const loginUser = computed(()=>store.state.loginUser)
+
+    const updateUser = () => {
+      state.photo = !state.photo;
+
+      // vuex 변화 테스트용 -> 통과
+      // console.log(loginUser)
+
+      store.dispatch("updateUser", loginUser);
+      router.push({ name: "ProfilePage" });
+    }
+
+    const onShow = () => {
+      // console.log(state.photo);
+      state.photo = !state.photo;
+      state.fileChk = !state.fileChk;
+    }
+
+    // 파일 업로드 했을 때, 변화 저장
+    const fileChg = () => {
       const fileDOM = document.querySelector("#file");
       const previews = document.querySelectorAll(".image-box");
-      this.imageSrc = URL.createObjectURL(fileDOM.files[0]);
-      previews[0].src = this.imageSrc;
-      this.uploadState = true;
-    },
-    onClicked(i) {
-      this.uploadState = false;
-      this.fileNum = i;
-    },
-  },
-};
+      state.imageSrc = URL.createObjectURL(fileDOM.files[0]);
+      // 여기서는 파일 경로가 찍힘
+      previews[0].src = state.imageSrc;
+      state.uploadState = true;
+      loginUser.value.profile = state.imageSrc;
+    }
+
+    // 이미지 선택했을 때, 변화
+    const onClicked = (i) => {
+      loginUser.value.profile = `${i}`
+      const previews = document.querySelector(".image-box");
+      previews.src = require(`@/assets/profiles/scale (${i}).png`)
+    }
+
+    // 초기화면 세팅
+    onMounted(() => {
+      const previews = document.querySelector(".image-box");
+      const loginUser = store.state.loginUser
+      if (loginUser.profile.length < 3) {
+        previews.src = require(`@/assets/profiles/scale (${loginUser.profile}).png`)
+      } else {
+        previews.src = loginUser.profile
+      }
+    });
+
+    return {
+      state,
+      loginUser,
+      updateUser,
+      onShow,
+      fileChg,
+      onClicked,
+    }
+  }
+}
+
 </script>
 
 <style scoped>

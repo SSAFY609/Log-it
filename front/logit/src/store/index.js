@@ -17,7 +17,7 @@ const baseURL = "http://localhost:9090/user";
 // };
 export default createStore({
   state: {
-    loginUser: {},
+    loginUser: {email:'sky@naver.com', name: '오하늘', profile:'3', studentNo: '0845123'},
   },
   getters: {},
   mutations: {

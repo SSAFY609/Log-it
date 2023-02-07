@@ -36,7 +36,7 @@ import { reactive, onBeforeMount } from "vue";
 
 export default {
   name: "UserProfile",
-  props: ["user", "imageSrc"],
+  props: ["user"],
   setup(props, { emit }) {
     const router = useRouter();
     const state = reactive({
@@ -49,10 +49,7 @@ export default {
     };
 
     onBeforeMount(() => {
-      // 파일 업로드
-      // const previews = document.querySelector(".image-box");
-      // const image = URL.createObjectURL(props.imageSrc);
-      // previews[0].src = image;
+     
       state.id = props.user.profile;
     });
     const signProf = () => {

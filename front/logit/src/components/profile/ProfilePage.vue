@@ -7,20 +7,21 @@
           <div class="profile-main-form-text">
             <div class="profile-main-form-text-email">
               <div>이메일</div>
-              <v-text-field v-model="email" density="compact"></v-text-field>
+              <v-text-field v-model="loginUser.email" density="compact"></v-text-field>
             </div>
             <div class="m-top-d">
               <div>이름</div>
-              <v-text-field v-model="name" density="compact"></v-text-field>
+              <v-text-field v-model="loginUser.name" density="compact"></v-text-field>
             </div>
             <div class="m-top-d">
               <div>학번</div>
-              <v-text-field v-model="ssafyNum" density="compact"></v-text-field>
+              <v-text-field v-model="loginUser.studentNo" density="compact"></v-text-field>
             </div>
           </div>
           <div class="profile-main-button">
-            <router-link :to="{ name: 'UpdateProfile' }">
+            <div>
               <v-btn
+                @click="toUpdate"
                 width="120"
                 height="40"
                 rounded="lg"
@@ -30,7 +31,7 @@
               >
                 <div class="profile-main-button-text">정보 수정</div>
               </v-btn>
-            </router-link>
+            </div>
             <router-link :to="{ name: 'CheckPassword' }">
               <v-btn
                 height="40"
@@ -46,11 +47,11 @@
         </v-form>
       </div>
       <!-- 사용자 프로필 사진 -->
-      <div class="profile-main-photo" @click="onShow">
+      <div class="profile-main-photo" >
         <img
           class="image-box"
-          :src="require(`@/assets/profiles/scale (${fileNum}).png`)"
           width="200"
+          height="200"
         />
       </div>
     </div>
@@ -116,52 +117,42 @@
 </template>
 
 <script>
-import { reactive, onBeforeMount } from "@vue/runtime-core";
+import { reactive, onMounted, computed } from "@vue/runtime-core";
+import { useRouter } from "vue-router"; 
+import { useStore } from "vuex";
+
 export default {
   name: "ProfilePage",
-  props: ["imageSrc"],
-  setup(props) {
+  props: ['fileSrc'],
+  setup() {
+    const router = useRouter();   
     const state = reactive({
-      name: "이름",
-      email: "asdas@gmail.com",
-      ssafyNum: "084182",
       model: null,
-      photo: false,
-      fileName: "",
-      previews: "",
-      fileNum: "3",
-      fileChk: "false",
     });
-    const onShow = () => {
-      this.photo = !this.photo;
-      this.fileChk = !this.fileChk;
-    };
-    onBeforeMount(() => {
-      console.log(props.imageSrc);
-      state.fileNum = props.imageSrc;
-      console.log(state.fileNum);
-      if (state.fileNum.length < 3) {
-        this.fileName = require(`@/assets/profiles/scale (${state.fileNum}).png`);
+
+    const store = useStore()
+
+    const loginUser = computed(()=>store.state.loginUser)
+    
+    const toUpdate = () => {
+      router.push({name:"UpdateProfile"});
+    }
+
+    onMounted(() => {
+      const previews = document.querySelector(".image-box");
+      const loginUser = store.state.loginUser
+      if (loginUser.profile.length < 3) {
+        previews.src = require(`@/assets/profiles/scale (${loginUser.profile}).png`)
       } else {
-        const previews = document.querySelectorAll(".image-box");
-        previews[0].src = URL.createObjectURL(props.imageSrc.file[0]);
+        previews.src = loginUser.profile
       }
     });
     return {
-      onShow,
+      toUpdate,
+      loginUser,
       state,
     };
   },
-
-  // fileChg() {
-  //   const fileDOM = document.querySelector("#file");
-  //   const previews = document.querySelectorAll(".image-box");
-  //   const imgSrc = URL.createObjectURL(fileDOM.files[0]);
-  //   previews[0].src = imgSrc;
-  // },
-  // onClicked(i) {
-  //   this.fileNum = i;
-  // },
 };
 </script>
 
