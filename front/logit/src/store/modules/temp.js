@@ -39,29 +39,32 @@ const temp = {
     // shareProgress: [],
     shareProgress: [
       {date: new Date(2023, 0, 17), contents: [
-        {progressId: 1, email: 'tjdgns@naver.com', name: '이성훈', profile: '1', content: '안녕하세요안녕하세요안녕하세요'},
-        {progressId: 2, email: 'skgus@naver.com', name: '김나현', profile: '11', content: '2222222233333333333333333333333322222222222222222222'},
-        {progressId: 3, email: '5sky@naver.com', name: '오하늘', profile: '16', content: '뀨어엉암;ㄻ라ㅓㅁ라머라머00'},
+        {progressId: 1, email: 'tjdgns@naver.com', name: '이성훈', profile: '1', content: '안녕하세요안녕하세요안녕하세요', like: 15},
+        {progressId: 2, email: 'skgus@naver.com', name: '김나현', profile: '11', content: '2222222233333333333333333333333322222222222222222222', like: 10},
+        {progressId: 3, email: '5sky@naver.com', name: '오하늘', profile: '16', content: '뀨어엉암;ㄻ라ㅓㅁ라머라머00', like: 10},
       ]},
       {date: new Date(2023, 0, 18), contents: [
-        {progressId: 4, email: 'tjdgns@naver.com', name: '이성훈', profile: '1', content: '<p>안녕하세요안녕하세요안녕하세요</p><p>예 반갑습니다</p>'},
-        {progressId: 5, email: '5sky@naver.com', name: '오하늘', profile: '16', content: '뀨어엉암;ㄻ라ㅓㅁ라머라머00'},
+        {progressId: 4, email: 'tjdgns@naver.com', name: '이성훈', profile: '1', content: '<p>안녕하세요안녕하세요안녕하세요</p><p>예 반갑습니다</p>', like: 10},
+        {progressId: 5, email: '5sky@naver.com', name: '오하늘', profile: '16', content: '뀨어엉암;ㄻ라ㅓㅁ라머라머00', like: 10},
       ]},
       {date: new Date(2023, 0, 19), contents: [
-        {progressId: 6, email: 'tjdgns@naver.com', name: '이성훈', profile: '1', content: '안녕하세요안녕하세요안녕하세요'},
-        {progressId: 7, email: 'skgus@naver.com', name: '김나현', profile: '11', content: '2222222233333333333333333333333322222222222222222222'},
+        {progressId: 6, email: 'tjdgns@naver.com', name: '이성훈', profile: '1', content: '안녕하세요안녕하세요안녕하세요', like: 10},
+        {progressId: 7, email: 'skgus@naver.com', name: '김나현', profile: '11', content: '2222222233333333333333333333333322222222222222222222', like: 10},
       ]},
       {date: new Date(2023, 0, 23), contents: [
-        {progressId: 8, email: 'skgus@naver.com', name: '김나현', profile: '11', content: '<p>22222222333333333333333333333333222222333322222233332222223333222222333322222233332222223333222222333322222222222222222222</p>'},
-        {progressId: 9, email: '5sky@naver.com', name: '오하늘', profile: '16', content: '뀨어엉암;ㄻ라ㅓㅁ라머라머00'},
+        {progressId: 8, email: 'skgus@naver.com', name: '김나현', profile: '11', content: '<p>22222222333333333333333333333333222222333322222233332222223333222222333322222233332222223333222222333322222222222222222222</p>', like: 10},
+        {progressId: 9, email: '5sky@naver.com', name: '오하늘', profile: '16', content: '뀨어엉암;ㄻ라ㅓㅁ라머라머00', like: 10},
       ]},
       {date: new Date(2023, 1, 1), contents: [
-        {progressId: 10, email: 'tjdgns@naver.com', name: '이성훈', profile: '1', content: '안녕하세요안녕하세요안녕하세요'},
+        {progressId: 10, email: 'tjdgns@naver.com', name: '이성훈', profile: '1', content: '안녕하세요안녕하세요안녕하세요', like: 10},
       ]},
       {date: new Date(2023, 1, 3), contents: [
-        {progressId: 11, email: 'tjdgns@naver.com', name: '이성훈', profile: '1', content: '안녕하세요안녕하세요안녕하세요'},
-        {progressId: 12, email: '5sky@naver.com', name: '오하늘', profile: '16', content: '뀨어엉암;ㄻ라ㅓㅁ라머라머00'},
+        {progressId: 11, email: 'tjdgns@naver.com', name: '이성훈', profile: '1', content: '안녕하세요안녕하세요안녕하세요', like: 10},
+        {progressId: 12, email: '5sky@naver.com', name: '오하늘', profile: '16', content: '뀨어엉암;ㄻ라ㅓㅁ라머라머00', like: 10},
       ]},
+    ],
+    myLikeProgress: [
+      1,2,3,4,5,6,8,9,10
     ]
   },
   getters: {
@@ -72,6 +75,29 @@ const temp = {
     },
     OPEN_SIDEBAR(state){
       state.sidebar = true;
+    },
+    LIKE_PROGRESS(state, payload){
+      state.myLikeProgress.push(payload.progressId);
+      const arr = state.shareProgress[payload.idx].contents
+      for(let i=0; i<arr.length; i++){
+        if(arr[i].progressId == payload.progressId){
+          arr[i].like += 1
+          break
+        }
+      }
+      state.shareProgress[payload.idx].contents = arr;
+    },
+    UNLIKE_PROGRESS(state, payload){
+      const idx = state.myLikeProgress.indexOf(payload.progressId);
+      state.myLikeProgress.splice(idx, 1);
+      const arr = state.shareProgress[payload.idx].contents
+      for(let i=0; i<arr.length; i++){
+        if(arr[i].progressId == payload.progressId){
+          arr[i].like -= 1
+          break
+        }
+      }
+      state.shareProgress[payload.idx].contents = arr;
     }
   },
   actions: {
@@ -80,6 +106,12 @@ const temp = {
     },
     openSidebar({commit}){
       commit('OPEN_SIDEBAR');
+    },
+    likeProgress({commit}, data){
+      commit('LIKE_PROGRESS', data)
+    },
+    unlikeProgress({commit}, data){
+      commit('UNLIKE_PROGRESS', data)
     }
   },
 }

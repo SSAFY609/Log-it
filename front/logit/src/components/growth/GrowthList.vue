@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="event-list">
-      <router-link :to="{name: 'EventProgress', params: {eventId: event.event_id}}" class="event hover_cursor" v-for="event in events" :key="event.event_id">
+      <router-link :to="{name: 'GrowthProgress', params: {growthId: event.event_id}}" class="event hover_cursor" v-for="event in events" :key="event.event_id">
         <div class="event-title">{{ event.name }}</div>
         <div class="event-date">{{ date_to_str(event.start_date, event.end_date) }}</div>
         <v-chip v-if="event.done" variant="outlined" color="rgb(27, 182, 40)">완료</v-chip>
@@ -15,7 +15,7 @@
 <script>
 import { mapState } from 'vuex';
 export default {
-    name: 'EventList',
+    name: 'GrowthList',
     data() {
       return {
         // period: 0,

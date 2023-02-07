@@ -41,17 +41,17 @@
         </v-timeline-item>
         <v-timeline-item
           class="progress-item"
-          v-for=" (item, index) in copy_progress"
+          v-for=" (item, index) in [...this.shareProgress].reverse()"
           dot-color="rgb(255, 225, 121)"
           :key="item.progressId"
           size="small"
         >
-          <div class="memo-box" :id="`state${copy_progress.length - index - 1}`">
+          <div class="memo-box" :id="`state${shareProgress.length - index - 1}`">
             <div class="memo-date">{{date_after(item.date)}}</div>
-            <div v-if="item.contents[0].email == loginUser.email" class="memo" @click="dialog = true, memo_contents = item.contents, now_idx = index">
+            <div v-if="item.contents[0].email == loginUser.email" class="memo" @click="dialog = true, now_idx = shareProgress.length - index - 1">
               <div v-html="item.contents[0].content"></div>
             </div>
-            <div v-else class="memo isMine" @click="dialog = true, memo_contents = item.contents, now_idx = index">
+            <div v-else class="memo isMine" @click="dialog = true, now_idx = shareProgress.length - index - 1">
               <div v-html="item.contents[0].content"></div>
             </div>
           </div>
@@ -114,7 +114,7 @@
           :modules="modules"
           class="mySwiper">
           
-          <swiper-slide v-for="(item, index) in memo_contents" :key="item" class="slide">
+          <swiper-slide v-for="(item, index) in shareProgress[now_idx].contents" :key="item" class="slide">
             <div v-if="item.email == loginUser.email" class="memo-bg">
               <div class="writer">
                 <div>
@@ -123,7 +123,7 @@
                   </v-avatar>
                   {{ item.name }}
                 </div>
-                <v-icon v-if="item.email == loginUser.email" @click="update_mode = true, update_content = memo_contents[index].content">mdi-pencil</v-icon>
+                <v-icon v-if="item.email == loginUser.email" @click="update_mode = true, update_content = shareProgress[now_idx].contents[index].content">mdi-pencil</v-icon>
               </div>
               <!-- <div v-else style="height: 25.5px"></div> -->
               <div class="detail-form">
@@ -135,6 +135,11 @@
                   toolbar="essential" 
                   :read-only="true" />
               </div>
+            <div class="heart">
+              <v-btn v-if="myLikeProgress.indexOf(item.progressId) != -1" variant="flat" icon="mdi-heart" color="red" @click="unlike(item.progressId)"></v-btn>
+              <v-btn v-else variant="outlined" icon="mdi-heart" color="red" @click="like(item.progressId)"></v-btn>
+              {{ item.like }}
+            </div>
               <div class="check">
                 <v-icon size="large" @click="dialog = false">mdi-close</v-icon>
               </div>
@@ -158,6 +163,11 @@
                   toolbar="essential" 
                   :read-only="true" />
               </div>
+            <div class="heart">
+              <v-btn v-if="myLikeProgress.indexOf(item.progressId) != -1" variant="flat" icon="mdi-heart" color="red" @click="unlike(item.progressId)"></v-btn>
+              <v-btn v-else variant="outlined" icon="mdi-heart" color="red" @click="like(item.progressId)"></v-btn>
+              {{ item.like }}
+            </div>
               <div class="check">
                 <v-icon size="large" @click="dialog = false">mdi-close</v-icon>
               </div>
@@ -202,7 +212,7 @@ import 'swiper/css/effect-cards';
 // import './style.css';
 
 export default {
-    name: 'EventProgress',
+    name: 'GrowthProgress',
     data() {
       return {
         eventId: 0,
@@ -234,7 +244,7 @@ export default {
       };
     },
     computed: {
-      ...mapState('temp', ['loginUser', 'event', 'eventUsers', 'shareProgress', 'users']),
+      ...mapState('temp', ['loginUser', 'event', 'eventUsers', 'shareProgress', 'users', 'myLikeProgress']),
       
       change_image(id){
         return `@assets/profiles/scale (${id}).png`;
@@ -329,6 +339,23 @@ export default {
       },
       pageDown() {
         window.scrollTo({left: 0, top: document.body.scrollHeight, behavior: 'smooth'});
+      },
+      like(id) {
+        const data = {
+          idx: this.now_idx,
+          progressId: id
+        }
+        this.$store.dispatch('temp/likeProgress', data)
+        // for(let i=0; i<this.$store.state.temp.shareProgress[this.now_idx].length; i++){
+        //   if(id == this.this.$store.state.temp.shareProgress[this.now_idx].contents)
+        // }
+      },
+      unlike(id){
+        const data = {
+          idx: this.now_idx,
+          progressId: id
+        }
+        this.$store.dispatch('temp/unlikeProgress', data)
       }
     },
     created() {
@@ -378,7 +405,7 @@ export default {
         } 
       }
 
-      this.copy_progress = [...this.shareProgress].reverse();
+      // this.copy_progress = [...this.shareProgress].reverse();
 
       for(let i=0; i<this.users.length; i++){
         const user = `${this.users[i].name} (${this.users[i].email})`
@@ -658,7 +685,19 @@ h1 {
 
 .check {
   /* position: absolute; */
+  margin-top: 10px;
   top: 610px;
+}
+
+.heart {
+  display: flex;
+  align-items: center;
+  font-family: appleB;
+  font-size: 30px;
+}
+
+.heart>button{
+  margin: 0 10px;
 }
 
 .navi {

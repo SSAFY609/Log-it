@@ -31,7 +31,7 @@
 
 <script>
 export default {
-    name: 'EventCreate',
+    name: 'GrowthCreate',
     props: {
         date: {
             type: String,

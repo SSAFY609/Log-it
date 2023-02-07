@@ -2,36 +2,36 @@ import router from "@/router";
 import axiosConnector from "@/utils/axios-connector";
 
 
-const event = {
+const growth = {
     namespaced: true,
     state:{
-        events: [],
-        event: {},
-        eventUsers: [],
+        growths: [],
+        growth: {},
+        growthUsers: [],
         progress: [],
 
     },
     getters: {
         // 이벤트 회원 수
-        getEventUsersLength(state){
-            return state.eventUsers.length;
+        getGrowthUsersLength(state){
+            return state.growthUsers.length;
         },
     },
     mutations: {
         CREATE_EVENT(context, payload){
-            // state.event = payload
-            // payload를 eventId로 할지, 등록한 event로 할지,,, 
-            // 그냥 id만 반환해도 될듯 어차피 eventId로 getEvent할거니깡
-            router.push({name: 'EventProgress', params: {eventId: payload.eventId}})
+            // state.growth = payload
+            // payload를 growthId로 할지, 등록한 growth로 할지,,, 
+            // 그냥 id만 반환해도 될듯 어차피 growthId로 getGrowth할거니깡
+            router.push({name: 'GrowthProgress', params: {growthId: payload.growthId}})
         },
-        GET_EVENTS(state, payload){
-            state.events = payload
+        GET_GROWTHS(state, payload){
+            state.growths = payload
         },
-        GET_EVENT(state, payload){
-            state.event = payload
+        GET_GROWTH(state, payload){
+            state.growth = payload
         },
-        GET_EVENT_USERS(state, payload){
-            state.eventUsers = payload
+        GET_GROWTH_USERS(state, payload){
+            state.growthUsers = payload
         },
         GET_PROGRESS(state, payload){
             state.progress = payload
@@ -39,23 +39,23 @@ const event = {
     },
     actions: {
         // 성장 여정 추가
-        createEvent({commit}, event){
-            axiosConnector.post(`event`, event
+        createGrowth({commit}, growth){
+            axiosConnector.post(`growth`, growth
             ).then((res)=>{
-                commit('CREATE_EVENT', res.data)
+                commit('CREATE_GROWTH', res.data)
             }).catch((err)=>{
                 console.log(err)
             })
         },
 
         // 회원에 해당하는 모든 이벤트 가져오기
-        getEvents({commit}, email) {
+        getGrowths({commit}, email) {
             const data = {
                 email: email
             }
-            axiosConnector.get(`event/get`, data
+            axiosConnector.get(`growth/get`, data
             ).then((res)=> {
-                commit('GET_EVENTS', res.data)
+                commit('GET_GROWTHS', res.data)
             }).catch((err)=>{
                 console.log(err)
             })
@@ -66,26 +66,26 @@ const event = {
         // 관통때, mutation에서 값을 못 받아오는 이유가 이거였군... 신기
 
         // 이벤트 아이디에 해당하는 모든 이벤트 가져오기
-        getEvent({commit}, eventId) {
-            axiosConnector.get(`event/${eventId}`
+        getGrowth({commit}, growthId) {
+            axiosConnector.get(`growth/${growthId}`
             ).then((res)=>{
-                commit('GET_EVENT', res.data)
+                commit('GET_GROWTH', res.data)
             }).catch((err)=>{
                 console.log(err);
             })
         },
         // 이벤트 아이디에 해당하는 이벤트 참여 유저들 가져오기
-        getEventUsers({commit}, eventId) {
-            axiosConnector.get(`eventUser/${eventId}`
+        getGrowthUsers({commit}, growthId) {
+            axiosConnector.get(`growthUser/${growthId}`
             ).then((res)=>{
-                commit('GET_EVENT_USERS', res.data)
+                commit('GET_GROWTH_USERS', res.data)
             }).catch((err)=>{
                 console.log(err)
             })
         },
         // 이벤트 아이디에 해당하는 과정들 가져오기
-        getProgress({commit}, eventId) {
-            axiosConnector.get(`progress/${eventId}`
+        getProgress({commit}, growthId) {
+            axiosConnector.get(`progress/${growthId}`
             ).then((res)=>{
                 commit('GET_PROGRESS', res.data)
             }).catch((err)=>{
@@ -93,27 +93,27 @@ const event = {
             })
         },
         // 이벤트에 회원 추가
-        addEventUser({commit}, eventId, email){
+        addGrowthUser({commit}, growthId, email){
             const data = {
-                eventId: eventId,
+                growthId: growthId,
                 email: email
             }
-            axiosConnector.post('eventUser', data
+            axiosConnector.post('growthUser', data
             ).then((res)=>{
-                commit('ADD_EVENT_USER', res.data)
+                commit('ADD_GROWTH_USER', res.data)
             }).catch((err)=>{
                 console.log(err)
             })
         },
         // 이벤트에 회원 삭제 ( 호스트만 가능 )
-        deleteEventUser({dispatch}, eventId, email){
+        deleteGrowthUser({dispatch}, growthId, email){
             const data = {
-                eventId: eventId,
+                growthId: growthId,
                 email: email
             }
-            axiosConnector.delete('eventUser', data
+            axiosConnector.delete('growthUser', data
             ).then(()=>{
-                dispatch('getEventUser', eventId)
+                dispatch('getGrowthUser', growthId)
             }).catch((err)=>{
                 console.log(err)
             })
@@ -142,4 +142,4 @@ const event = {
 
 }
 
-export default event;
+export default growth;

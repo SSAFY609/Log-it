@@ -3,7 +3,7 @@ import router from "@/router";
 import axios from "axios";
 
 import temp from './modules/temp.js'
-import event from "./modules/event.js";
+import growth from "./modules/growth.js";
 import timeline from "./modules/timeline.js";
 
 const baseURL = "http://localhost:9090/user";
@@ -66,7 +66,7 @@ export default createStore({
   },
   modules: {
     temp: temp,
-    event: event,
+    growth: growth,
     timeline: timeline,
   },
 });
