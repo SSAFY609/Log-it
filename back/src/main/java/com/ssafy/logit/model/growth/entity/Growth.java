@@ -29,9 +29,7 @@ public class Growth {
     @Embedded
     private EventDate eventDate;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "category_id")
-    private Category category;
+    private String category;
 
     private boolean result;
 

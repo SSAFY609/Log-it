@@ -2,10 +2,8 @@ package com.ssafy.logit.model.growth.service;
 
 import com.ssafy.logit.model.growth.dto.GrowthDto;
 import com.ssafy.logit.model.growth.dto.GrowthUserDto;
-import com.ssafy.logit.model.growth.entity.Category;
 import com.ssafy.logit.model.growth.entity.Growth;
 import com.ssafy.logit.model.growth.entity.GrowthUser;
-import com.ssafy.logit.model.growth.repository.CategoryRepository;
 import com.ssafy.logit.model.growth.repository.GrowthRepository;
 import com.ssafy.logit.model.growth.repository.GrowthUserRepository;
 import com.ssafy.logit.model.user.dto.UserDto;
@@ -28,7 +26,6 @@ public class GrowthService {
     private static final String IS_LOGINED = "이미 로그인된 사용자";
     private static final String PW_FAIL = "비밀번호 틀림";
     private static final String PRESENT = "이미 가입된 사용자";
-    private static final String NONE_CATEGORY = "카테고리 없음";
     private static final String NONE_EVENT = "성장 이벤트 없음";
 
     @Autowired
@@ -40,53 +37,16 @@ public class GrowthService {
     @Autowired
     private UserRepository userRepo;
 
-    @Autowired
-    private CategoryRepository categoryRepo;
-
     // 이벤트 등록
     public String registEvent(String email, GrowthDto growthDto) {
         Optional<User> user = userRepo.findByEmail(email);
         if (user.isPresent()) {
             growthDto.setUser(user.get());
-            Optional<Category> category = categoryRepo.findByCategoryName(growthDto.getCategoryName());
-            if (category.isPresent()) {
-                growthDto.setCategory(category.get());
-                Growth growth = growthRepo.save(growthDto.toEntity());
-                String shareResult = shareEvent(growth.getGrowthId(), growthDto.getUserList());
-                if (!shareResult.equals(SUCCESS)) {
-                    return shareResult;
-                } else {
-                    return SUCCESS;
-                }
-            } else {
-                return NONE_CATEGORY;
-            }
+            growthRepo.save(growthDto.toEntity());
+            return SUCCESS;
         } else {
             return NONE;
         }
-    }
-
-    // (위의 이벤트 등록 메소드에서 호출하여 사용) 이벤트 공유 완료 후 해당 이벤트에 대한 정보 저장
-    public String shareEvent(long growthId, List<Long> userList) {
-        int len = userList.size();
-        for (int i = 0; i < len; i++) {
-            Optional<User> user = userRepo.findById(userList.get(i));
-            if (user.isPresent()) {
-                GrowthUserDto growthUserDto = new GrowthUserDto();
-                growthUserDto.setUser(user.get());
-                Optional<Growth> growth = growthRepo.findById(growthId);
-                if (growth.isPresent()) {
-                    growthUserDto.setGrowth(growth.get());
-                    growthUserDto.setType(false);
-                    growthUserRepo.save(growthUserDto.toEntity());
-                } else {
-                    return NONE_EVENT;
-                }
-            } else {
-                return NONE;
-            }
-        }
-        return SUCCESS;
     }
 
     // 해당 이벤트에 참여하지 않는 사용자 반환
@@ -111,6 +71,7 @@ public class GrowthService {
         return null;
     }
 
+    // 성장 이벤트 공유
     // (해당 이벤트에 참여중이지 않은 사용자만 받아올 수 있으므로, 그 부분은 따로 검사하지 않음)
     public String inviteUser(long growthId, long userId) {
         Optional<Growth> growth = growthRepo.findById(growthId);

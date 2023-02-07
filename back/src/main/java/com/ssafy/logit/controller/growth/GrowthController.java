@@ -1,23 +1,16 @@
 package com.ssafy.logit.controller.growth;
 
 import com.ssafy.logit.model.growth.dto.GrowthDto;
-import com.ssafy.logit.model.growth.dto.GrowthUserDto;
-import com.ssafy.logit.model.growth.dto.ProgressDto;
-import com.ssafy.logit.model.growth.entity.Progress;
 import com.ssafy.logit.model.growth.service.GrowthService;
 import com.ssafy.logit.model.user.dto.UserDto;
-import com.ssafy.logit.model.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.http.parser.HttpParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.temporal.TemporalField;
 import java.util.List;
 
 @Slf4j
