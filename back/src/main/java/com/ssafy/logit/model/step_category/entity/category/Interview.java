@@ -12,6 +12,7 @@ import javax.validation.constraints.Max;
 public class Interview {
     @Id
     @GeneratedValue
+    @Column(name = "interview_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -54,13 +55,12 @@ public class Interview {
 
     // 생성 메소드 //
     public static Interview create(StepCategory stepCategory, String question, String answer, InterviewCategory interviewCategory) {
-        Interview interviewDetail = new Interview();
-        interviewDetail.addStepCategory(stepCategory);
-        interviewDetail.setQuestion(question);
-        interviewDetail.setAnwer(answer);
-        interviewDetail.setInterviewCategory(interviewCategory);
-
-        return interviewDetail;
+        Interview interview = new Interview();
+        interview.addStepCategory(stepCategory);
+        interview.setQuestion(question);
+        interview.setAnwer(answer);
+        interview.setInterviewCategory(interviewCategory);
+        return interview;
     }
 
     // 수정 메소드 //
