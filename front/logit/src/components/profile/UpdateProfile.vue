@@ -7,17 +7,17 @@
           <v-form disabled>
             <div class="profile-main-form-text-email">
               <div>이메일</div>
-              <v-text-field v-model="loginUser.email" density="compact"></v-text-field>
+              <v-text-field v-model="state.email" density="compact"></v-text-field>
             </div>
           </v-form>
           <v-form>
             <div class="m-top-d">
               <div>이름</div>
-              <v-text-field v-model="loginUser.name" density="compact"></v-text-field>
+              <v-text-field v-model="state.name" density="compact"></v-text-field>
             </div>
             <div class="m-top-d">
               <div>학번</div>
-              <v-text-field v-model="loginUser.studentNo" density="compact"></v-text-field>
+              <v-text-field v-model="state.studentNo" density="compact"></v-text-field>
             </div>
           </v-form>
         </div>
@@ -114,17 +114,24 @@
 </template>
 
 <script>
-import { reactive,onMounted, computed} from "@vue/runtime-core";
-import { useRouter } from "vue-router"; 
+import { reactive,onMounted} from "@vue/runtime-core";
+// import { useRouter } from "vue-router"; 
 import { useStore } from "vuex";
 
 export default {
   name: "UpdateProfile",
   props: ['fileSrc'],
   setup() {
-    const router = useRouter();
+    // const router = useRouter();
     const state = reactive({
       model: null,
+      email: '',
+      name: '',
+      studentNo: '',
+      profile: '',
+      pw: "",
+      flag: "",
+      isDeleted: "",
       photo: false,
       fileDOM: "",
       previews: "",
@@ -132,20 +139,29 @@ export default {
       fileChk: false,
       uploadState: false,
       imageSrc: "",
+      
+      
     })
 
     const store = useStore()
 
-    const loginUser = computed(()=>store.state.loginUser)
 
+    // 업데이트 요청
     const updateUser = () => {
-      state.photo = !state.photo;
-
-      // vuex 변화 테스트용 -> 통과
-      // console.log(loginUser)
-
-      store.dispatch("updateUser", loginUser);
-      router.push({ name: "ProfilePage" });
+      const user = {
+        email: state.email,
+        name: state.name,
+        studentNo: state.studentNo,
+        profile: state.profile,
+        pw: state.pw,
+        flag: state.flag,
+        isDeleted:state.isDeleted
+      }
+      // console.log(store.state.loginUser)
+      // console.log(user)
+      console.log("버튼 눌렀다.")
+      store.dispatch("updateUser", user);
+      
     }
 
     const onShow = () => {
@@ -162,12 +178,12 @@ export default {
       // 여기서는 파일 경로가 찍힘
       previews[0].src = state.imageSrc;
       state.uploadState = true;
-      loginUser.value.profile = state.imageSrc;
+      state.profile = state.imageSrc;
     }
 
     // 이미지 선택했을 때, 변화
     const onClicked = (i) => {
-      loginUser.value.profile = `${i}`
+      state.profile = `${i}`
       const previews = document.querySelector(".image-box");
       previews.src = require(`@/assets/profiles/scale (${i}).png`)
     }
@@ -175,7 +191,16 @@ export default {
     // 초기화면 세팅
     onMounted(() => {
       const previews = document.querySelector(".image-box");
-      const loginUser = store.state.loginUser
+      const loginUser = store.state.loginUser;
+      state.email = loginUser.email;
+      state.name = loginUser.name;
+      state.studentNo = loginUser.studentNo;
+      state.profile = loginUser.profile;
+      state.pw = loginUser.pw;
+      state.flag = loginUser.flag;
+      state.isDeleted = loginUser.isDeleted;
+  
+
       if (loginUser.profile.length < 3) {
         previews.src = require(`@/assets/profiles/scale (${loginUser.profile}).png`)
       } else {
@@ -185,7 +210,6 @@ export default {
 
     return {
       state,
-      loginUser,
       updateUser,
       onShow,
       fileChg,

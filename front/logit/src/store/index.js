@@ -6,7 +6,6 @@ import axiosConnector from '@/utils/axios-connector';
 // import temp from './modules/temp.js'
 // import event from './modules/event.js'
 // import timeline from './modules/timeline.js'
-import user from './modules/user.js'
 
 const baseURL = "http://localhost:9090/user";
 // const getToken = () => {
@@ -32,7 +31,11 @@ export default createStore({
       sessionStorage.removeItem("token");
       state.loginUser = {};
     },
-
+    GET_USER (state,payload){
+      state.loginUser = payload;
+      router.push({ name: "ProfilePage" });
+    }
+    
   },
   actions: {
     login({ commit }, user) {
@@ -71,26 +74,33 @@ export default createStore({
         alert("으악!!!!!!! 로그아웃 실패");
         console.log(err);
       })
-      // axios({
-      //   url: URL,
-      //   method: "POST",
-      //   headers: getToken(),
-      // })
-      //   .then(() => {
-      //     console.log("성공했어 ~크크큭 😋");
-      //     commit("LOG_OUT");
-      //   })
-      //   .catch((err) => {
-      //     alert("으악!!!!!!! 로그인 실패");
-      //     console.log(err);
-      //   });
     },
+    updateUser({dispatch}, user) {
+      axiosConnector
+        .post('user', user)
+        .then(() => {
+          alert("정보 변경 성공헀어 키야~~~ 😂");
+          dispatch('getUser')
+        })
+        .catch((err) => {
+          alert("정.보.변.경.실.패");
+          console.log(err);
+        });
+    },
+    getUser({ commit }) {
+      axiosConnector.get('user'
+      ).then((res) => { 
+        commit("GET_USER",res.data);
+      }).catch((err) => { 
+        alert("여기서 실패 헀스니다.")
+        console.log(err);
+      })
+    }
   },
 
   modules: {
     // temp: temp,
     // event: event,
     // timeline: timeline,
-    user:user,
   }
 })
