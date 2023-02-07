@@ -8,8 +8,6 @@ import javax.validation.constraints.Max;
 @Data
 @Schema(description = "채용전형(기타) 수정 요청")
 public class UpdateStepEtcRequest {
-
-
     @Schema(description = "전형(기타) id")
     private Long etcId;
     @Schema(description = "내용")

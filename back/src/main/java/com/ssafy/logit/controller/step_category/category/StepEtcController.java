@@ -71,13 +71,13 @@ public class StepEtcController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Operation(summary = "생성,수정 전부 처리", description = "request에 document객체 리스트를 담아 생성, 수정")
+    @Operation(summary = "생성,수정 전부 처리", description = "request에 stepEtc 객체 리스트를 담아 생성, 수정")
     @PostMapping("/create-update-all")
     public ResponseEntity<ResultDto> createUpdateAll(@RequestAttribute String email,
-                                                     @Validated @RequestBody CreateUpdateStecEtcList documents) {
+                                                     @Validated @RequestBody CreateUpdateStecEtcList stepEtcs) {
         User user = getUser(email);
-        StepCategory stepCategory = stepCategoryService.get(documents.getStepId());
-        stepEtcService.createUpdateAll(user, stepCategory, documents.getList());
+        StepCategory stepCategory = stepCategoryService.get(stepEtcs.getStepId());
+        stepEtcService.createUpdateAll(user, stepCategory, stepEtcs.getList());
 
         //  stepEtc 리스트
         List<StepEtcResponse> results = stepCategory

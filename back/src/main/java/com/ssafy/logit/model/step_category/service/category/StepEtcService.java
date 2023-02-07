@@ -51,6 +51,19 @@ public class StepEtcService {
         return stepEtc;
     }
 
+    @Transactional
+    public void createUpdateAll(User user, StepCategory stepCategory, List<UpdateStepEtcRequest> list) {
+        checkUser(user, stepCategory);
+        for (UpdateStepEtcRequest request : list) {
+            if (request.getEtcId() == null) {
+                StepEtc stepEtc = StepEtc.create(stepCategory, request.getContent());
+                stepEtcRepository.save(stepEtc);
+            } else {
+                update(user, request.getEtcId(), request);
+            }
+        }
+    }
+
 
     // User 체크
     private static void checkUser(User user, StepEtc stepEtc) {
@@ -67,15 +80,4 @@ public class StepEtcService {
     }
 
 
-    public void createUpdateAll(User user, StepCategory stepCategory, List<UpdateStepEtcRequest> list) {
-        checkUser(user,stepCategory);
-        for (UpdateStepEtcRequest request : list) {
-            if(request.getEtcId()==null){
-                StepEtc stepEtc = StepEtc.create(stepCategory, request.getContent());
-                stepEtcRepository.save(stepEtc);
-            }else{
-                update(user, request.getEtcId(), request);
-            }
-        }
-    }
 }
