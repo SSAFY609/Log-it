@@ -9,8 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-
 @Slf4j
 @RestController
 @RequestMapping("/growth")
@@ -31,14 +29,14 @@ public class GrowthController {
     private GrowthService growthService;
 
     // 성장 여정 이벤트 등록
-    @PostMapping
+    @PostMapping("/regist")
     public ResponseEntity<String> registEvent(@RequestBody GrowthDto growthDto, @RequestAttribute String email) throws Exception {
         try {
-            String registResult = growthService.registEvent(email, growthDto, growthDto.getUserList());
+            String registResult = growthService.registEvent(email, growthDto);
             if(registResult.equals(SUCCESS)) {
                 return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
             } else {
-                return new ResponseEntity<String>(FAIL, HttpStatus.NOT_ACCEPTABLE);
+                return new ResponseEntity<String>(registResult, HttpStatus.NOT_ACCEPTABLE);
             }
         } catch (Exception e) {
             e.printStackTrace();

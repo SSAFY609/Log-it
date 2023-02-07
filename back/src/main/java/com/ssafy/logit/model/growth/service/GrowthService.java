@@ -2,7 +2,9 @@ package com.ssafy.logit.model.growth.service;
 
 import com.ssafy.logit.model.growth.dto.GrowthDto;
 import com.ssafy.logit.model.growth.dto.GrowthUserDto;
+import com.ssafy.logit.model.growth.entity.Category;
 import com.ssafy.logit.model.growth.entity.Growth;
+import com.ssafy.logit.model.growth.repository.CategoryRepository;
 import com.ssafy.logit.model.growth.repository.GrowthRepository;
 import com.ssafy.logit.model.growth.repository.GrowthUserRepository;
 import com.ssafy.logit.model.user.entity.User;
@@ -23,6 +25,8 @@ public class GrowthService {
     private static final String IS_LOGINED = "이미 로그인된 사용자";
     private static final String PW_FAIL = "비밀번호 틀림";
     private static final String PRESENT = "이미 가입된 사용자";
+    private static final String NONE_CATEGORY = "카테고리 없음";
+    private static final String NONE_EVENT = "성장 이벤트 없음";
 
     @Autowired
     private GrowthRepository growthRepo;
@@ -33,35 +37,48 @@ public class GrowthService {
     @Autowired
     private UserRepository userRepo;
 
-    public String registEvent(String email, GrowthDto growthDto, List<Long> userList) {
+    @Autowired
+    private CategoryRepository categoryRepo;
+
+    public String registEvent(String email, GrowthDto growthDto) {
         Optional<User> user = userRepo.findByEmail(email);
-        if(user.isPresent()) {
+        if (user.isPresent()) {
             growthDto.setUser(user.get());
-            Growth growth = growthRepo.save(growthDto.toEntity());
-            shareEvent(growth.getGrowthId(), userList);
-            return SUCCESS;
+            Optional<Category> category = categoryRepo.findByCategoryName(growthDto.getCategoryName());
+            if (category.isPresent()) {
+                growthDto.setCategory(category.get());
+                Growth growth = growthRepo.save(growthDto.toEntity());
+                String shareResult = shareEvent(growth.getGrowthId(), growthDto.getUserList());
+                if (!shareResult.equals(SUCCESS)) {
+                    return shareResult;
+                } else {
+                    return SUCCESS;
+                }
+            } else {
+                return NONE_CATEGORY;
+            }
         } else {
-            return FAIL;
+            return NONE;
         }
     }
 
-    public String shareEvent(Long growthId, List<Long> userList) {
+    public String shareEvent(long growthId, List<Long> userList) {
         int len = userList.size();
-        for(int i = 0; i < len; i++) {
+        for (int i = 0; i < len; i++) {
             Optional<User> user = userRepo.findById(userList.get(i));
-            if(user.isPresent()) {
+            if (user.isPresent()) {
                 GrowthUserDto growthUserDto = new GrowthUserDto();
                 growthUserDto.setUser(user.get());
                 Optional<Growth> growth = growthRepo.findById(growthId);
-                if(growth.isPresent()) {
+                if (growth.isPresent()) {
                     growthUserDto.setGrowth(growth.get());
                     growthUserDto.setType(false);
                     growthUserRepo.save(growthUserDto.toEntity());
                 } else {
-                    return FAIL;
+                    return NONE_EVENT;
                 }
             } else {
-                return FAIL;
+                return NONE;
             }
         }
         return SUCCESS;

@@ -29,6 +29,10 @@ public class Growth {
     @Embedded
     private EventDate eventDate;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     private boolean result;
 
     // Entity -> DTO 변환
@@ -37,6 +41,7 @@ public class Growth {
                 .growthId(this.growthId)
                 .user(this.user)
                 .eventDate(this.eventDate)
+                .category(this.category)
                 .result(this.result).build();
     }
 }

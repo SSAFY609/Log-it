@@ -1,6 +1,7 @@
 package com.ssafy.logit.model.growth.dto;
 
 import com.ssafy.logit.model.common.EventDate;
+import com.ssafy.logit.model.growth.entity.Category;
 import com.ssafy.logit.model.growth.entity.Growth;
 import com.ssafy.logit.model.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -29,6 +30,12 @@ public class GrowthDto {
     @Embedded
     private EventDate eventDate;
 
+    @Schema(description = "카테고리")
+    private Category category;
+
+    @Schema(description = "카테고리 이름")
+    private String categoryName;
+
     @Schema(description = "결과")
     private boolean result;
 
@@ -40,6 +47,7 @@ public class GrowthDto {
         this.growthId = growth.getGrowthId();
         this.user = growth.getUser();
         this.eventDate = growth.getEventDate();
+        this.category= growth.getCategory();
         this.result = growth.isResult();
     }
 
@@ -49,6 +57,7 @@ public class GrowthDto {
                 .growthId(growthId)
                 .user(growthDto.user)
                 .eventDate(growthDto.eventDate)
+                .category(growthDto.category)
                 .result(growthDto.result).build();
     }
 
@@ -56,8 +65,9 @@ public class GrowthDto {
     public Growth toEntity() {
         return Growth.builder()
                 .growthId(this.growthId)
-                .eventDate(this.eventDate)
                 .user(this.user)
+                .eventDate(this.eventDate)
+                .category(this.category)
                 .result(this.result).build();
     }
 }

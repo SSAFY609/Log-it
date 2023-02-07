@@ -1,5 +1,6 @@
 package com.ssafy.logit.model.growth.entity;
 
+import com.ssafy.logit.model.growth.dto.CategoryDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,4 +21,11 @@ public class Category {
     private Long categoryId;
 
     private String categoryName;
+
+    // Entity -> DTO 변환
+    public CategoryDto toDto() {
+        return CategoryDto.builder()
+                .categoryId(this.categoryId)
+                .categoryName(this.categoryName).build();
+    }
 }
