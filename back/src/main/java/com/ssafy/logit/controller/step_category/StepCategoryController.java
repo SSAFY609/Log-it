@@ -1,9 +1,13 @@
 package com.ssafy.logit.controller.step_category;
 
 
+import com.ssafy.logit.model.job.entity.JobEvent;
+import com.ssafy.logit.model.job.repository.JobRepository;
 import com.ssafy.logit.model.step_category.dto.CreateStepCategoryRequest;
 import com.ssafy.logit.model.step_category.dto.CreateStepCategoryResponse;
+import com.ssafy.logit.model.step_category.dto.StepCategoryDto;
 import com.ssafy.logit.model.step_category.dto.UpdateStepCategoryRequest;
+import com.ssafy.logit.model.step_category.dto.category.StepCategoryResultDto;
 import com.ssafy.logit.model.step_category.entity.StepCategory;
 import com.ssafy.logit.model.step_category.service.StepCategoryService;
 import com.ssafy.logit.model.user.entity.User;
@@ -17,6 +21,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/step-category")
@@ -25,6 +33,8 @@ import org.springframework.web.bind.annotation.*;
 public class StepCategoryController {
     private final StepCategoryService stepCategoryService;
     private final UserService userService;
+
+    private final JobRepository jobRepository;
 
 
     @Operation(summary = "채용 전형 생성 ", description = "채용 전형 데이터를 생성합니다. RequestBody에 취업이벤트의 id가 필요합니다.")
@@ -65,11 +75,33 @@ public class StepCategoryController {
             @RequestAttribute String email, @PathVariable Long id) {
         User user = getUser(email);
         stepCategoryService.delete(user, id);
-
         return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
     }
+    
+    @GetMapping("/test/{jobEventId}")
+    public ResponseEntity<StepCategoryResultDto> test(@RequestAttribute String email, @PathVariable Long jobEventId){
+        User user = getUser(email);
+        JobEvent jobEvent = jobRepository.findById(jobEventId).get();
+        List<StepCategory> stepCategories = stepCategoryService.findStepCategories(jobEvent);
+        List<Object> stepList = stepCategories.stream()
+                .map(o -> stepCategoryService.getStepCategory(o))
+                .collect(Collectors.toList());
+        List<StepCategoryDto> results = new ArrayList<>();
+
+        for(int i = 0 ; i<stepCategories.size();i++){
+            results.add(new StepCategoryDto(stepCategories.get(i), stepList.get(i)));
+        }
+        return new ResponseEntity<>(new StepCategoryResultDto(
+                jobEvent.getStartDate(),
+                jobEvent.getStartDate(),
+                results.size(),
+                results), HttpStatus.OK);
+    }
+
 
     private User getUser(String email) {
         return userService.getUserEntity(email);
     }
+    
+    
 }

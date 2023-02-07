@@ -6,6 +6,10 @@ import com.ssafy.logit.model.job.entity.JobEvent;
 import com.ssafy.logit.model.job.repository.JobRepository;
 import com.ssafy.logit.model.step_category.dto.CreateStepCategoryRequest;
 import com.ssafy.logit.model.step_category.dto.UpdateStepCategoryRequest;
+import com.ssafy.logit.model.step_category.dto.category.codingtest.CodingTestResponse;
+import com.ssafy.logit.model.step_category.dto.category.document.DocumentResponse;
+import com.ssafy.logit.model.step_category.dto.category.etc.StepEtcResponse;
+import com.ssafy.logit.model.step_category.dto.category.interview.InterviewResponse;
 import com.ssafy.logit.model.step_category.entity.StepCategory;
 import com.ssafy.logit.model.step_category.repository.StepCategoryRepository;
 import com.ssafy.logit.model.user.entity.User;
@@ -14,7 +18,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -32,7 +38,11 @@ public class StepCategoryService {
         User eventUser = jobEvent.getUser();
         checkUser(user, eventUser);
 
-        StepCategory stepCategory = StepCategory.createCategory(jobEvent, request.getTypeDate(), request.getJobCategory());
+        StepCategory stepCategory = StepCategory.createCategory(
+                jobEvent,
+                request.getTypeDate(),
+                request.getJobCategory(),
+                request.getName());
         StepCategory saveCategory = stepCategoryRepository.save(stepCategory);
 
         return saveCategory;
@@ -47,7 +57,7 @@ public class StepCategoryService {
     public StepCategory update(User user, Long id, UpdateStepCategoryRequest request) {
         StepCategory stepCategory = stepCategoryRepository.findById(id).orElseThrow(NoSuchElementException::new);
         checkUser(user, stepCategory);
-        StepCategory updateCategory = stepCategory.updateCategory(request.getTypeDate(), request.getResultStatus());
+        StepCategory updateCategory = stepCategory.updateCategory(request.getTypeDate(), request.getResultStatus(),request.getName());
         return updateCategory;
     }
 
@@ -56,6 +66,44 @@ public class StepCategoryService {
         StepCategory stepCategory = stepCategoryRepository.findById(id).orElseThrow(NoSuchElementException::new);
         checkUser(user, stepCategory);
         stepCategoryRepository.delete(stepCategory);
+    }
+
+    public List<StepCategory> findStepCategories(JobEvent jobEvent) {
+        List<StepCategory> stepCategoryList = jobEvent.getStepCategoryList();
+        return stepCategoryList;
+    }
+
+    public Object getStepCategory(StepCategory stepCategory) {
+        switch (stepCategory.getJobCategory()) {
+            case DOCUMENT:
+                List<DocumentResponse> documentResponseList = stepCategory.getDocumentList()
+                        .stream()
+                        .map(o -> new DocumentResponse(o))
+                        .collect(Collectors.toList());
+                return documentResponseList;
+            case ETC:
+                List<StepEtcResponse> stepEtcListResponse = stepCategory.getStepEtcList()
+                        .stream()
+                        .map(o -> new StepEtcResponse(o))
+                        .collect(Collectors.toList());
+                return stepEtcListResponse;
+            case INTERVIEW:
+                List<InterviewResponse> interviewList = stepCategory.getInterviewList()
+                        .stream()
+                        .map(o->new InterviewResponse(o))
+                        .collect(Collectors.toList());
+                return interviewList;
+
+            case CODINGTEST:
+                List<CodingTestResponse> codingTest = stepCategory.getCodingTestList()
+                        .stream()
+                        .map(o -> new CodingTestResponse(o))
+                        .collect(Collectors.toList());
+                return codingTest;
+        }
+
+        throw new NoSuchElementException();
+
     }
 
     private void checkUser(User user, StepCategory stepCategory) {

@@ -1,6 +1,7 @@
 package com.ssafy.logit.model.common;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ssafy.logit.exception.WrongDateException;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -38,7 +39,7 @@ public class EventDate {
             eventDate.setEndDate(endDate);
             return eventDate;
         }
-        return null;
+        throw new WrongDateException();
     }
 
     //유효성 체크

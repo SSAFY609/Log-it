@@ -27,11 +27,15 @@ public class CreateStepCategoryResponse {
     private ResultStatus resultStatus;
     @Schema(description = "채용 전형 분류",example = "INTERVIEW")
     private JobCategory jobCategory;
+
+    @Schema(description = "이름", example = "코테 부셔져버렸다...")
+    private String name;
     public  CreateStepCategoryResponse(StepCategory stepCategory) {
         this.id = stepCategory.getId();
         this.typeDate = stepCategory.getTypeDate();
         this.resultStatus = stepCategory.getResultStatus();
         this.jobCategory = stepCategory.getJobCategory();
+        this.name = stepCategory.getName();
     }
 
 
