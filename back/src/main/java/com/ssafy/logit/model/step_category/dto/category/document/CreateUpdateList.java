@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 @Schema(description = "생성,서류 리스트 요청")
-public class CreateUpdateDocuments {
+public class CreateUpdateList {
     @Schema(description = "채용 전형 id")
     private Long stepId;
     
