@@ -4,6 +4,7 @@ import com.ssafy.logit.jwt.JwtUtil;
 import com.ssafy.logit.model.user.dto.UserDto;
 import com.ssafy.logit.model.user.entity.User;
 import com.ssafy.logit.model.user.repository.UserRepository;
+import org.hibernate.event.internal.MergeContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,8 +18,11 @@ public class UserService {
 
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
-    private static final String DELETED = "deleted";
-    private static final String NONE = "none";
+    private static final String DELETED = "이미 삭제됨";
+    private static final String NONE = "사용자 없음";
+    private static final String IS_LOGINED = "이미 로그인된 사용자";
+    private static final String PW_FAIL = "비밀번호 틀림";
+    private static final String PRESENT = "이미 가입된 사용자";
 
     @Autowired
     private UserRepository userRepo;
@@ -29,7 +33,7 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public UserDto login(String email, String pw) {
+    public Map<String, Object> login(String email, String pw) {
         Optional<User> user = userRepo.findByEmail(email);
         System.out.println("user 로그인 정보 !!! : " + user);
         System.out.println("입력한 pw : " + pw);
@@ -39,16 +43,46 @@ public class UserService {
         System.out.println("encodingPw !!! : " + encodingPw);
 
         // 해당 email의 회원이 존재하며, 입력받은 비밀번호가 db에 저장된 비밀번호(암호화된)와 matches 되면 로그인
-        if(user.isPresent() && passwordEncoder.matches(pw, user.get().getPw())) {
-            // 인증 성공 시 auth-token과 refresh-token 함께 발급
-            System.out.println("===== login =====");
-            String authToken = jwtUtil.createAuthToken(email);
-            String refreshToken = jwtUtil.createRefreshToken();
-            saveRefreshToken(email, refreshToken);
-            return UserDto.builder().email(email).refreshToken(refreshToken).authToken(authToken).build();
+        Map<String, Object> result = new HashMap<>();
+        if(user.isPresent()) {
+            UserDto userDto = user.get().toDto();
+            if(!passwordEncoder.matches(pw, user.get().getPw())) {
+                result.put("type", FAIL);
+                result.put("result", PW_FAIL);
+                System.out.println("login : 비밀번호가 틀렸음");
+            } else if(userDto.getRefreshToken() != null) {
+                result.put("type", FAIL);
+                result.put("result", IS_LOGINED);
+                System.out.println("login : 이미 로그인된 사용자");
+            } else {
+                // 인증 성공 시 auth-token과 refresh-token 함께 발급
+                System.out.println("===== login =====");
+                String authToken = jwtUtil.createAuthToken(email);
+                String refreshToken = jwtUtil.createRefreshToken();
+                saveRefreshToken(email, refreshToken);
+
+                userDto.setRefreshToken(refreshToken);
+                userDto.setAuthToken(authToken);
+                result.put("type", SUCCESS);
+                result.put("result", userDto);
+                result.put("refreshToken", refreshToken);
+                result.put("authToken", authToken);
+                result.put("id", userDto.getId());
+                result.put("name", userDto.getName());
+                result.put("pw", userDto.getPw());
+                result.put("flag", userDto.getFlag());
+                result.put("student_no", userDto.getStudentNo());
+                result.put("image", userDto.getImage());
+                result.put("deleted", userDto.isDeleted());
+                result.put("created_time", userDto.getCreatedTime());
+                result.put("login_time", userDto.getLoginTime());
+            }
         } else {
-            throw new RuntimeException("login : " + email + "에 해당하는 사용자 없음");
+            result.put("type", FAIL);
+            result.put("result", NONE);
+            System.out.println("login : " + email + "에 해당하는 사용자 없음");
         }
+        return result;
     }
 
     @Transactional
@@ -102,25 +136,33 @@ public class UserService {
         return pw;
     }
 
-    // 회원이 있을 때는 update, 회원이 없을 때는 regist
-    // => regist 변수로 판단
+    // 회원이 있을 때는 update, 회원이 없을 때는 regist (regist 변수로 판단)
     @Transactional
-    public UserDto saveUser(UserDto userDto, boolean regist) {
+    public Map<String, Object> saveUser(UserDto userDto, boolean regist) {
         // 객체 찾기(존재하는지 확인)
         Optional<User> user = userRepo.findByEmail(userDto.getEmail());
         
         // 비밀번호 암호화
         userDto.setPw(passwordEncoder.encode(userDto.getPw()));
         System.out.println("[saveUser] userDto : " + userDto);
-        
-        if(user.isPresent() && !regist) { // update
+
+        Map<String, Object> resultMap = new HashMap<>();
+        if(user.isPresent() && regist) { //  이미 가입된 사용자의 이메일로 회원가입 시도
+            System.out.println("regist : 이미 가입된 사용자");
+            resultMap.put("result", PRESENT);
+        } else if(!user.isPresent() && !regist) { // 가입되지 않은 사용자의 이메일로 업데이트 시도
+            System.out.println("update : 가입되지 않은 사용자");
+            resultMap.put("result", NONE);
+        } else if(user.isPresent() && !regist) { // update
             System.out.println("===== updateUser =====");
             userRepo.save(userDto.updateUser(user.get().getId(), userDto));
+            resultMap.put("result", userDto);
         } else { // regist
             System.out.println("===== registUser =====");
             userRepo.save(userDto.toEntity());
+            resultMap.put("result", userDto);
         }
-        return userDto;
+        return resultMap;
     }
 
     public List<UserDto> getAllUser() {
