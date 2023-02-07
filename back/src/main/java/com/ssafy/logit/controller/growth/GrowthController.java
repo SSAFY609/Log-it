@@ -1,6 +1,7 @@
 package com.ssafy.logit.controller.growth;
 
 import com.ssafy.logit.model.growth.dto.GrowthDto;
+import com.ssafy.logit.model.growth.dto.ProgressDto;
 import com.ssafy.logit.model.growth.service.GrowthService;
 import com.ssafy.logit.model.user.dto.UserDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,10 +25,6 @@ public class GrowthController {
     private static final String UNAUTHORIZED = "unauthorized";
     private static final String DELETED = "이미 삭제됨";
     private static final String NONE = "사용자 없음";
-    private static final String IS_LOGINED = "이미 로그인된 사용자";
-    private static final String PW_FAIL = "비밀번호 틀림";
-    private static final String PRESENT = "이미 가입된 사용자";
-    private static final String EXPIRED = "token expired";
 
     @Autowired
     private GrowthService growthService;
@@ -50,11 +47,7 @@ public class GrowthController {
     public ResponseEntity<String> registEvent(@RequestBody GrowthDto growthDto, @RequestAttribute String email) throws Exception {
         try {
             String registResult = growthService.registEvent(email, growthDto);
-            if(registResult.equals(SUCCESS)) {
-                return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
-            } else {
-                return new ResponseEntity<String>(registResult, HttpStatus.NOT_ACCEPTABLE);
-            }
+            return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<String>(FAIL, HttpStatus.NOT_ACCEPTABLE);
@@ -86,29 +79,34 @@ public class GrowthController {
     // 내가 참여하는 모든 이벤트 조회
     @Operation(summary = "내 이벤트 조회", description = "내가 작성한, 참여한 이벤트 모두 조회")
     @GetMapping("/get")
-    public ResponseEntity<List<GrowthDto>> getMyAllEvent(@RequestAttribute String email) {
+    public ResponseEntity<List<GrowthDto>> getMyAllEvent(@RequestAttribute String email) throws Exception {
         List<GrowthDto> growthDtoList = growthService.getMyAllEvent(email);
         return new ResponseEntity<List<GrowthDto>>(growthDtoList, HttpStatus.OK);
     }
 
     @Operation(summary = "내 초대 조회", description = "초대된 성장 이벤트 모두 조회")
     @GetMapping("/invitation")
-    public ResponseEntity<List<GrowthDto>> getInvitation(@RequestAttribute String email) {
+    public ResponseEntity<List<GrowthDto>> getInvitation(@RequestAttribute String email) throws Exception {
         List<GrowthDto> growthDtoList = growthService.getInvitation(email);
         return new ResponseEntity<List<GrowthDto>>(growthDtoList, HttpStatus.OK);
     }
 
-//    @Operation()
-//    @PutMapping("/invitation/{growthId}/{accept}")
-//    public ResponseEntity<String> acceptInvitation(@PathVariable long growthId, @PathVariable boolean accept, @RequestAttribute String email) {
-//        String result = growthService.acceptInvitation(growthId, accept, email);
-//        return new ResponseEntity<String>(result, HttpStatus.OK);
-//    }
-
-    @Operation()
+    @Operation(summary = "초대 수락 or 거절", description = "초대된 성장 이벤트를 수락하거나 거절")
     @PutMapping("/invitation")
-    public ResponseEntity<String> acceptInvitation(@RequestParam long growthId, @RequestParam boolean accept, @RequestAttribute String email) {
+    public ResponseEntity<String> acceptInvitation(@RequestParam long growthId, @RequestParam boolean accept, @RequestAttribute String email) throws Exception {
         String result = growthService.acceptInvitation(growthId, accept, email);
         return new ResponseEntity<String>(result, HttpStatus.OK);
+    }
+
+    @Operation()
+    @PostMapping("/write")
+    public ResponseEntity<String> registProgress(@RequestBody ProgressDto progressDto, @RequestAttribute String email) throws Exception {
+        try {
+            String result = growthService.registProgress(progressDto, email);
+            return new ResponseEntity<String>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(FAIL, HttpStatus.NOT_ACCEPTABLE);
+        }
     }
 }

@@ -2,10 +2,12 @@ package com.ssafy.logit.model.growth.service;
 
 import com.ssafy.logit.model.growth.dto.GrowthDto;
 import com.ssafy.logit.model.growth.dto.GrowthUserDto;
+import com.ssafy.logit.model.growth.dto.ProgressDto;
 import com.ssafy.logit.model.growth.entity.Growth;
 import com.ssafy.logit.model.growth.entity.GrowthUser;
 import com.ssafy.logit.model.growth.repository.GrowthRepository;
 import com.ssafy.logit.model.growth.repository.GrowthUserRepository;
+import com.ssafy.logit.model.growth.repository.ProgressRepository;
 import com.ssafy.logit.model.user.dto.UserDto;
 import com.ssafy.logit.model.user.entity.User;
 import com.ssafy.logit.model.user.repository.UserRepository;
@@ -33,6 +35,9 @@ public class GrowthService {
 
     @Autowired
     private UserRepository userRepo;
+
+    @Autowired
+    private ProgressRepository progressRepo;
 
     // 이벤트 등록
     public String registEvent(String email, GrowthDto growthDto) {
@@ -144,6 +149,7 @@ public class GrowthService {
         return null;
     }
 
+    // 초대 수락 (type을 true로 변경) or 거절 (db에서 삭제)
     public String acceptInvitation(long growthId, boolean accept, String email) {
         Optional<User> user = userRepo.findByEmail(email);
         if(user.isPresent()) {
@@ -164,5 +170,22 @@ public class GrowthService {
             }
         }
         return FAIL;
+    }
+
+    //
+    public String registProgress(ProgressDto progressDto, String email) {
+        Optional<User> user = userRepo.findByEmail(email);
+        if(user.isPresent()) {
+            progressDto.setUser(user.get());
+            Optional<Growth> growth = growthRepo.findById(progressDto.getGrowthId());
+            if(growth.isPresent()) {
+                progressDto.setGrowth(growth.get());
+                progressRepo.save(progressDto.toEntity());
+                return SUCCESS;
+            } else {
+                return NONE_EVENT;
+            }
+        }
+        return NONE;
     }
 }

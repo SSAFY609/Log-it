@@ -22,6 +22,9 @@ public class ProgressDto {
     @Schema(description = "성장 이벤트")
     private Growth growth;
 
+    @Schema(description = "성장 이벤트 id")
+    private long growthId;
+
     @Schema(description = "성장 과정 작성자")
     private User user;
 
