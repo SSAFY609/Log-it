@@ -26,8 +26,11 @@ public class InterviewService {
     @Transactional
     public Interview create(User user, StepCategory stepCategory, CreateInterviewRequest request){
         checkUser(user, stepCategory);
-        Interview interviewDetail = Interview.create(stepCategory, request.getQuestion(), request.getAnswer(), request.getInterviewCategory());
-        Interview saveInterview = interviewRepository.save(interviewDetail);
+        Interview interview = Interview.create(stepCategory, request.getQuestion(), request.getAnswer(), request.getInterviewCategory());
+        Interview saveInterview = interviewRepository.save(interview);
+        System.out.println("saveInterview = " + saveInterview.getAnswer());
+        System.out.println("saveInterview = " + saveInterview.getQuestion());
+        System.out.println("saveInterview.getInterviewCategory() = " + saveInterview.getInterviewCategory());
         return saveInterview;
     }
 

@@ -31,7 +31,6 @@ public class CodingTestService {
         StepCategory stepCategory = stepCategoryRepository.findById(request.getStepId()).orElseThrow(NoSuchElementException::new);
         checkUser(user, stepCategory);
         checkCategory(stepCategory);
-
         CodingTest codingTest = CodingTest.createCodingTest(stepCategory, request.getAlgoContent(), request.getAlgoCategory());
         CodingTest saveCodingTest = codingTestRepository.save(codingTest);
         return saveCodingTest;
