@@ -10,10 +10,11 @@ import javax.validation.constraints.NotNull;
 @Data
 @Schema(description = "코테 수정 요청")
 public class UpdateCodingTestRequest {
-    @NotNull
     private Long codingTestId;
     @Max(1000)
+    @Schema(description = "내용")
     private String algoContent;
     @Max(30)
+    @Schema(description = "알고리즘 분류")
     private AlgoCategory algoCategory;
 }

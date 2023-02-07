@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -26,6 +27,12 @@ public class CodingTestService {
     private final StepCategoryRepository stepCategoryRepository;
     private final CodingTestRepository codingTestRepository;
 
+    /**
+     * 코딩테스트 객체 생성
+     * @param user
+     * @param request
+     * @return
+     */
     @Transactional
     public CodingTest create(User user, CreateCodingTestRequest request){
         StepCategory stepCategory = stepCategoryRepository.findById(request.getStepId()).orElseThrow(NoSuchElementException::new);
@@ -36,11 +43,23 @@ public class CodingTestService {
         return saveCodingTest;
     }
 
+    /**
+     * 코딩 테스트 객체 조회
+     * @param id
+     * @return
+     */
     public CodingTest get(Long id ){
         CodingTest codingTest = codingTestRepository.findById(id).orElseThrow(NoSuchElementException::new);
         return codingTest;
     }
 
+    /**
+     * 코딩 테스트 객체 수정
+     * @param user
+     * @param id
+     * @param request
+     * @return
+     */
     @Transactional
     public CodingTest update(User user , Long id, UpdateCodingTestRequest request){
         CodingTest codingTest = codingTestRepository.findById(id).orElseThrow(NoSuchElementException::new);
@@ -48,11 +67,36 @@ public class CodingTestService {
         CodingTest updateCodingTest = codingTest.update(request.getAlgoContent(), request.getAlgoCategory());
         return updateCodingTest;
     }
+
+    /**
+     * 코딩 테스트 객체 삭제
+     * @param user
+     * @param id
+     */
     @Transactional
     public void delete(User user,Long id){
         CodingTest codingTest = codingTestRepository.findById(id).orElseThrow(NoSuchElementException::new);
         checkUser(user, codingTest);
         codingTestRepository.delete(codingTest);
+    }
+
+    /**
+     * 코딩테스트 리스트를 받아 생성, 수정을 진행합니다.
+     * @param user
+     * @param stepCategory
+     * @param list
+     */
+    @Transactional
+    public void createUpdateAll(User user, StepCategory stepCategory, List<UpdateCodingTestRequest> list) {
+        checkUser(user,stepCategory);
+        for (UpdateCodingTestRequest request : list) {
+            if(request.getCodingTestId()==null){
+                CodingTest document = CodingTest.createCodingTest(stepCategory, request.getAlgoContent(), request.getAlgoCategory());
+                codingTestRepository.save(document);
+            }else{
+                update(user, request.getCodingTestId(), request);
+            }
+        }
     }
 
 
@@ -76,5 +120,6 @@ public class CodingTestService {
             throw new DifferentUserException();
         }
     }
+
 
 }
