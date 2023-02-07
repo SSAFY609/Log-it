@@ -13,6 +13,11 @@
         <div class="add_btn f_main hover_cursor">+전형 추가</div>
       </div>
       <div class="contents_area"> 
+
+        <h1>임시 데이터 확인</h1>
+        <div>{{ jobs }}</div>
+        <h1>^^^^^^^^^^^^^^</h1>
+
         <!-- DB에서 불러온 데이터 보여주는 영역 -->
         <div class="show_container">
           <div class="show_box" v-for="i in datas.details" :key="i">
@@ -58,15 +63,24 @@
                 
                 <!-- 인풋창 영역-->
                 <div class="ct_input_area">
-                  <v-autocomplete
-                    clearable
-                    chips
-                    label="Autocomplete"
-                    :items="algorithmTypes"
-                    multiple
-                    variant="solo"
-                ></v-autocomplete>
-                  
+
+                  전체 영역
+                  <div class="option_types_area">
+                    
+                    <div v-for="item in algorithmTypes" :key="item">
+                      <div class="chip_container">
+                        <v-chip
+                          v-if="chip"
+                          class="ma-2 chip_box"
+                          @click="selectType"
+                        >
+                        {{ item }}
+                        </v-chip>  
+                      </div>
+                    </div>  
+                  </div>
+
+
 
                 </div>
 
@@ -112,6 +126,7 @@
  </template>
  
  <script>
+import { mapState } from 'vuex';
 
  export default {
     name: 'JobProgress',
@@ -119,14 +134,17 @@
     components: {
 
     },
+    computed: {
+      ...mapState("job", ["jobs"])
+    },
 
     data () {
       return {
-        text: '서류전형은 어쩌구 저쩌구 더미 데이터이다!!!',
         create_content: '',
         update: false,
+        chip: true,
         clicked: '',
-        algorithmTypes: ["dfs", "bfs","greedy", "tree", "stack", "que",],
+        algorithmTypes: ["dfs", "bfs","greedy", "tree", "stack", "que","기타"],
         datas: {
           name: "카카오",
           startDate: "2021-01-03",
@@ -140,7 +158,7 @@
             ]
 
             },
-            {eventId: "2", eventName: "코딩테스트", type: "코테" , testType: ["dfs", "greedy", "tree",], contents: "코딩테스트 내용입니다. 어쩌구 저쩌구"},
+            {eventId: "2", eventName: "코딩테스트", type: "코테" , testType: "bfs", contents: "코딩테스트 내용입니다. 어쩌구 저쩌구"},
             {eventId: "3", eventName: "임원면접", type: "면접", boardList: [
               {bId: "01", question: "자기소개 해보세요.", answer: "안녕하십니까 저는 이성훈입니다."},
               {bId: "02", question: "우리 회사에 지원한 동기는?", answer: "돈을 많이 준다고 들었습니다만?"},
@@ -154,7 +172,6 @@
     methods: {
       addQuestion() {
         const target = document.querySelector('.q_input_area')
-        console.log(target)
         target.classList.toggle('nosee')
 
 
@@ -164,7 +181,6 @@
         const removeList = document.querySelectorAll('.tab_item_box')
         const target = event.target
         
-        console.log(target.innerText)
 
 
         removeList.forEach(element => {
@@ -173,11 +189,27 @@
 
         target.classList.add('selected_item')
         this.clicked = target.innerText
+      },
 
+      selectType() {
+        const target = event.target
+        const removeList = document.querySelectorAll('.chip_box')
 
+        removeList.forEach(element => {
+          element.classList.remove('selected_chip')  
+        });
 
+        target.classList.toggle('selected_chip')
+        target.firstChild.setAttribute('prepend-icon', 'mdi-account-circle')
       }
+    },
+    mounted() {
+        const target = document.querySelector('.tab_area_box')
+        target.firstChild.classList.add('selected_item')
+        this.clicked = target.firstChild.innerText
+
     }
+
 
  }
  </script>
@@ -365,10 +397,41 @@ textarea:focus {
   color: #464646;
 }
 .ct_input_area {
-  background-color: rgb(145, 255, 255);
+  /* background-color: rgb(145, 255, 255); */
   width: 100%;
   height: 300px;
-
-
 }
+
+.option_types_area {
+
+  display: flex;
+  width: 100%;
+  height: 100px;
+}
+.chip_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+}
+.chip_box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80px;
+}
+.chip_box:hover {
+  background-color: #FF0A54;
+  color: white;
+  width: 88px;
+  cursor: pointer;
+}
+
+.selected_chip {
+  background-color: #FF0A54;
+  color: white;
+  width: 88px;
+}
+
+
  </style>

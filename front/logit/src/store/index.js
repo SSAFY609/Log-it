@@ -2,6 +2,8 @@ import { createStore } from "vuex";
 import router from "@/router";
 import axios from "axios";
 
+import tempJob from './modules/tempJob.js'
+import job from './modules/job.js'
 import temp from './modules/temp.js'
 import event from "./modules/event.js";
 import timeline from "./modules/timeline.js";
@@ -68,5 +70,7 @@ export default createStore({
     temp: temp,
     event: event,
     timeline: timeline,
+    job: job,
+    tempJob: tempJob,
   },
 });

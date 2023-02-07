@@ -5,10 +5,10 @@
     </div>
     <div class="right_box lay3">
       <div class="search_box_container lay1">
-        <div class="search_box right_box_items hover_cursor max_animation">
+        <div class="search_box right_box_items hover_cursor" @click="searchSlider">
           <div class="search_icon_box"><v-icon class="search_icon">mdi-magnify</v-icon></div>
           <div class="search_content_box">
-            <div class="search_content">검색</div>        
+            <input class="search_content" type="text" placeholder="검색">    
           </div>  
         </div>
       </div>
@@ -79,10 +79,16 @@ export default {
 
       target.classList.toggle('nosee')
     }
+    const searchSlider = () => {
+      const target = document.querySelector('.search_box')
+      target.classList.toggle('max_animation')
+    }
+
     return {
       state,
       openSidebar,
       openProfile,
+      searchSlider,
     }
     
   },
@@ -134,7 +140,7 @@ export default {
     height: 40px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: start;
     border-radius: 4px;
     margin-right: 10px;
   }
@@ -250,7 +256,7 @@ export default {
   }
 
   .max_animation {
-  animation-duration: 2s;
+  animation-duration: 0.4s;
   animation-name: max_animation;
   animation-fill-mode:forwards;
   animation-direction: alternate;
@@ -262,9 +268,13 @@ export default {
   }
 
   to {
-    width: 400px
+    width: 370px
   }
 }
 
+input:focus {
+  outline: none;
+  width: 100%;
+}
 
 </style>
