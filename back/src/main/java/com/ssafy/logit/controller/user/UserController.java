@@ -75,10 +75,8 @@ public class UserController {
         if(resultLogin.get("type").equals(FAIL)) {
             if(resultLogin.get("result").equals(NONE)) { // 사용자 없음
                 resultMap.put("result", NONE);
-            } else if(resultLogin.get("result").equals(PW_FAIL)) { // 비밀번호 틀림
+            } else { // 비밀번호 틀림
                 resultMap.put("result", PW_FAIL);
-            } else { // 이미 로그인됨
-                resultMap.put("result", IS_LOGINED);
             }
             return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
         } else {

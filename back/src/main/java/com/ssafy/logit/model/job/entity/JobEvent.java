@@ -1,6 +1,5 @@
 package com.ssafy.logit.model.job.entity;
 
-
 import com.ssafy.logit.model.common.ResultStatus;
 import com.ssafy.logit.model.step_category.entity.StepCategory;
 import com.ssafy.logit.model.user.entity.User;
