@@ -35,7 +35,7 @@ public class CreateJobEventResponse {
         this.companyName = jobEvent.getCompanyName();
         this.type = jobEvent.getType();
         this.resultStatus = jobEvent.getResultStatus();
-        this.startDate = jobEvent.getEventDate().getStartDate();
-        this.endDate = jobEvent.getEventDate().getEndDate();
+        this.startDate = jobEvent.getStartDate();
+        this.endDate = jobEvent.getEndDate();
     }
 }

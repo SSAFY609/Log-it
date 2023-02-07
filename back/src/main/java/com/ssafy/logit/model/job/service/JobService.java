@@ -2,6 +2,7 @@ package com.ssafy.logit.model.job.service;
 
 
 import com.ssafy.logit.exception.DifferentUserException;
+import com.ssafy.logit.exception.WrongDateException;
 import com.ssafy.logit.model.common.EventDate;
 import com.ssafy.logit.model.common.ResultStatus;
 import com.ssafy.logit.model.job.dto.CreateJobEventRequest;
@@ -15,11 +16,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
-@Transactional(readOnly = false)
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Slf4j
 public class JobService {
@@ -33,7 +35,6 @@ public class JobService {
     public List<JobEvent> getEvents(User user) {
         List<JobEvent> result = jobRepository.findAllByUser(user);
         return result;
-
     }
 
     /**
@@ -46,8 +47,12 @@ public class JobService {
     public JobEvent create(User user, CreateJobEventRequest request) {
         String type = request.getType();
         String companyName = request.getCompanyName();
-        EventDate eventDate = EventDate.createEventDate(request.getStartDate(), request.getEndDate());
-        JobEvent jobEvent = JobEvent.createJobEvent(user, companyName, type, eventDate);
+        LocalDate startDate = request.getStartDate();
+        LocalDate endDate = request.getEndDate();
+        if(endDate!=null){
+            validateDate(startDate,endDate);
+        }
+        JobEvent jobEvent = JobEvent.createJobEvent(user, companyName, type, startDate,endDate);
         JobEvent saveEvent = jobRepository.save(jobEvent);
 
         return saveEvent;
@@ -68,8 +73,9 @@ public class JobService {
         String companyName = request.getCompanyName();
         String type = request.getType();
         ResultStatus resultStatus = request.getResultStatus();
-        EventDate eventDate = request.getEventDate();
-        JobEvent updateEvent = jobEvent.updateInfo(companyName, type, resultStatus, eventDate);
+        LocalDate startDate = request.getStartDate();
+        LocalDate endDate = request.getEndDate();
+        JobEvent updateEvent = jobEvent.updateInfo(companyName, type, resultStatus, startDate,endDate);
 
         return updateEvent;
     }
@@ -81,7 +87,7 @@ public class JobService {
      * @return
      */
     public List<JobEvent> getAllByStartDate(User user){
-        List<JobEvent> jobEvents = jobRepository.findAllByUserOrderByEventDateStartDate(user);
+        List<JobEvent> jobEvents = jobRepository.findAllByUserOrderByStartDate(user);
         return jobEvents;
     }
 
@@ -117,6 +123,17 @@ public class JobService {
     private void checkUser(User user, JobEvent jobEvent) {
         if (!jobEvent.getUser().equals(user)) {
             throw new DifferentUserException();
+        }
+    }
+
+    /**
+     *  날짜 확인 ( 종료날짜가 시작날짜보다 뒤에 있어야 함)
+     * @param startDate
+     * @param endDate
+     */
+    private void validateDate(LocalDate startDate,LocalDate endDate){
+        if(startDate.isAfter(endDate)){
+            throw new WrongDateException();
         }
     }
 

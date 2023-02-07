@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,8 +37,11 @@ public class JobEvent {
 
     @Enumerated(EnumType.STRING)
     private ResultStatus resultStatus;
-    @Embedded
-    private EventDate eventDate;
+
+
+
+    private LocalDate startDate;
+    private LocalDate endDate;
 
     @OneToMany(mappedBy = "jobEvent")
     private List<StepCategory> stepCategoryList = new ArrayList<>();
@@ -45,23 +49,24 @@ public class JobEvent {
 
 
     // 생성 메소드 //
-    public static JobEvent createJobEvent(User user,String companyName, String type,EventDate eventDate){
+    public static JobEvent createJobEvent(User user,String companyName, String type,LocalDate startDate,LocalDate endDate){
         JobEvent jobEvent = new JobEvent();
         jobEvent.user = user;
         jobEvent.companyName = companyName;
         jobEvent.type = type;
         jobEvent.resultStatus = ResultStatus.INPROGRESS;
-        jobEvent.eventDate = eventDate;
-
+        jobEvent.startDate = startDate;
+        jobEvent.endDate = endDate;
         return jobEvent;
     }
 
     // 수정 메소드 //
-    public JobEvent updateInfo(String companyName,String type,ResultStatus resultStatus, EventDate eventDate){
+    public JobEvent updateInfo(String companyName,String type,ResultStatus resultStatus, LocalDate startDate,LocalDate endDate){
         this.companyName = companyName;
         this.type = type;
         this.resultStatus = resultStatus;
-        this.eventDate = eventDate;
+        this.startDate = startDate;
+        this.endDate = endDate;
         return this;
     }
 }

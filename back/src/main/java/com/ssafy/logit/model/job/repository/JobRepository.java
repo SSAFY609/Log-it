@@ -15,7 +15,7 @@ public interface JobRepository extends JpaRepository<JobEvent, Long> {
 
     List<JobEvent> findAllByUser(User user);
 
-    List<JobEvent> findAllByUserOrderByEventDateStartDate(User user);
+    List<JobEvent> findAllByUserOrderByStartDate(User user);
 
     @Query("SELECT DISTINCT iv " +
             "FROM JobEvent j " +
