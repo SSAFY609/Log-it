@@ -4,7 +4,6 @@ package com.ssafy.logit.model.job.entity;
 import com.ssafy.logit.model.common.ResultStatus;
 import com.ssafy.logit.model.step_category.entity.StepCategory;
 import com.ssafy.logit.model.user.entity.User;
-import com.ssafy.logit.model.common.EventDate;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

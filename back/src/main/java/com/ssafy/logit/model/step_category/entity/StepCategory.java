@@ -70,19 +70,21 @@ public class StepCategory {
     }
 
     // 생성 메소드 //
-    public static StepCategory createCategory(JobEvent jobEvent,LocalDate typeDate,JobCategory jobCategory){
+    public static StepCategory createCategory(JobEvent jobEvent,LocalDate typeDate,JobCategory jobCategory,String name){
         StepCategory stepCategory = new StepCategory();
         stepCategory.addJobEvent(jobEvent);
         stepCategory.setTypeDate(typeDate);
         stepCategory.setResultStatus(ResultStatus.INPROGRESS);
         stepCategory.setJobCategory(jobCategory);
+        stepCategory.setName(name);
         return stepCategory;
     }
 
     // 수정 메소드 //
-    public StepCategory updateCategory(LocalDate typeDate,ResultStatus resultStatus){
+    public StepCategory updateCategory(LocalDate typeDate,ResultStatus resultStatus,String name){
         this.setTypeDate(typeDate);
         this.setResultStatus(resultStatus);
+        this.setName(name);
         return this;
     }
 

@@ -3,7 +3,6 @@ package com.ssafy.logit.model.job.service;
 
 import com.ssafy.logit.exception.DifferentUserException;
 import com.ssafy.logit.exception.WrongDateException;
-import com.ssafy.logit.model.common.EventDate;
 import com.ssafy.logit.model.common.ResultStatus;
 import com.ssafy.logit.model.job.dto.CreateJobEventRequest;
 import com.ssafy.logit.model.job.dto.CreateJobEventResponse;

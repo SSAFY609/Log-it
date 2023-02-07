@@ -1,12 +1,9 @@
 package com.ssafy.logit.model.job.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.ssafy.logit.model.common.EventDate;
 import com.ssafy.logit.model.common.ResultStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
