@@ -1,9 +1,15 @@
 package com.ssafy.logit.controller.step_category.category;
 
+import com.ssafy.logit.model.common.ResultDto;
 import com.ssafy.logit.model.step_category.dto.category.codingtest.CodingTestResponse;
 import com.ssafy.logit.model.step_category.dto.category.codingtest.CreateCodingTestRequest;
+import com.ssafy.logit.model.step_category.dto.category.codingtest.CreateUpdateCodingTestList;
 import com.ssafy.logit.model.step_category.dto.category.codingtest.UpdateCodingTestRequest;
+import com.ssafy.logit.model.step_category.dto.category.interview.CreateUpdateInterviewList;
+import com.ssafy.logit.model.step_category.dto.category.interview.InterviewResponse;
+import com.ssafy.logit.model.step_category.entity.StepCategory;
 import com.ssafy.logit.model.step_category.entity.category.CodingTest;
+import com.ssafy.logit.model.step_category.service.StepCategoryService;
 import com.ssafy.logit.model.step_category.service.category.CodingTestService;
 import com.ssafy.logit.model.user.entity.User;
 import com.ssafy.logit.model.user.service.UserService;
@@ -16,6 +22,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/step-category/coding-test")
@@ -24,6 +33,7 @@ import org.springframework.web.bind.annotation.*;
 public class CodingTestController {
     private final UserService userService;
     private final CodingTestService codingTestService;
+    private final StepCategoryService stepCategoryService;
 
 
     @Operation(summary = "코테 전형 생성 ", description = "코테 전형 데이터를 생성합니다. RequestBody에 취업이벤트의 id가 필요합니다.")
@@ -63,6 +73,24 @@ public class CodingTestController {
         User user = getUser(email);
         codingTestService.delete(user, id);
         return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
+    }
+
+    @Operation(summary = "생성,수정 전부 처리", description = "request에 코딩테스트 객체 리스트를 담아 생성, 수정")
+    @PostMapping("/create-update-all")
+    public ResponseEntity<ResultDto> createUpdateAll(@RequestAttribute String email,
+                                                     @Validated @RequestBody CreateUpdateCodingTestList codingTests) {
+        User user = getUser(email);
+        StepCategory stepCategory = stepCategoryService.get(codingTests.getStepId());
+        codingTestService.createUpdateAll(user, stepCategory, codingTests.getList());
+
+        //  stepEtc 리스트
+        List<CodingTestResponse> results = stepCategory
+                .getCodingTestList()
+                .stream()
+                .map(o -> new CodingTestResponse(o))
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(new ResultDto(results.size(),results),HttpStatus.CREATED);
     }
 
     private User getUser(String email) {

@@ -5,6 +5,7 @@ import lombok.Getter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
+import java.util.NoSuchElementException;
 
 
 @Entity
@@ -23,42 +24,42 @@ public class CodingTest {
     @Max(1000)
     private String content;
     @Max(30)
-    private String algoCategory;
+    @Enumerated(EnumType.STRING)
+    private AlgoCategory algoCategory;
 
 
     // setter
-    private void setStepCategory(StepCategory stepCategory) {
-        if (stepCategory != null) {
-            this.stepCategory = stepCategory;
+    private void addStepCategory(StepCategory stepCategory) {
+        if (stepCategory == null) {
+            throw new NoSuchElementException();
         }
+        stepCategory.getCodingTestList().add(this);
+        this.stepCategory = stepCategory;
     }
 
     private void setContent(String content) {
         this.content = content;
     }
 
-    private void setAlgoCategory(String algoCategory) {
+    public void setAlgoCategory(AlgoCategory algoCategory) {
         this.algoCategory = algoCategory;
     }
 
-
     // 생성 메소드 //
-    public static CodingTest createCodingTest(StepCategory stepCategory, String content, String category) {
+    public static CodingTest createCodingTest(StepCategory stepCategory, String content, AlgoCategory category) {
         CodingTest codingTest = new CodingTest();
-        codingTest.setStepCategory(stepCategory);
+        codingTest.addStepCategory(stepCategory);
         codingTest.setContent(content);
         codingTest.setAlgoCategory(category);
         return codingTest;
     }
 
     // 수정 메소드 //
-    public CodingTest update(String content, String category) {
+    public CodingTest update(String content, AlgoCategory category) {
         this.setContent(content);
         this.setAlgoCategory(category);
         return this;
     }
-
-
 
 
 }
