@@ -5,22 +5,28 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.ssafy.logit.model.step_category.dto.serializer.InterviewCategoryDeserializer;
 import com.ssafy.logit.model.step_category.dto.serializer.InterviewCategorySerializer;
 import com.ssafy.logit.model.step_category.entity.category.InterviewCategory;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 
 @Data
+@Schema(description = "채용전형(면접) 생성 요청")
 public class CreateInterviewRequest {
 
 
     @NotNull
+    @Schema(description = "전형 id")
     private Long stepId;
     @Max(200)
+    @Schema(description = "질문")
     private String question;
     @Max(1000)
+    @Schema(description = "대답")
     private String answer;
 
+    @Schema(description = "면접 유형")
     private InterviewCategory category;
 
 
