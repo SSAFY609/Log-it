@@ -8,9 +8,11 @@
         />
       </div>
       <div>
-        <div v-if="!state.loginUser.name">
-          <h1>당신의 새로운 여정</h1>
-          <h1>매일 기록해보세요</h1>
+        <div v-if="state.loginUser.name">
+          <div style="height: 150px">
+          <h1 class="text"></h1>
+          <h1 class="text2"></h1>
+          </div>
           <p>진행중인 이벤트와 취업여정을 기록하면서 달라진 나의 모습을 발견하세요.</p>
           <router-link :to="{name: 'UserLogin'}" class="login_btn_box b_main btn_hover">
             <div class="login_btn_text f_white">시작하기</div>
@@ -50,10 +52,44 @@ export default {
     computed: { 
       ...mapState(['loginUser'])
   },
+  methods: {
+    writeTitle(className, letters, s) {
+      const $text = document.querySelector(className);
+
+// 글자 입력 속도
+const speed = 100;
+
+// 타이핑 효과
+const typing = async () => {  
+  const letter = letters.split("");
+  
+  while (letter.length) {
+    await wait(speed);
+    $text.innerHTML += letter.shift(); 
+  }
+  
+  // 잠시 대기
+  await wait(800)
+  
+}
+
+// 딜레이 기능 ( 마이크로초 )
+function wait(ms) {
+  return new Promise(res => setTimeout(res, ms))
+}
+
+// 초기 실행
+setTimeout(typing, s);
+    }
+  },
   created() {
     console.log(this.$store.state.loginUser);
     console.log(this.loginUser);
-    }
+    },
+  mounted(){
+    this.writeTitle('.text', '당신의 새로운 여정을', 1500)
+    this.writeTitle('.text2', '매일 기록해 보세요', 2600)
+  }
     
     
 
@@ -62,6 +98,21 @@ export default {
 </script>
 
 <style scoped>
+.texe::after {
+  content: '';
+  margin-left: .4rem;
+  border-right: 2px solid #777;
+  animation: cursor .9s infinite steps(2);
+}
+
+@keyframes cursor {
+  from { border-right: 2px solid #222; }
+  to { border-right: 2px solid #777; }
+}
+
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
+
+
   .container {
     height: 100%;
     display:flex;
