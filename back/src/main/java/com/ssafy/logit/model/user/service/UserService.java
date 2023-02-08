@@ -238,4 +238,8 @@ public class UserService {
     public User getUserEntity(String email){
         return userRepo.findByEmail(email).orElseThrow(NoSuchElementException::new);
     }
+
+    public List<User> getUsersByName(String name){
+        return userRepo.findByNameContains(name);
+    }
 }

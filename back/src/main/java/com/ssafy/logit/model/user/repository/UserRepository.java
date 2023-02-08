@@ -20,4 +20,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "select * from users where user_id not in (select user_id from growth_user where growth_id = ?1) and user_id != ?2 and name like %?3%", nativeQuery = true)
     public List<User> searchInviteUser(long growthId, long userId, String userName);
+
+    List<User> findByNameContains(String name);
+
 }

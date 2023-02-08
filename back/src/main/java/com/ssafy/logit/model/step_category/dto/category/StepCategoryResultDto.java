@@ -10,6 +10,9 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Schema(description = "기업에 대한 취업 여정 리스트 반환")
 public class StepCategoryResultDto<T> {
+
+    @Schema(description = "채용여정이벤트id")
+    private Long jobId;
     @Schema(description = "시작날짜")
     private LocalDate startDate;
     @Schema(description = "종료날짜")
