@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -52,7 +53,7 @@ public class UserController {
     @PostMapping("/regist")
     public ResponseEntity<String> regist(@RequestBody UserDto userDto) throws Exception {
         try {
-            Map<String, Object> resultMap = userService.saveUser(userDto, true);
+            Map<String, Object> resultMap = userService.registUser(userDto);
             if(resultMap.get("result").equals(PRESENT)) { // 이미 가입된 사용자
                 return new ResponseEntity<String>(PRESENT, HttpStatus.NOT_ACCEPTABLE);
             } else { // 회원가입 성공
@@ -147,11 +148,10 @@ public class UserController {
     @Operation(summary = "비밀번호 찾기", description = "임시 비밀번호 발급 후 이메일 전송")
     @PostMapping("/sendPw")
     public ResponseEntity<String> sendPwEmail(@RequestParam String email) {
-        UserDto userDto = userService.getUser(email);
-        if(userDto != null) {
-            String tmpPw = userService.getTmpPw();
-            userDto.setPw(tmpPw);
-            userService.saveUser(userDto, true);
+        String tmpPw = userService.getTmpPw();
+        String result = userService.updatePw(tmpPw, email);
+
+        if(result.equals(SUCCESS)) {
             // 전송
             MailDto mailDto = mailService.createMail(tmpPw, email);
             log.info("생성된 mailDto : {}", mailDto.getToAddress() + mailDto.getFromAddress() + mailDto.getTitle());
@@ -160,24 +160,26 @@ public class UserController {
             log.info("임시 비밀번호 전송 완료");
             return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
         } else {
-            return new ResponseEntity<String>(NONE, HttpStatus.OK);
+            return new ResponseEntity<String>(FAIL, HttpStatus.OK);
         }
     }
 
-    // 회원 수정
-    @Operation(summary = "회원 수정", description = "회원 정보 수정")
+//    @Operation(summary = "비밀번호 수정", description = "비밀번호 수정")
+//    @PostMapping("/pw")
+//    public ResponseEntity<String> updatePw(@RequestParam String pw, @RequestAttribute String email) {
+//
+//    }
+
+    // 프로필 수정
+    @Operation(summary = "프로필 수정", description = "회원 정보 수정")
     @PostMapping
     public ResponseEntity<String> updateUser(@RequestBody UserDto userDto, @RequestAttribute String email) throws Exception {
         try {
-            Map<String, Object> resultMap = userService.saveUser(userDto, false);
+            Map<String, Object> resultMap = userService.updateUser(userDto, email);
             if(resultMap.get("result").equals(NONE)) { // 존재하지 않는 사용자
                 return new ResponseEntity<String>(NONE, HttpStatus.NOT_ACCEPTABLE);
             } else {
-                if(userDto.getEmail().equals(email)) { // 토큰 확인 후 업데이트
-                    return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
-                } else { // 토큰과 일치하는 사용자 아님
-                    return new ResponseEntity<String>(UNAUTHORIZED, HttpStatus.UNAUTHORIZED);
-                }
+                return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
             }
         } catch (Exception e) {
             e.printStackTrace();
