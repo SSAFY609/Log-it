@@ -25,11 +25,11 @@
           <div class="show_box" v-for="i in datas.datas" :key="i">
             <div v-if="clicked==i.jobCategory" class="show_inner_box">
 
-              <h1>{{i.jobCategory}} 전형</h1>
+              <h2 class="category_text">{{i.name}} 전형</h2>
               
               
               <!-- 서류전형-->
-              <div v-if="i.jobCategory=='DOCUMENT'">
+              <div v-if="i.jobCategory=='서류'">
                 <div class="db_board_list" v-for="(el, index) in i.list" :key="index">
                   <h2>[ 질문{{ index + 1 }} ]</h2>
                   <div class="q_input_box">
@@ -59,6 +59,7 @@
                    </div>
                     <p>추가하기</p>
                   </div>
+
                 </div>
             
             
@@ -67,88 +68,81 @@
             
               </div>
               <!-- 코테 영역 -->
-              <div v-if="i.jobCategory=='CODINGTEST'" class="ct_area">
+              <div v-if="i.jobCategory=='코딩테스트'" class="ct_area">
                    
                 <!-- 인풋창 영역-->
                 <div class="ct_input_area">
 
                   <div class="test_item" v-for="(el, index) in ct_datas.list" :key="index">
                     <h2>[ 문제{{ index + 1 }} ]</h2>
-                    <h3>문제 유형</h3>
-                    <!-- <h3>{{ ct_datas }}</h3> -->
-                    <div class="option_types_area">
-                      <div class="chip_box" v-for="item in testList" :key="item">
+                    <h3 class="temp">문제 유형</h3>
+                    <div ref="option_area" class="option_types_area">
+                      <!-- <div class="chip_box" v-for="item in testList" :key="item">
                         <input class="radio_item" type="radio" :name="`ct_category${index}`" :id="`${item}`" @click="changeOption" :value="`${item}`">
                         <label :for="`${item}`">{{ item }}</label>
+                      </div> -->
+                      
+                      <div class="chip_box hover_cursor">
+                        <input type="radio" :name="`ct_category${index}`" id="BFS" @click="changeOption" value="BFS">
+                        <label for="BFS">BFS</label>
                       </div>
-                      <!-- <div class="chip_box">
+                      <div class="chip_box hover_cursor">
                         <input type="radio" :name="`ct_category${index}`" id="DFS" @click="changeOption" value="DFS">
                         <label for="DFS">DFS</label>
                       </div>
-                      <div class="chip_box">
+                      <div class="chip_box hover_cursor">
                         <input type="radio" :name="`ct_category${index}`" id="그래프" @click="changeOption" value="그래프">
                         <label for="그래프">그래프</label>
                       </div>
-                      <div class="chip_box">
+                      <div class="chip_box hover_cursor">
                         <input type="radio" :name="`ct_category${index}`" id="구현" @click="changeOption" value="구현">
                         <label for="구현">구현</label>
                       </div>
-                      <div class="chip_box">
+                      <div class="chip_box hover_cursor">
                         <input type="radio" :name="`ct_category${index}`" id="문자열" @click="changeOption" value="문자열">
                         <label for="문자열">문자열</label>
                       </div>
-                      <div class="chip_box">
+                      <div class="chip_box hover_cursor">
                         <input type="radio" :name="`ct_category${index}`" id="정렬" @click="changeOption" value="정렬">
                         <label for="정렬">정렬</label>
                       </div>
-                      <div class="chip_box">
+                      <div class="chip_box hover_cursor">
                         <input type="radio" :name="`ct_category${index}`" id="이분탐색" @click="changeOption" value="이분탐색">
                         <label for="이분탐색">이분탐색</label>
                       </div>
-                      <div class="chip_box">
+                      <div class="chip_box hover_cursor">
                         <input type="radio" :name="`ct_category${index}`" id="자료구조" @click="changeOption" value="자료구조">
                         <label for="자료구조">자료구조</label>
                       </div>
-                      <div class="chip_box">
+                      <div class="chip_box hover_cursor">
                         <input type="radio" :name="`ct_category${index}`" id="완전탐색" @click="changeOption" value="완전탐색">
                         <label for="완전탐색">완전탐색</label>
                       </div>
-                      <div class="chip_box">
+                      <div class="chip_box hover_cursor">
                         <input type="radio" :name="`ct_category${index}`" id="힙" @click="changeOption" value="힙">
                         <label for="힙">힙</label>
                       </div>
-                      <div class="chip_box">
+                      <div class="chip_box hover_cursor">
                         <input type="radio" :name="`ct_category${index}`" id="트리" @click="changeOption" value="트리">
                         <label for="트리">트리</label>
                       </div>
-                      <div class="chip_box">
+                      <div class="chip_box hover_cursor">
                         <input type="radio" :name="`ct_category${index}`" id="DP" @click="changeOption" value="DP">
                         <label for="DP">DP</label>
                       </div>
-                      <div class="chip_box">
+                      <div class="chip_box hover_cursor">
                         <input type="radio" :name="`ct_category${index}`" id="그리디" @click="changeOption" value="그리디">
                         <label for="그리디">그리디</label>
                       </div>
 
-                      <div class="chip_box">
+                      <div class="chip_box hover_cursor">
                         <input type="radio" :name="`ct_category${index}`" id="백트랙킹" @click="changeOption" value="백트랙킹">
                         <label for="백트랙킹">백트랙킹</label>
-                      </div> -->
+                      </div>
 
 
                       
-                      
-                      <!-- <div v-for="item in testList" :key="item">
-                        <div class="chip_container">
-                           <v-chip
-                            v-if="chip"
-                             class="ma-2 chip_box"
-                             @click="selectType"
-                          >
-                           {{ item }}
-                          </v-chip>  
-                        </div>
-                      </div>   -->
+                    
                     </div>
                     <div class="ct_contents_area">
                       <h3>문제 내용</h3>
@@ -167,8 +161,8 @@
 
 
 
-              <div v-if="i.jobCategory=='INTERVIEW'">
-                <div class="interview_area">
+              <!-- <div v-if="i.jobCategory=='면접'">
+                <div class="면접_area">
                   <div v-for="(item, index) in i.list" :key="index">
                     <div>{{ item.id }}</div>
                     <div>{{ item.category }}</div>
@@ -176,9 +170,47 @@
                     <div>{{ item.answer }}</div>
                   </div>
                 </div>
+              </div> -->
+
+                            <!-- 서류전형-->
+                <div v-if="i.jobCategory=='면접'">
+                  <div class="db_board_list" v-for="(item, index) in i.list" :key="index">
+                    <h2>[ 질문{{ index + 1 }} ]</h2>
+                    <div class="q_input_box">
+                    <input class="q_text" type="text" v-model="item.question">
+                  </div>
+                  <div class="a_input_box">
+                    <textarea class="a_text" v-model="item.answer"></textarea>
+                  </div>
+                </div>
+                
+
+                <!-- 인풋창 영역-->
+                <div class="contents_box lay2">
+                  <div class="q_input_area nosee">
+                    <div class="q_input_box">
+                      <input class="q_text" type="text" placeholder="질문을 추가하세요." autofocus>
+                    </div>
+                    <div class="a_input_box">
+                      <textarea  class="a_text" placeholder="답변을 작성하세요."></textarea>
+                    </div>  
+                  </div>
+
+                  <!-- 추가하기 버튼 -->
+                  <div class="add_q_btn_box hover_cursor" @click="addQuestion">
+                    <div name="add_q_btn" id="add_q_btn" class="q_btn " >
+                     <v-icon class="f_icon plus_icon">mdi-plus</v-icon>
+                   </div>
+                    <p>추가하기</p>
+                  </div>
+                  
+                </div>
+            
+            
+            
+            
+            
               </div>
-
-
 
 
               
@@ -226,28 +258,7 @@ import { mapState } from 'vuex';
         datas: {},
         ct_datas: {},
         category: {},
-        
-        // datas:
-        //   name: "카카오",
-        //   startDate: "2021-01-03",
-        //   endDate: null,
-        //   details: [
-        //     {eventId: "1", eventName: "서류전형", type: "서류", boardList: [
-        //       {bId: "01", question: "[질문1] 지원자의 성장과정과 노력들에 대해서 작성하시오.", 
-        //        answer: "안녕하십니까 저는 이성훈입니다.이러한 결과에 초점을 맞추어 찍찍이를 이용하여 간단하게 붙일 수 있는 방충망을 주력 제품으로 삼았습니다.또한, 설문 조사 시 받은 메신저 아이디로 방충망 무료 설치 이벤트를 제안하였고, 승낙한 분들의 집에 직접 방충망을 설치하기 시작했습니다.  이 경험을 통해 위기가 발생해도 해답을 찾는 방법을 배웠고, 무엇보다 하고자 하는 의지가 중요하다는 것을 배웠습니다. 항상 함께하는 팀원에게 감사함을 느끼며 업무에 임하는 직원이 되겠습니다."},
-        //       {bId: "02", question: "[서류]우리 회사에 지원한 동기는?", answer: "돈을 많이 준다고 들었습니다만?"},
-        //       {bId: "03", question: "[서류]본인의 강점을 말해보세요", answer: "저는 MZ세대 입니다."},
-        //     ]
-
-        //     },
-        //     {eventId: "2", eventName: "코딩테스트", type: "코테" , testType: "bfs", contents: "코딩테스트 내용입니다. 어쩌구 저쩌구"},
-        //     {eventId: "3", eventName: "임원면접", type: "면접", boardList: [
-        //       {bId: "01", question: "자기소개 해보세요.", answer: "안녕하십니까 저는 이성훈입니다."},
-        //       {bId: "02", question: "우리 회사에 지원한 동기는?", answer: "돈을 많이 준다고 들었습니다만?"},
-        //       {bId: "03", question: "본인의 강점을 말해보세요", answer: "저는 MZ세대 입니다."},
-        //     ]}
-        //   ],
-        // }
+ 
       }
     },
 
@@ -276,7 +287,8 @@ import { mapState } from 'vuex';
       selectType() {
         const target = event.target
         const removeList = document.querySelectorAll('.chip_box')
-
+        console.log(target)
+        console.log(removeList)
         removeList.forEach(element => {
           element.classList.remove('selected_chip')  
         });
@@ -298,10 +310,27 @@ import { mapState } from 'vuex';
 
         const targetName = event.target.name
         const targetOption = event.target.value
+        const target = event.target
+
 
         this.category[`${targetName}`] = targetOption
+        target.classList.add('checked')
         // console.log(this.category)
+        // console.log(target)
 
+        const target2 = event.target
+        const removeList = document.querySelectorAll('.chip_box')
+        
+        console.log(target2)
+        console.log(removeList)
+
+        removeList.forEach(element => {
+          element.classList.remove('selected_chip')  
+        });
+
+        target2.parentElement.classList.toggle('selected_chip')
+
+        
 
 
       }
@@ -318,7 +347,7 @@ import { mapState } from 'vuex';
       }
 
       for(let i=0; i < this.datas.datas.length; i++) {
-          if (this.datas.datas[i].jobCategory == 'CODINGTEST') {
+          if (this.datas.datas[i].jobCategory == '코딩테스트') {
             this.ct_datas = this.datas.datas[i]
           }
       }
@@ -329,23 +358,21 @@ import { mapState } from 'vuex';
         this.category[`ct_category${i}`] = this.ct_datas.list[i].category
       }
 
-
+      
 
 
     },
     mounted() {
+
+
         const target = document.querySelector('.tab_area_box')
+        
+
         target.firstChild.classList.add('selected_item')
         this.clicked = target.firstChild.innerText
+      
+      
 
-        const radioList = document.querySelectorAll('.radio_item')
-        console.log(radioList)  
-
-        radioList.forEach(element => {
-          console.log(element)
-        });
-
-        
         
 
         
@@ -430,7 +457,7 @@ span {
   margin-top: 16px;
   width: 800px;
   min-height: 600px;
-  background-color: #739614;
+  background-color: #F6F6F6;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -522,8 +549,7 @@ textarea:focus {
   display: flex;
   flex-direction: column;
   width:690px;
-  background-color: cadetblue;
-  outline: 2px solid red;
+  margin-bottom: 100px;
 }
 
 .db_board_list {
@@ -556,39 +582,17 @@ textarea:focus {
   width: 700px;
   height: 100px;
 }
-/* .chip_container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100px;
-}
-.chip_box {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 80px;
-}
-.chip_box:hover {
-  background-color: #FF0A54;
-  color: white;
-  width: 88px;
-  cursor: pointer;
-}
 
-.selected_chip {
-  background-color: #FF0A54;
-  color: white;
-  width: 88px;
-} */
+
+
 
 .test_item {
-  background-color: rgb(201, 201, 240);
   width: 100%;
   height: 100%;
 }
 
 .ct_contents_area {
-  background-color: #f77a9f;
+  background-color: transparent;
   width: 690px;
 }
 
@@ -600,16 +604,42 @@ textarea:focus {
 .ct_area {
   margin-top: 20px;
 }
-.interview_area {
+.면접_area {
   margin-top: 20px;
 }
 .chip_box {
   width: 90px;
   height: 36px;
   border-radius: 50px;
-  background-color: #739614;
+  background-color: #DFDFDF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+}
+.chip_box:hover {
+  background-color: #FF0A54;
+  color: white;
+}
+
+label {
+  width: 150px;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
+label:hover {
+  cursor: pointer;
+}
+
+.category_text {
+  font-family: appleB;
+  font-size: 30px;
+}
+.selected_chip {
+  background-color: #FF0A54;
+  color: white;
+}
+
  </style>

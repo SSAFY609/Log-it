@@ -15,48 +15,10 @@ const tempJob = {
                 "size": 4,
                 "datas": [
                     {
-                        "stepId": 4,
-                        "resultStatus": "INPROGRESS",
-                        "jobCategory": "INTERVIEW",
-                        "name": "HI",
-                        "list": [
-                            {
-                                "id": 8,
-                                "question": "자기소개 해주세요",
-                                "answer": "나는 공진호",
-                                "category": "인성면접"
-                            },
-                            {
-                                "id": 9,
-                                "question": "자신의 강점은?",
-                                "answer": "컴퓨터 게임을 잘합니다.",
-                                "category": "기술면접"
-                            }
-                        ]
-                    },
-                    {
-                        "stepId": 5,
-                        "resultStatus": "INPROGRESS",
-                        "jobCategory": "CODINGTEST",
-                        "name": "HI",
-                        "list": [
-                            {
-                                "id": 6,
-                                "content": "DFS 문제중에서는 난이도가 어려웠다. 아무말이나 적고 싶다. 더미 데이터를 분석해 보는것은 의미가 있을까? 프로그래머스에서 문제를 더 찾아봐야겠다. 코테는 언제나 즐겁다.",
-                                "category": "DFS"
-                            },
-                            {
-                                "id": 7,
-                                "content": "다이나믹 프로그래밍 공부를 더 해야곘다. 앞으로는 어떤 이용한 알고리즘 문제였다. 어려웠다.",
-                                "category": "DP"
-                            }
-                        ]
-                    },
-                    {
                         "stepId": 12,
                         "resultStatus": "INPROGRESS",
-                        "jobCategory": "DOCUMENT",
-                        "name": "HI",
+                        "jobCategory": "서류",
+                        "name": "서류",
                         "list": [
                             {
                                 "id": 13,
@@ -74,7 +36,47 @@ const tempJob = {
                                 "answer": "아 싫어요"
                             },
                         ]
-                    }
+                    },
+                    {
+                        "stepId": 5,
+                        "resultStatus": "INPROGRESS",
+                        "jobCategory": "코딩테스트",
+                        "name": "코딩테스트",
+                        "list": [
+                            {
+                                "id": 6,
+                                "content": "DFS 문제중에서는 난이도가 어려웠다. 아무말이나 적고 싶다. 더미 데이터를 분석해 보는것은 의미가 있을까? 프로그래머스에서 문제를 더 찾아봐야겠다. 코테는 언제나 즐겁다.",
+                                "category": "DFS"
+                            },
+                            {
+                                "id": 7,
+                                "content": "다이나믹 프로그래밍 공부를 더 해야곘다. 앞으로는 어떤 이용한 알고리즘 문제였다. 어려웠다.",
+                                "category": "트리"
+                            }
+                        ]
+                    },
+                    {
+                        "stepId": 4,
+                        "resultStatus": "INPROGRESS",
+                        "jobCategory": "면접",
+                        "name": "인성면접",
+                        "list": [
+                            {
+                                "id": 8,
+                                "question": "자기소개 해주세요",
+                                "answer": "나는 공진호",
+                                "category": "인성면접"
+                            },
+                            {
+                                "id": 9,
+                                "question": "자신의 강점은?",
+                                "answer": "컴퓨터 게임을 잘합니다.",
+                                "category": "기술면접"
+                            }
+                        ]
+                    },
+                    
+                    
                 ]
             },
             {   
@@ -104,7 +106,7 @@ const tempJob = {
                     {
                         "stepId": 4,
                         "resultStatus": "INPROGRESS",
-                        "jobCategory": "INTERVIEW",
+                        "jobCategory": "면접",
                         "name": "HI",
                         "list": [
                             {
@@ -124,7 +126,7 @@ const tempJob = {
                     {
                         "stepId": 5,
                         "resultStatus": "INPROGRESS",
-                        "jobCategory": "CODINGTEST",
+                        "jobCategory": "코딩테스트",
                         "name": "HI",
                         "list": [
                             {
@@ -142,7 +144,7 @@ const tempJob = {
                     {
                         "stepId": 12,
                         "resultStatus": "INPROGRESS",
-                        "jobCategory": "DOCUMENT",
+                        "jobCategory": "서류",
                         "name": "HI",
                         "list": [
                             {
@@ -191,7 +193,7 @@ const tempJob = {
                     {
                         "stepId": 4,
                         "resultStatus": "INPROGRESS",
-                        "jobCategory": "INTERVIEW",
+                        "jobCategory": "면접",
                         "name": "HI",
                         "list": [
                             {
@@ -211,7 +213,7 @@ const tempJob = {
                     {
                         "stepId": 5,
                         "resultStatus": "INPROGRESS",
-                        "jobCategory": "CODINGTEST",
+                        "jobCategory": "코딩테스트",
                         "name": "HI",
                         "list": [
                             {
@@ -229,7 +231,7 @@ const tempJob = {
                     {
                         "stepId": 12,
                         "resultStatus": "INPROGRESS",
-                        "jobCategory": "DOCUMENT",
+                        "jobCategory": "서류",
                         "name": "HI",
                         "list": [
                             {
