@@ -19,9 +19,9 @@
         <p>진행중인 이벤트와 취업여정을 기록하면서 달라진 나의 모습을 발견하세요.</p>
 
       </div>
-      <router-link :to="{name: 'UserLogin'}" class="login_btn_box b_main btn_hover">
+      <div @click="start" class="login_btn_box b_main btn_hover">
         <div class="login_btn_text f_white">시작하기</div>
-      </router-link>
+      </div>
       <div class="img_box lay1">
         <v-img class="laptop_img"
                :src="require('../../assets/images/laptop02.png')"
@@ -32,15 +32,24 @@
 </template>
 
 <script>
+import router from '@/router';
 import { mapState } from 'vuex';
 
-export default {
+export default {  
     name: 'MainPage',
     setup() {
       const state = {
         loginUser: {name: '이성훈'},
       }
+      const start = () => { 
+        if (sessionStorage.getItem("token")) {
+          router.push({ name: 'EventList' })
+        } else { 
+          router.push({ name: 'UserLogin' })
+        }
+      }
       return {
+        start,
         state,
       }
   },
