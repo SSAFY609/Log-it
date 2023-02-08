@@ -25,6 +25,7 @@
           </router-link>
         </div>
       </div>
+      <div style="position:fixed">얍{{ scrollTop }}</div>
       <div class="img_box lay1">
         <v-img class="laptop_img"
                :src="require('../../assets/images/laptop02.png')"
@@ -49,6 +50,11 @@ export default {
   },
     computed: { 
       ...mapState(['loginUser'])
+  },
+  data() {
+    return {
+      scrollTop: 0,
+    }
   },
   methods: {
     writeTitle(className, letters, s) {
@@ -100,6 +106,22 @@ export default {
 
       // 초기 실행
       setTimeout(typing, s);
+    },
+    onScroll(){
+      const currentScrollPosition = window.pageYOffset || document.documentElement.scrollTop
+      if(currentScrollPosition < 0){
+        return
+      }
+      this.scrollTop = currentScrollPosition;
+      if (currentScrollPosition > 0 && currentScrollPosition < 500){
+        const img = document.querySelector('.img_box')
+        img.style.width = `${1300 + currentScrollPosition * 0.5}px`
+      } else if (currentScrollPosition >= 507 ){
+        const img = document.querySelector('.img_box')
+        img.style.position = "-webkit-sticky"
+        img.style.position = "sticky"
+        img.style.top = "0"
+      }
     }
   },
   created() {
@@ -108,7 +130,9 @@ export default {
     },
   mounted(){
     this.writeTitle('.text', '당신의 새로운 여정을 \n 매일 기록해 보세요', 1500)
-  }
+    window.addEventListener('scroll', this.onScroll)
+  },
+  
     
     
 
@@ -124,6 +148,8 @@ export default {
     animation: cursor .9s infinite steps(2);
   }
 
+
+
   @keyframes cursor {
     from { border-right: 10px solid #ffffff; }
     to { border-right: 10px solid #ff0000; }
@@ -133,13 +159,12 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 180px;
+    height: 250px;
   }
 
   .container {
-    height: 100%;
+    height: 200%;
     display:flex;
-    align-items: center;
     justify-content: center;
   }
   .discription_box {
@@ -150,7 +175,7 @@ export default {
   h1 {
     text-align: center;
     font-family: appleB;
-    font-size: 50px;
+    font-size: 56px;
     ;
   }
   p {
@@ -173,7 +198,7 @@ export default {
     width: 1300px;
     display: flex;
     justify-content: center;
-    margin-top: 0px;
+    margin-top: 50px;
   }
   .laptop_img {
     margin: 0 auto;
@@ -186,7 +211,7 @@ export default {
     justify-content: center;
     align-items: center;
     margin: 0 auto;
-    margin-top: 20px;
+    margin-top: 40px;
   }
   .login_btn_text {
     margin-top: 2px;
