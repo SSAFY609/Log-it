@@ -116,17 +116,21 @@ export default createStore({
         });
     },
     // 비밀번호 재발급
-    sendPw({dispatch}){
-      axiosConnector
-      .post("user/sendPw")
-      .then(()=>{
-        alert("비밀번호 재발급은 했어 ~");
-        dispatch("getUser")
+    sendPw(context, email) {
+      const URL = `${baseURL}/sendPw`;
+      axios({
+        url: URL,
+        method: "POST",
+        params: { email: email },
       })
-      .catch((err)=>{
-        alert("비밀번호 재발급 실패 ...... 🤣");
-        console.log(err);
-      })
+        .then(() => {
+          console.log("성공");
+          // commit("LOGIN_USER", res.data);
+        })
+        .catch((err) => {
+          alert("으악!!!!!!! 로그인 실패");
+          console.log(err);
+        });
     },
     // 이메일 중복 검사하기
     // UserEmail.vue에 작성

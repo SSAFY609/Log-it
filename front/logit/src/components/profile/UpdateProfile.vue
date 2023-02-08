@@ -158,9 +158,6 @@ export default {
         name: state.name,
         studentNo: state.studentNo,
         image: state.image,
-        pw: state.pw,
-        flag: state.flag,
-        isDeleted: state.isDeleted,
       };
       // console.log(store.state.loginUser)
       // console.log(user)
@@ -183,6 +180,7 @@ export default {
       previews[0].src = state.imageSrc;
       state.uploadState = true;
       state.image = state.imageSrc;
+      console.log(state.image);
     };
 
     // 이미지 선택했을 때, 변화
@@ -200,10 +198,7 @@ export default {
       state.name = loginUser.name;
       state.studentNo = loginUser.studentNo;
       state.image = loginUser.image;
-      state.pw = loginUser.pw;
-      state.flag = loginUser.flag;
-      state.isDeleted = loginUser.isDeleted;
-
+      
       if (loginUser.image.length < 3) {
         previews.src = require(`@/assets/profiles/scale (${loginUser.image}).png`);
       } else {

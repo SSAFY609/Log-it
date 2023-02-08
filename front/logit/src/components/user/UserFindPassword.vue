@@ -61,9 +61,12 @@
          alert("이메일 주소를 확인해주세요.");
          return;
        }
-         this.$store.dispatch("sendPw");
+       const email = this.email_tmp
+       console.log(email)
+         this.$store.dispatch("sendPw", email);
          this.$router.push("reset");
      },
+
      async chkEmail() { 
       const validate  = await this.$refs.form.validate();
        if (validate.valid) {
