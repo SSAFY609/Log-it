@@ -1,6 +1,7 @@
 package com.ssafy.logit.model.growth.entity;
 
-import com.ssafy.logit.model.growth.dto.ImageDto;
+import com.ssafy.logit.model.growth.dto.LikeProgressDto;
+import com.ssafy.logit.model.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,24 +14,26 @@ import javax.persistence.*;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Image {
+public class LikeProgress {
 
     @Id
     @GeneratedValue
-    @Column(name = "image_id")
-    private Long imageId;
+    @Column(name = "like_id")
+    private Long likeId;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "progress_id")
     private Progress progress;
 
-    private String imageUrl;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     // Entity -> DTO 변환
-    public ImageDto toDto() {
-        return ImageDto.builder()
-                .imageId(this.imageId)
+    public LikeProgressDto toDto() {
+        return LikeProgressDto.builder()
+                .likeId(this.likeId)
                 .progress(this.progress)
-                .imageUrl(this.imageUrl).build();
+                .user(this.user).build();
     }
 }

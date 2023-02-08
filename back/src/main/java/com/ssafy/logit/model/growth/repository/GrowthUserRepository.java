@@ -1,6 +1,5 @@
 package com.ssafy.logit.model.growth.repository;
 
-import com.ssafy.logit.model.growth.dto.GrowthUserDto;
 import com.ssafy.logit.model.growth.entity.GrowthUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

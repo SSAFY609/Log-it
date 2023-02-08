@@ -130,4 +130,12 @@ public class GrowthController {
             return new ResponseEntity<String>(FAIL, HttpStatus.NOT_ACCEPTABLE);
         }
     }
+
+    // 성장 과정 좋아요 or 좋아요 취소
+    @Operation()
+    @PutMapping("/like/{progressId}")
+    public ResponseEntity<Boolean> like(@PathVariable long progressId, @RequestAttribute String email) {
+        boolean likeResult = growthService.like(progressId, email);
+        return new ResponseEntity<Boolean>(likeResult, HttpStatus.OK);
+    }
 }

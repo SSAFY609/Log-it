@@ -20,7 +20,7 @@ public class Growth {
     @Id
     @GeneratedValue
     @Column(name = "growth_id")
-    private Long growthId;
+    private long growthId;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")

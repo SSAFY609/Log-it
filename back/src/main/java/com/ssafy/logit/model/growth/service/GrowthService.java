@@ -2,11 +2,13 @@ package com.ssafy.logit.model.growth.service;
 
 import com.ssafy.logit.model.growth.dto.GrowthDto;
 import com.ssafy.logit.model.growth.dto.GrowthUserDto;
+import com.ssafy.logit.model.growth.dto.LikeProgressDto;
 import com.ssafy.logit.model.growth.dto.ProgressDto;
 import com.ssafy.logit.model.growth.entity.Growth;
 import com.ssafy.logit.model.growth.entity.GrowthUser;
 import com.ssafy.logit.model.growth.repository.GrowthRepository;
 import com.ssafy.logit.model.growth.repository.GrowthUserRepository;
+import com.ssafy.logit.model.growth.repository.LikeRepository;
 import com.ssafy.logit.model.growth.repository.ProgressRepository;
 import com.ssafy.logit.model.user.dto.UserDto;
 import com.ssafy.logit.model.user.entity.User;
@@ -26,6 +28,8 @@ public class GrowthService {
     private static final String FAIL = "fail";
     private static final String NONE = "사용자 없음";
     private static final String NONE_EVENT = "성장 이벤트 없음";
+    private static final String LIKE = "like 성공";
+    private static final String CANCEL_LIKE = "like 취소 성공";
 
     @Autowired
     private GrowthRepository growthRepo;
@@ -38,6 +42,9 @@ public class GrowthService {
 
     @Autowired
     private ProgressRepository progressRepo;
+
+    @Autowired
+    private LikeRepository likeRepo;
 
     // 이벤트 등록
     public long registEvent(String email, GrowthDto growthDto) {
@@ -192,5 +199,25 @@ public class GrowthService {
             }
         }
         return NONE;
+    }
+
+    // 좋아요
+    public boolean like(long processId, String email) {
+        boolean result = true;
+        Optional<User> user = userRepo.findByEmail(email);
+        if(user.isPresent()) {
+            long userId = user.get().toDto().getId();
+            int myLike = likeRepo.cntMyLike(userId, processId);
+            if(myLike == 0) { // 좋아요
+                LikeProgressDto likeDto = new LikeProgressDto();
+                likeDto.setProgress(progressRepo.findById(processId).get());
+                likeDto.setUser(userRepo.findById(userId).get());
+                likeRepo.save(likeDto.toEnity());
+            } else { // 좋아요 취소
+                likeRepo.delete(likeRepo.findMyLike(userId, processId).get());
+                result = false;
+            }
+        }
+        return result;
     }
 }
