@@ -1,11 +1,9 @@
 package com.ssafy.logit.model.growth.service;
 
-import com.ssafy.logit.model.growth.dto.GrowthDto;
-import com.ssafy.logit.model.growth.dto.GrowthUserDto;
-import com.ssafy.logit.model.growth.dto.LikeProgressDto;
-import com.ssafy.logit.model.growth.dto.ProgressDto;
+import com.ssafy.logit.model.growth.dto.*;
 import com.ssafy.logit.model.growth.entity.Growth;
 import com.ssafy.logit.model.growth.entity.GrowthUser;
+import com.ssafy.logit.model.growth.entity.Progress;
 import com.ssafy.logit.model.growth.repository.GrowthRepository;
 import com.ssafy.logit.model.growth.repository.GrowthUserRepository;
 import com.ssafy.logit.model.growth.repository.LikeRepository;
@@ -199,11 +197,6 @@ public class GrowthService {
         return NONE;
     }
 
-    // 성장 과정 단건 조회
-    public ProgressDto getProgress(long progressId) {
-        return progressRepo.findById(progressId).get().toDto();
-    }
-
     // 좋아요
     public boolean like(long processId, String email) {
         boolean result = true;
@@ -222,5 +215,36 @@ public class GrowthService {
             }
         }
         return result;
+    }
+
+    // 해당 이벤트의 모든 progress에 대한 정보를 가공하여 반환
+    public List<AllProgress> getAllProgress(long growthId) {
+        Optional<List<String>> dateList = progressRepo.dateList(); // 날짜별로 progress 구분
+        if(dateList.isPresent()) {
+            List<AllProgress> allProgressList = new ArrayList<>();
+            for(int i = 0; i < dateList.get().size(); i++) { // 날짜별 탐색
+                AllProgress allProgress = new AllProgress();
+                String date = dateList.get().get(i);
+                allProgress.setDate(date);
+                Optional<List<Progress>> findByDate = progressRepo.findByDate(date);
+                if(findByDate.isPresent()) {
+                    List<Content> contentList = new ArrayList<>();
+                    for(int j = 0; j < findByDate.get().size(); j++) { // 한 날짜에 속한 progress 탐색
+                        Content content = new Content();
+                        Progress progress = findByDate.get().get(j);
+                        content.setProgressId(progress.getProgressId());
+                        content.setWriterEmail(progress.getUser().getEmail());
+                        content.setWriterName(progress.getUser().getName());
+                        content.setWriterImage(progress.getUser().getImage());
+                        content.setContent(progress.getContent());
+                        contentList.add(content);
+                    }
+                    allProgress.setContentList(contentList);
+                }
+                allProgressList.add(allProgress);
+            }
+            return allProgressList;
+        }
+        return null;
     }
 }

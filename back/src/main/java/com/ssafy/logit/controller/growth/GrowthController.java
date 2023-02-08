@@ -1,5 +1,6 @@
 package com.ssafy.logit.controller.growth;
 
+import com.ssafy.logit.model.growth.dto.AllProgress;
 import com.ssafy.logit.model.growth.dto.GrowthDto;
 import com.ssafy.logit.model.growth.dto.ProgressDto;
 import com.ssafy.logit.model.growth.service.GrowthService;
@@ -127,13 +128,6 @@ public class GrowthController {
         }
     }
 
-    // 성장 과정 단건 조회
-    @Operation(summary = "성장 과정 조회", description = "성장 과정 단건 조회")
-    @GetMapping("/progress")
-    public ResponseEntity<ProgressDto> getProgress(@RequestParam long progressId) {
-        return new ResponseEntity<ProgressDto>(growthService.getProgress(progressId), HttpStatus.OK);
-    }
-
     // 성장 과정 좋아요 or 좋아요 취소
     @Operation(summary = "좋아요", description = "좋아요 or 좋아요 취소")
     @PutMapping("/like/{progressId}")
@@ -142,8 +136,10 @@ public class GrowthController {
         return new ResponseEntity<Boolean>(likeResult, HttpStatus.OK);
     }
 
-//    // 좋아요 조회
-//    @Operation(summary = "좋아요 조회", description = "해당 사용자가 해당 성장 과정에 좋아요를 눌렀는지 조회")
-//    @GetMapping("/like")
-//    public ResponseEntity<>
+    // 한 이벤트의 모든 progress 조회, 데이터 가공
+    @Operation(summary = "progress 다건 조회", description = "한 이벤트의 모든 progress를 데이터 가공 후 반환")
+    @GetMapping("/progress")
+    public ResponseEntity<List<AllProgress>> getAllProgress(@RequestParam long growthId) {
+        return new ResponseEntity<List<AllProgress>>(growthService.getAllProgress(growthId), HttpStatus.OK);
+    }
 }
