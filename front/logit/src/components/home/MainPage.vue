@@ -4,14 +4,12 @@
       <div class="logo_box">
         <v-img class="logo_img"
                :src="require('../../assets/images/logit_logo_text.png')"
-
         />
       </div>
       <div>
         <div v-if="state.loginUser.name">
-          <div style="height: 150px">
-          <h1 class="text"></h1>
-          <h1 class="text2"></h1>
+          <div class="writeTitle">
+            <h1 class="text"></h1>
           </div>
           <p>진행중인 이벤트와 취업여정을 기록하면서 달라진 나의 모습을 발견하세요.</p>
           <router-link :to="{name: 'UserLogin'}" class="login_btn_box b_main btn_hover">
@@ -56,30 +54,52 @@ export default {
     writeTitle(className, letters, s) {
       const $text = document.querySelector(className);
 
-// 글자 입력 속도
-const speed = 100;
+      // 글자 입력 속도
+      const speed = 100;
 
-// 타이핑 효과
-const typing = async () => {  
-  const letter = letters.split("");
-  
-  while (letter.length) {
-    await wait(speed);
-    $text.innerHTML += letter.shift(); 
-  }
-  
-  // 잠시 대기
-  await wait(800)
-  
-}
+      const changeLineBreak = (letter) => {
+        return letter.map(text => text === "\n" ? "<br>" : text);
+      }
 
-// 딜레이 기능 ( 마이크로초 )
-function wait(ms) {
-  return new Promise(res => setTimeout(res, ms))
-}
+      // 타이핑 효과
+      const typing = async () => {  
+        const letter = changeLineBreak(letters.split(""));
+        
+        while (letter.length) {
+          await wait(speed);
+          $text.innerHTML += letter.shift(); 
+        }
+        
+        // 잠시 대기
+        await wait(1500)
+        
+        // 지우는 효과
+        remove();
+      }
+      
+      // 글자 지우는 효과
+      const remove = async () => {
+        const letter = changeLineBreak(letters.split(""));
+        
+        while (letter.length) {
+          await wait(speed);
+          
+          letter.pop();
+          $text.innerHTML = letter.join(""); 
+        }
+        
+        await wait(1000)
+        // 다음 순서의 글자로 지정, 타이핑 함수 다시 실행
+        typing();
+      }
 
-// 초기 실행
-setTimeout(typing, s);
+      // 딜레이 기능 ( 마이크로초 )
+      function wait(ms) {
+        return new Promise(res => setTimeout(res, ms))
+      }
+
+      // 초기 실행
+      setTimeout(typing, s);
     }
   },
   created() {
@@ -87,8 +107,7 @@ setTimeout(typing, s);
     console.log(this.loginUser);
     },
   mounted(){
-    this.writeTitle('.text', '당신의 새로운 여정을', 1500)
-    this.writeTitle('.text2', '매일 기록해 보세요', 2600)
+    this.writeTitle('.text', '당신의 새로운 여정을 \n 매일 기록해 보세요', 1500)
   }
     
     
@@ -98,20 +117,24 @@ setTimeout(typing, s);
 </script>
 
 <style scoped>
-.texe::after {
-  content: '';
-  margin-left: .4rem;
-  border-right: 2px solid #777;
-  animation: cursor .9s infinite steps(2);
-}
+  .text::after {
+    content: '';
+    margin-left: .4rem;
+    border-right: 10px solid #ff0000;
+    animation: cursor .9s infinite steps(2);
+  }
 
-@keyframes cursor {
-  from { border-right: 2px solid #222; }
-  to { border-right: 2px solid #777; }
-}
+  @keyframes cursor {
+    from { border-right: 10px solid #ffffff; }
+    to { border-right: 10px solid #ff0000; }
+  }
 
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
-
+  .writeTitle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 180px;
+  }
 
   .container {
     height: 100%;

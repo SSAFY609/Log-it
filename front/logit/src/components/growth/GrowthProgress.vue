@@ -2,10 +2,11 @@
   <div class="container">
     <div class="header">
       <div class="title">
-        <div class="event-title">{{ event.name }}</div>
-        <div class="event-date">{{ date_to_str(event.start_date, event.end_date) }}</div>
-        <div v-if="eventUsers.users.length == 1"> {{ eventUsers.owner.name }} 님 참여중 <v-icon @click="dialog1 = true">mdi-account-multiple-plus</v-icon></div>
-        <div v-else> {{ eventUsers.owner.name }} 님 외 {{ eventUsers.users.length - 1 }}명 참여중 <v-icon @click="member = true">mdi-account-multiple-plus</v-icon></div>
+        <div class="event-title">{{ growth.category }}</div>
+        <!-- <div class="event-date">{{ growth.eventDate.startDate }} ~ {{ ?growth.eventDate.endDate }} </div> -->
+        <div class="event-date">{{ date_to_str(growth.eventDate.startDate, growth.eventDate.endDate) }}</div>
+        <div v-if="growthUsers.length == 0"> {{ growth.user.name }} 님 참여중 <v-icon @click="member = true">mdi-account-multiple-plus</v-icon></div>
+        <div v-else> {{ growth.user.name }} 님 외 {{ growthUsers.length }}명 참여중 <v-icon @click="member = true">mdi-account-multiple-plus</v-icon></div>
       </div>
       <div class="grass-box">
         <div class="grass">
@@ -41,7 +42,7 @@
         </v-timeline-item>
         <v-timeline-item
           class="progress-item"
-          v-for=" (item, index) in [...this.shareProgress].reverse()"
+          v-for=" (item, index) in [...this.progress].reverse()"
           dot-color="rgb(255, 225, 121)"
           :key="item.progressId"
           size="small"
@@ -76,29 +77,28 @@
               <v-icon v-if="is_host" color="red" class="member-delete" @click="member_delete(user.email)">mdi-close</v-icon>
             </div>
           </div>
-          <v-card-actions style="justify-content:space-between" class="hover_cursor" @click="show = !show">
+          <v-card-actions style="justify-content:space-between" class="hover_cursor" @click="searchSet(), show = !show">
             <div>
               <v-avatar><v-icon>mdi-plus</v-icon></v-avatar>
               추가하기
             </div>
             <v-btn
               :icon="show ? 'mdi-chevron-up' : 'mdi-chevron-down'"
-              
               style="text-align:right"
             ></v-btn>
           </v-card-actions>
           <v-expand-transition>
             <div v-show="show" style="text-align: center;">
               <v-divider></v-divider>
-              <v-autocomplete
-                class="search-user"
-                clearable
-                :items="allUsers"
-                placeholder="이름 검색"
-                v-model:model-value="search_user"
-                hide-no-data
-              ></v-autocomplete>
-              <v-btn color="#FF0A54" style="color:white" @click="addEventUser"><v-icon style="margin-right:5px">mdi-send</v-icon>초대하기</v-btn>
+              <v-text-field variant="outlined" v-model:model-value="searchText" placeholder="유저를 검색해 주세요" prepend-inner-icon="mdi-magnify" @keyup="search"></v-text-field>
+              <div class="search-list">
+                <div v-for="user in searchUser" :key="user.email" class="search-result">
+                  <div>
+                    {{ user.name }}({{ user.email }})
+                  </div>
+                  <v-btn color="#FF0A54" variant="text" @click="addEventUser(user.id)" icon="mdi-send"></v-btn>
+                </div>
+              </div>
             </div>
           </v-expand-transition>
         </v-card>
@@ -208,6 +208,7 @@ import { EffectCards } from 'swiper';
 import 'swiper/css';
 
 import 'swiper/css/effect-cards';
+// import axiosConnector from '../../utils/axios-connector';
 
 // import './style.css';
 
@@ -215,7 +216,7 @@ export default {
     name: 'GrowthProgress',
     data() {
       return {
-        eventId: 0,
+        growthId: 0,
         grass: [],
         copy_progress: [],
         allUsers: [],
@@ -231,6 +232,7 @@ export default {
         is_host: false,
         search_user: null,
         update_idx: 0,
+        searchText: '',
       }
     },
     components: {
@@ -245,6 +247,7 @@ export default {
     },
     computed: {
       ...mapState('temp', ['loginUser', 'event', 'eventUsers', 'shareProgress', 'users', 'myLikeProgress']),
+      ...mapState('growth', ['growth', 'progress', 'searchUser', 'growthUsers']),
       
       change_image(id){
         return `@assets/profiles/scale (${id}).png`;
@@ -252,12 +255,14 @@ export default {
     },
     methods: {
       date_to_str(st, ed) {
-        const year1 = st.getFullYear();
-        const month1 = st.getMonth() + 1;
-        const date1 = st.getDate();
-        const year2 = ed.getFullYear();
-        const month2 = ed.getMonth() + 1;
-        const date2 = ed.getDate();
+        const arr1 = st.split('-');
+        const arr2 = ed.split('-');
+        const year1 = arr1[0];
+        const month1 = parseInt(arr1[1]);
+        const date1 = parseInt(arr1[2]);
+        const year2 = arr2[0];
+        const month2 = parseInt(arr2[1]);
+        const date2 = parseInt(arr2[2]);
         return `${year1}년 ${month1}월 ${date1}일 ~ ${year2}년 ${month2}월 ${date2}일`
       },
       getDateDiff(d1, d2) {
@@ -281,6 +286,14 @@ export default {
         }
         return `${year}-${month >= 10 ? month : '0' + month}-${date >= 10 ? date : '0' + date} (${this.day[day]})`;
       },
+      today_string(){
+        const i = new Date()
+        const year = i.getFullYear();
+        const month = i.getMonth() + 1;
+        const date = i.getDate();
+        return `${year}-${month >= 10 ? month : '0' + month}-${date >= 10 ? date : '0' + date}`;
+
+      },
       // update_content() {
       //   this.update_mode = true;
       // },
@@ -288,36 +301,31 @@ export default {
         console.log(email, this.event.event_id);
         // this.$store.dispatch('deleteEventUser', this.event.event_id, email);
       },
-      addEventUser(){
-        if(!this.search_user){
-          alert('선택된 유저가 없습니다.')
-        } else {
-          const arr = this.search_user.split(' ');
-          const name = arr[0];
-          const email = arr[1].slice(1,-1);
-          console.log(`이름은 ${name} 이메일은 ${email}`);
-          const eventUser = {
-            eventId: this.event.event_id,
-            email: email,
+      addEventUser(id){
+          const data = {
+            growthId: this.growth.growthId,
+            userId: id,
           }
-          console.log(eventUser);
-          // this.$store.dispatch('addEventUser', eventUser);
+          console.log(data);
+          this.$store.dispatch('growth/addGrowthUser', data);
 
           // 추가하기 버튼 누르면 어디까지 닫아야 하남,,,,??
           // this.show = false;
           // this.member = false;
-        }
+        
       },
       sendRequest(){
         // 이건 create 요청
         if(this.now_idx == -1){
-          // const progress = {
-          //   growthId: this.growth.growthId,
-          //   date: new Date(),
-          //   email: this.loginUser.email,
-          //   content: this.write_content,
-          // }
-          // this.$store.dispatch('growth/createProgress', progress)
+          const progress = {
+            growthId: this.growth.growthId,
+            progressDate: {
+              date: this.today_string(),
+            },
+            content: this.write_content,
+          }
+          console.log(progress)
+          this.$store.dispatch('growth/registProgress', progress)
         } 
         // 이건 update 요청
         else {
@@ -363,16 +371,49 @@ export default {
           progressId: id
         }
         this.$store.dispatch('temp/unlikeProgress', data)
+      },
+      search() {
+        if (this.searchText){
+          const data = {
+            growthId: this.growth.growthId,
+            userName: this.searchText
+          }
+          this.$store.dispatch('growth/searchUser', data)
+        } else {
+          this.$store.commit('growth/SEARCH_USER_RESET')
+        }
+      },
+      searchSet() {
+        if(this.show){
+          this.$store.commit('growth/SEARCH_USER_RESET')
+        }
       }
     },
     created() {
       // 파람스로 이벤트 아이디 추출
-      this.eventId = this.$route.params.eventId;
+      this.growthId = this.$route.params.growthId;
+
+      // let growth = null
+
+      // // 바로 호출....?
+      // axiosConnector.get(`growth/get_event`, {
+      //   params: { growthId: this.growthId }
+      // }).then((res)=>{
+      //   console.log(res, 'ㅋㅋㅋㅋㅋㅋ')
+      //   growth = res.data
+      // }).catch((err)=>{
+      //   console.log(err)
+      // })
+
+
+      // 파람스 테스트 -> 통
+      // console.log(this.growthId)
 
       // 이벤트 아이디에 해당하는 호출.....
-      // this.$store.dispatch('event/getEvent', this.eventId);
-      // this.$store.dispatch('event/getEventUsers', this.eventId);
-      // this.$store.dispatch('event/getProgress', this.eventId);
+      // this.$store.dispatch('growth/getGrowthUsers', this.growthId);
+      // this.$store.dispatch('growth/getGrowth', this.growthId);
+      // this.$store.dispatch(`growth/getAllUser`, this.growthId);
+      // this.$store.dispatch('growth/getProgress', this.growthId);
 
 
       // 잔디를 구성하기 위한 작업,,,,
@@ -418,10 +459,7 @@ export default {
         const user = `${this.users[i].name} (${this.users[i].email})`
         this.allUsers.push(user)
       }
-    }
-
-
-
+    },
 }
 </script>
 
@@ -569,6 +607,20 @@ h1 {
 .search-user div {
   font-family: appleL;
 }
+
+
+.search-list {
+  font-size: 16px;
+}
+
+.search-result {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
+  padding: 0 10px;
+}
+
 
 .progress {
   margin-top: 100px;

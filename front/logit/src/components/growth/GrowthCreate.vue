@@ -64,9 +64,9 @@ export default {
                         startDate: this.start_date,
                         endDate: this.end_date,
                     },
-                    categoryName: this.select_category,
+                    category: this.select_category,
                 }
-                // this.$store.dispatch('growth/createGrowth', growth)
+                this.$store.dispatch('growth/createGrowth', growth)
                 console.log(growth);
                 // this.$router.push({name: 'GrowthProgress', params: {growthId: 1}})
             }

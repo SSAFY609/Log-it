@@ -3,10 +3,7 @@
     <div class="container">
       <div v-if="sidebar" style="width:260px"></div>
       <div class="box">
-          <h1 class="welcome">
-            <div class="user-name">{{ loginUser.name }}</div>
-            님의 타임라인
-          </h1>
+          <h1 class="welcome">{{loginUser.name}}님 타임라인</h1>
           
           <swiper 
           class="mySwiper"
@@ -42,16 +39,16 @@
           </swiper>
           <div class="buttons">
             <!-- 네모모양이냐 원이냐 -->
-            <v-btn color="#464646" variant="outlined" @click="goslide(0)"><v-icon>mdi-chevron-triple-left</v-icon></v-btn>
+            <!-- <v-btn color="#464646" variant="outlined" @click="goslide(0)"><v-icon>mdi-chevron-triple-left</v-icon></v-btn>
             <v-btn color="#464646" variant="outlined" @click="nextSlide"><v-icon>mdi-chevron-double-left</v-icon></v-btn>
             <v-btn color="#ff417a" variant="outlined" @click="goslide(state.slide)">Today</v-btn>
             <v-btn color="#464646" variant="outlined" @click="prevSlide(0)"><v-icon>mdi-chevron-double-right</v-icon></v-btn>
-            <v-btn color="#464646" variant="outlined" @click="goslide(-1)"><v-icon>mdi-chevron-triple-right</v-icon></v-btn>
-            <!-- <v-btn color="#717171" variant="outlined" @click="goslide(0)" icon="mdi-chevron-triple-left"></v-btn>
-            <v-btn color="#717171" variant="outlined" @click="nextSlide" icon="mdi-chevron-double-left"></v-btn>
-            <v-btn color="#ff417a" variant="outlined" @click="goslide(state.slide)" size="large">오늘</v-btn>
-            <v-btn color="#717171" variant="outlined" @click="prevSlide(0)" icon="mdi-chevron-double-right"></v-btn>
-            <v-btn color="#717171" variant="outlined" @click="goslide(-1)" icon="mdi-chevron-triple-right"></v-btn> -->
+            <v-btn color="#464646" variant="outlined" @click="goslide(-1)"><v-icon>mdi-chevron-triple-right</v-icon></v-btn> -->
+            <v-btn color="#717171" variant="text" @click="goslide(0)" icon="mdi-chevron-double-left"></v-btn>
+            <v-btn color="#717171" variant="text" @click="nextSlide" icon="mdi-chevron-left"></v-btn>
+            <v-btn color="#ff417a" variant="text" @click="goslide(state.slide)" size="large">TODAY</v-btn>
+            <v-btn color="#717171" variant="text" @click="prevSlide(0)" icon="mdi-chevron-right"></v-btn>
+            <v-btn color="#717171" variant="text" @click="goslide(-1)" icon="mdi-chevron-double-right"></v-btn>
           </div>
       </div>
     </div>

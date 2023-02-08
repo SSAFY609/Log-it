@@ -5,11 +5,12 @@ import axiosConnector from "@/utils/axios-connector";
 const growth = {
     namespaced: true,
     state:{
-        growths: [],
+        allGrowth: [],
         growth: {},
         growthUsers: [],
         progress: [],
-
+        allUser: [],
+        searchUser: [],
     },
     getters: {
         // 이벤트 회원 수
@@ -18,14 +19,15 @@ const growth = {
         },
     },
     mutations: {
-        CREATE_EVENT(context, payload){
+        CREATE_GROWTH(context, payload){
             // state.growth = payload
             // payload를 growthId로 할지, 등록한 growth로 할지,,, 
             // 그냥 id만 반환해도 될듯 어차피 growthId로 getGrowth할거니깡
-            router.push({name: 'GrowthProgress', params: {growthId: payload.growthId}})
+            router.push({name: 'GrowthProgress', params: {growthId: payload}})
         },
-        GET_GROWTHS(state, payload){
-            state.growths = payload
+        GET_ALL_GROWTH(state, payload){
+            console.log(payload)
+            state.allGrowth = payload
         },
         GET_GROWTH(state, payload){
             state.growth = payload
@@ -35,12 +37,21 @@ const growth = {
         },
         GET_PROGRESS(state, payload){
             state.progress = payload
+        },
+        GET_ALL_USER(state, payload){
+            state.allUser = payload
+        },
+        SEARCH_USER(state, payload){
+            state.searchUser = payload
+        },
+        SEARCH_USER_RESET(state){
+            state.searchUser = []
         }
     },
     actions: {
         // 성장 여정 추가
         createGrowth({commit}, growth){
-            axiosConnector.post(`growth`, growth
+            axiosConnector.post(`growth/regist`, growth
             ).then((res)=>{
                 commit('CREATE_GROWTH', res.data)
             }).catch((err)=>{
@@ -49,13 +60,10 @@ const growth = {
         },
 
         // 회원에 해당하는 모든 이벤트 가져오기
-        getGrowths({commit}, email) {
-            const data = {
-                email: email
-            }
-            axiosConnector.get(`growth/get`, data
+        getAllGrowth({commit}) {
+            axiosConnector.get(`growth/get_mine`
             ).then((res)=> {
-                commit('GET_GROWTHS', res.data)
+                commit('GET_ALL_GROWTH', res.data)
             }).catch((err)=>{
                 console.log(err)
             })
@@ -67,8 +75,13 @@ const growth = {
 
         // 이벤트 아이디에 해당하는 모든 이벤트 가져오기
         getGrowth({commit}, growthId) {
-            axiosConnector.get(`growth/${growthId}`
-            ).then((res)=>{
+            const params = {
+                growthId: growthId
+            }
+            axiosConnector.get(`growth/get_event`, {
+                params: params
+            }).then((res)=>{
+                console.log(res.data)
                 commit('GET_GROWTH', res.data)
             }).catch((err)=>{
                 console.log(err);
@@ -76,8 +89,14 @@ const growth = {
         },
         // 이벤트 아이디에 해당하는 이벤트 참여 유저들 가져오기
         getGrowthUsers({commit}, growthId) {
-            axiosConnector.get(`growthUser/${growthId}`
+            console.log('여기야여기')
+            axiosConnector.get(`growth/get_user`, {
+                params: {
+                    growthId: growthId
+                }
+            }
             ).then((res)=>{
+                console.log(res.data, '우잉')
                 commit('GET_GROWTH_USERS', res.data)
             }).catch((err)=>{
                 console.log(err)
@@ -92,15 +111,31 @@ const growth = {
                 console.log(err)
             })
         },
-        // 이벤트에 회원 추가
-        addGrowthUser({commit}, growthId, email){
-            const data = {
-                growthId: growthId,
-                email: email
-            }
-            axiosConnector.post('growthUser', data
+        // 회원 추가를 위한 검색용 유저들 (가입되어있지 않은...)
+        getAllUser({commit}, growthId) {
+            axiosConnector.get(`growth/invite/get`, {
+                params: { growthId: growthId }
+            }).then((res)=>{
+                console.log(res.data)
+                commit('GET_ALL_USER', res.data)
+            }).catch((err)=>{
+                console.log(err)
+            })
+        },
+        // 회원 검색
+        searchUser({commit}, data){
+            axiosConnector.post(`growth/invite/search`, data
             ).then((res)=>{
-                commit('ADD_GROWTH_USER', res.data)
+                commit('SEARCH_USER', res.data)
+            }).catch((err)=>{
+                console.log(err)
+            })
+        },
+        // 이벤트에 회원 추가
+        addGrowthUser(context, data){
+            axiosConnector.post('growth/invite', data
+            ).then((res)=>{
+                console.log(res.data)
             }).catch((err)=>{
                 console.log(err)
             })
@@ -119,11 +154,12 @@ const growth = {
             })
         },
         // 이벤트에 과정 추가
-        createProgress({dispatch}, progress){
-            axiosConnector.post('progress', progress
+        registProgress(context, progress){
+            axiosConnector.post('growth/write', progress
             ).then((res)=>{
+                console.log(res)
                 // 이때 res.data는 eventId
-                dispatch('getProgress', res.data);
+                // dispatch('getProgress', res.data);
             }).catch((err)=>{
                 console.log(err);
             })
