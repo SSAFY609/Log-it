@@ -76,7 +76,7 @@ public class GrowthController {
 
     // 이름으로 회원 like 검색
     @Operation(summary = "초대 후보 이름 검색", description = "해당 이벤트에 참여하지 않는 회원 중 이름으로 검색")
-    @GetMapping("/invite/search")
+    @PostMapping("/invite/search")
     public ResponseEntity<List<UserDto>> searchOtherUser(@RequestBody Info info, @RequestAttribute String email) {
         List<UserDto> userDtoList = growthService.searchUser(info.growthId, email, info.userName);
         return new ResponseEntity<List<UserDto>>(userDtoList, HttpStatus.OK);
@@ -141,4 +141,9 @@ public class GrowthController {
         boolean likeResult = growthService.like(progressId, email);
         return new ResponseEntity<Boolean>(likeResult, HttpStatus.OK);
     }
+
+//    // 좋아요 조회
+//    @Operation(summary = "좋아요 조회", description = "해당 사용자가 해당 성장 과정에 좋아요를 눌렀는지 조회")
+//    @GetMapping("/like")
+//    public ResponseEntity<>
 }
