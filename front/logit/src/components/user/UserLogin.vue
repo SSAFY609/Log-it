@@ -76,7 +76,7 @@ export default {
   data: () => ({
     rules2: [
       (value) => !!value || "",
-      (value) => (value || "").length <= 1 || "Max 20 characters",
+      (value) => (value || "").length <= 1 || "",
       (value) => {
         const pattern =
           /^(([^<script>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

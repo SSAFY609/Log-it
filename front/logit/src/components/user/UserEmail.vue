@@ -125,7 +125,6 @@ export default {
   text-decoration: underline;
 }
 .signup-button:hover {
-  background-color: #ff0a54;
   cursor: pointer;
 }
 .signup-button:active {

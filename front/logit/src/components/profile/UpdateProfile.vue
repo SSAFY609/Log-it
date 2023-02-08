@@ -8,7 +8,7 @@
             <div class="profile-main-form-text-email">
               <div>이메일</div>
               <v-text-field
-                v-model="state.email"
+                v-model="loginUser.id"
                 density="compact"
               ></v-text-field>
             </div>
@@ -17,14 +17,14 @@
             <div class="m-top-d">
               <div>이름</div>
               <v-text-field
-                v-model="state.name"
+                v-model="loginUser.name"
                 density="compact"
               ></v-text-field>
             </div>
             <div class="m-top-d">
               <div>학번</div>
               <v-text-field
-                v-model="state.studentNo"
+                v-model="loginUser.studen_no"
                 density="compact"
               ></v-text-field>
             </div>
@@ -122,7 +122,7 @@
 </template>
 
 <script>
-import { reactive, onMounted } from "@vue/runtime-core";
+import { reactive, onMounted, computed  } from "@vue/runtime-core";
 // import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
@@ -190,6 +190,8 @@ export default {
       previews.src = require(`@/assets/profiles/scale (${i}).png`);
     };
 
+    const loginUser = computed(() => store.state.loginUser)
+    
     // 초기화면 세팅
     onMounted(() => {
       const previews = document.querySelector(".image-box");
@@ -212,6 +214,7 @@ export default {
       onShow,
       fileChg,
       onClicked,
+      loginUser
     };
   },
 };

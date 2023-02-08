@@ -49,22 +49,21 @@
      email_help: "",
    }),
    methods: {
-    
      fpwEmail() {
        if (!this.email_tmp.trim()) {
          alert("입력된 이메일 주소가 없습니다.");
          return;
        }
-       if (
-         !document.querySelector(".fpw-button").classList.contains("color")
-       ) {
+       else if (!document.querySelector(".fpw-button").classList.contains("color")) {
          alert("이메일 주소를 확인해주세요.");
          return;
        }
-       const email = this.email_tmp
-       console.log(email)
-         this.$store.dispatch("sendPw", email);
-         this.$router.push("reset");
+       else {
+        const email = this.email_tmp
+        console.log(email)
+        this.$store.dispatch("sendPw", email);
+        this.$router.push("reset");
+       }
      },
 
      async chkEmail() { 

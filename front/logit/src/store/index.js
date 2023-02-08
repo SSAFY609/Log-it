@@ -16,20 +16,30 @@ const baseURL = "http://localhost:9090/user";
 export default createStore({
   state: {
     // 로그인했을 때 주는 데이터 받으려면 키를 만들어놔야 되나..?
-    loginUser: {
-      email: "sky@naver.com",
-      name: "오하늘",
-      image: "3",
-      studentNo: "0845123",
-      pw: "1234",
-      flag: "",
-      isDeleted: "",
-    },
+    // loginUser: {
+    //   email: "sky@naver.com",
+    //   name: "오하늘",
+    //   image: "3",
+    //   studentNo: "0845123",
+    //   pw: "1234",
+    //   flag: "",
+    //   isDeleted: "",
+    // },
+    loginUser : {}
   },
   getters: {},
   mutations: {
     LOGIN_USER(state, payload) {
-      state.loginUser = payload;
+      console.log(payload);
+      // state.loginUser.email = payload.email
+      // state.loginUser.name = payload.name
+      // state.loginUser.iamge = payload.iamge
+      // console.log(state.loginUser.iamge)
+      // state.loginUser.studentNo = payload.studentNo
+      // state.loginUser.pw = payload.pw
+      // state.loginUser.isDeleted = "0"
+    
+      state.loginUser = payload
       console.log(state.loginUser);
       sessionStorage.setItem("token", payload["jwt-auth-token"]);
       sessionStorage.setItem("email", payload["user"]);
@@ -37,6 +47,8 @@ export default createStore({
     },
     LOG_OUT(state) {
       sessionStorage.removeItem("token");
+      sessionStorage.removeItem("email");
+
       state.loginUser = {};
     },
     GET_USER(state, payload) {
@@ -63,11 +75,12 @@ export default createStore({
         });
     },
     // 유저 회원가입하기
-    signup(context, user) {
+    signup({dispatch}, user) {
       axiosConnector
         .post("user/regist", user)
         .then(() => {
           alert("회원가입 성공했어 ~ ^^ ");
+          dispatch("login", user);
           router.push({ name: "UserSignupComplete" });
         })
         .catch((err) => {

@@ -7,7 +7,7 @@
           <div class="profile-main-form-text">
             <div class="profile-main-form-text-email">
               <div>이메일</div>
-              <v-text-field v-model="loginUser.email" density="compact"></v-text-field>
+              <v-text-field v-model="loginUser.id" density="compact"></v-text-field>
             </div>
             <div class="m-top-d">
               <div>이름</div>
@@ -15,7 +15,7 @@
             </div>
             <div class="m-top-d">
               <div>학번</div>
-              <v-text-field v-model="loginUser.studentNo" density="compact"></v-text-field>
+              <v-text-field v-model="loginUser.student_no" density="compact"></v-text-field>
             </div>
           </div>
           <div class="profile-main-button">
@@ -55,64 +55,6 @@
         />
       </div>
     </div>
-    <!-- 프로필 사진 아이콘 -->
-    <!--
-    <div class="profile-input-icon" @click="onShow">
-      <v-icon v-show="fileChk" size="large">mdi-lead-pencil</v-icon>
-      <v-icon v-show="!fileChk" style="font-size: 200%">mdi-check</v-icon>
-    </div>
-    -->
-    <!-- 아래 프로필 사진 선택 창-->
-    <!--
-     <div v-show="photo" class="profile-photo">
-      <v-sheet class="mx-auto" max-width="990">
-        <v-slide-group
-          v-model="model"
-          class="pa-4"
-          selected-class="bg-primary"
-          show-arrows
-        >
-          <v-slide-group-item v-slot="{ isSelected, toggle, selectedClass }">
-          -->
-    <!-- 사용자 파일 업로드 선택 창-->
-    <!--
-              <input @change="fileChg" id="file" type="file" accept="image/*" />
-              <div class="ma-4 select hover_cursor hover_bigger">
-                <v-icon class="profile_icon f_icon lay3 btn_clicked2"
-                  >mdi-folder-plus-outline</v-icon
-                >
-              </div>
-            </label>
-            <div v-for="i in 36" :key="i">
-              -->
-    <!-- 디즈니 프로필 사진 선택 창-->
-    <!--
-              <v-img
-                color="grey-lighten-1"
-                :src="require(`@/assets/profiles/scale (${i}).png`)"
-                :class="['ma-4', selectedClass]"
-                class="hover_cursor hover_bigger"
-                style="border-radius: 55px"
-                @click="toggle, onClicked(i)"
-              >
-                <div class="d-flex fill-height align-center justify-center">
-                  <v-fade-transition>
-                    <v-img
-                      class="hover_cursor"
-                      v-if="isSelected"
-                      :src="require(`@/assets/profiles/scale (3).png`)"
-                      height="110"
-                      width="110"
-                      style="filter: brightness(65%); border-radius: 55px"
-                    ></v-img>
-                  </v-fade-transition>
-                </div>
-              </v-img>
-            </div>
-          </v-slide-group-item>
-        </v-slide-group>
-      </v-sheet>
-    </div> -->
   </div>
 </template>
 
@@ -128,6 +70,9 @@ export default {
     const router = useRouter();   
     const state = reactive({
       model: null,
+      email: "",
+      name: "",
+      studentNo:"",
     });
 
     const store = useStore()
@@ -141,7 +86,7 @@ export default {
     onMounted(() => {
       const previews = document.querySelector(".image-box");
       const loginUser = store.state.loginUser
-      console.log(loginUser.image.length)
+      console.log(loginUser.image)
       if (loginUser.image.length < 3) {
         previews.src = require(`@/assets/profiles/scale (${loginUser.image}).png`)
       } else {

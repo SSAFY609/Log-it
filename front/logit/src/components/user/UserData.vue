@@ -114,7 +114,6 @@ Email {
   text-decoration: underline;
 }
 .data-button:hover {
-  background-color: #ff0a54;
   cursor: pointer;
 }
 .data-button:active {

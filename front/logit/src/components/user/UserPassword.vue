@@ -119,7 +119,6 @@ Email {
   text-decoration: underline;
 }
 .password-button:hover {
-  background-color: #ff0a54;
   cursor: pointer;
 }
 .password-button:active {
