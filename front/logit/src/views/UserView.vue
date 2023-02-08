@@ -77,7 +77,7 @@ export default {
   margin-top: 50px;
   background-color: white;
   border-radius: 20px;
-  width: 470px;
-  height: 600px;
+  width: 510px;
+  height: 630px;
 }
 </style>
