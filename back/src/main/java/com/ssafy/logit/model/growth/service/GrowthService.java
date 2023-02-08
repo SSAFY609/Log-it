@@ -119,8 +119,8 @@ public class GrowthService {
     }
 
     // 한 개의 성장 이벤트 반환
-    public GrowthDto getOneEvent(long growthUserId) {
-        Optional<Growth> growth = growthRepo.findById(growthUserId);
+    public GrowthDto getOneEvent(long growthId) {
+        Optional<Growth> growth = growthRepo.findById(growthId);
         if(growth.isPresent()) {
             return growth.get().toDto();
         }

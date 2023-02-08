@@ -78,7 +78,7 @@ public class GrowthController {
 
     // 내가 참여하는 모든 이벤트 조회
     @Operation(summary = "내 이벤트 조회", description = "내가 작성한, 참여한 이벤트 모두 조회")
-    @GetMapping("/get")
+    @GetMapping("/get_mine")
     public ResponseEntity<List<GrowthDto>> getMyAllEvent(@RequestAttribute String email) throws Exception {
         List<GrowthDto> growthDtoList = growthService.getMyAllEvent(email);
         return new ResponseEntity<List<GrowthDto>>(growthDtoList, HttpStatus.OK);
@@ -98,7 +98,7 @@ public class GrowthController {
         return new ResponseEntity<String>(result, HttpStatus.OK);
     }
 
-    @Operation()
+    @Operation(summary = "성장 과정 등록", description = "성장 과정 등록")
     @PostMapping("/write")
     public ResponseEntity<String> registProgress(@RequestBody ProgressDto progressDto, @RequestAttribute String email) throws Exception {
         try {
@@ -108,5 +108,12 @@ public class GrowthController {
             e.printStackTrace();
             return new ResponseEntity<String>(FAIL, HttpStatus.NOT_ACCEPTABLE);
         }
+    }
+
+    @Operation(summary = "성장 이벤트 조회", description = "성장 이벤트 단건 조회")
+    @GetMapping("/get_event")
+    public ResponseEntity<GrowthDto> getEvent(@RequestParam Long growthId) throws Exception {
+        GrowthDto growthDto = growthService.getOneEvent(growthId);
+        return new ResponseEntity<GrowthDto>(growthDto, HttpStatus.OK);
     }
 }

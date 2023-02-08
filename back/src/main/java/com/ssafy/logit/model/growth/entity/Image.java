@@ -1,5 +1,6 @@
 package com.ssafy.logit.model.growth.entity;
 
+import com.ssafy.logit.model.growth.dto.ImageDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,4 +27,10 @@ public class Image {
     private String imageUrl;
 
     // Entity -> DTO 변환
+    public ImageDto toDto() {
+        return ImageDto.builder()
+                .imageId(this.imageId)
+                .progress(this.progress)
+                .imageUrl(this.imageUrl).build();
+    }
 }
