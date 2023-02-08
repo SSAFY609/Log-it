@@ -141,10 +141,11 @@ export default {
     onMounted(() => {
       const previews = document.querySelector(".image-box");
       const loginUser = store.state.loginUser
-      if (loginUser.profile.length < 3) {
-        previews.src = require(`@/assets/profiles/scale (${loginUser.profile}).png`)
+      console.log(loginUser.image.length)
+      if (loginUser.image.length < 3) {
+        previews.src = require(`@/assets/profiles/scale (${loginUser.image}).png`)
       } else {
-        previews.src = loginUser.profile
+        previews.src = loginUser.image
       }
     });
     return {

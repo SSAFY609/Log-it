@@ -116,8 +116,6 @@ export default {
       console.log(user)
       this.$store.dispatch("login", user);
     },
-    kakaoLogin() {},
-    googleLogin() {},
     toSignup() {
       this.$router.push("email");
     },

@@ -65,7 +65,7 @@ export default {
     const router = useRouter();
 
     const chkPw = () => {
-      if (state.password == store.state.loginUser.password) {
+      if (state.password == store.state.loginUser.pw) {
         router.push({ name: "UpdatePassword" });
       } else {
         alert("비밀번호를 다시 입력해주세요.");
@@ -74,8 +74,7 @@ export default {
     // 초기화면 세팅
     onMounted(() => {
       const loginUser = store.state.loginUser;
-      console.log("여기까지와쑤요");
-      state.userPassword = loginUser.password;
+      state.userPassword = loginUser.pw;
       state.email = loginUser.email;
     });
     return {

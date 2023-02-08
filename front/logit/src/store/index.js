@@ -89,7 +89,7 @@ export default createStore({
           console.log(err);
         });
     },
-
+    // 비밀번호 변경하기
     updatePassword({ dispatch }, user) {
       axiosConnector
         .post("user", user)
@@ -102,6 +102,7 @@ export default createStore({
           console.log(err);
         });
     },
+    // 유저 정보 변경하기
     updateUser({ dispatch }, user) {
       axiosConnector
         .post("user", user)
@@ -114,6 +115,36 @@ export default createStore({
           console.log(err);
         });
     },
+    // 비밀번호 재발급
+    sendPw({dispatch}){
+      axiosConnector
+      .post("user/sendPw")
+      .then(()=>{
+        alert("비밀번호 재발급은 했어 ~");
+        dispatch("getUser")
+      })
+      .catch((err)=>{
+        alert("비밀번호 재발급 실패 ...... 🤣");
+        console.log(err);
+      })
+    },
+    // 이메일 중복 검사하기
+    // UserEmail.vue에 작성
+    // axiosConnector.get("user/check", {
+    //   params: {
+    //     email:this.email
+    //   }
+    // })
+    //   .then((res)=>{
+    //     console.log(res)
+    //     alert("헉!! 이메일 중복검사 성공~!!")
+    //     this.email_help = `${this.email}은 사용 가능한 이메일입니다.`;
+    //   }).catch((err)=>{
+    //     console.log(err);
+    //     this.email_help = `${this.email}은 사용할 수 없는 이메일입니다.`;
+    //   })
+   
+    // 유저 정보 가져오기
     getUser({ commit }) {
       axiosConnector
         .get("user")

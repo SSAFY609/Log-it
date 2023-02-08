@@ -31,6 +31,7 @@
  </template>
  
  <script>
+
  export default {
    name: "UserEmail",
    data: () => ({
@@ -40,16 +41,15 @@
        (value) => {
          const pattern =
            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-         return pattern.test(value) || "유효하지 않은 이메일 형식입니다.";
+         return pattern.test(value) || "";
        },
      ],
      email_tmp: "",
      email: "",
      email_help: "",
    }),
- 
    methods: {
-     // 계정생성 - 이메일
+    
      fpwEmail() {
        if (!this.email_tmp.trim()) {
          alert("입력된 이메일 주소가 없습니다.");
@@ -61,31 +61,12 @@
          alert("이메일 주소를 확인해주세요.");
          return;
        }
+         this.$store.dispatch("sendPw");
          this.$router.push("reset");
      },
- 
-     // 이메일 검사 - 유효성 검사, 중복 검사,
-     async chkEmail() {
-       const validate = await this.$refs.form.validate();
-       // 이메일 유효성 검사 완료하면
+     async chkEmail() { 
+      const validate  = await this.$refs.form.validate();
        if (validate.valid) {
-         // 이메일 중복 검사
-         // 중복될 경우 -> "이미 사용중인 이메일입니다" + 버튼 비활성화
-         // 중복이 아닐 경우 -> "사용할 수 있는 이메일입니다." + 버튼 활성화
-         var params = new URLSearchParams();
-         params.append("email", this.email_tmp);
-         //http.post("URL,params")
-         //.then((res=>{
-         //if(res.data.response==" 실패"){
-         // this.email_help='이미 사용중인 이메일입니다.'
-         // document.querySelector(".fpw-button").classList.remove("color");
-         // return;
-         //}
-         // this.email = this.email_tmp
-         // this.email_help = '${this.email}는 사용 가능한 이메일입니다.'
-         //}))
-         this.email_help = "asd@asd.com은 사용 가능한 이메일입니다.";
-      
          document.querySelector(".fpw-button").classList.add("color");
        } else {
          document.querySelector(".fpw-button").classList.remove("color");

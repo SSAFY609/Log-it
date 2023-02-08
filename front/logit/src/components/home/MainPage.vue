@@ -48,8 +48,7 @@ export default {
       ...mapState(['loginUser'])
   },
   created() {
-    console.log(this.$store.state.loginUser);
-    console.log(this.loginUser);
+
     }
     
     

@@ -53,14 +53,11 @@
 </template>
 
 <script>
-import { reactive } from "@vue/reactivity";
-import { useStore } from "vuex";
-import { onMounted } from "@vue/runtime-core";
+// import { reactive } from "@vue/reactivity";
+// import { ref } from "vue";
 export default {
   name: "UpdatePassword",
-  setup() {
-    const store = useStore();
-    const state = reactive({
+  data:() => ({
       rules1: {
         required: (value) => !!value || "",
         min: (v) => v.length >= 8 || "최소 8자리 이상 입력해주세요.",
@@ -77,67 +74,62 @@ export default {
       studentNo: "",
       isDeleted: "",
       image: "",
-    });
-
+    
+  }),
     // 다음 버튼 클릭
-    const modifyPw = () => {
-      if (!this.password.trim() || !this.password_tmp.trim()) {
-        alert("입력한 비밀번호가 없습니다.");
-        return;
-      }
-      if (
-        !document
-          .querySelector(".profile-main-button-user")
-          .classList.contains("color")
-      ) {
-        alert("입력한 비밀번호가 일치하지 않습니다.");
-        return;
-      }
-      const user = {
-        pw: state.password_tmp,
-        email: state.email,
-        flag: state.flag,
-        studentNo: state.studentNo,
-        isDeleted: state.isDeleted,
-        image: state.image,
-      };
-      store.dispatch("updateUser", user);
-      this.$router.push({ name: "ProfilePage" });
-    };
-    onMounted(() => {
-      const loginUser = store.state.loginUser;
-      state.email = loginUser.email;
-      state.name = loginUser.name;
-      state.flag = loginUser.flag;
-      state.studentNo = loginUser.studentNo;
-      state.isDeleted = loginUser.isDeleted;
-      state.image = loginUser.image;
-    });
-    return {
-      state,
-      modifyPw,
-    };
-  },
-  // 비밀번호 유효성 검사
   methods: {
-    async chkPw() {
-      const validate = await this.$refs.form.validate();
-      if (validate.valid) {
-        if (this.password == this.password_tmp) {
+      modifyPw ()  {
+        if (!this.password.trim() || !this.password_tmp.trim()) {
+          alert("입력한 비밀번호가 없습니다.");
+          return;
+        }
+        if (
+          !document
+            .querySelector(".profile-main-button-user")
+            .classList.contains("color")
+        ) {
+          alert("입력한 비밀번호가 일치하지 않습니다.");
+          return;
+        }
+        const user = {
+          pw: this.password_tmp,
+          email: this.email,
+          flag: this.flag,
+          studentNo: this.studentNo,
+          isDeleted: this.isDeleted,
+          image: this.image,
+        };
+        this.$store.dispatch("updateUser", user);
+        this.$router.push({ name: "ProfilePage" });
+      },
+      async chkPw () {
+        const validate = await this.$refs.form.validate();
+        if (validate.valid) {
+          if (this.password == this.password_tmp) {
+            document
+              .querySelector(".profile-main-button-user")
+              .classList.add("color");
+          }
+        } else {
           document
             .querySelector(".profile-main-button-user")
-            .classList.add("color");
+            .classList.remove("color");
         }
-      } else {
-        document
-          .querySelector(".profile-main-button-user")
-          .classList.remove("color");
       }
-    },
   },
+  mounted() {
+    const loginUser = this.$store.state.loginUser;
+    this.email = loginUser.email;
+    this.name = loginUser.name;
+    this.flag = loginUser.flag;
+    this.studentNo = loginUser.studentNo;
+    this.isDeleted = loginUser.isDeleted;
+    this.image = loginUser.image;
+    console.log("여기까지왔숨다")
+  },
+}
 
-  // 비밀번호 2개 유효성 검사
-};
+
 </script>
 
 <style scoped>

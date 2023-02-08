@@ -182,12 +182,12 @@ export default {
       // 여기서는 파일 경로가 찍힘
       previews[0].src = state.imageSrc;
       state.uploadState = true;
-      state.profile = state.imageSrc;
+      state.image = state.imageSrc;
     };
 
     // 이미지 선택했을 때, 변화
     const onClicked = (i) => {
-      state.profile = `${i}`;
+      state.image = `${i}`;
       const previews = document.querySelector(".image-box");
       previews.src = require(`@/assets/profiles/scale (${i}).png`);
     };
@@ -204,10 +204,10 @@ export default {
       state.flag = loginUser.flag;
       state.isDeleted = loginUser.isDeleted;
 
-      if (loginUser.profile.length < 3) {
-        previews.src = require(`@/assets/profiles/scale (${loginUser.profile}).png`);
+      if (loginUser.image.length < 3) {
+        previews.src = require(`@/assets/profiles/scale (${loginUser.image}).png`);
       } else {
-        previews.src = loginUser.profile;
+        previews.src = loginUser.image;
       }
     });
 
