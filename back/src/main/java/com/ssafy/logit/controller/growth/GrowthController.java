@@ -69,7 +69,7 @@ public class GrowthController {
     // 해당 성장 이벤트에 참여하지 않는 모든 사용자 조회 (작성자 + 참여자 모두 제외한 나머지)
     @Operation(summary = "초대 후보 검색", description = "해당 이벤트에 참여하지 않는 모든 회원 조회")
     @GetMapping("/invite/get")
-    public ResponseEntity<List<UserDto>> getAllUser(@RequestParam long growthId, @RequestAttribute String email) throws Exception {
+    public ResponseEntity<List<UserDto>> getAllOtherUser(@RequestParam long growthId, @RequestAttribute String email) throws Exception {
         List<UserDto> userDtoList = growthService.getAllUser(growthId, email);
         return new ResponseEntity<List<UserDto>>(userDtoList, HttpStatus.OK);
     }
@@ -77,7 +77,7 @@ public class GrowthController {
     // 이름으로 회원 like 검색
     @Operation(summary = "초대 후보 이름 검색", description = "해당 이벤트에 참여하지 않는 회원 중 이름으로 검색")
     @GetMapping("/invite/search")
-    public ResponseEntity<List<UserDto>> searchUser(@RequestBody Info info, @RequestAttribute String email) {
+    public ResponseEntity<List<UserDto>> searchOtherUser(@RequestBody Info info, @RequestAttribute String email) {
         List<UserDto> userDtoList = growthService.searchUser(info.growthId, email, info.userName);
         return new ResponseEntity<List<UserDto>>(userDtoList, HttpStatus.OK);
     }
@@ -127,13 +127,12 @@ public class GrowthController {
         }
     }
 
-//    // 성장 과정 단건 조회
-//    @Operation(summary = "성장 과정 조회", description = "성장 과정 단건 조회")
-//    @GetMapping()
-//    public ResponseEntity<ProgressDto> getProgress() {
-//
-//    }
-
+    // 성장 과정 단건 조회
+    @Operation(summary = "성장 과정 조회", description = "성장 과정 단건 조회")
+    @GetMapping("/progress")
+    public ResponseEntity<ProgressDto> getProgress(@RequestParam long progressId) {
+        return new ResponseEntity<ProgressDto>(growthService.getProgress(progressId), HttpStatus.OK);
+    }
 
     // 성장 과정 좋아요 or 좋아요 취소
     @Operation(summary = "좋아요", description = "좋아요 or 좋아요 취소")

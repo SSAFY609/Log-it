@@ -199,6 +199,11 @@ public class GrowthService {
         return NONE;
     }
 
+    // 성장 과정 단건 조회
+    public ProgressDto getProgress(long progressId) {
+        return progressRepo.findById(progressId).get().toDto();
+    }
+
     // 좋아요
     public boolean like(long processId, String email) {
         boolean result = true;
