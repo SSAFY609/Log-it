@@ -51,6 +51,20 @@ public class GrowthService {
         }
     }
 
+    // 한 개의 성장 이벤트 반환
+    public GrowthDto getOneEvent(long growthId) {
+        Optional<Growth> growth = growthRepo.findById(growthId);
+        if(growth.isPresent()) {
+            return growth.get().toDto();
+        }
+        return null;
+    }
+
+    // 해당 성장 이벤트에 참여하는 사용자 목록 반환
+    public List<UserDto> getAllThisUser(long growthId) {
+        return userRepo.findAllUser(growthId).stream().map(UserDto::new).collect(Collectors.toList());
+    }
+
     // 해당 이벤트에 참여하지 않는 사용자 반환
     public List<UserDto> getAllUser(long growthId, String email) {
         Optional<User> user = userRepo.findByEmail(email);
@@ -114,15 +128,6 @@ public class GrowthService {
                 }
             }
             return growthDtoList;
-        }
-        return null;
-    }
-
-    // 한 개의 성장 이벤트 반환
-    public GrowthDto getOneEvent(long growthId) {
-        Optional<Growth> growth = growthRepo.findById(growthId);
-        if(growth.isPresent()) {
-            return growth.get().toDto();
         }
         return null;
     }
