@@ -28,8 +28,6 @@ public class GrowthService {
     private static final String FAIL = "fail";
     private static final String NONE = "사용자 없음";
     private static final String NONE_EVENT = "성장 이벤트 없음";
-    private static final String LIKE = "like 성공";
-    private static final String CANCEL_LIKE = "like 취소 성공";
 
     @Autowired
     private GrowthRepository growthRepo;

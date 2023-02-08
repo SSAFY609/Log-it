@@ -20,11 +20,7 @@ import java.util.List;
 @Tag(name="growth", description="성장 여정 API")
 public class GrowthController {
 
-    private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
-    private static final String UNAUTHORIZED = "unauthorized";
-    private static final String DELETED = "이미 삭제됨";
-    private static final String NONE = "사용자 없음";
 
     @Autowired
     private GrowthService growthService;

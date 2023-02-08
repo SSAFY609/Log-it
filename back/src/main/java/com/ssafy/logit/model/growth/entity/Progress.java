@@ -33,6 +33,7 @@ public class Progress {
     @Embedded
     private ProgressDate progressDate;
 
+    @Lob
     @Column(length = 50000)
     private String content;
 
