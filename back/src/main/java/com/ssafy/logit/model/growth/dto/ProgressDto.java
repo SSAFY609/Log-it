@@ -22,17 +22,20 @@ public class ProgressDto {
     @Schema(description = "성장 이벤트")
     private Growth growth;
 
-    @Schema(description = "성장 과정 작성자")
+    @Schema(description = "성장 이벤트 id")
+    private long growthId;
+
+    @Schema(description = "작성자")
     private User user;
 
-    @Schema(description = "성장 과정 날짜")
+    @Schema(description = "날짜")
     private ProgressDate progressDate;
 
-    @Schema(description = "성장 과정 내용")
+    @Schema(description = "내용")
     private String content;
 
-    @Schema(description = "성장 과정 첨부 이미지")
-    private String image;
+    @Schema(description = "좋아요 개수")
+    private int likeCnt;
 
     // 생성자 (List<Entity> -> List<DTO> 변환을 위함)
     public ProgressDto(Progress progress) {
@@ -41,7 +44,7 @@ public class ProgressDto {
         this.user = progress.getUser();
         this.progressDate = progress.getProgressDate();
         this.content = progress.getContent();
-        this.image = progress.getImage();
+        this.likeCnt = progress.getLikeCnt();
     }
 
     // 업데이트용 메소드
@@ -52,7 +55,7 @@ public class ProgressDto {
                 .user(progressDto.user)
                 .progressDate(progressDto.progressDate)
                 .content(progressDto.content)
-                .image(progressDto.image).build();
+                .likeCnt(progressDto.likeCnt).build();
     }
 
     // DTO -> Entity 변환
@@ -63,6 +66,6 @@ public class ProgressDto {
                 .user(this.user)
                 .progressDate(this.progressDate)
                 .content(this.content)
-                .image(this.image).build();
+                .likeCnt(this.likeCnt).build();
     }
 }

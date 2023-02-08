@@ -15,6 +15,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     public List<User> findByName(String name);
 
+    @Query(value = "select * from users where user_id in (select user_id from growth_user where growth_id = ?1 and type = true)", nativeQuery = true)
+    public List<User> findAllUser(long growthId);
+
     @Query(value = "select * from users where user_id not in (select user_id from growth_user where growth_id = ?1) and user_id != ?2", nativeQuery = true)
     public List<User> findInviteUser(long growthId, long userId);
 

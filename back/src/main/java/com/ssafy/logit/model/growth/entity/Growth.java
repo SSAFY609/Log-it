@@ -20,7 +20,7 @@ public class Growth {
     @Id
     @GeneratedValue
     @Column(name = "growth_id")
-    private Long growthId;
+    private long growthId;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
@@ -29,9 +29,7 @@ public class Growth {
     @Embedded
     private EventDate eventDate;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "category_id")
-    private Category category;
+    private String category;
 
     private boolean result;
 

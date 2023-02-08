@@ -18,6 +18,7 @@ public class GrowthUser {
 
     @Id
     @GeneratedValue
+    @Column(name = "growth_user_id")
     private long growthUserId;
 
     @ManyToOne(fetch = FetchType.EAGER)

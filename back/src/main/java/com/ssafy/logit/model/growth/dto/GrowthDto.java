@@ -1,7 +1,6 @@
 package com.ssafy.logit.model.growth.dto;
 
 import com.ssafy.logit.model.common.EventDate;
-import com.ssafy.logit.model.growth.entity.Category;
 import com.ssafy.logit.model.growth.entity.Growth;
 import com.ssafy.logit.model.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,7 +10,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Embedded;
-import java.util.List;
 
 @Schema(description = "성장 이벤트")
 @Data
@@ -30,24 +28,18 @@ public class GrowthDto {
     @Embedded
     private EventDate eventDate;
 
-    @Schema(description = "카테고리")
-    private Category category;
-
     @Schema(description = "카테고리 이름")
-    private String categoryName;
+    private String category;
 
     @Schema(description = "결과")
     private boolean result;
-
-    @Schema(description = "공유 회원 리스트")
-    private List<Long> userList;
 
     // 생성자 (List<Entity> -> List<DTO> 변환을 위함)
     public GrowthDto(Growth growth) {
         this.growthId = growth.getGrowthId();
         this.user = growth.getUser();
         this.eventDate = growth.getEventDate();
-        this.category= growth.getCategory();
+        this.category = growth.getCategory();
         this.result = growth.isResult();
     }
 

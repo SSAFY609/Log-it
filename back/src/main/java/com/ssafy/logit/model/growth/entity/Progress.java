@@ -33,9 +33,11 @@ public class Progress {
     @Embedded
     private ProgressDate progressDate;
 
+    @Lob
+    @Column(length = 50000)
     private String content;
 
-    private String image;
+    private int likeCnt;
 
     // Entity -> DTO 변환
     public ProgressDto toDto() {
@@ -45,6 +47,6 @@ public class Progress {
                 .user(this.user)
                 .progressDate(this.progressDate)
                 .content(this.content)
-                .image(this.image).build();
+                .likeCnt(this.likeCnt).build();
     }
 }

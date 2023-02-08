@@ -10,6 +10,9 @@ import java.util.List;
 @Repository
 public interface GrowthUserRepository extends JpaRepository<GrowthUser, Long> {
 
-    @Query(value = "select * from growth_user where user_id = ?1 and type = true", nativeQuery = true)
-    public List<GrowthUser> findMyEvent(long userId);
+    @Query(value = "select * from growth_user where user_id = ?1 and type = ?2", nativeQuery = true)
+    public List<GrowthUser> findMyEvent(long userId, boolean type);
+
+    @Query(value = "select growth_user_id from growth_user where user_id = ?1 and growth_id = ?2", nativeQuery = true)
+    public long findEvent(long userId, long growthId);
 }

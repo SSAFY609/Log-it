@@ -32,14 +32,26 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    // 회원가입
+    @Transactional
+    public Map<String, Object> registUser(UserDto userDto) {
+        Optional<User> user = userRepo.findByEmail(userDto.getEmail());
+        Map<String, Object> resultMap = new HashMap<>();
+        if(user.isPresent()) {
+            System.out.println("regist : 이미 가입된 사용자");
+            resultMap.put("result", PRESENT);
+        } else {
+            System.out.println("===== registUser =====");
+            userDto.setPw(passwordEncoder.encode(userDto.getPw())); // 비밀번호 암호화
+            userRepo.save(userDto.toEntity());
+            resultMap.put("result", userDto);
+        }
+        return resultMap;
+    }
+
+    // 로그인
     public Map<String, Object> login(String email, String pw) {
         Optional<User> user = userRepo.findByEmail(email);
-        System.out.println("user 로그인 정보 !!! : " + user);
-        System.out.println("입력한 pw : " + pw);
-
-        // 암호화 (입력받은 pw를 인코딩한 값이 기존에 저장된 값과 같은지 확인하기 위함)
-        String encodingPw = passwordEncoder.encode(pw);
-        System.out.println("encodingPw !!! : " + encodingPw);
 
         // 해당 email의 회원이 존재하며, 입력받은 비밀번호가 db에 저장된 비밀번호(암호화된)와 matches 되면 로그인
         Map<String, Object> result = new HashMap<>();
@@ -48,7 +60,7 @@ public class UserService {
             if(!passwordEncoder.matches(pw, user.get().getPw())) {
                 result.put("type", FAIL);
                 result.put("result", PW_FAIL);
-                System.out.println("login : 비밀번호가 틀렸음");
+                System.out.println("login : 비밀번호 틀림");
             } else {
                 // 인증 성공 시 auth-token과 refresh-token 함께 발급
                 System.out.println("===== login =====");
@@ -80,6 +92,7 @@ public class UserService {
         return result;
     }
 
+    // refreshToken 저장
     @Transactional
     public void saveRefreshToken(String email, String refreshToken) {
         Optional<User> user = userRepo.findByEmail(email);
@@ -93,6 +106,7 @@ public class UserService {
         }
     }
 
+    // 로그아웃
     @Transactional
     public void logout(String email) {
         System.out.println("===== logout =====");
@@ -103,6 +117,7 @@ public class UserService {
         }
     }
 
+    // 토큰 재발급
     public String getRefreshToken(String email) {
         Optional<User> user = userRepo.findByEmail(email);
         if(user.isPresent()) {
@@ -114,6 +129,7 @@ public class UserService {
         }
     }
 
+    // 임시 비밀번호 생성
     public String getTmpPw() {
         char[] charSet = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
                 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
@@ -131,35 +147,54 @@ public class UserService {
         return pw;
     }
 
-    // 회원이 있을 때는 update, 회원이 없을 때는 regist (regist 변수로 판단)
-    @Transactional
-    public Map<String, Object> saveUser(UserDto userDto, boolean regist) {
-        // 객체 찾기(존재하는지 확인)
-        Optional<User> user = userRepo.findByEmail(userDto.getEmail());
-        
-        // 비밀번호 암호화
-        userDto.setPw(passwordEncoder.encode(userDto.getPw()));
-        System.out.println("[saveUser] userDto : " + userDto);
+    // 비밀번호 확인
+    public String confirmPw(String pw, String email) {
+        Optional<User> user = userRepo.findByEmail(email);
 
-        Map<String, Object> resultMap = new HashMap<>();
-        if(user.isPresent() && regist) { //  이미 가입된 사용자의 이메일로 회원가입 시도
-            System.out.println("regist : 이미 가입된 사용자");
-            resultMap.put("result", PRESENT);
-        } else if(!user.isPresent() && !regist) { // 가입되지 않은 사용자의 이메일로 업데이트 시도
-            System.out.println("update : 가입되지 않은 사용자");
-            resultMap.put("result", NONE);
-        } else if(user.isPresent() && !regist) { // update
-            System.out.println("===== updateUser =====");
-            userRepo.save(userDto.updateUser(user.get().getId(), userDto));
-            resultMap.put("result", userDto);
-        } else { // regist
-            System.out.println("===== registUser =====");
+//        // 암호화 (입력받은 pw를 인코딩한 값이 기존에 저장된 값과 같은지 확인하기 위함)
+//        String encodingPw = passwordEncoder.encode(pw);
+
+        // 입력받은 비밀번호가 db에 저장된 비밀번호(암호화된)와 matches 되면 success
+        UserDto userDto = user.get().toDto();
+        if (passwordEncoder.matches(pw, userDto.getPw())) {
+            return SUCCESS;
+        }
+        return PW_FAIL;
+    }
+
+    // 비밀번호 수정
+    @Transactional
+    public String updatePw(String pw, String email) {
+        Optional<User> user = userRepo.findByEmail(email);
+        if(user.isPresent()) {
+            UserDto userDto = user.get().toDto();
+            userDto.setPw(passwordEncoder.encode(pw)); // 비밀번호 암호화
             userRepo.save(userDto.toEntity());
-            resultMap.put("result", userDto);
+            return SUCCESS;
+        } else {
+            return NONE;
+        }
+    }
+
+    // 프로필 수정
+    @Transactional
+    public Map<String, Object> updateUser(UserDto userDto, String email) {
+        Optional<User> user = userRepo.findByEmail(email);
+        Map<String, Object> resultMap = new HashMap<>();
+        if(user.isPresent()) {
+            System.out.println("===== updateUser =====");
+            UserDto newUserDto = user.get().toDto();
+            newUserDto.setName(userDto.getName());
+            newUserDto.setStudentNo(userDto.getStudentNo());
+            userRepo.save(newUserDto.toEntity());
+            resultMap.put("result", newUserDto);
+        } else {
+            resultMap.put("result", NONE);
         }
         return resultMap;
     }
 
+    // 회원 다건 조회
     public List<UserDto> getAllUser() {
         List<User> userList = userRepo.findAll();
         if(userList.size() > 0) {
@@ -171,6 +206,7 @@ public class UserService {
         }
     }
 
+    // email로 회원 단건 조회
     public UserDto getUser(String email) {
         if(userRepo.findByEmail(email).isPresent()) {
             System.out.println("===== getUser =====");
@@ -181,6 +217,7 @@ public class UserService {
         }
     }
 
+    // id로 회원 단건 조회
     public UserDto getUser(long id) {
         if(userRepo.findById(id).isPresent()) {
             System.out.println("===== getUser =====");
@@ -191,6 +228,7 @@ public class UserService {
         }
     }
 
+    // 이름으로 회원 검색
     public List<UserDto> searchUser(String name) {
         List<User> userList = userRepo.findByName(name);
         if(userList.size() > 0) {
@@ -202,6 +240,7 @@ public class UserService {
         }
     }
 
+    // 회원 삭제 (db에서 deleted 속성 변경)
     @Transactional
     public String deleteUser(Long id) {
         Optional<User> user = userRepo.findById(id);
@@ -223,6 +262,7 @@ public class UserService {
         }
     }
 
+    // 회원 삭제 (db에서 삭제)
     @Transactional
     public boolean dropUser(Long id) {
         if(userRepo.findById(id).isPresent()) {
@@ -235,6 +275,7 @@ public class UserService {
         }
     }
 
+    // 회원 엔티티 반환
     public User getUserEntity(String email){
         return userRepo.findByEmail(email).orElseThrow(NoSuchElementException::new);
     }
