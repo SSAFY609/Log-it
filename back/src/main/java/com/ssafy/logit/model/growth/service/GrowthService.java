@@ -13,6 +13,7 @@ import com.ssafy.logit.model.user.entity.User;
 import com.ssafy.logit.model.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,7 @@ public class GrowthService {
     private LikeRepository likeRepo;
 
     // 이벤트 등록
+    @Transactional
     public long registEvent(String email, GrowthDto growthDto) {
         Optional<User> user = userRepo.findByEmail(email);
         if (user.isPresent()) {
@@ -92,6 +94,7 @@ public class GrowthService {
 
     // 성장 이벤트 공유
     // (해당 이벤트에 참여중이지 않은 사용자만 받아올 수 있으므로, 그 부분은 따로 검사하지 않음)
+    @Transactional
     public String inviteUser(long growthId, long userId) {
         Optional<Growth> growth = growthRepo.findById(growthId);
         if(growth.isPresent()) {
@@ -158,6 +161,7 @@ public class GrowthService {
     }
 
     // 초대 수락 (type을 true로 변경) or 거절 (db에서 삭제)
+    @Transactional
     public String acceptInvitation(long growthId, boolean accept, String email) {
         Optional<User> user = userRepo.findByEmail(email);
         if(user.isPresent()) {
@@ -181,6 +185,7 @@ public class GrowthService {
     }
 
     // 성장 과정 등록
+    @Transactional
     public String registProgress(ProgressDto progressDto, String email) {
         Optional<User> user = userRepo.findByEmail(email);
         if(user.isPresent()) {
@@ -198,6 +203,7 @@ public class GrowthService {
     }
 
     // 좋아요
+    @Transactional
     public boolean like(long processId, String email) {
         boolean result = true;
         Optional<User> user = userRepo.findByEmail(email);
