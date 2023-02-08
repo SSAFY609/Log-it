@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -69,7 +68,6 @@ public class UserController {
     @Operation(summary = "로그인", description = "회원 정보 저장 (JWT 인증x)")
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody UserDto userDto) throws Exception {
-        log.info("login user info : {}", userDto);
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> resultLogin = userService.login(userDto.getEmail(), userDto.getPw());
 
@@ -145,7 +143,7 @@ public class UserController {
     }
 
     // 비밀번호 찾기 (임시 비밀번호 발급 후 이메일 전송)
-    @Operation(summary = "비밀번호 찾기", description = "임시 비밀번호 발급 후 이메일 전송")
+    @Operation(summary = "비밀번호 찾기", description = "임시 비밀번호 발급 후 이메일 전송 (JWT 인증x)")
     @PostMapping("/sendPw")
     public ResponseEntity<String> sendPwEmail(@RequestParam String email) {
         String tmpPw = userService.getTmpPw();
@@ -164,11 +162,19 @@ public class UserController {
         }
     }
 
-//    @Operation(summary = "비밀번호 수정", description = "비밀번호 수정")
-//    @PostMapping("/pw")
-//    public ResponseEntity<String> updatePw(@RequestParam String pw, @RequestAttribute String email) {
-//
-//    }
+    // 비밀번호 확인
+    @Operation(summary = "비밀번호 확인", description = "비밀번호 변경을 위한 비밀번호 확인")
+    @PostMapping("/pw_confirm")
+    public ResponseEntity<String> confirmPw(@RequestPart String pw, @RequestAttribute String email) {
+        return new ResponseEntity<String>(userService.confirmPw(pw, email), HttpStatus.OK);
+    }
+
+    // 비밀번호 수정
+    @Operation(summary = "비밀번호 수정", description = "비밀번호 수정")
+    @PostMapping("/pw_change")
+    public ResponseEntity<String> updatePw(@RequestPart String pw, @RequestAttribute String email) {
+        return new ResponseEntity<String>(userService.updatePw(pw, email), HttpStatus.OK);
+    }
 
     // 프로필 수정
     @Operation(summary = "프로필 수정", description = "회원 정보 수정")

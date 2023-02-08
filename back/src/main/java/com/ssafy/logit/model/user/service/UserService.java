@@ -32,15 +32,26 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    // 회원가입
+    @Transactional
+    public Map<String, Object> registUser(UserDto userDto) {
+        Optional<User> user = userRepo.findByEmail(userDto.getEmail());
+        Map<String, Object> resultMap = new HashMap<>();
+        if(user.isPresent()) {
+            System.out.println("regist : 이미 가입된 사용자");
+            resultMap.put("result", PRESENT);
+        } else {
+            System.out.println("===== registUser =====");
+            userDto.setPw(passwordEncoder.encode(userDto.getPw())); // 비밀번호 암호화
+            userRepo.save(userDto.toEntity());
+            resultMap.put("result", userDto);
+        }
+        return resultMap;
+    }
+
     // 로그인
     public Map<String, Object> login(String email, String pw) {
         Optional<User> user = userRepo.findByEmail(email);
-        System.out.println("user 로그인 정보 !!! : " + user);
-        System.out.println("입력한 pw : " + pw);
-
-        // 암호화 (입력받은 pw를 인코딩한 값이 기존에 저장된 값과 같은지 확인하기 위함)
-        String encodingPw = passwordEncoder.encode(pw);
-        System.out.println("encodingPw !!! : " + encodingPw);
 
         // 해당 email의 회원이 존재하며, 입력받은 비밀번호가 db에 저장된 비밀번호(암호화된)와 matches 되면 로그인
         Map<String, Object> result = new HashMap<>();
@@ -49,7 +60,7 @@ public class UserService {
             if(!passwordEncoder.matches(pw, user.get().getPw())) {
                 result.put("type", FAIL);
                 result.put("result", PW_FAIL);
-                System.out.println("login : 비밀번호가 틀렸음");
+                System.out.println("login : 비밀번호 틀림");
             } else {
                 // 인증 성공 시 auth-token과 refresh-token 함께 발급
                 System.out.println("===== login =====");
@@ -136,12 +147,28 @@ public class UserService {
         return pw;
     }
 
+    // 비밀번호 확인
+    public String confirmPw(String pw, String email) {
+        Optional<User> user = userRepo.findByEmail(email);
+
+//        // 암호화 (입력받은 pw를 인코딩한 값이 기존에 저장된 값과 같은지 확인하기 위함)
+//        String encodingPw = passwordEncoder.encode(pw);
+
+        // 입력받은 비밀번호가 db에 저장된 비밀번호(암호화된)와 matches 되면 success
+        UserDto userDto = user.get().toDto();
+        if (passwordEncoder.matches(pw, userDto.getPw())) {
+            return SUCCESS;
+        }
+        return PW_FAIL;
+    }
+
+    // 비밀번호 수정
     @Transactional
     public String updatePw(String pw, String email) {
         Optional<User> user = userRepo.findByEmail(email);
         if(user.isPresent()) {
             UserDto userDto = user.get().toDto();
-            userDto.setPw(pw);
+            userDto.setPw(passwordEncoder.encode(pw)); // 비밀번호 암호화
             userRepo.save(userDto.toEntity());
             return SUCCESS;
         } else {
@@ -163,25 +190,6 @@ public class UserService {
             resultMap.put("result", newUserDto);
         } else {
             resultMap.put("result", NONE);
-        }
-        return resultMap;
-    }
-
-    // 회원가입
-    @Transactional
-    public Map<String, Object> registUser(UserDto userDto) {
-        Optional<User> user = userRepo.findByEmail(userDto.getEmail());
-        Map<String, Object> resultMap = new HashMap<>();
-        if(user.isPresent()) {
-            System.out.println("regist : 이미 가입된 사용자");
-            resultMap.put("result", PRESENT);
-        } else {
-            System.out.println("===== registUser =====");
-            // 비밀번호 암호화
-            userDto.setPw(passwordEncoder.encode(userDto.getPw()));
-            System.out.println("[saveUser] userDto : " + userDto);
-            userRepo.save(userDto.toEntity());
-            resultMap.put("result", userDto);
         }
         return resultMap;
     }
