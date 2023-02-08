@@ -44,13 +44,13 @@ public class GrowthController {
     // 성장 이벤트 등록
     @Operation(summary = "성장 이벤트 등록", description = "성장 이벤트 등록 (카테고리, 공유할 회원, 날짜 선택 가능)")
     @PostMapping("/regist")
-    public ResponseEntity<String> registEvent(@RequestBody GrowthDto growthDto, @RequestAttribute String email) throws Exception {
+    public ResponseEntity<Long> registEvent(@RequestBody GrowthDto growthDto, @RequestAttribute String email) throws Exception {
         try {
-            String registResult = growthService.registEvent(email, growthDto);
-            return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+            long growthId = growthService.registEvent(email, growthDto);
+            return new ResponseEntity<Long>(growthId, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<String>(FAIL, HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<Long>(0L, HttpStatus.NOT_ACCEPTABLE);
         }
     }
 

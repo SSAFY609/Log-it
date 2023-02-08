@@ -49,6 +49,7 @@ public class GrowthDto {
                 .growthId(growthId)
                 .user(growthDto.user)
                 .eventDate(growthDto.eventDate)
+                .category(growthDto.category)
                 .result(growthDto.result).build();
     }
 
@@ -58,6 +59,7 @@ public class GrowthDto {
                 .growthId(this.growthId)
                 .user(this.user)
                 .eventDate(this.eventDate)
+                .category(this.category)
                 .result(this.result).build();
     }
 }

@@ -40,14 +40,14 @@ public class GrowthService {
     private ProgressRepository progressRepo;
 
     // 이벤트 등록
-    public String registEvent(String email, GrowthDto growthDto) {
+    public long registEvent(String email, GrowthDto growthDto) {
         Optional<User> user = userRepo.findByEmail(email);
         if (user.isPresent()) {
             growthDto.setUser(user.get());
-            growthRepo.save(growthDto.toEntity());
-            return SUCCESS;
+            Growth growth = growthRepo.save(growthDto.toEntity());
+            return growth.getGrowthId();
         } else {
-            return NONE;
+            return -1;
         }
     }
 
@@ -172,7 +172,7 @@ public class GrowthService {
         return FAIL;
     }
 
-    //
+    // 성장 과정 등록
     public String registProgress(ProgressDto progressDto, String email) {
         Optional<User> user = userRepo.findByEmail(email);
         if(user.isPresent()) {
