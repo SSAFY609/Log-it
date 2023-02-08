@@ -127,12 +127,12 @@ public class GrowthController {
         }
     }
 
-    // 성장 과정 단건 조회
-    @Operation(summary = "성장 과정 조회", description = "성장 과정 단건 조회")
-    @GetMapping()
-    public ResponseEntity<ProgressDto> getProgress() {
-
-    }
+//    // 성장 과정 단건 조회
+//    @Operation(summary = "성장 과정 조회", description = "성장 과정 단건 조회")
+//    @GetMapping()
+//    public ResponseEntity<ProgressDto> getProgress() {
+//
+//    }
 
 
     // 성장 과정 좋아요 or 좋아요 취소
