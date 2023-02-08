@@ -5,7 +5,7 @@ import axiosConnector from "@/utils/axios-connector";
 const job = {
     namespaced: true,
     state:{
-        testList: [ "BFS", "DFS", "그래프 구현", "구현", "문자열", "정렬", "이분탐색", "자료구조", "완전탐색", "힙", "트리" , "그래프탐색", "동적 프로그래밍", "그리디", "백 트랙킹"
+        testList: [ "BFS", "DFS", "그래프", "구현", "문자열", "정렬", "이분탐색", "자료구조", "완전탐색", "힙", "트리", "DP", "그리디", "백트랙킹"
         ],
 
     

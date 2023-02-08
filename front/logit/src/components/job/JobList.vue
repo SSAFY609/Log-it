@@ -1,10 +1,13 @@
 <template>
   <div class="container">
-    <div class="event-list">
-      <router-link :to="{name: 'JobProgress', params: {jobId: 1}}" class="event hover_cursor">
-        <div class="event-title">{{ jobs.job }}</div>
+    <div class="event-list" >
+      <router-link :to="{name: 'JobProgress', params: {jobId: job.jobId}}" class="event hover_cursor" v-for="job in jobs" :key="job">
+        <div class="event-title">{{ job.title }}</div>
+        <div class="event-date">{{ date_to_str(job.startDate, job.endDate) }}</div>
+        <v-chip v-if="job.progress" variant="outlined" color="rgb(27, 182, 40)">완료</v-chip>
+        <v-chip v-else variant="outlined" color="rgb(245, 21, 107)">진행중</v-chip>
       </router-link>
-      <h1>데이터확인</h1>
+      <div v-if="jobs.length%2 == 1" class="event-else"></div>
     </div>
   </div>
 </template>
@@ -20,7 +23,7 @@ export default {
       }
     },
     computed: {
-      ...mapState("tempJob", ["jobs", "userId"])
+      ...mapState("tempJob", ["jobs"])
     },
     methods: {
       date_to_str(st, ed) {
