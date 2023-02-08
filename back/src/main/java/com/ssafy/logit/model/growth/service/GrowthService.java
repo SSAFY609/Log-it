@@ -217,6 +217,19 @@ public class GrowthService {
         return result;
     }
 
+    // 한 이벤트의 내가 좋아요한 성장 과정 리스트 조회
+    public List<Long> getLikeProgress(long growthId, String email) {
+        Optional<User> user = userRepo.findByEmail(email);
+        if(user.isPresent()) {
+            long userId = user.get().toDto().getId();
+            Optional<List<Long>> likeProgressList = likeRepo.getLikeProgress(growthId, userId);
+            if(likeProgressList.isPresent()) {
+                return likeProgressList.get();
+            }
+        }
+        return null;
+    }
+
     // 해당 이벤트의 모든 progress에 대한 정보를 가공하여 반환
     public List<AllProgress> getAllProgress(long growthId) {
         Optional<List<String>> dateList = progressRepo.dateList(); // 날짜별로 progress 구분

@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -134,6 +135,13 @@ public class GrowthController {
     public ResponseEntity<Boolean> like(@PathVariable long progressId, @RequestAttribute String email) {
         boolean likeResult = growthService.like(progressId, email);
         return new ResponseEntity<Boolean>(likeResult, HttpStatus.OK);
+    }
+
+    // 좋아요 조회
+    @Operation(summary = "좋아요 조회", description = "한 이벤트 안에서 내가 좋아요한 모든 progress 조회")
+    @GetMapping("/like/get")
+    public ResponseEntity<List<Long>> getLikeProgress(@RequestParam long growthId, @RequestAttribute String email) {
+        return new ResponseEntity<List<Long>>(growthService.getLikeProgress(growthId, email), HttpStatus.OK);
     }
 
     // 한 이벤트의 모든 progress 조회, 데이터 가공
