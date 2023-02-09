@@ -25,7 +25,6 @@
           </router-link>
         </div>
       </div>
-      <div style="position:fixed">얍{{ scrollTop }}</div>
       <div class="img_box lay1">
         <v-img class="laptop_img"
                :src="require('../../assets/images/laptop02.png')"
@@ -43,7 +42,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { onBeforeUnmount } from 'vue';
+import { onMounted, onBeforeUnmount } from 'vue';
 
 export default {
     name: 'MainPage',
@@ -66,24 +65,16 @@ export default {
       //   observe.observe(postIt)
       // })
 
+      onMounted(()=>{
+        writeTitle('.text', '당신의 새로운 여정을 \n 매일 기록해 보세요', 1500)
+        window.addEventListener('scroll', onScroll)
+      })
+      
       onBeforeUnmount(()=>{
-        window.removeEventListener('scroll');
+        window.removeEventListener('scroll', onScroll);
       })
 
-      return {
-        state,
-      }
-  },
-    computed: { 
-      ...mapState(['loginUser'])
-  },
-  data() {
-    return {
-      scrollTop: 0,
-    }
-  },
-  methods: {
-    writeTitle(className, letters, s) {
+      const writeTitle = (className, letters, s) => {
       const $text = document.querySelector(className);
 
       // 글자 입력 속도
@@ -132,32 +123,30 @@ export default {
 
       // 초기 실행
       setTimeout(typing, s);
-    },
-    onScroll(){
+    };
+
+    const onScroll = () => {
       const currentScrollPosition = window.pageYOffset || document.documentElement.scrollTop
       if(currentScrollPosition < 0){
         return
       }
-      this.scrollTop = currentScrollPosition;
       if (currentScrollPosition > 0 && currentScrollPosition < 500){
         const img = document.querySelector('.img_box')
         img.style.width = `${1300 + currentScrollPosition * 0.5}px`
       } 
     }
+
+      return {
+        state,
+        writeTitle,
+        onScroll,
+
+      }
   },
-  created() {
-    console.log(this.$store.state.loginUser);
-    console.log(this.loginUser);
-    },
-  mounted(){
-    this.writeTitle('.text', '당신의 새로운 여정을 \n 매일 기록해 보세요', 1500)
-    window.addEventListener('scroll', this.onScroll)
+    computed: { 
+      ...mapState(['loginUser'])
   },
   
-    
-    
-
-    
 }
 </script>
 

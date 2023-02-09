@@ -102,16 +102,28 @@ export default {
         state.swiper = swiper;
       };
 
+      const str_to_date = (str) => {
+        const arr = str.split('-');
+        const year = arr[0];
+        const month = parseInt(arr[1]) - 1;
+        const date = parseInt(arr[2]);
+        return new Date(year, month, date);
+      }
+
       const min_date = (arr)=>{
         let st = arr.reduce((prev,curr) => {
-          return prev.start_date <= curr.start_date ? prev : curr;
+          const p = str_to_date(prev.start_date);
+          const c = str_to_date(curr.start_date)
+          return p <= c ? prev : curr;
         })
         return st;
       }
-        
+      
       const max_date = (arr)=>{
         let ed = arr.reduce((prev, curr) => {
-          return curr.end_date <= prev.end_date ? prev : curr;
+          const p = str_to_date(prev.end_date);
+          const c = str_to_date(curr.end_date)
+          return c <= p ? prev : curr;
         })
         return ed;
       }
@@ -125,8 +137,8 @@ export default {
         // vuex에 접근해서 events 가공하기............. 후하 이게 근데 되려나 싶기도 하공,,,,
         const events = store.state.temp.events;
 
-        // const growths = store.state.growth.growths;
-        // const jobs = store.state.job.jobs;
+        // const growths = store.state.timeline.growths;
+        // const jobs = store.state.timeline.jobs;
 
         // 정렬은 이미 되어있다고 생각
 
@@ -316,6 +328,7 @@ export default {
           loginUser,
           min_date,
           max_date,
+          str_to_date,
           addDays,
           prevSlide,
           nextSlide,

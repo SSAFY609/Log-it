@@ -61,15 +61,14 @@ export default {
                     // title: '선택된 카테고리가 없습니다',
                     text: '선택된 카테고리가 없습니다',
                     icon: 'error',
-                    cancelButtonColor: '#FF0A54',
                     confirmButtonColor: '#FF0A54',
-                    toast: true
                 })
             } else if (!this.start_date || !this.end_date) {
                 Swal.fire({
                     // title: '선택된 카테고리가 없습니다',
                     text: '선택된 날짜가 없습니다',
-                    icon: 'error'
+                    icon: 'error',
+                    confirmButtonColor: '#FF0A54',
                 })
             } else {
                 const growth = {
