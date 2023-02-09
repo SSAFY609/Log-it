@@ -7,15 +7,15 @@
           <div class="profile-main-form-text">
             <div class="profile-main-form-text-email">
               <div>이메일</div>
-              <v-text-field v-model="loginUser.id" density="compact"></v-text-field>
+              <v-text-field v-model="state.email" density="compact"></v-text-field>
             </div>
             <div class="m-top-d">
               <div>이름</div>
-              <v-text-field v-model="loginUser.name" density="compact"></v-text-field>
+              <v-text-field v-model="state.name" density="compact"></v-text-field>
             </div>
             <div class="m-top-d">
               <div>학번</div>
-              <v-text-field v-model="loginUser.student_no" density="compact"></v-text-field>
+              <v-text-field v-model="state.studentNo" density="compact"></v-text-field>
             </div>
           </div>
           <div class="profile-main-button">
@@ -86,6 +86,9 @@ export default {
     onMounted(() => {
       const previews = document.querySelector(".image-box");
       const loginUser = store.state.loginUser
+      state.email = loginUser.email;
+      state.name = loginUser.name;
+      state.studentNo = loginUser.studentNo;
       console.log(loginUser.image)
       if (loginUser.image.length < 3) {
         previews.src = require(`@/assets/profiles/scale (${loginUser.image}).png`)

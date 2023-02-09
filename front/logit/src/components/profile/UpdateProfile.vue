@@ -8,7 +8,7 @@
             <div class="profile-main-form-text-email">
               <div>이메일</div>
               <v-text-field
-                v-model="loginUser.id"
+                v-model="state.email"
                 density="compact"
               ></v-text-field>
             </div>
@@ -17,14 +17,14 @@
             <div class="m-top-d">
               <div>이름</div>
               <v-text-field
-                v-model="loginUser.name"
+                v-model="state.name"
                 density="compact"
               ></v-text-field>
             </div>
             <div class="m-top-d">
               <div>학번</div>
               <v-text-field
-                v-model="loginUser.studen_no"
+                v-model="state.studentNo"
                 density="compact"
               ></v-text-field>
             </div>
@@ -32,8 +32,9 @@
         </div>
         <v-form disabled>
           <div class="profile-main-button">
-            <div>
+            <div >
               <v-btn
+              @click="updateUser"
                 width="120"
                 height="40"
                 rounded="lg"
@@ -41,7 +42,7 @@
                 class="profile-main-button-user"
                 style="color: white; font-size: 15px"
               >
-                <div @click="updateUser" class="profile-main-button-text">
+                <div  class="profile-main-button-text">
                   입력 저장
                 </div>
               </v-btn>
@@ -137,32 +138,47 @@ export default {
       name: "",
       studentNo: "",
       image: "",
-      pw: "",
-      flag: "",
-      isDeleted: "",
       photo: false,
-      fileDOM: "",
       previews: "",
-      fileNum: "",
       fileChk: false,
-      uploadState: false,
       imageSrc: "",
+      imageFile: "",
+      mutipartFile: "",
+      defaultImage: "",
     });
 
     const store = useStore();
+    const formData = new FormData();
 
     // 업데이트 요청
     const updateUser = () => {
-      const user = {
-        email: state.email,
-        name: state.name,
-        studentNo: state.studentNo,
-        image: state.image,
-      };
-      // console.log(store.state.loginUser)
-      // console.log(user)
-      console.log("버튼 눌렀다.");
-      store.dispatch("updateUser", user);
+      // 이름, 학번 업데이트
+      // const user = {
+      //   name: state.name, // 변경된 데이터
+      //   studentNo: state.studentNo, //변경된 데이터
+      // };
+      // store.dispatch("updateUser", user);
+
+      // 이미지 업로드
+      state.mutipartFile = state.image;
+      state.defaultImage = state.image;
+
+      if (state.image.length < 3) {
+        state.mutipartFile = null;
+      } else { 
+        state.defaultImage = null;
+      }
+      const file = {
+        mutipartFile: state.mutipartFile,
+        defaultImage: state.defaultImage
+      }
+      console.log(file);
+      // const file = {
+      //   multipartFile: null,
+      //   defaultImage: "3",
+      // }
+      //console.log(file)
+      // store.dispatch("uploadImage", file);
     };
 
     const onShow = () => {
@@ -172,15 +188,17 @@ export default {
     };
 
     // 파일 업로드 했을 때, 변화 저장
-    const fileChg = () => {
+    const fileChg = (file) => {
+      // 파일 형식 수정
+      state.imageFile = file;
+      formData.append("image", state.imageFile);
+      // 파일 미리보기
       const fileDOM = document.querySelector("#file");
       const previews = document.querySelectorAll(".image-box");
       state.imageSrc = URL.createObjectURL(fileDOM.files[0]);
-      // 여기서는 파일 경로가 찍힘
       previews[0].src = state.imageSrc;
-      state.uploadState = true;
       state.image = state.imageSrc;
-      console.log(state.image);
+      // 파일 형식 바꾼거랑 파일 미리보기 형식 같은지 확인 중
     };
 
     // 이미지 선택했을 때, 변화
@@ -209,6 +227,7 @@ export default {
     });
 
     return {
+      formData,
       state,
       updateUser,
       onShow,
