@@ -37,6 +37,7 @@
 
 <script>
 import { mapState } from 'vuex';
+import { onBeforeUnmount } from 'vue';
 
 export default {
     name: 'MainPage',
@@ -44,6 +45,10 @@ export default {
       const state = {
         loginUser: {name: '이성훈'},
       }
+      onBeforeUnmount(()=>{
+        window.removeEventListener('scroll');
+      })
+
       return {
         state,
       }
@@ -116,12 +121,7 @@ export default {
       if (currentScrollPosition > 0 && currentScrollPosition < 500){
         const img = document.querySelector('.img_box')
         img.style.width = `${1300 + currentScrollPosition * 0.5}px`
-      } else if (currentScrollPosition >= 507 ){
-        const img = document.querySelector('.img_box')
-        img.style.position = "-webkit-sticky"
-        img.style.position = "sticky"
-        img.style.top = "0"
-      }
+      } 
     }
   },
   created() {
@@ -163,13 +163,12 @@ export default {
   }
 
   .container {
-    height: 200%;
     display:flex;
     justify-content: center;
   }
   .discription_box {
     margin-top: 70px;
-    height: 1300px;
+    height: 2600px;
     justify-content: center;
   }
   h1 {
@@ -199,6 +198,8 @@ export default {
     display: flex;
     justify-content: center;
     margin-top: 50px;
+    position: sticky;
+    top: 70px;
   }
   .laptop_img {
     margin: 0 auto;
