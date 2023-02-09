@@ -1,7 +1,6 @@
 const timeline = {
     namespaced: true,
     state:{
-
     },
     getters: {
 

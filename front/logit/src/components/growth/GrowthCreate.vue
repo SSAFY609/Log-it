@@ -31,7 +31,7 @@
 
 <script>
 export default {
-    name: 'EventCreate',
+    name: 'GrowthCreate',
     props: {
         date: {
             type: String,
@@ -59,14 +59,16 @@ export default {
             } else if (!this.start_date || !this.end_date) {
                 alert('선택된 날짜가 없습니다.')
             } else {
-                const event = {
+                const growth = {
+                    eventDate: {
+                        startDate: this.start_date,
+                        endDate: this.end_date,
+                    },
                     category: this.select_category,
-                    start_date: this.start_date,
-                    end_date: this.end_date,
                 }
-                // this.$store.dispatch('event/createEvent', event)
-                console.log(event)
-                this.$router.push({name: 'EventProgress', params: {eventId: 1}})
+                this.$store.dispatch('growth/createGrowth', growth)
+                console.log(growth);
+                // this.$router.push({name: 'GrowthProgress', params: {growthId: 1}})
             }
         }
     },

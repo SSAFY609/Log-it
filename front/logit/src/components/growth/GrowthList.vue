@@ -1,21 +1,27 @@
 <template>
   <div class="container">
+    <button-view style="margin-top:50px"></button-view>
     <div class="event-list">
-      <router-link :to="{name: 'EventProgress', params: {eventId: event.event_id}}" class="event hover_cursor" v-for="event in events" :key="event.event_id">
-        <div class="event-title">{{ event.name }}</div>
-        <div class="event-date">{{ date_to_str(event.start_date, event.end_date) }}</div>
-        <v-chip v-if="event.done" variant="outlined" color="rgb(27, 182, 40)">완료</v-chip>
+      <div class="event hover_cursor" v-for="growth in allGrowth" :key="growth.growthId" @click="growthDetail(growth.growthId)">
+        <div class="event-title">{{ growth.category }}</div>
+        <div class="event-date">{{ date_to_str(growth.eventDate.startDate, growth.eventDate.endDate) }}</div>
+        <v-chip v-if="growth.result" variant="outlined" color="rgb(27, 182, 40)">완료</v-chip>
         <v-chip v-else variant="outlined" color="rgb(245, 21, 107)">진행중</v-chip>
-      </router-link>
-      <div v-if="events.length%2 == 1" class="event-else"></div>
+      </div>
+      <div v-if="allGrowth.length%2 == 1" class="event-else"></div>
     </div>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import buttonView from '@/components/etc/buttonView.vue'
+
 export default {
-    name: 'EventList',
+    name: 'GrowthList',
+    components: {
+      buttonView,
+    },
     data() {
       return {
         // period: 0,
@@ -24,32 +30,25 @@ export default {
       }
     },
     computed: {
-      ...mapState("temp", ["events"])
+      ...mapState("growth", ["allGrowth"])
     },
     methods: {
       date_to_str(st, ed) {
-        const year1 = st.getFullYear();
-        const month1 = st.getMonth() + 1;
-        const date1 = st.getDate();
-        const year2 = ed.getFullYear();
-        const month2 = ed.getMonth() + 1;
-        const date2 = ed.getDate();
-        return `${year1}년 ${month1}월 ${date1}일 ~ ${year2}년 ${month2}월 ${date2}일`
+        const arr1 = st.split('-')
+        const arr2 = ed.split('-')
+        const month1 = parseInt(arr1[1])
+        const date1 = parseInt(arr1[2])
+        const month2 = parseInt(arr2[1])
+        const date2 = parseInt(arr2[2])
+        return `${arr1[0]}년 ${month1}월 ${date1}일 ~ ${arr2[0]}년 ${month2}월 ${date2}일`
       },
-
-      getDateDiff(d1, d2) {
-        // d1이 시작 날짜, d2가 종료 날짜
-        const diffDate = d2.getTime() - d1.getTime();
-        
-        return diffDate / (1000 * 60 * 60 * 24) + 1; // 밀리세컨 * 초 * 분 * 시 = 일
+      growthDetail(growthId){
+        this.$store.dispatch('growth/growthSetting', growthId)
       }
     },
     created() {
-      // const st = this.event.start_date;
-      // const ed = this.event.end_date;
-      // this.period = this.getDateDiff(st, ed);
-      // this.week = parseInt(this.period / 15);
-      // this.rest = this.period % 15;
+      this.$store.dispatch('growth/getAllGrowth')
+      // console.log(this.$store.state.growth.allGrowth);
     }
 
 }

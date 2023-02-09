@@ -19,7 +19,7 @@
         </router-link>
       </div>
       <div v-else class="profile_box right_box_items lay1">
-        <div @click="openProfile" class="profile_id lay2 hover_cursor ">{{state.loginUser.name}} 님</div>
+        <!-- <div @click="openProfile" class="profile_id lay2 hover_cursor ">{{state.loginUser.name}} 님</div> -->
         <div @click="openProfile" class="profile_img_box hover_cursor lay2">
           <v-img class="logo_img"
             :src="require('../../assets/profiles/scale (3).png')"
@@ -199,15 +199,15 @@ export default {
     justify-content: center;
   } 
   .profile_img_box {
-    width: 46px;
-    height: 46px;
+    width: 30px;
+    height: 30px;
     border-radius: 50px;
     background-color: gray;
     margin-right: 10px;
   }
   .profile_id {
     margin-right: 10px;
-    font-size: 20px;
+    font-size: 15px;
   }
   .profile_slider_box {
     margin: 0 auto;
