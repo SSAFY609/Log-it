@@ -1,9 +1,6 @@
 package com.ssafy.logit.controller.growth;
 
-import com.ssafy.logit.model.growth.dto.AllProgress;
-import com.ssafy.logit.model.growth.dto.FirstProgress;
-import com.ssafy.logit.model.growth.dto.GrowthDto;
-import com.ssafy.logit.model.growth.dto.ProgressDto;
+import com.ssafy.logit.model.growth.dto.*;
 import com.ssafy.logit.model.growth.service.GrowthService;
 import com.ssafy.logit.model.user.dto.UserDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -171,5 +169,12 @@ public class GrowthController {
     @GetMapping("/like/get")
     public ResponseEntity<List<Long>> getLikeProgress(@RequestParam long growthId, @RequestAttribute String email) {
         return new ResponseEntity<List<Long>>(growthService.getLikeProgress(growthId, email), HttpStatus.OK);
+    }
+
+    // 로그 조회
+    @Operation(summary = "로그 조회", description = "한 이벤트의 날짜별로 과정이 존재하는지 반환")
+    @GetMapping("/log/{growthId}")
+    public ResponseEntity<List<Log>> getLog(@PathVariable long growthId) throws ParseException {
+        return new ResponseEntity<List<Log>>(growthService.makeLog(growthId), HttpStatus.OK);
     }
 }

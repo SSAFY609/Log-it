@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -328,24 +329,47 @@ public class GrowthService {
     }
 
     // 로그 만들기
-    public void makeLog(EventDate eventDate) throws ParseException {
-        Date start = new SimpleDateFormat("yyyy-MM-dd").parse(eventDate.getStartDate().toString());
-        Date end = new SimpleDateFormat("yyyy-MM-dd").parse(eventDate.getEndDate().toString());
+    public List<Log> makeLog(long growthId) throws ParseException {
+        List<Log> logList = new ArrayList<>();
 
-        long diffDays = (start.getTime() - end.getTime()) / (24 * 60 * 60) + 1; // 총 일 수
+        Optional<Growth> growth = growthRepo.findById(growthId);
+        if(growth.isPresent()) {
+            LocalDate startDate = growth.get().getEventDate().getStartDate();
+            LocalDate endDate = growth.get().getEventDate().getEndDate();
 
-        Map<String, Boolean> log = new HashMap<>();
-        for(int i = 0; i < diffDays; i++) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(start);
-            calendar.add(Calendar.DATE, i);
-            log.put(start.toString(), false);
+            Date start = new SimpleDateFormat("yyyy-MM-dd").parse(startDate.toString());
+            Date end = new SimpleDateFormat("yyyy-MM-dd").parse(endDate.toString());
+
+            long diffDays = (end.getTime() - start.getTime()) / 1000 / (24 * 60 * 60) + 1; // 총 일 수
+
+            Log log = new Log();
+            log.setIdx(0);
+            log.setDate(startDate.toString());
+            log.setWritten(false);
+            logList.add(log);
+
+            for(int i = 1; i < diffDays + 1; i++) {
+                log = new Log();
+                log.setIdx(i);
+                startDate = startDate.plusDays(1);
+                log.setDate(startDate.toString());
+                log.setWritten(false);
+                logList.add(log);
+            }
+
+            Optional<List<String>> dateList = progressRepo.dateList(growthId);
+            if(dateList.isPresent()) {
+                for(int i = 0; i < dateList.get().size(); i++) {
+                    String nowDate = dateList.get().get(i);
+                    for(int j = 0; j < logList.size(); j++) {
+                        if(logList.get(j).getDate().equals(nowDate)) {
+                            logList.get(j).setWritten(true);
+                        }
+                    }
+                }
+            }
         }
+        Collections.sort(logList);
+        return logList;
     }
-
-    // 잔기 심기 (과정 등록 시 map에서 찾고, 없으면 true로 넣어주기)
-
-
-    // 잔디 조회 (map 그대로 보내주면 될듯)
-
 }
