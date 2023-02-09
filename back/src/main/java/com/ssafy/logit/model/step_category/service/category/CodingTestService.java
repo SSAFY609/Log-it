@@ -3,6 +3,7 @@ package com.ssafy.logit.model.step_category.service.category;
 
 import com.ssafy.logit.exception.DifferentUserException;
 import com.ssafy.logit.exception.WrongCategoryException;
+import com.ssafy.logit.model.step_category.dto.category.codingtest.AlgoCategoryStatistics;
 import com.ssafy.logit.model.step_category.dto.category.codingtest.CreateCodingTestRequest;
 import com.ssafy.logit.model.step_category.dto.category.codingtest.UpdateCodingTestRequest;
 import com.ssafy.logit.model.step_category.entity.JobCategory;
@@ -97,6 +98,15 @@ public class CodingTestService {
                 update(user, request.getCodingTestId(), request);
             }
         }
+    }
+
+    /**
+     * 코딩테스트 카테고리 통계
+     * @return
+     */
+
+    public List<AlgoCategoryStatistics> getAlgoStatics(){
+        return codingTestRepository.getGroupByAlgoCategory();
     }
 
 
