@@ -130,6 +130,27 @@ public class GrowthController {
         }
     }
 
+    // 하나의 progress 조회
+    @Operation()
+    @GetMapping("/progress/{progressId}")
+    public ResponseEntity<ProgressDto> getProgress(@PathVariable long progressId) {
+        return new ResponseEntity<ProgressDto>(growthService.getProgress(progressId), HttpStatus.OK);
+    }
+
+    // 한 이벤트의 모든 progress 조회, 데이터 가공
+    @Operation(summary = "progress 다건 조회", description = "한 이벤트의 모든 progress를 데이터 가공 후 반환")
+    @GetMapping("/progress")
+    public ResponseEntity<List<AllProgress>> getAllProgress(@RequestParam long growthId) {
+        return new ResponseEntity<List<AllProgress>>(growthService.getAllProgress(growthId), HttpStatus.OK);
+    }
+
+    // 우선순위를 반영하여 날짜별 대표 progress를 데이터 가공 후 반환
+    @Operation(summary = "대표 progress", description = "우선순위를 반영한 날짜별 대표 progress를 데이터 가공 후 반환")
+    @GetMapping("/progress/first")
+    public ResponseEntity<List<FirstProgress>> getFirstProgress(@RequestParam long growthId, @RequestAttribute String email) {
+        return new ResponseEntity<List<FirstProgress>>(growthService.getFirstProgress(growthId, email), HttpStatus.OK);
+    }
+
     // 성장 과정 좋아요 or 좋아요 취소
     @Operation(summary = "좋아요", description = "좋아요 or 좋아요 취소")
     @PutMapping("/like/{progressId}")
@@ -143,18 +164,5 @@ public class GrowthController {
     @GetMapping("/like/get")
     public ResponseEntity<List<Long>> getLikeProgress(@RequestParam long growthId, @RequestAttribute String email) {
         return new ResponseEntity<List<Long>>(growthService.getLikeProgress(growthId, email), HttpStatus.OK);
-    }
-
-    // 한 이벤트의 모든 progress 조회, 데이터 가공
-    @Operation(summary = "progress 다건 조회", description = "한 이벤트의 모든 progress를 데이터 가공 후 반환")
-    @GetMapping("/progress")
-    public ResponseEntity<List<AllProgress>> getAllProgress(@RequestParam long growthId) {
-        return new ResponseEntity<List<AllProgress>>(growthService.getAllProgress(growthId), HttpStatus.OK);
-    }
-
-    @Operation()
-    @GetMapping("/progress/first")
-    public ResponseEntity<List<FirstProgress>> getFirstProgress(@RequestParam long growthId, @RequestAttribute String email) {
-        return new ResponseEntity<List<FirstProgress>>(growthService.getFirstProgress(growthId, email), HttpStatus.OK);
     }
 }

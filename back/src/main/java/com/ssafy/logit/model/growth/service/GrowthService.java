@@ -202,6 +202,12 @@ public class GrowthService {
         return NONE;
     }
 
+    // 한 개의 성장 과정 반환
+    @Transactional
+    public ProgressDto getProgress(long progressId) {
+        return progressRepo.findById(progressId).get().toDto();
+    }
+
     // 좋아요
     @Transactional
     public boolean like(long processId, String email) {
@@ -283,7 +289,6 @@ public class GrowthService {
 
             Optional<List<String>> dateList = progressRepo.dateList(growth_id);
             if(dateList.isPresent()) {
-
 
                 for(int i = 0; i < dateList.get().size(); i++) {
                     String nowDate = dateList.get().get(i);
