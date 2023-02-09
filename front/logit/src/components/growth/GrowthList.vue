@@ -42,11 +42,8 @@ export default {
         const date2 = parseInt(arr2[2])
         return `${arr1[0]}년 ${month1}월 ${date1}일 ~ ${arr2[0]}년 ${month2}월 ${date2}일`
       },
-      growthDetail(id){
-        this.$store.dispatch('growth/getGrowth', id);
-        this.$store.dispatch('growth/getGrowthUsers', id);
-        this.$store.dispatch(`growth/getAllUser`, id);
-        this.$router.push({name: 'GrowthProgress', params: {growthId: id}})
+      growthDetail(growthId){
+        this.$store.dispatch('growth/growthSetting', growthId)
       }
     },
     created() {

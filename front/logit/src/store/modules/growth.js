@@ -8,9 +8,13 @@ const growth = {
         allGrowth: [],
         growth: {},
         growthUsers: [],
-        progress: [],
+        progress: {},
+        firstProgress: [],
+        dateProgress: [],
         allUser: [],
         searchUser: [],
+        myLikeProgress: [],
+        log: [],
     },
     getters: {
         // 이벤트 회원 수
@@ -19,24 +23,27 @@ const growth = {
         },
     },
     mutations: {
-        CREATE_GROWTH(context, payload){
-            // state.growth = payload
-            // payload를 growthId로 할지, 등록한 growth로 할지,,, 
-            // 그냥 id만 반환해도 될듯 어차피 growthId로 getGrowth할거니깡
-            router.push({name: 'GrowthProgress', params: {growthId: payload}})
-        },
         GET_ALL_GROWTH(state, payload){
             console.log(payload)
             state.allGrowth = payload
         },
         GET_GROWTH(state, payload){
-            state.growth = payload
+            state.growth = payload.data
+            router.push({name: 'GrowthProgress', params: {growthId: payload.growthId}})
         },
         GET_GROWTH_USERS(state, payload){
             state.growthUsers = payload
         },
         GET_PROGRESS(state, payload){
             state.progress = payload
+            router.push({ name: 'ProgressUpdate'})
+        },
+        GET_FIRST_PROGRESS(state, payload){
+            state.firstProgress = payload
+        },
+        GET_DATE_PROGRESS(state, payload){
+            state.dateProgress = payload
+            router.push({name: 'ProgressDetail'})
         },
         GET_ALL_USER(state, payload){
             state.allUser = payload
@@ -46,14 +53,20 @@ const growth = {
         },
         SEARCH_USER_RESET(state){
             state.searchUser = []
+        },
+        GET_LIKE_PROGRESS(state, payload){
+            state.myLikeProgress = payload
+        },
+        GET_LOG(state, payload){
+            state.log = payload
         }
     },
     actions: {
         // 성장 여정 추가
-        createGrowth({commit}, growth){
+        createGrowth({dispatch}, growth){
             axiosConnector.post(`growth/regist`, growth
             ).then((res)=>{
-                commit('CREATE_GROWTH', res.data)
+                dispatch('growthSetting', res.data)
             }).catch((err)=>{
                 console.log(err)
             })
@@ -82,7 +95,11 @@ const growth = {
                 params: params
             }).then((res)=>{
                 console.log(res.data)
-                commit('GET_GROWTH', res.data)
+                const payload = {
+                    data: res.data,
+                    growthId: growthId
+                }
+                commit('GET_GROWTH', payload)
             }).catch((err)=>{
                 console.log(err);
             })
@@ -103,10 +120,32 @@ const growth = {
             })
         },
         // 이벤트 아이디에 해당하는 과정들 가져오기
-        getProgress({commit}, growthId) {
-            axiosConnector.get(`progress/${growthId}`
+        getProgress({commit}, progressId) {
+            axiosConnector.get(`growth/progress/${progressId}`
             ).then((res)=>{
                 commit('GET_PROGRESS', res.data)
+            }).catch((err)=>{
+                console.log(err)
+            })
+        },
+
+        // 이벤트 타임라인에 보여줄 메인 과정들 (날짜당 대표 과정 하나씩)
+        getFirstProgress({commit}, growthId){
+            axiosConnector.get(`growth/progress/first`,{
+                params: {
+                    growthId: growthId
+                }
+            }).then((res)=>{
+                commit('GET_FIRST_PROGRESS', res.data)
+            }).catch((err)=>{
+                console.log(err)
+            })
+        },
+        // 날짜별 과정들 가져오기
+        getDateProgress({commit}, data){
+            axiosConnector.get(`growth/progress/${data.growthId}/${data.date}`
+            ).then((res)=>{
+                commit('GET_DATE_PROGRESS', res.data)
             }).catch((err)=>{
                 console.log(err)
             })
@@ -154,26 +193,66 @@ const growth = {
             })
         },
         // 이벤트에 과정 추가
-        registProgress(context, progress){
+        registProgress({dispatch}, progress){
             axiosConnector.post('growth/write', progress
-            ).then((res)=>{
-                console.log(res)
+            ).then(()=>{
+                const data = {
+                    growthId: progress.growthId,
+                    date: progress.progressDate.date
+                }
+                dispatch('getDateProgress', data)
+                // console.log(res)
                 // 이때 res.data는 eventId
                 // dispatch('getProgress', res.data);
             }).catch((err)=>{
                 console.log(err);
             })
         },
+
         // 이벤트에 과정 수정
         updateProgress({dispatch}, progress){
-            axiosConnector.put('progress', progress
-            ).then((res)=> {
-                dispatch('getProgress', res.data)
+            axiosConnector.post(`growth/write`, progress
+            ).then(()=> {
+                const data = {
+                    growthId: progress.growthId,
+                    date: progress.progressDate.date
+                }
+                dispatch('getDateProgress', data)
             }).catch((err)=>{
                 console.log(err);
             })
-        }
-        // 이벤트에 과정 삭제 => 그냥 안하면 어때,,, ? ㅋㅋㅋㅋ
+        },
+
+        // 내가 좋아요 한 과정들 미리 받아두기
+        getLikeProgress({commit}, growthId){
+            axiosConnector.get(`growth/like/get`,{
+                params: {
+                    growthId: growthId
+                }
+            }).then((res)=>{
+                commit('GET_LIKE_PROGRESS', res.data)
+            }).catch((err)=>{
+                console.log(err)
+            })
+        },
+
+        getLog({commit}, growthId){
+            axiosConnector.get(`growth/log/${growthId}`
+            ).then((res)=>{
+                commit('GET_LOG', res.data)
+            }).catch((err)=>{
+                console.log(err)
+            })
+        },
+
+        // 이벤트 첫 세팅 ㄱㄱ
+        growthSetting({dispatch}, growthId){
+            dispatch('getGrowthUsers', growthId)
+            dispatch('getFirstProgress', growthId)
+            dispatch('getLikeProgress', growthId)
+            dispatch('getLog', growthId)
+            dispatch('getGrowth', growthId)
+        },
     }
 
 }

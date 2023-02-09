@@ -13,6 +13,9 @@ import SearchResult from '../components/search/SearchResult.vue'
 import GrowthList from '../components/growth/GrowthList.vue'
 import GrowthCreate from '../components/growth/GrowthCreate.vue'
 import GrowthProgress from '../components/growth/GrowthProgress.vue'
+import ProgressCreate from '../components/growth/ProgressCreate.vue'
+import ProgressDetail from '../components/growth/ProgressDetail.vue'
+import ProgressUpdate from '../components/growth/ProgressUpdate.vue'
 import JobCreate from '../components/job/JobCreate.vue'
 import JobList from '../components/job/JobList.vue'
 import JobProgress from '../components/job/JobProgress.vue'
@@ -89,7 +92,24 @@ const router = createRouter({
         {
           path: ':growthId',
           name: 'GrowthProgress',
-          component: GrowthProgress
+          component: GrowthProgress,
+          children: [
+            {
+              path: "create",
+              name: "ProgressCreate",
+              component: ProgressCreate,
+            },
+            {
+              path: "detail",
+              name: "ProgressDetail",
+              component: ProgressDetail,
+            },
+            {
+              path: "update",
+              name: "ProgressUpdate",
+              component: ProgressUpdate,
+            }
+          ]
         },
       ],
     },

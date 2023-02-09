@@ -3,7 +3,6 @@
     <div class="header">
       <div class="title">
         <div class="event-title">{{ growth.category }}</div>
-        <!-- <div class="event-date">{{ growth.eventDate.startDate }} ~ {{ ?growth.eventDate.endDate }} </div> -->
         <div class="event-date">{{ date_to_str(growth.eventDate.startDate, growth.eventDate.endDate) }}</div>
         <div v-if="growthUsers.length == 0"> {{ growth.user.name }} 님 참여중 <v-icon @click="member = true">mdi-account-multiple-plus</v-icon></div>
         <div v-else> {{ growth.user.name }} 님 외 {{ growthUsers.length }}명 참여중 <v-icon @click="member = true">mdi-account-multiple-plus</v-icon></div>
@@ -20,10 +19,10 @@
             <div v-for="j in rest" :key="j" class="square"></div>
           </div> -->
           <div class="week">
-            <div v-for="i in grass" :key="i">
-              <div v-if="i=='not'" class="not"></div>
-              <div v-else :class="i.class" @click="check($event)">
-                <v-tooltip activator="parent" location="bottom">{{ i.date }}</v-tooltip>
+            <div v-for="grass in log" :key="grass.idx">
+              <div v-if="!grass.written" class="not"></div>
+              <div v-else :class="`done ${grass.date}`" @click="check($event)">
+                <v-tooltip activator="parent" location="bottom">{{ grass.date }}</v-tooltip>
               </div>
             </div>
           </div>
@@ -35,46 +34,52 @@
         <v-timeline-item v-if="!today" class="progress-item" dot-color="rgb(255, 225, 121)" size="small">
           <div class="memo-box">
             <div class="memo-date">{{date_after(new Date())}}</div>
-            <div class="memo" @click="dialog = true, update_mode = true, now_idx = -1, update_content = ''">
+            <div class="memo" @click="dialog = true, progressCreate()">
               <div>텍스트를 입력하세요</div>
             </div>
           </div>
         </v-timeline-item>
         <v-timeline-item
           class="progress-item"
-          v-for=" (item, index) in [...this.progress].reverse()"
+          v-for=" progress in [...this.firstProgress].reverse()"
           dot-color="rgb(255, 225, 121)"
-          :key="item.progressId"
+          :key="progress.progressDto.progressId"
           size="small"
         >
-          <div class="memo-box" :id="`state${shareProgress.length - index - 1}`">
-            <div class="memo-date">{{date_after(item.date)}}</div>
-            <div v-if="item.contents[0].email == loginUser.email" class="memo" @click="dialog = true, now_idx = shareProgress.length - index - 1">
-              <div v-html="item.contents[0].content"></div>
+          <div class="memo-box" :id="progress.date">
+            <div class="memo-date">{{progress.date}}</div>
+            <div v-if="progress.progressDto.user.id == loginUser.id" class="memo" @click="dialog = true, progressDetail(progress.date)">
+              <div v-html="progress.progressDto.content"></div>
             </div>
-            <div v-else class="memo isMine" @click="dialog = true, now_idx = shareProgress.length - index - 1">
-              <div v-html="item.contents[0].content"></div>
+            <div v-else class="memo isMine" @click="dialog = true, progressDetail(progress.date)">
+              <div v-html="progress.progressDto.content"></div>
             </div>
           </div>
         </v-timeline-item>
       </v-timeline> 
+
+      <!-- 여기부터 이벤트 유저 모달창 -->
       <v-dialog
         v-model="member"
         class="member-dialog"
       >
         <v-card class="member-dialog member-box">
-          <v-card-title class="member-title">{{event.name}} 참여 목록</v-card-title>
-          <div v-for="user in eventUsers.users" :key="user.user_id" class="member-list">
+          <v-card-title class="member-title"><v-icon>mdi-account-multiple</v-icon> 참여 목록</v-card-title>
+          <div class="member-list">
             <v-avatar>
-              <v-img :src="require(`@/assets/profiles/scale (${user.profile}).png`)"></v-img>
+              <v-img :src="require(`@/assets/profiles/scale (${growth.user.image}).png`)"></v-img>
             </v-avatar>
-            <span style="margin: 0px 10px">
-              {{ user.name }}
-            </span>
-            <v-chip v-if="user.name == eventUsers.owner.name" color="#FF0A54">호스트</v-chip>
-            <div v-else class="member">
+            <span style="margin: 0px 10px">{{ growth.user.name }}</span>
+            <v-chip color="#FF0A54">호스트</v-chip>
+          </div>
+          <div v-for="member in growthUsers" :key="member.id" class="member-list">
+            <v-avatar>
+              <v-img :src="require(`@/assets/profiles/scale (${member.image}).png`)"></v-img>
+            </v-avatar>
+            <span style="margin: 0px 10px">{{ member.name }}</span>
+            <div class="member">
               <v-chip color="#2d8bff">멤버</v-chip>
-              <v-icon v-if="is_host" color="red" class="member-delete" @click="member_delete(user.email)">mdi-close</v-icon>
+              <v-icon v-if="is_host" color="red" class="member-delete" @click="member_delete(member.email)">mdi-close</v-icon>
             </div>
           </div>
           <v-card-actions style="justify-content:space-between" class="hover_cursor" @click="searchSet(), show = !show">
@@ -103,92 +108,13 @@
           </v-expand-transition>
         </v-card>
       </v-dialog>
+
+      <!-- 여기부터는 포스트잇 화면 -->
       <v-dialog
         v-model="dialog"
         class="memo-dialog"
       >
-        <swiper v-if="!update_mode" 
-          :effect="'cards'"
-          :grabCursor="false"
-          :cssMode="false"
-          :modules="modules"
-          class="mySwiper">
-          
-          <swiper-slide v-for="(item, index) in shareProgress[now_idx].contents" :key="item" class="slide">
-            <div v-if="item.email == loginUser.email" class="memo-bg">
-              <div class="writer">
-                <div>
-                  <v-avatar style="margin-right: 10px">
-                    <v-img :src="require(`@/assets/profiles/scale (${item.profile}).png`)"></v-img>
-                  </v-avatar>
-                  {{ item.name }}
-                </div>
-                <v-icon v-if="item.email == loginUser.email" @click="update_mode = true, update_content = shareProgress[now_idx].contents[index].content">mdi-pencil</v-icon>
-              </div>
-              <!-- <div v-else style="height: 25.5px"></div> -->
-              <div class="detail-form">
-                <QuillEditor 
-                  class="text-editor" 
-                  theme="bubble"
-                  v-model:content="item.content"
-                  content-type="html"
-                  toolbar="essential" 
-                  :read-only="true" />
-              </div>
-            <div class="heart">
-              <v-btn v-if="myLikeProgress.indexOf(item.progressId) != -1" variant="flat" icon="mdi-heart" color="red" @click="unlike(item.progressId)"></v-btn>
-              <v-btn v-else variant="outlined" icon="mdi-heart" color="red" @click="like(item.progressId)"></v-btn>
-              {{ item.like }}
-            </div>
-              <div class="check">
-                <v-icon size="large" @click="dialog = false">mdi-close</v-icon>
-              </div>
-            </div>
-            <div v-else class="memo-bg pink">
-              <div class="writer">
-                <div>
-                  <v-avatar style="margin-right: 10px">
-                    <v-img :src="require(`@/assets/profiles/scale (${item.profile}).png`)"></v-img>
-                  </v-avatar>
-                  {{ item.name }}
-                </div>
-              </div>
-              <!-- <div v-else style="height: 25.5px"></div> -->
-              <div class="detail-form">
-                <QuillEditor 
-                  class="text-editor" 
-                  theme="bubble"
-                  v-model:content="item.content"
-                  content-type="html"
-                  toolbar="essential" 
-                  :read-only="true" />
-              </div>
-            <div class="heart">
-              <v-btn v-if="myLikeProgress.indexOf(item.progressId) != -1" variant="flat" icon="mdi-heart" color="red" @click="unlike(item.progressId)"></v-btn>
-              <v-btn v-else variant="outlined" icon="mdi-heart" color="red" @click="like(item.progressId)"></v-btn>
-              {{ item.like }}
-            </div>
-              <div class="check">
-                <v-icon size="large" @click="dialog = false">mdi-close</v-icon>
-              </div>
-            </div>
-          </swiper-slide>
-        </swiper>
-        <div v-else class="memo-dialog">
-          <div class="detail-form memo-bg memo-create">
-            <QuillEditor 
-              class="text-editor" 
-              theme="bubble"
-              v-model:content="write_content"
-              content-type="html"
-              toolbar="essential" 
-              placeholder="텍스트를 입력하세요"
-              :read-only="false" />
-            <div class="check">
-              <v-icon size="large" @click="sendRequest">mdi-check</v-icon>
-            </div>
-          </div>
-        </div>
+        <router-view></router-view>
       </v-dialog>
     </div>
     <div class="navi">
@@ -199,18 +125,7 @@
 </template>
 
 <script>
-import { QuillEditor } from '@vueup/vue-quill'
-import '@vueup/vue-quill/dist/vue-quill.bubble.css';
-import { Swiper, SwiperSlide } from 'swiper/vue';
 import { mapState } from 'vuex';
-import { EffectCards } from 'swiper';
-
-import 'swiper/css';
-
-import 'swiper/css/effect-cards';
-// import axiosConnector from '../../utils/axios-connector';
-
-// import './style.css';
 
 export default {
     name: 'GrowthProgress',
@@ -218,42 +133,36 @@ export default {
       return {
         growthId: 0,
         grass: [],
-        copy_progress: [],
         allUsers: [],
         period: 0,
         member: false,
         dialog: false,
-        memo_contents: [],
-        write_content: '',
         day: ['일', '월', '화', '수', '목', '금', '토'],
-        update_mode: false,
-        today: false,
         show: false,
         is_host: false,
         search_user: null,
-        update_idx: 0,
         searchText: '',
       }
     },
-    components: {
-      QuillEditor,
-      Swiper,
-      SwiperSlide,
-    },
-    setup() {
-      return {
-        modules: [EffectCards],
-      };
-    },
     computed: {
       ...mapState('temp', ['loginUser', 'event', 'eventUsers', 'shareProgress', 'users', 'myLikeProgress']),
-      ...mapState('growth', ['growth', 'progress', 'searchUser', 'growthUsers']),
+      ...mapState('growth', ['growth', 'searchUser', 'growthUsers', 'firstProgress', 'log']),
       
       change_image(id){
         return `@assets/profiles/scale (${id}).png`;
       }
     },
     methods: {
+      progressCreate(){
+        this.$router.push({name: 'ProgressCreate'})
+      },
+      progressDetail(date){
+        const data = {
+          growthId: this.growthId,
+          date: date
+        }
+        this.$store.dispatch('growth/getDateProgress', data)
+      },
       date_to_str(st, ed) {
         const arr1 = st.split('-');
         const arr2 = ed.split('-');
@@ -294,9 +203,6 @@ export default {
         return `${year}-${month >= 10 ? month : '0' + month}-${date >= 10 ? date : '0' + date}`;
 
       },
-      // update_content() {
-      //   this.update_mode = true;
-      // },
       member_delete(email){
         console.log(email, this.event.event_id);
         // this.$store.dispatch('deleteEventUser', this.event.event_id, email);
@@ -314,38 +220,17 @@ export default {
           // this.member = false;
         
       },
-      sendRequest(){
-        // 이건 create 요청
-        if(this.now_idx == -1){
-          const progress = {
-            growthId: this.growth.growthId,
-            progressDate: {
-              date: this.today_string(),
-            },
-            content: this.write_content,
-          }
-          console.log(progress)
-          this.$store.dispatch('growth/registProgress', progress)
-        } 
-        // 이건 update 요청
-        else {
-          // const progress = {
-          //   growthId: this.growth.growthId,
-          //   date: new Date(),
-          //   email: this.loginUser.email,
-          //   content: this.write_content,
-          // }
-          // this.$store.dispatch('growth/updateProgress', progress)
-        }
-      },
       check(event){
         // console.log(event.target.classList)
         if(event.target.classList.contains('done')){
           const go = event.target.classList[1]
           // console.log(go)
+          // console.log(this.$refs[go])
+          // this.$refs[go].scrollIntoView({behavior: "smooth", block: 'center'})
+          // console.log(go)
           // this.$refs['state3'].scrollIntoView({behavior: "smooth"})
           // this.$refs['bottom'].scrollIntoView({behavior: "smooth"})
-          document.querySelector(`#state${go}`).scrollIntoView({behavior: "smooth", block: 'center'})
+          document.getElementById(go).scrollIntoView({behavior: "smooth", block: 'center'})
           // window.scrollTo(0,100)
         }
       },
@@ -392,7 +277,7 @@ export default {
     created() {
       // 파람스로 이벤트 아이디 추출
       this.growthId = this.$route.params.growthId;
-
+      console.log(this.$store.state.growth.growthUsers)
       // let growth = null
 
       // // 바로 호출....?
@@ -404,6 +289,7 @@ export default {
       // }).catch((err)=>{
       //   console.log(err)
       // })
+
 
 
       // 파람스 테스트 -> 통
@@ -444,20 +330,9 @@ export default {
 
       // 잔디 확인용 테스트
       // console.log(this.grass)
-      
-      const today = new Date()
-      for(let i=0; i<this.shareProgress.length; i++){
-        if (this.shareProgress[i].date.toLocaleDateString() == today.toLocaleDateString()) {
-          this.today = true;
-          break;
-        } 
-      }
-
-      // this.copy_progress = [...this.shareProgress].reverse();
-
-      for(let i=0; i<this.users.length; i++){
-        const user = `${this.users[i].name} (${this.users[i].email})`
-        this.allUsers.push(user)
+      if (this.loginUser.id == this.growth.user.id) {
+        this.is_host = true
+        console.log(this.is_host)
       }
     },
 }
