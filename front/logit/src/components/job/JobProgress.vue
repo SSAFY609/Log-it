@@ -77,72 +77,16 @@
 
                   <div class="test_item" v-for="(el, index) in ct_datas.list" :key="index">
                     <div class="num_btn">
-                    <p>문제 {{ index + 1 }}</p>
-                  </div>
+                      <p>문제 {{ index + 1 }}</p>
+                    </div>
       
                     <div class="option_types_area">
                       <div class="chip_box hover_cursor" v-for="item in testList" :key="item">
-                        <input class="radio_item" type="radio" :name="`ct_category${index}`" :id="`${item}`" @click="changeOption" :value="`${item}`">
+                        <input class="radio_item" type="radio" :name="`ct_category${index}`" :id="`${item}`"  :value="`${item}`" @click="changeOption">
                         <label :for="`${item}`">{{ item }}</label>
+                        <div class="hidden_data">{{ index }}</div>
                       </div>
                       
-                      <!-- <div class="chip_box hover_cursor">
-                        <input type="radio" :name="`ct_category${index}`" id="BFS" @click="changeOption" value="BFS">
-                        <label for="BFS">BFS</label>
-                      </div>
-                      <div class="chip_box hover_cursor">
-                        <input type="radio" :name="`ct_category${index}`" id="DFS" @click="changeOption" value="DFS">
-                        <label for="DFS">DFS</label>
-                      </div>
-                      <div class="chip_box hover_cursor">
-                        <input type="radio" :name="`ct_category${index}`" id="그래프" @click="changeOption" value="그래프">
-                        <label for="그래프">그래프</label>
-                      </div>
-                      <div class="chip_box hover_cursor">
-                        <input type="radio" :name="`ct_category${index}`" id="구현" @click="changeOption" value="구현">
-                        <label for="구현">구현</label>
-                      </div>
-                      <div class="chip_box hover_cursor">
-                        <input type="radio" :name="`ct_category${index}`" id="문자열" @click="changeOption" value="문자열">
-                        <label for="문자열">문자열</label>
-                      </div>
-                      <div class="chip_box hover_cursor">
-                        <input type="radio" :name="`ct_category${index}`" id="정렬" @click="changeOption" value="정렬">
-                        <label for="정렬">정렬</label>
-                      </div>
-                      <div class="chip_box hover_cursor">
-                        <input type="radio" :name="`ct_category${index}`" id="이분탐색" @click="changeOption" value="이분탐색">
-                        <label for="이분탐색">이분탐색</label>
-                      </div>
-                      <div class="chip_box hover_cursor">
-                        <input type="radio" :name="`ct_category${index}`" id="자료구조" @click="changeOption" value="자료구조">
-                        <label for="자료구조">자료구조</label>
-                      </div>
-                      <div class="chip_box hover_cursor">
-                        <input type="radio" :name="`ct_category${index}`" id="완전탐색" @click="changeOption" value="완전탐색">
-                        <label for="완전탐색">완전탐색</label>
-                      </div>
-                      <div class="chip_box hover_cursor">
-                        <input type="radio" :name="`ct_category${index}`" id="힙" @click="changeOption" value="힙">
-                        <label for="힙">힙</label>
-                      </div>
-                      <div class="chip_box hover_cursor">
-                        <input type="radio" :name="`ct_category${index}`" id="트리" @click="changeOption" value="트리">
-                        <label for="트리">트리</label>
-                      </div>
-                      <div class="chip_box hover_cursor">
-                        <input type="radio" :name="`ct_category${index}`" id="DP" @click="changeOption" value="DP">
-                        <label for="DP">DP</label>
-                      </div>
-                      <div class="chip_box hover_cursor">
-                        <input type="radio" :name="`ct_category${index}`" id="그리디" @click="changeOption" value="그리디">
-                        <label for="그리디">그리디</label>
-                      </div>
-
-                      <div class="chip_box hover_cursor">
-                        <input type="radio" :name="`ct_category${index}`" id="백트랙킹" @click="changeOption" value="백트랙킹">
-                        <label for="백트랙킹">백트랙킹</label>
-                      </div> -->
 
 
                       
@@ -299,19 +243,6 @@ import { mapState } from 'vuex';
       },
 
 
-
-      selectType() {
-        const target = event.target
-        const removeList = document.querySelectorAll('.chip_box')
-        console.log(target)
-        console.log(removeList)
-        removeList.forEach(element => {
-          element.classList.remove('selected_chip')  
-        });
-
-        target.classList.toggle('selected_chip')
-      },
-
       date_to_str(st, ed) {
         const year1 = st.getFullYear();
         const month1 = st.getMonth() + 1;
@@ -324,27 +255,12 @@ import { mapState } from 'vuex';
 
       changeOption() {
 
-        const targetName = event.target.name
-        const targetOption = event.target.value
-        const target = event.target
+        // console.log(event.target)
+        const target = event.target.parentElement.parentElement.parentElement
+
+        console.log(target)
 
 
-        this.category[`${targetName}`] = targetOption
-        target.classList.add('checked')
-        // console.log(this.category)
-        // console.log(target)
-
-        const target2 = event.target
-        const removeList = document.querySelectorAll('.chip_box')
-        
-        console.log(target2)
-        console.log(removeList)
-
-        removeList.forEach(element => {
-          element.classList.remove('selected_chip')  
-        });
-
-        target2.parentElement.classList.toggle('selected_chip')
       },
       
 
@@ -371,9 +287,7 @@ import { mapState } from 'vuex';
           }
       }
 
-      // console.log(this.ct_datas)
       for(let i=0; i < this.ct_datas.list.length; i++) {
-        // console.log(this.ct_datas.list[i].category)
         this.category[`ct_category${i}`] = this.ct_datas.list[i].category
       }
 
@@ -389,24 +303,36 @@ import { mapState } from 'vuex';
         target.firstChild.classList.add('selected_item')
         this.clicked = target.firstChild.innerText
 
-        // const targetList = document.querySelectorAll('.chip_box')
+        // console.log(this.category.ct_category0)
 
-        const targetList = document.getElementsByName('ct_category${index}')
-        console.log(targetList)
-        console.log(this.category)
+
+        const targetArray = []
+        const c_length = Object.keys(this.category).length
+        for(let i = 0; i < c_length; i++) {
+          
+          targetArray.push(this.ct_datas.list[i].category)
+
         
 
-        // targetList.forEach(element => {
-        //   console.log(element.innerText)
-        //   console.log(element)
-        //   console.log(this.category)
-        //   if(element.innerText == this.category) {
 
-        //   }
+        }
+        
 
-           
-        // });
-      
+        
+        for(let i = 0; i < c_length; i++) {
+          const targetList = document.getElementsByName(`ct_category${i}`)
+
+
+          targetList.forEach(element => {
+            console.log(element.name)
+            if(element.value == targetArray[i]) {
+              element.parentElement.classList.add('selected_item')
+            }
+          });
+
+        }
+
+
       
 
         
@@ -487,11 +413,7 @@ span {
   font-family: appleL;
   font-size: 22px;
 }
-.selected_item {
-  background-color: #FF0A54 ;
-  color: white;
-  z-index: 1000;
-}
+
 .contents_area {
   margin-top: 16px;
   width: 940px;
@@ -626,16 +548,16 @@ textarea:focus {
   outline: 5px dashed #FF0A54;
 }
 .ct_input_area {
-  background-color: rgb(145, 255, 255);
   width: 100%;
 }
 
 .option_types_area {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   flex-wrap: wrap;
   width: 100%;
   height: 100px;
+  margin-top: 20px;
 }
 
 
@@ -655,6 +577,7 @@ textarea:focus {
   width: 100%;
   height: 200px !important;
   margin-bottom: 20px;
+  margin-top: 20px;
 }
 .ct_area {
   margin-top: 20px;
@@ -720,5 +643,10 @@ label:hover {
   display: flex;
   
 
+}
+.selected_item {
+  background-color: #FF0A54 ;
+  color: white;
+  z-index: 1000;
 }
  </style>
