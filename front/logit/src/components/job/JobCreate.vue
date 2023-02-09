@@ -5,34 +5,84 @@
             취업 여정 추가
         </div>
         <div class="category-title">
-            ✔ 어떤 기업을 목표로 하시나요?
+            💼&nbsp;&nbsp;어떤 기업을 목표로 하시나요?
         </div>
         <div><v-text-field label="ex) 카카오" v-model="company_name"></v-text-field></div>
+
         <div class="category-title">
-            ✔ 이벤트 기간 설정
+            📌&nbsp;&nbsp;채용을 위한 전형 추가
+        </div>
+        <v-chip-group filter class="category" column multiple>
+            <v-chip color="#FF0A54" size="large" v-for="i in categoryList" :value="i" :key="i" @click="select_chip(i), flag = false" >
+                {{ i }}
+            </v-chip>
+        </v-chip-group> 
+
+        <div class="category-title category-title2">
+            📆&nbsp;&nbsp;기간 설정
         </div>
         <div class="select-date">
             <v-text-field label="시작 날짜" type="date" v-model="start_date"></v-text-field> ~
             <v-text-field label="종료 날짜" type="date" v-model="end_date"></v-text-field>
         </div>
         <div class="create_btn_box b_main btn_hover" @click="create">
-            <div class="create_btn_text f_white">다음단계</div>
+            <div class="create_btn_text f_white">생성하기</div>
         </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 export default {
     name: 'JobCreate',
+
+    props: {
+        date: {
+            type: String,
+        }
+    },
+    computed: {
+      ...mapState("job", ["categoryList"]),
+      ...mapState("tempJob", ["jobs"])
+    },
+
     data() {
         return {
             company_name: "",
+            categoryList: [],
+            selectedList: [],
             start_date: null,
             end_date: null,
+            flag: false,
+            sendData: {},
+            
         }
     },
     methods: {
+
+        select_chip(i) {
+
+            const target = event.target
+
+            console.log(target.innerText)
+            if(this.selectedList.indexOf(i) != -1){
+
+                console.log("선택 취소")
+                const idx = this.selectedList.indexOf(i)
+
+                this.selectedList.splice(idx,1)
+
+            } else {
+                // console.log("선택")
+                // console.log(this.selectedList)
+                // console.log(i)
+                this.selectedList.push(i);
+            }
+        },
+
+
+
         create() {
             if (!this.company_name) {
                 alert('기업명을 입력해주세요.')
@@ -40,13 +90,20 @@ export default {
                 alert('날짜를 선택해 주세요.')
             } else {
                 console.log(this.company_name)
+                console.log(this.selectedList)
                 console.log(this.start_date)
                 console.log(this.end_date)
+                
+                
+                
+                
             }
         }
     },
     created() {
         this.start_date = this.$route.query.st;
+        this.categoryList = this.$store.state.job.categoryList
+
     },
 
 }
@@ -77,13 +134,13 @@ export default {
 .event-create-title {
     font-family: appleB;
     font-size: 50px;
-    margin-top: 60px;
+    margin-top: 40px;
     text-align: center;
 }
 
 .category-title {
-    margin-top: 50px;
-    margin-bottom: 20px;
+    margin-top: 40px;
+    margin-bottom: 10px;
     font-size: 20px;
     text-align: start;
 }
@@ -112,11 +169,14 @@ export default {
     justify-content: center;
     align-items: center;
     margin: 0 auto;
-    margin-top: 80px;
+    margin-top: 30px;
   }
   .create_btn_text {
     margin-top: 2px;
     font-size: 22px;
     font-weight: 500;
+  }
+  .category-title2 {
+    margin-top: 40px;
   }
 </style>

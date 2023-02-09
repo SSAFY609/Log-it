@@ -7,7 +7,12 @@
         <v-chip v-if="event.done" variant="outlined" color="rgb(27, 182, 40)">완료</v-chip>
         <v-chip v-else variant="outlined" color="rgb(245, 21, 107)">진행중</v-chip>
       </router-link>
-      <div v-if="events.length%2 == 1" class="event-else"></div>
+      <!-- 추가하기 버튼 영역 -->
+      <router-link :to="{name: 'EventCreate'}" class="add_event hover_cursor">
+        <v-icon class="f_icon plus_icon">mdi-plus-box</v-icon>
+        <div class="event-title add_title">이벤트 추가</div>
+      </router-link>
+      <div v-if="events.length%2 == 0" class="event-else"></div>
     </div>
   </div>
 </template>
@@ -110,6 +115,37 @@ export default {
 .event-date {
   font-size: 20px;
   margin-bottom: 10px;
+}
+.add_event {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background-color: rgba(219, 219, 219, 0.194); */
+  border-radius: 20px;
+  height: 200px;
+  width: 500px;
+  margin: 10px;
+  border: 6px dashed rgba(219, 219, 219, 0.335);
+}
+.add_event:hover {
+  background-color: rgba(219, 219, 219, 0.616);
+  border: 6px  rgba(219, 219, 219, 0.692);
+}
+.add_event:hover :nth-child(1){
+  color: #313131;
+}
+.add_event:hover :nth-child(2){
+  color: #313131;
+}
+
+.plus_icon {
+  font-size: 60px;
+  margin-right: 4px;
+  color: #9292926e;
+
+}
+.add_title {
+  color: #9292926e;
 }
 
 </style>

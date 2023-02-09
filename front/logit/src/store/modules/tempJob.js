@@ -87,27 +87,12 @@ const tempJob = {
                 "progress": true,
                 "size": 4,
                 "datas": [
-                    {
-                        "stepId": 3,
-                        "resultStatus": "INPROGRESS",
-                        "jobCategory": "ETC",
-                        "name": "HI",
-                        "list": [
-                            {
-                                "id": 10,
-                                "content": "1차면접"
-                            },
-                            {
-                                "id": 11,
-                                "content": "1차면접"
-                            }
-                        ]
-                    },
+                    
                     {
                         "stepId": 4,
                         "resultStatus": "INPROGRESS",
                         "jobCategory": "면접",
-                        "name": "HI",
+                        "name": "기술면접",
                         "list": [
                             {
                                 "id": 8,
@@ -127,7 +112,7 @@ const tempJob = {
                         "stepId": 5,
                         "resultStatus": "INPROGRESS",
                         "jobCategory": "코딩테스트",
-                        "name": "HI",
+                        "name": "코테",
                         "list": [
                             {
                                 "id": 6,
@@ -145,7 +130,7 @@ const tempJob = {
                         "stepId": 12,
                         "resultStatus": "INPROGRESS",
                         "jobCategory": "서류",
-                        "name": "HI",
+                        "name": "자소서",
                         "list": [
                             {
                                 "id": 13,
@@ -163,22 +148,12 @@ const tempJob = {
                                 "answer": "아 싫어요"
                             },
                         ]
-                    }
-                ]
-            },
-            {   
-                "jobId": 3,
-                "title": "삼성",
-                "startDate": new Date(2023,0,10),
-                "endDate": new Date(2023,0,10),
-                "progress": false,
-                "size": 4,
-                "datas": [
+                    },
                     {
                         "stepId": 3,
                         "resultStatus": "INPROGRESS",
-                        "jobCategory": "ETC",
-                        "name": "HI",
+                        "jobCategory": "기타",
+                        "name": "과제",
                         "list": [
                             {
                                 "id": 10,
@@ -190,11 +165,22 @@ const tempJob = {
                             }
                         ]
                     },
+                ]
+            },
+            {   
+                "jobId": 3,
+                "title": "삼성",
+                "startDate": new Date(2023,0,10),
+                "endDate": new Date(2023,0,10),
+                "progress": false,
+                "size": 4,
+                "datas": [
+                   
                     {
                         "stepId": 4,
                         "resultStatus": "INPROGRESS",
                         "jobCategory": "면접",
-                        "name": "HI",
+                        "name": "인성면접",
                         "list": [
                             {
                                 "id": 8,
@@ -214,7 +200,7 @@ const tempJob = {
                         "stepId": 5,
                         "resultStatus": "INPROGRESS",
                         "jobCategory": "코딩테스트",
-                        "name": "HI",
+                        "name": "코딩테스트",
                         "list": [
                             {
                                 "id": 6,
@@ -232,7 +218,7 @@ const tempJob = {
                         "stepId": 12,
                         "resultStatus": "INPROGRESS",
                         "jobCategory": "서류",
-                        "name": "HI",
+                        "name": "서류",
                         "list": [
                             {
                                 "id": 13,
@@ -250,28 +236,64 @@ const tempJob = {
                                 "answer": "아 싫어요"
                             },
                         ]
-                    }
+                    },
+                    {
+                        "stepId": 3,
+                        "resultStatus": "INPROGRESS",
+                        "jobCategory": "기타",
+                        "name": "과제",
+                        "list": [
+                            {
+                                "id": 10,
+                                "content": "1차면접"
+                            },
+                            {
+                                "id": 11,
+                                "content": "1차면접"
+                            }
+                        ]
+                    },
                 ]
             },
         ]
     },
     getters: {
-        getCategoryCnt(state) {
+        g기타ategoryCnt(state) {
             return state.category.length;
         }
     },
     mutations: {
-        GET_DATAS(state, payload) {
+        GET_JOBS(state, payload) {
             state.jobs = payload
         }
 
     },
     actions: {
-        getJobs({commit}, jobs) {
-            axiosConnector.get('job', jobs
+        getJobs({commit}, jobId) {
+            axiosConnector.get('job/get', {
+                params: {
+                    jobId : jobId
+                }
+            }
             ).then((res)=> {
-                commit('GET_DATAS', res.jobs)
+                commit('GET_DATAS', res.data)
             }).catch((err)=> {
+                console.log(err)
+            })
+            
+
+        },
+        sendJobs({dispatch}, datas) {
+            console.log('sendJobs 실행')
+            console.log(datas.jobId)
+            console.log(datas.datas[0].list[0].question)
+            console.log(datas.datas[0].list[0].answer)
+            console.log(datas.datas[1].list[0].answer)
+            axiosConnector.post('job/update', datas
+            ).then(()=> {
+                dispatch('getJobs', datas.jobId)
+            }).catch((err)=> {
+                console.log('엑시오스 에러')
                 console.log(err)
             })
             
