@@ -31,6 +31,12 @@
                :src="require('../../assets/images/laptop02.png')"
         />
       </div>
+      <!-- <div class="post-it">포스트잇이얌</div>
+      <h1>아이고 안녕하십니까1111111</h1>
+      <h1>아이고 안녕하십니까222222</h1>
+      <h1>아이고 안녕하십니까3333333</h1>
+      <h1>아이고 안녕하십니까444444</h1>
+      <h1>아이고 안녕하십니까555555</h1> -->
     </div>
   </div>
 </template>
@@ -45,6 +51,21 @@ export default {
       const state = {
         loginUser: {name: '이성훈'},
       }
+
+      // let observe = new IntersectionObserver((e)=>{
+      //   e.forEach((box)=>{
+      //     if(box.isIntersecting){
+      //       box.target.style.right = "-1000px";
+      //       box.target.style.transform = 'rotate(0deg)';
+      //     }
+      //   })
+      // })
+
+      // onMounted(()=>{
+      //   let postIt = document.querySelector(`.post-it`)
+      //   observe.observe(postIt)
+      // })
+
       onBeforeUnmount(()=>{
         window.removeEventListener('scroll');
       })
@@ -141,6 +162,22 @@ export default {
 </script>
 
 <style scoped>
+
+.post-it {
+  background-color: yellow;
+  z-index: 100;
+  height: 300px;
+  width: 300px;
+  position: relative;
+  right: 500px;
+  transition: all 1s;
+}
+
+h1 {
+  margin: 500px 0;
+  position: relative;
+  z-index: 2500;
+}
   .text::after {
     content: '';
     margin-left: .4rem;
