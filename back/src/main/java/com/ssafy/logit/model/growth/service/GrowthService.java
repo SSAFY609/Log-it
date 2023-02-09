@@ -12,6 +12,7 @@ import com.ssafy.logit.model.user.dto.UserDto;
 import com.ssafy.logit.model.user.entity.User;
 import com.ssafy.logit.model.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -208,44 +209,18 @@ public class GrowthService {
         return progressRepo.findById(progressId).get().toDto();
     }
 
-    // 좋아요
-    @Transactional
-    public boolean like(long processId, String email) {
-        boolean result = true;
-        Optional<User> user = userRepo.findByEmail(email);
-        Optional<Progress> progress = progressRepo.findById(processId);
-        if(user.isPresent() && progress.isPresent()) {
-            long userId = user.get().toDto().getId();
-            ProgressDto progressDto = progress.get().toDto();
+    // 하루에 대한 모든 progress를 우선순위 반영하여 반환
+    public List<ProgressDto> getDateProgress(long growthId, String date, String email) {
+        List<ProgressDto> progressDtoList = new ArrayList<>();
 
-            int myLike = likeRepo.cntMyLike(userId, processId);
-            if(myLike == 0) { // 좋아요
-                LikeProgressDto likeDto = new LikeProgressDto();
-                likeDto.setProgress(progressRepo.findById(processId).get());
-                likeDto.setUser(userRepo.findById(userId).get());
-                likeRepo.save(likeDto.toEnity());
-                progressDto.setLikeCnt(progressDto.getLikeCnt() + 1);
-            } else { // 좋아요 취소
-                likeRepo.delete(likeRepo.findMyLike(userId, processId).get());
-                progressDto.setLikeCnt(progressDto.getLikeCnt() - 1);
-                result = false;
-            }
-            progressRepo.save(progressDto.toEntity());
+        long userId = userRepo.findByEmail(email).get().getId();
+        Optional<Progress> myProgress = progressRepo.getMine(date, userId);
+        if(myProgress.isPresent()) {
+            progressDtoList.add(myProgress.get().toDto());
         }
-        return result;
-    }
-
-    // 한 이벤트의 내가 좋아요한 성장 과정 리스트 조회
-    public List<Long> getLikeProgress(long growthId, String email) {
-        Optional<User> user = userRepo.findByEmail(email);
-        if(user.isPresent()) {
-            long userId = user.get().toDto().getId();
-            Optional<List<Long>> likeProgressList = likeRepo.getLikeProgress(growthId, userId);
-            if(likeProgressList.isPresent()) {
-                return likeProgressList.get();
-            }
-        }
-        return null;
+        Optional<List<Progress>> otherProgress = progressRepo.getDateProgress(growthId, date, userId);
+        progressDtoList.addAll(otherProgress.get().stream().map(ProgressDto::new).collect(Collectors.toList()));
+        return progressDtoList;
     }
 
     // 해당 이벤트의 모든 progress에 대한 정보를 가공하여 반환
@@ -298,7 +273,7 @@ public class GrowthService {
 
                     Optional<Progress> myProgress = progressRepo.getMine(nowDate, userId);
                     if(myProgress.isPresent()) {
-                       firstProgress.setProgressDto(myProgress.get().toDto());
+                        firstProgress.setProgressDto(myProgress.get().toDto());
                     } else {
                         Optional<Progress> otherProgress = progressRepo.getFirst(growth_id, nowDate);
                         if(otherProgress.isPresent()) {
@@ -310,5 +285,45 @@ public class GrowthService {
             }
         }
         return firstProgressList;
+    }
+
+    // 좋아요
+    @Transactional
+    public boolean like(long processId, String email) {
+        boolean result = true;
+        Optional<User> user = userRepo.findByEmail(email);
+        Optional<Progress> progress = progressRepo.findById(processId);
+        if(user.isPresent() && progress.isPresent()) {
+            long userId = user.get().toDto().getId();
+            ProgressDto progressDto = progress.get().toDto();
+
+            int myLike = likeRepo.cntMyLike(userId, processId);
+            if(myLike == 0) { // 좋아요
+                LikeProgressDto likeDto = new LikeProgressDto();
+                likeDto.setProgress(progressRepo.findById(processId).get());
+                likeDto.setUser(userRepo.findById(userId).get());
+                likeRepo.save(likeDto.toEnity());
+                progressDto.setLikeCnt(progressDto.getLikeCnt() + 1);
+            } else { // 좋아요 취소
+                likeRepo.delete(likeRepo.findMyLike(userId, processId).get());
+                progressDto.setLikeCnt(progressDto.getLikeCnt() - 1);
+                result = false;
+            }
+            progressRepo.save(progressDto.toEntity());
+        }
+        return result;
+    }
+
+    // 한 이벤트의 내가 좋아요한 성장 과정 리스트 조회
+    public List<Long> getLikeProgress(long growthId, String email) {
+        Optional<User> user = userRepo.findByEmail(email);
+        if(user.isPresent()) {
+            long userId = user.get().toDto().getId();
+            Optional<List<Long>> likeProgressList = likeRepo.getLikeProgress(growthId, userId);
+            if(likeProgressList.isPresent()) {
+                return likeProgressList.get();
+            }
+        }
+        return null;
     }
 }

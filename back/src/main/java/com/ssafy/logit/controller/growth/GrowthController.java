@@ -130,11 +130,18 @@ public class GrowthController {
         }
     }
 
-    // 하나의 progress 조회
-    @Operation()
+    // progress 단건 조회
+    @Operation(summary = "progress 단건 조회", description = "하나의 progress 조회")
     @GetMapping("/progress/{progressId}")
     public ResponseEntity<ProgressDto> getProgress(@PathVariable long progressId) {
         return new ResponseEntity<ProgressDto>(growthService.getProgress(progressId), HttpStatus.OK);
+    }
+    
+    // 하루에 대한 모든 progress를 우선순위 반영하여 조회
+    @Operation(summary = "progress 하루 다건 조회", description = "하루에 포함된 모든 progress를 우선순위 반영 후 반환")
+    @GetMapping("/progress/{growthId}/{date}")
+    public ResponseEntity<List<ProgressDto>> getDateProgress(@PathVariable long growthId, @PathVariable String date, @RequestAttribute String email) {
+        return new ResponseEntity<List<ProgressDto>>(growthService.getDateProgress(growthId, date, email), HttpStatus.OK);
     }
 
     // 한 이벤트의 모든 progress 조회, 데이터 가공
