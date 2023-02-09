@@ -1,5 +1,6 @@
 package com.ssafy.logit.model.growth.service;
 
+import com.ssafy.logit.model.common.EventDate;
 import com.ssafy.logit.model.growth.dto.*;
 import com.ssafy.logit.model.growth.entity.Growth;
 import com.ssafy.logit.model.growth.entity.GrowthUser;
@@ -12,13 +13,12 @@ import com.ssafy.logit.model.user.dto.UserDto;
 import com.ssafy.logit.model.user.entity.User;
 import com.ssafy.logit.model.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -326,4 +326,26 @@ public class GrowthService {
         }
         return null;
     }
+
+    // 로그 만들기
+    public void makeLog(EventDate eventDate) throws ParseException {
+        Date start = new SimpleDateFormat("yyyy-MM-dd").parse(eventDate.getStartDate().toString());
+        Date end = new SimpleDateFormat("yyyy-MM-dd").parse(eventDate.getEndDate().toString());
+
+        long diffDays = (start.getTime() - end.getTime()) / (24 * 60 * 60) + 1; // 총 일 수
+
+        Map<String, Boolean> log = new HashMap<>();
+        for(int i = 0; i < diffDays; i++) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(start);
+            calendar.add(Calendar.DATE, i);
+            log.put(start.toString(), false);
+        }
+    }
+
+    // 잔기 심기 (과정 등록 시 map에서 찾고, 없으면 true로 넣어주기)
+
+
+    // 잔디 조회 (map 그대로 보내주면 될듯)
+
 }
