@@ -200,6 +200,7 @@ const growth = {
                     growthId: progress.growthId,
                     date: progress.progressDate.date
                 }
+                console.log(data)
                 dispatch('getDateProgress', data)
                 // console.log(res)
                 // 이때 res.data는 eventId
