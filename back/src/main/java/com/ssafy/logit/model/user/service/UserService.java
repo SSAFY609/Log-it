@@ -75,14 +75,15 @@ public class UserService {
                 result.put("refreshToken", refreshToken);
                 result.put("authToken", authToken);
                 result.put("id", userDto.getId());
+                result.put("email", userDto.getEmail());
                 result.put("name", userDto.getName());
                 result.put("pw", userDto.getPw());
                 result.put("flag", userDto.getFlag());
-                result.put("student_no", userDto.getStudentNo());
+                result.put("studentNo", userDto.getStudentNo());
                 result.put("image", userDto.getImage());
                 result.put("deleted", userDto.isDeleted());
-                result.put("created_time", userDto.getCreatedTime());
-                result.put("login_time", userDto.getLoginTime());
+                result.put("createdTime", userDto.getCreatedTime());
+                result.put("loginTime", userDto.getLoginTime());
             }
         } else {
             result.put("type", FAIL);

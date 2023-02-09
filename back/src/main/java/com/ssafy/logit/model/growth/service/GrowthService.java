@@ -1,5 +1,6 @@
 package com.ssafy.logit.model.growth.service;
 
+import com.ssafy.logit.model.common.EventDate;
 import com.ssafy.logit.model.growth.dto.*;
 import com.ssafy.logit.model.growth.entity.Growth;
 import com.ssafy.logit.model.growth.entity.GrowthUser;
@@ -15,9 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -202,43 +204,29 @@ public class GrowthService {
         return NONE;
     }
 
-    // 좋아요
+    // 한 개의 성장 과정 반환
     @Transactional
-    public boolean like(long processId, String email) {
-        boolean result = true;
-        Optional<User> user = userRepo.findByEmail(email);
-        if(user.isPresent()) {
-            long userId = user.get().toDto().getId();
-            int myLike = likeRepo.cntMyLike(userId, processId);
-            if(myLike == 0) { // 좋아요
-                LikeProgressDto likeDto = new LikeProgressDto();
-                likeDto.setProgress(progressRepo.findById(processId).get());
-                likeDto.setUser(userRepo.findById(userId).get());
-                likeRepo.save(likeDto.toEnity());
-            } else { // 좋아요 취소
-                likeRepo.delete(likeRepo.findMyLike(userId, processId).get());
-                result = false;
-            }
-        }
-        return result;
+    public ProgressDto getProgress(long progressId) {
+        return progressRepo.findById(progressId).get().toDto();
     }
 
-    // 한 이벤트의 내가 좋아요한 성장 과정 리스트 조회
-    public List<Long> getLikeProgress(long growthId, String email) {
-        Optional<User> user = userRepo.findByEmail(email);
-        if(user.isPresent()) {
-            long userId = user.get().toDto().getId();
-            Optional<List<Long>> likeProgressList = likeRepo.getLikeProgress(growthId, userId);
-            if(likeProgressList.isPresent()) {
-                return likeProgressList.get();
-            }
+    // 하루에 대한 모든 progress를 우선순위 반영하여 반환
+    public List<ProgressDto> getDateProgress(long growthId, String date, String email) {
+        List<ProgressDto> progressDtoList = new ArrayList<>();
+
+        long userId = userRepo.findByEmail(email).get().getId();
+        Optional<Progress> myProgress = progressRepo.getMine(date, userId);
+        if(myProgress.isPresent()) {
+            progressDtoList.add(myProgress.get().toDto());
         }
-        return null;
+        Optional<List<Progress>> otherProgress = progressRepo.getDateProgress(growthId, date, userId);
+        progressDtoList.addAll(otherProgress.get().stream().map(ProgressDto::new).collect(Collectors.toList()));
+        return progressDtoList;
     }
 
     // 해당 이벤트의 모든 progress에 대한 정보를 가공하여 반환
     public List<AllProgress> getAllProgress(long growthId) {
-        Optional<List<String>> dateList = progressRepo.dateList(); // 날짜별로 progress 구분
+        Optional<List<String>> dateList = progressRepo.dateList(growthId); // 날짜별로 progress 구분
         if(dateList.isPresent()) {
             List<AllProgress> allProgressList = new ArrayList<>();
             for(int i = 0; i < dateList.get().size(); i++) { // 날짜별 탐색
@@ -265,5 +253,123 @@ public class GrowthService {
             return allProgressList;
         }
         return null;
+    }
+
+    // 한 날짜의 대표 progress 선정 후 반환
+    // 우선순위 : 내가 쓴 progress -> 좋아요 높은 progress -> 빨리 쓴 progress
+    public List<FirstProgress> getFirstProgress(long growth_id, String email) {
+        List<FirstProgress> firstProgressList = new ArrayList<>();
+        Optional<User> user = userRepo.findByEmail(email);
+        if(user.isPresent()) {
+            long userId = user.get().toDto().getId();
+
+            Optional<List<String>> dateList = progressRepo.dateList(growth_id);
+            if(dateList.isPresent()) {
+
+                for(int i = 0; i < dateList.get().size(); i++) {
+                    String nowDate = dateList.get().get(i);
+
+                    FirstProgress firstProgress = new FirstProgress();
+                    firstProgress.setDate(nowDate);
+
+                    Optional<Progress> myProgress = progressRepo.getMine(nowDate, userId);
+                    if(myProgress.isPresent()) {
+                        firstProgress.setProgressDto(myProgress.get().toDto());
+                    } else {
+                        Optional<Progress> otherProgress = progressRepo.getFirst(growth_id, nowDate);
+                        if(otherProgress.isPresent()) {
+                            firstProgress.setProgressDto(otherProgress.get().toDto());
+                        }
+                    }
+                    firstProgressList.add(firstProgress);
+                }
+            }
+        }
+        return firstProgressList;
+    }
+
+    // 좋아요
+    @Transactional
+    public boolean like(long processId, String email) {
+        boolean result = true;
+        Optional<User> user = userRepo.findByEmail(email);
+        Optional<Progress> progress = progressRepo.findById(processId);
+        if(user.isPresent() && progress.isPresent()) {
+            long userId = user.get().toDto().getId();
+            ProgressDto progressDto = progress.get().toDto();
+
+            int myLike = likeRepo.cntMyLike(userId, processId);
+            if(myLike == 0) { // 좋아요
+                LikeProgressDto likeDto = new LikeProgressDto();
+                likeDto.setProgress(progressRepo.findById(processId).get());
+                likeDto.setUser(userRepo.findById(userId).get());
+                likeRepo.save(likeDto.toEnity());
+                progressDto.setLikeCnt(progressDto.getLikeCnt() + 1);
+            } else { // 좋아요 취소
+                likeRepo.delete(likeRepo.findMyLike(userId, processId).get());
+                progressDto.setLikeCnt(progressDto.getLikeCnt() - 1);
+                result = false;
+            }
+            progressRepo.save(progressDto.toEntity());
+        }
+        return result;
+    }
+
+    // 한 이벤트의 내가 좋아요한 성장 과정 리스트 조회
+    public List<Long> getLikeProgress(long growthId, String email) {
+        Optional<User> user = userRepo.findByEmail(email);
+        if(user.isPresent()) {
+            long userId = user.get().toDto().getId();
+            Optional<List<Long>> likeProgressList = likeRepo.getLikeProgress(growthId, userId);
+            if(likeProgressList.isPresent()) {
+                return likeProgressList.get();
+            }
+        }
+        return null;
+    }
+
+    // 로그 만들기
+    public List<Log> makeLog(long growthId) throws ParseException {
+        List<Log> logList = new ArrayList<>();
+
+        Optional<Growth> growth = growthRepo.findById(growthId);
+        if(growth.isPresent()) {
+            LocalDate startDate = growth.get().getEventDate().getStartDate();
+            LocalDate endDate = growth.get().getEventDate().getEndDate();
+
+            Date start = new SimpleDateFormat("yyyy-MM-dd").parse(startDate.toString());
+            Date end = new SimpleDateFormat("yyyy-MM-dd").parse(endDate.toString());
+
+            long diffDays = (end.getTime() - start.getTime()) / 1000 / (24 * 60 * 60) + 1; // 총 일 수
+
+            Log log = new Log();
+            log.setIdx(0);
+            log.setDate(startDate.toString());
+            log.setWritten(false);
+            logList.add(log);
+
+            for(int i = 1; i < diffDays + 1; i++) {
+                log = new Log();
+                log.setIdx(i);
+                startDate = startDate.plusDays(1);
+                log.setDate(startDate.toString());
+                log.setWritten(false);
+                logList.add(log);
+            }
+
+            Optional<List<String>> dateList = progressRepo.dateList(growthId);
+            if(dateList.isPresent()) {
+                for(int i = 0; i < dateList.get().size(); i++) {
+                    String nowDate = dateList.get().get(i);
+                    for(int j = 0; j < logList.size(); j++) {
+                        if(logList.get(j).getDate().equals(nowDate)) {
+                            logList.get(j).setWritten(true);
+                        }
+                    }
+                }
+            }
+        }
+        Collections.sort(logList);
+        return logList;
     }
 }

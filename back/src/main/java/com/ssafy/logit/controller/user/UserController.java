@@ -83,14 +83,15 @@ public class UserController {
             resultMap.put("jwt-auth-token", resultLogin.get("authToken"));
             resultMap.put("jwt-refresh-token", resultLogin.get("refreshToken"));
             resultMap.put("id", resultLogin.get("id"));
+            resultMap.put("email", resultLogin.get("email"));
             resultMap.put("name", resultLogin.get("name"));
             resultMap.put("pw", resultLogin.get("pw"));
             resultMap.put("flag", resultLogin.get("flag"));
-            resultMap.put("student_no", resultLogin.get("student_no"));
+            resultMap.put("studentNo", resultLogin.get("studentNo"));
             resultMap.put("image", resultLogin.get("image"));
             resultMap.put("deleted", resultLogin.get("deleted"));
-            resultMap.put("created_time", resultLogin.get("created_time"));
-            resultMap.put("login_time", resultLogin.get("login_time"));
+            resultMap.put("createdTime", resultLogin.get("createdTime"));
+            resultMap.put("loginTime", resultLogin.get("loginTime"));
 
             // 정보 확인을 위해 클라이언트로 전달
             Map<String, Object> authToken_info = jwtUtil.checkAndGetClaims((String)resultLogin.get("refreshToken"));

@@ -1,8 +1,6 @@
 package com.ssafy.logit.controller.growth;
 
-import com.ssafy.logit.model.growth.dto.AllProgress;
-import com.ssafy.logit.model.growth.dto.GrowthDto;
-import com.ssafy.logit.model.growth.dto.ProgressDto;
+import com.ssafy.logit.model.growth.dto.*;
 import com.ssafy.logit.model.growth.service.GrowthService;
 import com.ssafy.logit.model.user.dto.UserDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -25,18 +24,6 @@ public class GrowthController {
 
     @Autowired
     private GrowthService growthService;
-
-    static class Info {
-        long growthId;
-        long userId;
-        String userName;
-
-        public Info(long growthId, long userId, String userName) {
-            this.growthId = growthId;
-            this.userId = userId;
-            this.userName = userName;
-        }
-    }
 
     // 성장 이벤트 등록
     @Operation(summary = "성장 이벤트 등록", description = "성장 이벤트 등록 (카테고리, 공유할 회원, 날짜 선택 가능)")
@@ -79,7 +66,7 @@ public class GrowthController {
     @Operation(summary = "초대 후보 이름 검색", description = "해당 이벤트에 참여하지 않는 회원 중 이름으로 검색")
     @PostMapping("/invite/search")
     public ResponseEntity<List<UserDto>> searchOtherUser(@RequestBody Info info, @RequestAttribute String email) {
-        List<UserDto> userDtoList = growthService.searchUser(info.growthId, email, info.userName);
+        List<UserDto> userDtoList = growthService.searchUser(info.getGrowthId(), email, info.getUserName());
         return new ResponseEntity<List<UserDto>>(userDtoList, HttpStatus.OK);
     }
 
@@ -87,7 +74,7 @@ public class GrowthController {
     @Operation(summary = "성장 이벤트 회원 초대", description = "성장 이벤트 회원 초대 (한 명씩 추가)")
     @PostMapping("/invite")
     public ResponseEntity<String> inviteUser(@RequestBody Info info) throws Exception {
-        String inviteResult = growthService.inviteUser(info.growthId, info.userId);
+        String inviteResult = growthService.inviteUser(info.getGrowthId(), info.getUserId());
         return new ResponseEntity<String>(inviteResult, HttpStatus.OK);
     }
 
@@ -120,12 +107,41 @@ public class GrowthController {
     @PostMapping("/write")
     public ResponseEntity<String> registProgress(@RequestBody ProgressDto progressDto, @RequestAttribute String email) throws Exception {
         try {
+            System.out.println("dddddddddddddddddddddddddddddddddddddddddddddddd");
             String result = growthService.registProgress(progressDto, email);
             return new ResponseEntity<String>(result, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<String>(FAIL, HttpStatus.NOT_ACCEPTABLE);
         }
+    }
+
+    // progress 단건 조회
+    @Operation(summary = "progress 단건 조회", description = "하나의 progress 조회")
+    @GetMapping("/progress/{progressId}")
+    public ResponseEntity<ProgressDto> getProgress(@PathVariable long progressId) {
+        return new ResponseEntity<ProgressDto>(growthService.getProgress(progressId), HttpStatus.OK);
+    }
+    
+    // 하루에 대한 모든 progress를 우선순위 반영하여 조회
+    @Operation(summary = "progress 하루 다건 조회", description = "하루에 포함된 모든 progress를 우선순위 반영 후 반환")
+    @GetMapping("/progress/{growthId}/{date}")
+    public ResponseEntity<List<ProgressDto>> getDateProgress(@PathVariable long growthId, @PathVariable String date, @RequestAttribute String email) {
+        return new ResponseEntity<List<ProgressDto>>(growthService.getDateProgress(growthId, date, email), HttpStatus.OK);
+    }
+
+    // 한 이벤트의 모든 progress 조회, 데이터 가공
+    @Operation(summary = "progress 다건 조회", description = "한 이벤트의 모든 progress를 데이터 가공 후 반환")
+    @GetMapping("/progress")
+    public ResponseEntity<List<AllProgress>> getAllProgress(@RequestParam long growthId) {
+        return new ResponseEntity<List<AllProgress>>(growthService.getAllProgress(growthId), HttpStatus.OK);
+    }
+
+    // 우선순위를 반영하여 날짜별 대표 progress를 데이터 가공 후 반환
+    @Operation(summary = "대표 progress", description = "우선순위를 반영한 날짜별 대표 progress를 데이터 가공 후 반환")
+    @GetMapping("/progress/first")
+    public ResponseEntity<List<FirstProgress>> getFirstProgress(@RequestParam long growthId, @RequestAttribute String email) {
+        return new ResponseEntity<List<FirstProgress>>(growthService.getFirstProgress(growthId, email), HttpStatus.OK);
     }
 
     // 성장 과정 좋아요 or 좋아요 취소
@@ -143,10 +159,10 @@ public class GrowthController {
         return new ResponseEntity<List<Long>>(growthService.getLikeProgress(growthId, email), HttpStatus.OK);
     }
 
-    // 한 이벤트의 모든 progress 조회, 데이터 가공
-    @Operation(summary = "progress 다건 조회", description = "한 이벤트의 모든 progress를 데이터 가공 후 반환")
-    @GetMapping("/progress")
-    public ResponseEntity<List<AllProgress>> getAllProgress(@RequestParam long growthId) {
-        return new ResponseEntity<List<AllProgress>>(growthService.getAllProgress(growthId), HttpStatus.OK);
+    // 로그 조회
+    @Operation(summary = "로그 조회", description = "한 이벤트의 날짜별로 과정이 존재하는지 반환")
+    @GetMapping("/log/{growthId}")
+    public ResponseEntity<List<Log>> getLog(@PathVariable long growthId) throws ParseException {
+        return new ResponseEntity<List<Log>>(growthService.makeLog(growthId), HttpStatus.OK);
     }
 }
