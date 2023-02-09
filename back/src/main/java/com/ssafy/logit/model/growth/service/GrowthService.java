@@ -207,18 +207,24 @@ public class GrowthService {
     public boolean like(long processId, String email) {
         boolean result = true;
         Optional<User> user = userRepo.findByEmail(email);
-        if(user.isPresent()) {
+        Optional<Progress> progress = progressRepo.findById(processId);
+        if(user.isPresent() && progress.isPresent()) {
             long userId = user.get().toDto().getId();
+            ProgressDto progressDto = progress.get().toDto();
+
             int myLike = likeRepo.cntMyLike(userId, processId);
             if(myLike == 0) { // 좋아요
                 LikeProgressDto likeDto = new LikeProgressDto();
                 likeDto.setProgress(progressRepo.findById(processId).get());
                 likeDto.setUser(userRepo.findById(userId).get());
                 likeRepo.save(likeDto.toEnity());
+                progressDto.setLikeCnt(progressDto.getLikeCnt() + 1);
             } else { // 좋아요 취소
                 likeRepo.delete(likeRepo.findMyLike(userId, processId).get());
+                progressDto.setLikeCnt(progressDto.getLikeCnt() - 1);
                 result = false;
             }
+            progressRepo.save(progressDto.toEntity());
         }
         return result;
     }
@@ -238,7 +244,7 @@ public class GrowthService {
 
     // 해당 이벤트의 모든 progress에 대한 정보를 가공하여 반환
     public List<AllProgress> getAllProgress(long growthId) {
-        Optional<List<String>> dateList = progressRepo.dateList(); // 날짜별로 progress 구분
+        Optional<List<String>> dateList = progressRepo.dateList(growthId); // 날짜별로 progress 구분
         if(dateList.isPresent()) {
             List<AllProgress> allProgressList = new ArrayList<>();
             for(int i = 0; i < dateList.get().size(); i++) { // 날짜별 탐색
@@ -265,5 +271,39 @@ public class GrowthService {
             return allProgressList;
         }
         return null;
+    }
+
+    // 한 날짜의 대표 progress 선정 후 반환
+    // 우선순위 : 내가 쓴 progress -> 좋아요 높은 progress -> 빨리 쓴 progress
+    public List<FirstProgress> getFirstProgress(long growth_id, String email) {
+        List<FirstProgress> firstProgressList = new ArrayList<>();
+        Optional<User> user = userRepo.findByEmail(email);
+        if(user.isPresent()) {
+            long userId = user.get().toDto().getId();
+
+            Optional<List<String>> dateList = progressRepo.dateList(growth_id);
+            if(dateList.isPresent()) {
+
+
+                for(int i = 0; i < dateList.get().size(); i++) {
+                    String nowDate = dateList.get().get(i);
+
+                    FirstProgress firstProgress = new FirstProgress();
+                    firstProgress.setDate(nowDate);
+
+                    Optional<Progress> myProgress = progressRepo.getMine(nowDate, userId);
+                    if(myProgress.isPresent()) {
+                       firstProgress.setProgressDto(myProgress.get().toDto());
+                    } else {
+                        Optional<Progress> otherProgress = progressRepo.getFirst(growth_id, nowDate);
+                        if(otherProgress.isPresent()) {
+                            firstProgress.setProgressDto(otherProgress.get().toDto());
+                        }
+                    }
+                    firstProgressList.add(firstProgress);
+                }
+            }
+        }
+        return firstProgressList;
     }
 }

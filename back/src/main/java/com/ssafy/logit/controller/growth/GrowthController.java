@@ -1,6 +1,7 @@
 package com.ssafy.logit.controller.growth;
 
 import com.ssafy.logit.model.growth.dto.AllProgress;
+import com.ssafy.logit.model.growth.dto.FirstProgress;
 import com.ssafy.logit.model.growth.dto.GrowthDto;
 import com.ssafy.logit.model.growth.dto.ProgressDto;
 import com.ssafy.logit.model.growth.service.GrowthService;
@@ -120,6 +121,7 @@ public class GrowthController {
     @PostMapping("/write")
     public ResponseEntity<String> registProgress(@RequestBody ProgressDto progressDto, @RequestAttribute String email) throws Exception {
         try {
+            System.out.println("dddddddddddddddddddddddddddddddddddddddddddddddd");
             String result = growthService.registProgress(progressDto, email);
             return new ResponseEntity<String>(result, HttpStatus.OK);
         } catch (Exception e) {
@@ -148,5 +150,11 @@ public class GrowthController {
     @GetMapping("/progress")
     public ResponseEntity<List<AllProgress>> getAllProgress(@RequestParam long growthId) {
         return new ResponseEntity<List<AllProgress>>(growthService.getAllProgress(growthId), HttpStatus.OK);
+    }
+
+    @Operation()
+    @GetMapping("/progress/first")
+    public ResponseEntity<List<FirstProgress>> getFirstProgress(@RequestParam long growthId, @RequestAttribute String email) {
+        return new ResponseEntity<List<FirstProgress>>(growthService.getFirstProgress(growthId, email), HttpStatus.OK);
     }
 }
