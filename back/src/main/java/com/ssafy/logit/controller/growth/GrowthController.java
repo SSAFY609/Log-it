@@ -25,18 +25,6 @@ public class GrowthController {
     @Autowired
     private GrowthService growthService;
 
-    static class Info {
-        long growthId;
-        long userId;
-        String userName;
-
-        public Info(long growthId, long userId, String userName) {
-            this.growthId = growthId;
-            this.userId = userId;
-            this.userName = userName;
-        }
-    }
-
     // 성장 이벤트 등록
     @Operation(summary = "성장 이벤트 등록", description = "성장 이벤트 등록 (카테고리, 공유할 회원, 날짜 선택 가능)")
     @PostMapping("/regist")
@@ -78,7 +66,7 @@ public class GrowthController {
     @Operation(summary = "초대 후보 이름 검색", description = "해당 이벤트에 참여하지 않는 회원 중 이름으로 검색")
     @PostMapping("/invite/search")
     public ResponseEntity<List<UserDto>> searchOtherUser(@RequestBody Info info, @RequestAttribute String email) {
-        List<UserDto> userDtoList = growthService.searchUser(info.growthId, email, info.userName);
+        List<UserDto> userDtoList = growthService.searchUser(info.getGrowthId(), email, info.getUserName());
         return new ResponseEntity<List<UserDto>>(userDtoList, HttpStatus.OK);
     }
 
@@ -86,7 +74,7 @@ public class GrowthController {
     @Operation(summary = "성장 이벤트 회원 초대", description = "성장 이벤트 회원 초대 (한 명씩 추가)")
     @PostMapping("/invite")
     public ResponseEntity<String> inviteUser(@RequestBody Info info) throws Exception {
-        String inviteResult = growthService.inviteUser(info.growthId, info.userId);
+        String inviteResult = growthService.inviteUser(info.getGrowthId(), info.getUserId());
         return new ResponseEntity<String>(inviteResult, HttpStatus.OK);
     }
 
