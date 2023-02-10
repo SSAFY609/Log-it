@@ -37,6 +37,10 @@ public class StepCategoryService {
     public StepCategory create(User user, CreateStepCategoryRequest request) {
         JobEvent jobEvent = jobRepository.findById(request.getJobEventId()).orElseThrow(NoSuchElementException::new);
         User eventUser = jobEvent.getUser();
+        System.out.println("eventUser.getId() = " + eventUser);
+        System.out.println("user.getId() = " + user);
+        log.info("",eventUser.getId());
+        log.info("",user.getId());
         checkUser(user, eventUser);
 
         StepCategory stepCategory = StepCategory.createCategory(

@@ -102,7 +102,6 @@ public class ImageService {
 
         // 기존 프로필 사진
         String fileKey = userDto.getImage();
-        System.out.println(">>>>>>>>>>>> fileKey : " + fileKey);
 
         try {
             if(fileKey.length() > 2) { // 기존 프로필 사진이 파일인 경우
