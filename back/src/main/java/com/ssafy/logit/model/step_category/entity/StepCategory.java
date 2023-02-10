@@ -42,7 +42,7 @@ public class StepCategory {
     private ResultStatus resultStatus;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 20)
+    @Column(length = 20,updatable = false)
     private JobCategory jobCategory;
 
     @OneToMany(mappedBy = "stepCategory")

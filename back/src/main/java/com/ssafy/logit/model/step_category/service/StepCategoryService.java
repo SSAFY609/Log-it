@@ -8,6 +8,7 @@ import com.ssafy.logit.model.step_category.dto.CreateStepCategoryRequest;
 import com.ssafy.logit.model.step_category.dto.UpdateStepCategoryRequest;
 import com.ssafy.logit.model.step_category.dto.category.codingtest.CodingTestResponse;
 import com.ssafy.logit.model.step_category.dto.category.document.DocumentResponse;
+import com.ssafy.logit.model.step_category.dto.category.entire.StepCategoryAllRequest;
 import com.ssafy.logit.model.step_category.dto.category.etc.StepEtcResponse;
 import com.ssafy.logit.model.step_category.dto.category.interview.InterviewResponse;
 import com.ssafy.logit.model.step_category.entity.StepCategory;
@@ -46,6 +47,13 @@ public class StepCategoryService {
 
         return saveCategory;
     }
+
+    @Transactional
+    public StepCategory create(User user, StepCategoryAllRequest request){
+
+    }
+
+
 
     public StepCategory get(Long id) {
         StepCategory stepCategory = stepCategoryRepository.findById(id).orElseThrow(NoSuchElementException::new);
