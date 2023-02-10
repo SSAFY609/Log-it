@@ -215,7 +215,7 @@ public class GrowthService {
         List<ProgressDto> progressDtoList = new ArrayList<>();
 
         long userId = userRepo.findByEmail(email).get().getId();
-        Optional<Progress> myProgress = progressRepo.getMine(date, userId);
+        Optional<Progress> myProgress = progressRepo.getMine(growthId, date, userId);
         if(myProgress.isPresent()) {
             progressDtoList.add(myProgress.get().toDto());
         }
@@ -257,13 +257,13 @@ public class GrowthService {
 
     // 한 날짜의 대표 progress 선정 후 반환
     // 우선순위 : 내가 쓴 progress -> 좋아요 높은 progress -> 빨리 쓴 progress
-    public List<FirstProgress> getFirstProgress(long growth_id, String email) {
+    public List<FirstProgress> getFirstProgress(long growthId, String email) {
         List<FirstProgress> firstProgressList = new ArrayList<>();
         Optional<User> user = userRepo.findByEmail(email);
         if(user.isPresent()) {
             long userId = user.get().toDto().getId();
 
-            Optional<List<String>> dateList = progressRepo.dateList(growth_id);
+            Optional<List<String>> dateList = progressRepo.dateList(growthId);
             if(dateList.isPresent()) {
 
                 for(int i = 0; i < dateList.get().size(); i++) {
@@ -272,11 +272,11 @@ public class GrowthService {
                     FirstProgress firstProgress = new FirstProgress();
                     firstProgress.setDate(nowDate);
 
-                    Optional<Progress> myProgress = progressRepo.getMine(nowDate, userId);
+                    Optional<Progress> myProgress = progressRepo.getMine(growthId, nowDate, userId);
                     if(myProgress.isPresent()) {
                         firstProgress.setProgressDto(myProgress.get().toDto());
                     } else {
-                        Optional<Progress> otherProgress = progressRepo.getFirst(growth_id, nowDate);
+                        Optional<Progress> otherProgress = progressRepo.getFirst(growthId, nowDate);
                         if(otherProgress.isPresent()) {
                             firstProgress.setProgressDto(otherProgress.get().toDto());
                         }
