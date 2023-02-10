@@ -2,7 +2,6 @@ package com.ssafy.logit.model.step_category.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.ssafy.logit.model.common.EventDate;
 import com.ssafy.logit.model.common.ResultStatus;
 import com.ssafy.logit.model.step_category.entity.JobCategory;
 import com.ssafy.logit.model.step_category.entity.StepCategory;
@@ -28,14 +27,12 @@ public class CreateStepCategoryResponse {
     @Schema(description = "채용 전형 분류",example = "INTERVIEW")
     private JobCategory jobCategory;
 
-    @Schema(description = "이름", example = "코테 부셔져버렸다...")
-    private String name;
+
     public  CreateStepCategoryResponse(StepCategory stepCategory) {
         this.id = stepCategory.getId();
         this.typeDate = stepCategory.getTypeDate();
         this.resultStatus = stepCategory.getResultStatus();
         this.jobCategory = stepCategory.getJobCategory();
-        this.name = stepCategory.getName();
     }
 
 

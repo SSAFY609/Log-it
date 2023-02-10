@@ -44,14 +44,13 @@ public class JobService {
      */
     @Transactional
     public JobEvent create(User user, CreateJobEventRequest request) {
-        String type = request.getType();
         String companyName = request.getCompanyName();
         LocalDate startDate = request.getStartDate();
         LocalDate endDate = request.getEndDate();
         if(endDate!=null){
             validateDate(startDate,endDate);
         }
-        JobEvent jobEvent = JobEvent.createJobEvent(user, companyName, type, startDate,endDate);
+        JobEvent jobEvent = JobEvent.createJobEvent(user, companyName, startDate,endDate);
         JobEvent saveEvent = jobRepository.save(jobEvent);
 
         return saveEvent;
@@ -70,11 +69,10 @@ public class JobService {
         JobEvent jobEvent = jobRepository.findById(jobEventId).orElseThrow(NoSuchElementException::new);
         checkUser(user,jobEvent);
         String companyName = request.getCompanyName();
-        String type = request.getType();
         ResultStatus resultStatus = request.getResultStatus();
         LocalDate startDate = request.getStartDate();
         LocalDate endDate = request.getEndDate();
-        JobEvent updateEvent = jobEvent.updateInfo(companyName, type, resultStatus, startDate,endDate);
+        JobEvent updateEvent = jobEvent.updateInfo(companyName,  resultStatus, startDate,endDate);
 
         return updateEvent;
     }

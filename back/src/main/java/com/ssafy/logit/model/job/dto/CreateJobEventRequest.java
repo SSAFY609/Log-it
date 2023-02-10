@@ -31,4 +31,6 @@ public class CreateJobEventRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     @Schema(description = "종료 날짜")
     private LocalDate endDate;
+
+//    private List<>
 }

@@ -36,7 +36,6 @@ public class StepCategoryDto {
         this.typeDate = stepCategory.getTypeDate();
         this.resultStatus = stepCategory.getResultStatus();
         this.jobCategory = stepCategory.getJobCategory();
-        this.name = stepCategory.getName();
         this.list = o;
     }
 

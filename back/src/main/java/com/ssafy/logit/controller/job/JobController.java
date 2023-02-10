@@ -6,6 +6,7 @@ import com.ssafy.logit.model.job.dto.CreateJobEventResponse;
 import com.ssafy.logit.model.job.dto.UpdateJobEventRequest;
 import com.ssafy.logit.model.job.entity.JobEvent;
 import com.ssafy.logit.model.job.service.JobService;
+import com.ssafy.logit.model.step_category.dto.category.JobEventAllRequest;
 import com.ssafy.logit.model.user.entity.User;
 import com.ssafy.logit.model.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -83,6 +84,21 @@ public class JobController {
                 .map(o -> new CreateJobEventResponse(o))
                 .collect(Collectors.toList());
         return new ResponseEntity<>(new ResultDto(collect.size(), collect), HttpStatus.OK);
+    }
+
+
+    @Operation(summary = "취업 이벤트 생성 ", description = "취업이벤트 모두 생성 합니다.")
+    @PostMapping("/post-all")
+    public ResponseEntity<ResultDto> postAll(@RequestAttribute String email, JobEventAllRequest request) {
+        User user = getUser(email);
+        System.out.println("request = " + request.getDatas());
+//        Object datas = (List<>)request.getDatas();
+//        List<JobEvent> events = jobService.getAllByStartDate(user);
+//        List<CreateJobEventResponse> collect = events.stream()
+//                .map(o -> new CreateJobEventResponse(o))
+//                .collect(Collectors.toList());
+//        return new ResponseEntity<>(new ResultDto(collect.size(), collect), HttpStatus.OK);
+        return new ResponseEntity<>(null,HttpStatus.OK);
     }
 
     private User getUser(String email) {

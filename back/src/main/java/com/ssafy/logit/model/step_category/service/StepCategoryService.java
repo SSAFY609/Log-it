@@ -41,8 +41,7 @@ public class StepCategoryService {
         StepCategory stepCategory = StepCategory.createCategory(
                 jobEvent,
                 request.getTypeDate(),
-                request.getJobCategory(),
-                request.getName());
+                request.getJobCategory());
         StepCategory saveCategory = stepCategoryRepository.save(stepCategory);
 
         return saveCategory;
@@ -57,7 +56,7 @@ public class StepCategoryService {
     public StepCategory update(User user, Long id, UpdateStepCategoryRequest request) {
         StepCategory stepCategory = stepCategoryRepository.findById(id).orElseThrow(NoSuchElementException::new);
         checkUser(user, stepCategory);
-        StepCategory updateCategory = stepCategory.updateCategory(request.getTypeDate(), request.getResultStatus(),request.getName());
+        StepCategory updateCategory = stepCategory.updateCategory(request.getTypeDate(), request.getResultStatus());
         return updateCategory;
     }
 

@@ -19,9 +19,6 @@ public class UpdateJobEventRequest {
     @NotBlank
     private String companyName;
 
-    @Column(length = 30)
-    @Schema(description = "채용 유형",example = "인턴")
-    private String type;
 
     @Schema(description = "결과")
     private ResultStatus resultStatus;
