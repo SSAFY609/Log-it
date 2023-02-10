@@ -5,6 +5,7 @@ import axios from "axios";
 import temp from './modules/temp.js'
 import growth from "./modules/growth.js";
 import timeline from "./modules/timeline.js";
+import search from "./modules/search.js";
 
 // const baseURL = "https://i8a609.p.ssafy.io/api/user";
 const baseURL = "http://localhost:9090/user";
@@ -70,5 +71,6 @@ export default createStore({
     temp: temp,
     growth: growth,
     timeline: timeline,
+    search: search,
   },
 });

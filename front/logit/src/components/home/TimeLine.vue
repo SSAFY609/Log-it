@@ -396,7 +396,6 @@ export default {
 
       onMounted(()=>{
         // 오늘이 있는 페이지로 이동
-        console.log(state.slide);
         state.swiper.slideTo(state.slide)
       })
       
@@ -615,12 +614,16 @@ export default {
   width: 100%;
 }
 
+.floor1:hover {
+  background: rgb(255,185,185);
+  background: linear-gradient(90deg, rgba(255,185,185,1) 0%, rgba(255,133,132,1) 24%, rgba(255,0,48,1) 100%);
+}
 
 .floor1 {
   top: 110px;
-  /* background-color: rgb(255, 126, 147); */
-  background: rgb(255,0,48);
-background: linear-gradient(90deg, rgba(255,0,48,1) 0%, rgba(255,133,132,1) 76%, rgba(255,185,185,1) 100%);
+  background: rgb(255,0,48) repeat-x;
+  background: linear-gradient(90deg, #ff0030 0%, #ff8584 76%, #ffb9b9 100%) repeat-x;
+  transition: all 1s ease;
 }
 .floor2 {
   top: 75px;
