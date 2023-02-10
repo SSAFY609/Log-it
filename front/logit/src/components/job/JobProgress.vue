@@ -3,6 +3,8 @@
     <div class="job_box_area lay3">
       <div class="header_area lay2">
         <h1>{{ datas.title }} 취업 여정</h1>
+        <h1>임시</h1>
+        <h1>{{  datas.datas[0].list[0] }}</h1>
         <v-btn @click="sendData">저장</v-btn>
         <span v-if="datas.endDate">{{ date_to_str(datas.startDate, datas.endDate) }}</span>  
         <span v-else>{{ datas.startDate}} ~ 진행중</span>
@@ -82,9 +84,9 @@
       
                     <div class="option_types_area">
                       <div class="chip_box hover_cursor" v-for="item in testList" :key="item">
-                        <input class="radio_item" type="radio" :name="`ct_category${index}`" :id="`${item}`"  :value="`${item}`" @click="changeOption">
-                        <label :for="`${item}`">{{ item }}</label>
-                        <div class="hidden_data">{{ index }}</div>
+                        <input class="radio_item" type="radio" :name="`ct_category${index}`" :id="`${item}`"  :value="`${item}`">
+                        <label :for="`${item}`" @click="changeOption(index, item)">{{ item }}</label>
+                        <!-- <div class="hidden_data">{{ index }}</div> -->
                       </div>
                       
 
@@ -253,19 +255,51 @@ import { mapState } from 'vuex';
         return `${year1}년 ${month1}월 ${date1}일 ~ ${year2}년 ${month2}월 ${date2}일`
       },
 
-      changeOption() {
+      changeOption(index, item) {
 
+        // event.preventDefault()
+        // event.stopPropagation()
         // console.log(event.target)
-        const target = event.target.parentElement.parentElement.parentElement
+        // console.log(index)
+        // console.log(item)
 
-        console.log(target)
+        const removeList = document.getElementsByName(`ct_category${index}`)
 
+        removeList.forEach(element => {
+          // console.log(element.parentElement.innerText)
+          element.parentElement.classList.remove('selected_item')
+
+          if(element.parentElement.innerText == item) {  
+            element.parentElement.classList.add('selected_item')
+            this.category[`ct_category${index}`] = item
+            
+
+            this.datas.datas.forEach(datas => {
+              if(datas.jobCategory=='코딩테스트') {
+
+                // console.log(datas.list[index].category)
+                datas.list[index].category = item
+                // console.log(datas.list[index].category)
+              }
+            });
+            // for(let i = 0; i < this.datas.datas.length; i++ ) {
+            //   this.
+            // }
+
+          }
+        });
+
+        
+
+        // console.log(this.datas.datas.length)
+        // console.log(this.ct_datas.list[0].category)
+        // console.log(this.datas.datas[1].list[1].category)
 
       },
       
 
       sendData() {
-        this.$store.dispatch('tempJob/sendJobs', this.datas) 
+        this.$store.dispatch('tempJob/sendJobs', this.datas)
       }
 
 
@@ -303,7 +337,7 @@ import { mapState } from 'vuex';
         target.firstChild.classList.add('selected_item')
         this.clicked = target.firstChild.innerText
 
-        // console.log(this.category.ct_category0)
+        // console.log(this.datas)
 
 
         const targetArray = []
@@ -324,7 +358,7 @@ import { mapState } from 'vuex';
 
 
           targetList.forEach(element => {
-            console.log(element.name)
+            // console.log(element.name)
             if(element.value == targetArray[i]) {
               element.parentElement.classList.add('selected_item')
             }
