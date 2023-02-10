@@ -87,7 +87,7 @@ public class SearchService {
             for (ProgressDto p : progressDtoList) {
                 SearchResultDto result = new SearchResultDto();
                 result.setType("성장 과정");
-                result.setId(p.getGrowthId());
+                result.setId(p.getProgressId());
 
                 if(p.getContent().length() > 30) {
                     String cutResult = cutStr(keyword, p.getContent());

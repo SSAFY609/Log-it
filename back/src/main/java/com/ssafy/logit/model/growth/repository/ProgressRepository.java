@@ -26,6 +26,6 @@ public interface ProgressRepository  extends JpaRepository<Progress, Long> {
     @Query(value = "select * from progress where growth_id = ?1 and date = ?2 and user_id != ?3 order by like_cnt desc, progress_id asc", nativeQuery = true)
     public Optional<List<Progress>> getDateProgress(long growth_id, String date, long user_id);
 
-    @Query(value = "select * from progress where user_id = ?1 and content like %?2%", nativeQuery = true)
+    @Query(value = "select * from progress where (user_id = ?1 or growth_id in (select growth_id from growth_user where user_id = ?1 and type = true)) and content like %?2%", nativeQuery = true)
     public Optional<List<Progress>> search(long userId, String keyword);
 }
