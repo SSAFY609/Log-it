@@ -6,6 +6,9 @@ import com.ssafy.logit.model.growth.entity.Growth;
 import com.ssafy.logit.model.growth.entity.Progress;
 import com.ssafy.logit.model.growth.repository.GrowthRepository;
 import com.ssafy.logit.model.growth.repository.ProgressRepository;
+import com.ssafy.logit.model.job.dto.CreateJobEventResponse;
+import com.ssafy.logit.model.job.entity.JobEvent;
+import com.ssafy.logit.model.search.Repository.SearchRepository;
 import com.ssafy.logit.model.search.dto.SearchResultDto;
 import com.ssafy.logit.model.user.dto.UserDto;
 import com.ssafy.logit.model.user.entity.User;
@@ -31,6 +34,9 @@ public class SearchService {
     @Autowired
     ProgressRepository progressRepo;
 
+    @Autowired
+    SearchRepository searchRepo;
+
     // 회원 검색 결과 반환 (이메일)
     public List<SearchResultDto> searchUserEmail(List<SearchResultDto> resultList, long userId, String keyword) {
         Optional<List<User>> userList = userRepo.searchEmail(userId, keyword);
@@ -41,6 +47,8 @@ public class SearchService {
                 result.setType("회원 이메일");
                 result.setId(u.getId());
                 result.setContent(u.getEmail());
+                result.setUserName(u.getName());
+                result.setUserProfile(u.getImage());
                 resultList.add(result);
             }
         }
@@ -57,6 +65,8 @@ public class SearchService {
                 result.setType("회원 이름");
                 result.setId(u.getId());
                 result.setContent(u.getName());
+                result.setUserEmail(u.getEmail());
+                result.setUserProfile(u.getImage());
                 resultList.add(result);
             }
         }
@@ -100,6 +110,18 @@ public class SearchService {
         }
         return resultList;
     }
+
+//    // 취업 여정 검색 결과 반환 (기업명)
+//    public List<SearchResultDto> searchJob(List<SearchResultDto> resultList, long userId, String keyword) {
+//        Optional<List<JobEvent>> jobEventList = searchRepo.searchCompany(userId, keyword);
+//        if(jobEventList.isPresent()) {
+//            List<CreateJobEventResponse> jobEventDtoList = jobEventList.get().stream().map(CreateJobEventResponse::new).collect(Collectors.toList());
+//            for(CreateJobEventResponse c: jobEventDtoList) {
+//                CreateJobEventResponse dto = new CreateJobEventResponse();
+//
+//            }
+//        }
+//    }
 
     // 문자열 가공 (30자 이내, 키워드 포함)
     public String cutStr(String keyword, String content) {
