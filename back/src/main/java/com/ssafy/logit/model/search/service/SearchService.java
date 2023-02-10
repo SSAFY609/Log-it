@@ -20,6 +20,8 @@ import java.util.stream.Collectors;
 @Service
 public class SearchService {
 
+    private static final int MAX_STR = 30;
+
     @Autowired
     UserRepository userRepo;
 
@@ -86,10 +88,68 @@ public class SearchService {
                 SearchResultDto result = new SearchResultDto();
                 result.setType("성장 과정");
                 result.setId(p.getGrowthId());
-                result.setContent(p.getContent());
+
+                if(p.getContent().length() > 30) {
+                    String cutResult = cutStr(keyword, p.getContent());
+                    result.setContent(cutResult);
+                } else {
+                    result.setContent(p.getContent());
+                }
                 resultList.add(result);
             }
         }
         return resultList;
+    }
+
+    // 문자열 가공 (30자 이내, 키워드 포함)
+    public String cutStr(String keyword, String content) {
+        char[] contentArr = content.toCharArray();
+        char[] keywordArr = keyword.toCharArray();
+
+        for(int i = 0; i < content.length(); i++) {
+            if(contentArr[i] == keywordArr[0]) {
+                boolean isHere = false;
+                for(int j = 0; j < keyword.length(); j++) {
+                    if(contentArr[i+j] != keywordArr[j]) {
+                        isHere = false;
+                        break;
+                    } else {
+                        isHere = true;
+                    }
+                }
+
+                // 검색 keyword의 위치 찾고 검색 결과 반환
+                if(isHere) {
+                    int keyStartIdx = i;
+                    int keyNextIdx = i + keyword.length();
+                    int nextContentLen = content.length() - keyNextIdx; // content에서 keyword 이후에 남은 문자열 길이
+
+                    char[] result = new char[MAX_STR];
+                    if(nextContentLen >= MAX_STR - keyword.length()) {
+                        for(int j = 0; j < keyword.length(); j++) {
+                            result[j] = keywordArr[j];
+                        }
+                        for(int j = keyNextIdx; j < MAX_STR; j++) {
+                            result[j] = contentArr[j];
+                        }
+                    } else {
+                        int lastLen = MAX_STR - nextContentLen;
+                        int startIdx = keyStartIdx - lastLen;
+                        int idx = 0;
+                        for(int j = startIdx; j < keyStartIdx; j++) {
+                            result[idx++] = contentArr[j];
+                        }
+                        for(int j = keyStartIdx; j < keyNextIdx; j++) {
+                            result[idx++] = contentArr[j];
+                        }
+                        for(int j = keyNextIdx; j < MAX_STR; j++) {
+                            result[idx++] = contentArr[j];
+                        }
+                    }
+                    return new String(result);
+                }
+            }
+        }
+        return null;
     }
 }
