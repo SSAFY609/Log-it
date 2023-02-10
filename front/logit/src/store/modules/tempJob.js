@@ -5,6 +5,7 @@ import axiosConnector from "@/utils/axios-connector";
 const tempJob = {
     namespaced: true,
     state:{
+        allJob: [],
         jobs: [
             {   
                 "jobId": 1,
@@ -258,18 +259,39 @@ const tempJob = {
         ]
     },
     getters: {
-        g기타ategoryCnt(state) {
+        categoryCnt(state) {
             return state.category.length;
         }
     },
     mutations: {
-        GET_JOBS(state, payload) {
+        GET_ALL_JOB(state, payload){
+            console.log(payload)
+            state.allJob = payload
+        },
+
+
+        GET_JOB(state, payload) {
             state.jobs = payload
-        }
+        },
 
     },
     actions: {
-        getJobs({commit}, jobId) {
+
+
+
+        // 사용자가 가지고 있는 모든 취업여정 가져오기
+        getAllJob({commit}) {
+            axiosConnector.get(`job`
+            ).then((res)=> {
+                console.log('응답 성공')
+                commit('GET_ALL_Job', res.data)
+            }).catch((err)=>{
+                console.log(err)
+            })
+        },
+
+
+        getJob({commit}, jobId) {
             axiosConnector.get('job/get', {
                 params: {
                     jobId : jobId

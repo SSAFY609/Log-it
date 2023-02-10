@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <div class="event-list" >
+      <h1>{{ allJob }}</h1>
       <router-link :to="{name: 'JobProgress', params: {jobId: job.jobId}}" class="event hover_cursor" v-for="job in jobs" :key="job">
         <div class="event-title">{{ job.title }}</div>
         <div class="event-date">{{ date_to_str(job.startDate, job.endDate) }}</div>
@@ -28,7 +29,7 @@ export default {
       }
     },
     computed: {
-      ...mapState("tempJob", ["jobs"])
+      ...mapState("tempJob", ["jobs", "allJob"])
     },
     methods: {
       date_to_str(st, ed) {
@@ -49,6 +50,7 @@ export default {
       }
     },
     created() {
+      this.$store.dispatch('tempJob/getAllJob')
 
     }
 
