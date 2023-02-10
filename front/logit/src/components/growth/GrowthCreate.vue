@@ -30,6 +30,8 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2'
+
 export default {
     name: 'GrowthCreate',
     props: {
@@ -55,9 +57,19 @@ export default {
         },
         create() {
             if (!this.select_category) {
-                alert('선택된 카테고리가 없습니다.')
+                Swal.fire({
+                    // title: '선택된 카테고리가 없습니다',
+                    text: '선택된 카테고리가 없습니다',
+                    icon: 'error',
+                    confirmButtonColor: '#FF0A54',
+                })
             } else if (!this.start_date || !this.end_date) {
-                alert('선택된 날짜가 없습니다.')
+                Swal.fire({
+                    // title: '선택된 카테고리가 없습니다',
+                    text: '선택된 날짜가 없습니다',
+                    icon: 'error',
+                    confirmButtonColor: '#FF0A54',
+                })
             } else {
                 const growth = {
                     eventDate: {

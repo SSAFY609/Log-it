@@ -25,18 +25,26 @@
           </router-link>
         </div>
       </div>
-      <div style="position:fixed">얍{{ scrollTop }}</div>
+      <div @click="testTimeline">클릭!</div>
       <div class="img_box lay1">
         <v-img class="laptop_img"
                :src="require('../../assets/images/laptop02.png')"
         />
       </div>
+      <!-- <div class="post-it">포스트잇이얌</div>
+      <h1>아이고 안녕하십니까1111111</h1>
+      <h1>아이고 안녕하십니까222222</h1>
+      <h1>아이고 안녕하십니까3333333</h1>
+      <h1>아이고 안녕하십니까444444</h1>
+      <h1>아이고 안녕하십니까555555</h1> -->
     </div>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import { onMounted, onBeforeUnmount } from 'vue';
+import { useStore } from 'vuex';
 
 export default {
     name: 'MainPage',
@@ -44,20 +52,36 @@ export default {
       const state = {
         loginUser: {name: '이성훈'},
       }
-      return {
-        state,
+
+      // let observe = new IntersectionObserver((e)=>{
+      //   e.forEach((box)=>{
+      //     if(box.isIntersecting){
+      //       box.target.style.right = "-1000px";
+      //       box.target.style.transform = 'rotate(0deg)';
+      //     }
+      //   })
+      // })
+
+      // onMounted(()=>{
+      //   let postIt = document.querySelector(`.post-it`)
+      //   observe.observe(postIt)
+      // })
+      const store = useStore()
+
+      const testTimeline = () => {
+        store.dispatch('timeline/timelineSetting')
       }
-  },
-    computed: { 
-      ...mapState(['loginUser'])
-  },
-  data() {
-    return {
-      scrollTop: 0,
-    }
-  },
-  methods: {
-    writeTitle(className, letters, s) {
+
+      onMounted(()=>{
+        writeTitle('.text', '당신의 새로운 여정을 \n 매일 기록해 보세요', 1500)
+        window.addEventListener('scroll', onScroll)
+      })
+      
+      onBeforeUnmount(()=>{
+        window.removeEventListener('scroll', onScroll);
+      })
+
+      const writeTitle = (className, letters, s) => {
       const $text = document.querySelector(className);
 
       // 글자 입력 속도
@@ -106,41 +130,51 @@ export default {
 
       // 초기 실행
       setTimeout(typing, s);
-    },
-    onScroll(){
+    };
+
+    const onScroll = () => {
       const currentScrollPosition = window.pageYOffset || document.documentElement.scrollTop
       if(currentScrollPosition < 0){
         return
       }
-      this.scrollTop = currentScrollPosition;
       if (currentScrollPosition > 0 && currentScrollPosition < 500){
         const img = document.querySelector('.img_box')
         img.style.width = `${1300 + currentScrollPosition * 0.5}px`
-      } else if (currentScrollPosition >= 507 ){
-        const img = document.querySelector('.img_box')
-        img.style.position = "-webkit-sticky"
-        img.style.position = "sticky"
-        img.style.top = "0"
-      }
+      } 
     }
+
+      return {
+        state,
+        testTimeline,
+        writeTitle,
+        onScroll,
+
+      }
   },
-  created() {
-    console.log(this.$store.state.loginUser);
-    console.log(this.loginUser);
-    },
-  mounted(){
-    this.writeTitle('.text', '당신의 새로운 여정을 \n 매일 기록해 보세요', 1500)
-    window.addEventListener('scroll', this.onScroll)
+    computed: { 
+      ...mapState(['loginUser'])
   },
   
-    
-    
-
-    
 }
 </script>
 
 <style scoped>
+
+.post-it {
+  background-color: yellow;
+  z-index: 100;
+  height: 300px;
+  width: 300px;
+  position: relative;
+  right: 500px;
+  transition: all 1s;
+}
+
+h1 {
+  margin: 500px 0;
+  position: relative;
+  z-index: 2500;
+}
   .text::after {
     content: '';
     margin-left: .4rem;
@@ -163,13 +197,12 @@ export default {
   }
 
   .container {
-    height: 200%;
     display:flex;
     justify-content: center;
   }
   .discription_box {
     margin-top: 70px;
-    height: 1300px;
+    height: 2600px;
     justify-content: center;
   }
   h1 {
@@ -199,6 +232,8 @@ export default {
     display: flex;
     justify-content: center;
     margin-top: 50px;
+    position: sticky;
+    top: 70px;
   }
   .laptop_img {
     margin: 0 auto;

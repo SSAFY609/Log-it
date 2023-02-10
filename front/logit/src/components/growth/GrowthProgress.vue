@@ -4,8 +4,10 @@
       <div class="title">
         <div class="event-title">{{ growth.category }}</div>
         <div class="event-date">{{ date_to_str(growth.eventDate.startDate, growth.eventDate.endDate) }}</div>
-        <div v-if="growthUsers.length == 0"> {{ growth.user.name }} 님 참여중 <v-icon @click="member = true">mdi-account-multiple-plus</v-icon></div>
-        <div v-else> {{ growth.user.name }} 님 외 {{ growthUsers.length }}명 참여중 <v-icon @click="member = true">mdi-account-multiple-plus</v-icon></div>
+        <div class="show-member-list" @click="member = true">
+          <div v-if="growthUsers.length == 0"> {{ growth.user.name }} 님 참여중 <v-icon>mdi-account-multiple-plus</v-icon></div>
+          <div v-else> {{ growth.user.name }} 님 외 {{ growthUsers.length }}명 참여중 <v-icon>mdi-account-multiple-plus</v-icon></div>
+        </div>
       </div>
       <div class="grass-box">
         <div class="grass">
@@ -31,7 +33,7 @@
     </div>
     <div class="progress">
       <v-timeline side="end" align="center" line-thickness="5">
-        <v-timeline-item v-if="!today" class="progress-item" dot-color="rgb(255, 225, 121)" size="small">
+        <v-timeline-item v-show="!today" class="progress-item" dot-color="rgb(255, 225, 121)" size="small">
           <div class="memo-box">
             <div class="memo-date">{{date_after(new Date())}}</div>
             <div class="memo" @click="dialog = true, progressCreate()">
@@ -132,9 +134,7 @@ export default {
     data() {
       return {
         growthId: 0,
-        grass: [],
         allUsers: [],
-        period: 0,
         member: false,
         dialog: false,
         day: ['일', '월', '화', '수', '목', '금', '토'],
@@ -145,8 +145,8 @@ export default {
       }
     },
     computed: {
-      ...mapState('temp', ['loginUser', 'event', 'eventUsers', 'shareProgress', 'users', 'myLikeProgress']),
-      ...mapState('growth', ['growth', 'searchUser', 'growthUsers', 'firstProgress', 'log']),
+      ...mapState(['loginUser']),
+      ...mapState('growth', [ 'today', 'growth', 'searchUser', 'growthUsers', 'firstProgress', 'log']),
       
       change_image(id){
         return `@assets/profiles/scale (${id}).png`;
@@ -277,59 +277,16 @@ export default {
     created() {
       // 파람스로 이벤트 아이디 추출
       this.growthId = this.$route.params.growthId;
-      console.log(this.$store.state.growth.growthUsers)
-      // let growth = null
 
-      // // 바로 호출....?
-      // axiosConnector.get(`growth/get_event`, {
-      //   params: { growthId: this.growthId }
-      // }).then((res)=>{
-      //   console.log(res, 'ㅋㅋㅋㅋㅋㅋ')
-      //   growth = res.data
-      // }).catch((err)=>{
-      //   console.log(err)
-      // })
+      // if(this.firstProgress[this.firstProgress.length-1].date == this.today_string()){
+      //   this.today = true;
+      // }else{
+      //   this.today = false;
+      // }
 
 
-
-      // 파람스 테스트 -> 통
-      // console.log(this.growthId)
-
-      // 이벤트 아이디에 해당하는 호출.....
-      // this.$store.dispatch('growth/getGrowthUsers', this.growthId);
-      // this.$store.dispatch('growth/getGrowth', this.growthId);
-      // this.$store.dispatch(`growth/getAllUser`, this.growthId);
-      // this.$store.dispatch('growth/getProgress', this.growthId);
-
-
-      // 잔디를 구성하기 위한 작업,,,,
-      // 글이 있냐 없냐를 클래스로 분리,,, -> 근데 공유 일지는 어케 처리해야하징 날짜만 받아야하나,,,,,,, 후하
-      // 내일 더미 데이터로 실험해 봐야 할 듯
-      const st = this.event.start_date;
-      const ed = this.event.end_date;
-      this.period = this.getDateDiff(st, ed);
-      
-      let idx = 0;
-      for (let i=0; i<this.period ;i++) {
-        if (idx == this.shareProgress.length){
-          this.grass.push('not');
-          continue
-        }
-        const target = this.addDays(st, i);
-        if (this.shareProgress[idx].date.toLocaleDateString() == target.toLocaleDateString()) {
-          const data = {
-            class: `done ${idx}`,
-            date: target.toLocaleDateString()
-          }
-          this.grass.push(data);
-          idx += 1;
-        } else {
-          this.grass.push('not');
-        }
-      }
-
-      // 잔디 확인용 테스트
-      // console.log(this.grass)
+      console.log(this.loginUser.id)
+      console.log(this.growth.user.id)
       if (this.loginUser.id == this.growth.user.id) {
         this.is_host = true
         console.log(this.is_host)
@@ -376,6 +333,9 @@ h1 {
 
 .title {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin-right: 100px;
 }
 
@@ -436,6 +396,24 @@ h1 {
   cursor: pointer;
 }
 
+.show-member-list {
+  border: solid 1px rgb(160, 160, 160);
+  width: 70%;
+  height: 40px;
+  border-radius: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.show-member-list:hover {
+  background-color: rgba(128, 128, 128, 0.168);
+  border: none;
+  color: black;
+}
+
 .member-dialog {
   font-family: appleL;
   display: flex;
@@ -465,7 +443,7 @@ h1 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 300px;
+  width: 310px;
 }
 
 .member-delete{
@@ -641,5 +619,9 @@ h1 {
   right: 8%;
   bottom: 8%;
   
+}
+.navi button {
+  margin: 5px 0;
+  color: grey;
 }
 </style>

@@ -1,10 +1,10 @@
 import router from "@/router";
 import axiosConnector from "@/utils/axios-connector"
 
-const timeline = {
+const search = {
     namespaced: true,
     state:{
-        sidebar: true,
+        serachResult: [],
         growths: [],
         jobs: [],
     },
@@ -45,4 +45,4 @@ const timeline = {
 
 }
 
-export default timeline;
+export default search;

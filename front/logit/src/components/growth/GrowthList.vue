@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <button-view style="margin-top:50px"></button-view>
     <div class="event-list">
       <div class="event hover_cursor" v-for="growth in allGrowth" :key="growth.growthId" @click="growthDetail(growth.growthId)">
         <div class="event-title">{{ growth.category }}</div>
@@ -15,13 +14,9 @@
 
 <script>
 import { mapState } from 'vuex';
-import buttonView from '@/components/etc/buttonView.vue'
 
 export default {
     name: 'GrowthList',
-    components: {
-      buttonView,
-    },
     data() {
       return {
         // period: 0,
