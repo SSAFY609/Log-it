@@ -52,7 +52,7 @@ public class UserController {
     @PostMapping("/regist")
     public ResponseEntity<String> regist(@RequestBody UserDto userDto) throws Exception {
         try {
-            Map<String, Object> resultMap = userService.saveUser(userDto, true);
+            Map<String, Object> resultMap = userService.registUser(userDto);
             if(resultMap.get("result").equals(PRESENT)) { // 이미 가입된 사용자
                 return new ResponseEntity<String>(PRESENT, HttpStatus.NOT_ACCEPTABLE);
             } else { // 회원가입 성공
@@ -68,17 +68,14 @@ public class UserController {
     @Operation(summary = "로그인", description = "회원 정보 저장 (JWT 인증x)")
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody UserDto userDto) throws Exception {
-        log.info("login user info : {}", userDto);
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> resultLogin = userService.login(userDto.getEmail(), userDto.getPw());
 
         if(resultLogin.get("type").equals(FAIL)) {
             if(resultLogin.get("result").equals(NONE)) { // 사용자 없음
                 resultMap.put("result", NONE);
-            } else if(resultLogin.get("result").equals(PW_FAIL)) { // 비밀번호 틀림
+            } else { // 비밀번호 틀림
                 resultMap.put("result", PW_FAIL);
-            } else { // 이미 로그인됨
-                resultMap.put("result", IS_LOGINED);
             }
             return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
         } else {
@@ -86,14 +83,15 @@ public class UserController {
             resultMap.put("jwt-auth-token", resultLogin.get("authToken"));
             resultMap.put("jwt-refresh-token", resultLogin.get("refreshToken"));
             resultMap.put("id", resultLogin.get("id"));
+            resultMap.put("email", resultLogin.get("email"));
             resultMap.put("name", resultLogin.get("name"));
             resultMap.put("pw", resultLogin.get("pw"));
             resultMap.put("flag", resultLogin.get("flag"));
-            resultMap.put("student_no", resultLogin.get("student_no"));
+            resultMap.put("studentNo", resultLogin.get("studentNo"));
             resultMap.put("image", resultLogin.get("image"));
             resultMap.put("deleted", resultLogin.get("deleted"));
-            resultMap.put("created_time", resultLogin.get("created_time"));
-            resultMap.put("login_time", resultLogin.get("login_time"));
+            resultMap.put("createdTime", resultLogin.get("createdTime"));
+            resultMap.put("loginTime", resultLogin.get("loginTime"));
 
             // 정보 확인을 위해 클라이언트로 전달
             Map<String, Object> authToken_info = jwtUtil.checkAndGetClaims((String)resultLogin.get("refreshToken"));
@@ -146,14 +144,13 @@ public class UserController {
     }
 
     // 비밀번호 찾기 (임시 비밀번호 발급 후 이메일 전송)
-    @Operation(summary = "비밀번호 찾기", description = "임시 비밀번호 발급 후 이메일 전송")
+    @Operation(summary = "비밀번호 찾기", description = "임시 비밀번호 발급 후 이메일 전송 (JWT 인증x)")
     @PostMapping("/sendPw")
-    public ResponseEntity<String> sendPwEmail(@RequestAttribute String email) {
-        UserDto userDto = userService.getUser(email);
-        if(userDto != null) {
-            String tmpPw = userService.getTmpPw();
-            userDto.setPw(tmpPw);
-            userService.saveUser(userDto, true);
+    public ResponseEntity<String> sendPwEmail(@RequestParam String email) {
+        String tmpPw = userService.getTmpPw();
+        String result = userService.updatePw(tmpPw, email);
+
+        if(result.equals(SUCCESS)) {
             // 전송
             MailDto mailDto = mailService.createMail(tmpPw, email);
             log.info("생성된 mailDto : {}", mailDto.getToAddress() + mailDto.getFromAddress() + mailDto.getTitle());
@@ -162,24 +159,34 @@ public class UserController {
             log.info("임시 비밀번호 전송 완료");
             return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
         } else {
-            return new ResponseEntity<String>(NONE, HttpStatus.OK);
+            return new ResponseEntity<String>(FAIL, HttpStatus.OK);
         }
     }
 
-    // 회원 수정
-    @Operation(summary = "회원 수정", description = "회원 정보 수정")
+    // 비밀번호 확인
+    @Operation(summary = "비밀번호 확인", description = "비밀번호 변경을 위한 비밀번호 확인")
+    @PostMapping("/pw_confirm")
+    public ResponseEntity<String> confirmPw(@RequestPart String pw, @RequestAttribute String email) {
+        return new ResponseEntity<String>(userService.confirmPw(pw, email), HttpStatus.OK);
+    }
+
+    // 비밀번호 수정
+    @Operation(summary = "비밀번호 수정", description = "비밀번호 수정")
+    @PostMapping("/pw_change")
+    public ResponseEntity<String> updatePw(@RequestPart String pw, @RequestAttribute String email) {
+        return new ResponseEntity<String>(userService.updatePw(pw, email), HttpStatus.OK);
+    }
+
+    // 프로필 수정
+    @Operation(summary = "프로필 수정", description = "회원 정보 수정")
     @PostMapping
     public ResponseEntity<String> updateUser(@RequestBody UserDto userDto, @RequestAttribute String email) throws Exception {
         try {
-            Map<String, Object> resultMap = userService.saveUser(userDto, false);
+            Map<String, Object> resultMap = userService.updateUser(userDto, email);
             if(resultMap.get("result").equals(NONE)) { // 존재하지 않는 사용자
                 return new ResponseEntity<String>(NONE, HttpStatus.NOT_ACCEPTABLE);
             } else {
-                if(userDto.getEmail().equals(email)) { // 토큰 확인 후 업데이트
-                    return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
-                } else { // 토큰과 일치하는 사용자 아님
-                    return new ResponseEntity<String>(UNAUTHORIZED, HttpStatus.UNAUTHORIZED);
-                }
+                return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
             }
         } catch (Exception e) {
             e.printStackTrace();

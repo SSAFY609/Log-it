@@ -6,7 +6,6 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Schema(description = "회원")
 @Data
@@ -66,7 +65,7 @@ public class UserDto {
         this.refreshToken = user.getRefreshToken();
     }
 
-    public User updateUser(Long id, UserDto userDto) {
+    public User updateUser(long id, UserDto userDto) {
         return User.builder()
                 .id(id)
                 .name(userDto.getName())

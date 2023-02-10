@@ -1,6 +1,7 @@
 package com.ssafy.logit.exHandler.advice;
 
 import com.ssafy.logit.exHandler.ErrorResult;
+import com.ssafy.logit.exception.AuthorizationException;
 import com.ssafy.logit.exception.DifferentUserException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,13 @@ public class CommonControllerAdvice {
     public ResponseEntity<ErrorResult> differentExHandler(DifferentUserException e){
         log.error("[DifferentUserException] Handler");
         ErrorResult errorResult = new ErrorResult("userDiffernet",e.getMessage());
+        return new ResponseEntity<>(errorResult, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResult> authorizationExhandler(AuthorizationException e){
+        log.error("[AuthorizationException] Handler");
+        ErrorResult errorResult = new ErrorResult("권한 없음. 토큰 확인",e.getMessage());
         return new ResponseEntity<>(errorResult, HttpStatus.BAD_REQUEST);
     }
 
