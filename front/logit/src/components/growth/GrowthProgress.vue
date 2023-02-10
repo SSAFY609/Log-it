@@ -620,4 +620,8 @@ h1 {
   bottom: 8%;
   
 }
+.navi button {
+  margin: 5px 0;
+  color: grey;
+}
 </style>

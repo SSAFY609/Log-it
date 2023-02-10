@@ -3,7 +3,17 @@
     <div class="container">
       <div v-if="sidebar" style="width:260px"></div>
       <div class="box">
-          <h1 class="welcome">{{loginUser.name}}님 타임라인</h1>
+          <h1 class="welcome">
+            <!-- <img class="cal" :src="require(`@/assets/images/cal.png`)" /> -->
+            <img class="cal" :src="require(`@/assets/images/cal2.png`)" />
+            <div class="user-name">
+              {{loginUser.name}}
+            </div>
+            님의 타임라인
+          </h1>
+          <div style="font-size: 20px;">LOG-IT과 함께하는 SSAFY 여정</div>
+          <div style="font-size: 20px; margin-bottom:40px">{{loginUser.name}}님의 한 주 일정을 확인하고 타임라인을 클릭해 상세페이지로 가서 기록하고 관리해보세요.</div>
+         
           
           <swiper 
           class="mySwiper"
@@ -44,13 +54,52 @@
             <v-btn color="#ff417a" variant="outlined" @click="goslide(state.slide)">Today</v-btn>
             <v-btn color="#464646" variant="outlined" @click="prevSlide(0)"><v-icon>mdi-chevron-double-right</v-icon></v-btn>
             <v-btn color="#464646" variant="outlined" @click="goslide(-1)"><v-icon>mdi-chevron-triple-right</v-icon></v-btn> -->
-            <v-btn color="#717171" variant="text" @click="goslide(0)" icon="mdi-chevron-double-left"></v-btn>
-            <v-btn color="#717171" variant="text" @click="nextSlide" icon="mdi-chevron-left"></v-btn>
-            <v-btn color="#ff417a" variant="text" @click="goslide(state.slide)" size="large">TODAY</v-btn>
-            <v-btn color="#717171" variant="text" @click="prevSlide(0)" icon="mdi-chevron-right"></v-btn>
-            <v-btn color="#717171" variant="text" @click="goslide(-1)" icon="mdi-chevron-double-right"></v-btn>
+            <v-btn color="#717171" variant="text" size="60" @click="goslide(0)" icon="mdi-chevron-double-left"></v-btn>
+            <v-btn color="#717171" variant="text" size="60" @click="nextSlide" icon="mdi-chevron-left"></v-btn>
+            <v-btn color="#ff417a" variant="text" size="60" @click="goslide(state.slide)">오늘</v-btn>
+            <v-btn color="#717171" variant="text" size="60" @click="prevSlide(0)" icon="mdi-chevron-right"></v-btn>
+            <v-btn color="#717171" variant="text" size="60" @click="goslide(-1)" icon="mdi-chevron-double-right"></v-btn>
           </div>
+          <div class="progress" style="display:flex; justify-content:center"> 
+        <div>
+          <div>전체 진행도</div>
+          <v-progress-circular
+            :rotate="360"
+            :size="70"
+            :width="15"
+            :model-value="value"
+            color="#EF476F"
+          >
+            {{ value }}
+          </v-progress-circular>
+        </div>
+        <div>
+          <div>성장 진행도</div>
+          <v-progress-circular
+            :rotate="360"
+            :size="70"
+            :width="15"
+            :model-value="value1"
+            color="#FF9770"
+          >
+            {{ value1 }}
+          </v-progress-circular>
+        </div>
+        <div>
+          <div>취업 진행도</div>
+          <v-progress-circular
+            :rotate="360"
+            :size="70"
+            :width="15"
+            :model-value="value2"
+            color="#06D6A0"
+          >
+            {{ value2 }}
+          </v-progress-circular>
+        </div>
       </div>
+      </div>
+      
     </div>
   </div>
 </template>
@@ -75,9 +124,34 @@ export default {
   },
   data() {
       return {
-          
+        interval: {},
+        interval1: {},
+        interval2: {},
+        value: 0,
+        value1: 0,
+        value2: 0,
       }
   },
+  mounted () {
+      this.interval = setInterval(() => {
+        if(this.value == 70){
+          return;
+        }
+        this.value += 1
+      }, 30) 
+      this.interval1 = setInterval(() => {
+        if(this.value1 == 30){
+          return;
+        }
+        this.value1 += 1
+      }, 30) 
+      this.interval2 = setInterval(() => {
+        if(this.value2 == 45){
+          return;
+        }
+        this.value2 += 1
+      }, 30) 
+    },
   setup(){
       const state = reactive({
           date: [],
@@ -96,7 +170,7 @@ export default {
       const store = useStore()
 
       const sidebar = computed(()=>store.state.temp.sidebar)
-      const loginUser = computed(()=>store.state.temp.loginUser)
+      const loginUser = computed(()=>store.state.loginUser)
 
       const onSwiper = (swiper) => {
         state.swiper = swiper;
@@ -366,6 +440,13 @@ export default {
 </script>
 
 <style scoped>
+.cal {
+  height: 64px;
+  width: 54px;
+  margin-right: 16px;
+  margin-bottom: 10px;
+  /* box-shadow: 1px 5px 10px grey; */
+}
 .container {
   /* background-color: gold; */
   height: 100%;
@@ -387,7 +468,7 @@ export default {
 }
 
 .box {
-  margin-top: 150px;
+  margin-top: 180px;
   width: 70%;
   text-align: center;
   /* background-color: pink; */
@@ -397,17 +478,33 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 40px;
-  font-size: 45px;
+  /* margin-bottom: 40px; */
+  font-size: 60px;
   font-family: appleB;
+  color: #191919;
 }
 
 .user-name {
-  font-size: 55px;
+  font-size: 60px;
   /* font-size: 45px; */
-  font-family: galaxy;
-  /* font-family: appleB; */
+  /* font-family: galaxy; */
+  font-family: appleB;
   margin-right: 5px;
+  color: #191919;
+}
+
+.progress{
+  height: 600px;
+  width: 100%;
+  background-color: #a6a6a623;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.progress div {
+  margin: 0 20px;
+
 }
 
 .grow div{
@@ -461,6 +558,9 @@ export default {
   font-size: 20px;
   color: white;
   cursor: pointer;
+}
+.event:hover {
+  
 }
 
 .mon {
@@ -517,45 +617,54 @@ export default {
 
 
 .floor1 {
-  top: 130px;
+  top: 110px;
   /* background-color: rgb(255, 126, 147); */
-  background-color: #ff477ecc;
+  background: rgb(255,0,48);
+background: linear-gradient(90deg, rgba(255,0,48,1) 0%, rgba(255,133,132,1) 76%, rgba(255,185,185,1) 100%);
 }
 .floor2 {
-  top: 95px;
+  top: 75px;
   /* background-color: rgb(255, 185, 100); */
-  background-color: #ff5c8abe;
+  background: rgb(255,0,48);
+background: linear-gradient(90deg, rgba(255,0,48,1) 0%, rgba(255,133,132,1) 76%, rgba(255,185,185,1) 100%);
 }
 .floor3 {
-  top: 60px;
+  top: 40px;
   /* background-color: rgb(255, 126, 147); */
   background-color: #ff7096c0;
 }
 
 .floor4 {
   background-color: #ff85a2bb;
-  top: 25px;
+  top: 5px;
   /* background-color: rgb(255, 210, 46); */
 }
 .floor-1 {
+  top: 250px;
   /* background-color: rgb(27, 171, 255); */
-  background-color: #ff8800b8;
+
+background: rgb(255, 196, 0);
+background: linear-gradient(90deg, rgb(255, 196, 0) 0%, rgba(255,182,56,1) 76%, rgba(255,226,175,1) 100%);
 }
 .floor-2 {
-  top: 280px;
+  top: 285px;
   /* background-color: rgb(255, 210, 155); */
   /* background-color: rgb(255, 126, 147); */
-  background-color: #ffa200bd;
+
+  background: rgb(255, 196, 0);
+background: linear-gradient(90deg, rgb(255, 196, 0) 0%, rgba(255,182,56,1) 76%, rgba(255,226,175,1) 100%);
 }
 .floor-3 {
-  top: 315px;
+  top: 320px;
   /* background-color: rgb(255, 255, 172); */
   /* background-color: rgb(255, 185, 100); */
-  background-color: #ffc400bb;
+
+  background: rgb(255, 196, 0);
+background: linear-gradient(90deg, rgb(255, 196, 0) 0%, rgba(255,182,56,1) 76%, rgba(255,226,175,1) 100%);
 }
 
 .floor-4 {
-  top: 350px;
+  top: 355px;
   /* background-color: rgb(255, 126, 147); */
   /* background-color: rgb(183, 255, 183); */
   background-color: #ffd000bf;
@@ -636,6 +745,9 @@ display: none;
 
 .today-date ~.circle {
   border-color: #494949;
+  width: 24px;
+  height: 24px;
+  top: -17px;
 }
 
 .today-date ~.circle:hover {

@@ -1,6 +1,6 @@
 <template>
    <div class="container">
-      <div v-if="modal" class="background-area" @click="modal=false"></div>
+      <!-- <div v-if="modal" class="background-area" @click="modal=false"></div>
       <div class="search_big_area">
          <div class="search_big_box">
             <input class="search_input" type="text"
@@ -22,7 +22,8 @@
             </div>
          </div>
          <div class="search_btn_box b_main f_white btn_hover">검색</div>   
-      </div>
+      </div> -->
+      <router-view></router-view>
    </div>
 </template>
   
@@ -55,6 +56,9 @@
             ],
             filteredStates: [],
             modal: false,
+            searchResult: [
+               
+            ]
          }
       },
 
