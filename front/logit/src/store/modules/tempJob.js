@@ -1,5 +1,5 @@
 import axiosConnector from "@/utils/axios-connector";
-
+import router from "@/router";
 
 
 const tempJob = {
@@ -266,7 +266,8 @@ const tempJob = {
     mutations: {
         GET_ALL_JOB(state, payload){
             console.log(payload)
-            state.allJob = payload
+            state.allJob = payload;
+            router.push({name: 'JobList'})
         },
 
 
@@ -284,7 +285,7 @@ const tempJob = {
             axiosConnector.get(`job`
             ).then((res)=> {
                 console.log('응답 성공')
-                commit('GET_ALL_Job', res.data)
+                commit('GET_ALL_JOB', res.data)
             }).catch((err)=>{
                 console.log(err)
             })
@@ -307,10 +308,7 @@ const tempJob = {
         },
         sendJobs({dispatch}, datas) {
             console.log('sendJobs 실행')
-            console.log(datas.jobId)
-            console.log(datas.datas[0].list[0].question)
-            console.log(datas.datas[0].list[0].answer)
-            console.log(datas.datas[1].list[0].answer)
+            console.log(datas)
             axiosConnector.post('job/update', datas
             ).then(()=> {
                 dispatch('getJobs', datas.jobId)

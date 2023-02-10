@@ -35,6 +35,7 @@ export default createStore({
   actions: {
     login({ commit }, user) {
       const URL = `${baseURL}/login`;
+      console.log(user)
       axios({
         url: URL,
         method: "POST",
