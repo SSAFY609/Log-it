@@ -328,7 +328,6 @@ const tempJob = {
                 console.log(err)
             })
             
-
         },
         createJob({dispatch}, datas) {
             console.log('createJob 실행')
