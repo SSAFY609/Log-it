@@ -276,7 +276,7 @@ public class UserController {
     @PostMapping("/uploadImage")
     public ResponseEntity<String> uploadImage(@RequestPart MultipartFile multipartFile, @RequestPart String defaultImage, @RequestAttribute String email) throws Exception {
         try {
-            if(defaultImage.equals("0")) { // 사용자가 프로필 이미지를 파일로 업로드 했을 때
+            if(!multipartFile.isEmpty()) { // 사용자가 프로필 이미지를 파일로 업로드 했을 때
                 String fileUrl = imageService.uploadImage(multipartFile, userService.getUser(email));
                 if(fileUrl.equals(FAIL)) {
                     return new ResponseEntity<String>(FAIL, HttpStatus.OK);
@@ -285,6 +285,10 @@ public class UserController {
                     return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
                 }
             } else { // 사용자가 프로필 이미지를 default 이미지 중 골랐을 때
+                System.out.println(">>>>>>>>>>>> multipartFile : " + multipartFile.isEmpty());
+                System.out.println(">>>>>>>>>>>> multipartFile : " + multipartFile.getOriginalFilename());
+                System.out.println(">>>>>>>>>>>> multipartFile : " + multipartFile.getContentType());
+                System.out.println(">>>>>>>>>>>> multipartFile : " + multipartFile.getBytes());
                 String defaultImageNum = imageService.uploadDefaultImage(defaultImage, userService.getUser(email));
                 if(defaultImageNum.equals(FAIL)) {
                     return new ResponseEntity<String>(FAIL, HttpStatus.OK);
