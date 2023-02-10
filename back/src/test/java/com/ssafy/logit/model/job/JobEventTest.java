@@ -1,19 +1,13 @@
 package com.ssafy.logit.model.job;
 
 import com.ssafy.logit.model.job.entity.JobEvent;
-import com.ssafy.logit.model.user.entity.User;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
-import java.time.LocalDate;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class JobEventTest {
@@ -32,8 +26,8 @@ class JobEventTest {
 //        LocalDate now = LocalDate.now();
 //        LocalDate after = now.plusDays(5);
 
-        JobEvent jobEvent1 = JobEvent.createJobEvent(null, "company1", "인턴",  null);
-        JobEvent jobEvent2 = JobEvent.createJobEvent(null, "company2", "신입",  null);
+        JobEvent jobEvent1 = JobEvent.createJobEvent(null, "company1", "인턴",  null,null);
+        JobEvent jobEvent2 = JobEvent.createJobEvent(null, "company2", "신입",  null,null);
 
         em.persist(jobEvent1);
         em.persist(jobEvent2);
