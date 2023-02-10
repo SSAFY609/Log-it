@@ -8,7 +8,7 @@ import temp from './modules/temp.js'
 import event from "./modules/event.js";
 import timeline from "./modules/timeline.js";
 
-const baseURL = "http://localhost:9090/user";
+const baseURL = "https://i8a609.p.ssafy.io/api/";
 const getToken = () => {
   const token = sessionStorage.getItem("token");
   return {

@@ -57,7 +57,7 @@ export default {
         return diffDate / (1000 * 60 * 60 * 24) + 1; // 밀리세컨 * 초 * 분 * 시 = 일
       },
       goJobDetail(jobId) {
-        this.$store.dispatch('tempJob/growthSetting', jobId)
+        this.$store.dispatch('tempJob/jobSetting', jobId)
       }
     },
     created() {
