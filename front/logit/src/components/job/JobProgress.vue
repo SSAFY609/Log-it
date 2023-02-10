@@ -3,8 +3,11 @@
     <div class="job_box_area lay3">
       <div class="header_area lay2">
         <h1>{{ datas.title }} 취업 여정</h1>
-        <h1>임시</h1>
-        <h1>{{  datas.datas[0].list[0] }}</h1>
+        <h1>^^^^^^^^^</h1>
+        <h1>{{  newDatas }}</h1>
+
+
+
         <v-btn @click="sendData">저장</v-btn>
         <span v-if="datas.endDate">{{ date_to_str(datas.startDate, datas.endDate) }}</span>  
         <span v-else>{{ datas.startDate}} ~ 진행중</span>
@@ -182,10 +185,6 @@
 
 
       </div>
-
-
-
-
     </div>
    </div>
  </template>
@@ -205,7 +204,7 @@ import { mapState } from 'vuex';
     },
     computed: {
       ...mapState("job", ["testList"]),
-      ...mapState("tempJob", ["jobs"])
+      ...mapState("tempJob", ["jobs", "allJob"])
     },
 
     data () {
@@ -218,6 +217,7 @@ import { mapState } from 'vuex';
         datas: {},
         ct_datas: {},
         category: {},
+        newDatas: {},
  
       }
     },
@@ -307,8 +307,33 @@ import { mapState } from 'vuex';
 
     created() {
       const jobId = this.$route.params.jobId
+    
+      // console.log(jobId)
+
       const datas = this.$store.state.tempJob.jobs
+
       
+      
+      this.$store.state.tempJob.allJob.data.forEach(element => {
+
+        console.log('파라미터 아이디')
+        console.log(jobId)
+        console.log('새로운 데이터')
+        console.log(element)
+        if(element.id == jobId) {
+          console.log('파라미터로 보낸 아이디와 반복만 아이디 일치')
+          this.newDatas = this.$store.state.tempJob.allJob.data
+        }
+      
+      
+      });
+
+      this.newDatas = this.$store.state.tempJob.allJob.data
+      
+      // console.log(datas)
+
+      // console.log(this.newDatas)
+
       for(let i=0; i< datas.length; i++) {
         if(datas[i].jobId == jobId) {
           this.datas = datas[i]

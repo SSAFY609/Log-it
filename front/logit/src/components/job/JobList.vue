@@ -1,19 +1,25 @@
 <template>
   <div class="container">
     <div class="event-list" >
-      <h1>{{ allJob }}</h1>
-      <router-link :to="{name: 'JobProgress', params: {jobId: job.jobId}}" class="event hover_cursor" v-for="job in jobs" :key="job">
+      <!-- <h1>{{ allJob.data[0].id }}</h1> -->
+      <div @click="goJobDetail(item.id)" v-for="item in allJob.data" :key="item" class="event hover_cursor">
+        <div class="event-title">{{ item.companyName }}</div>
+        <div class="event-date">{{ date_to_str(item.startDate, item.endDate) }}</div>
+        <v-chip v-if="item.resultStatus" variant="outlined" color="rgb(27, 182, 40)">완료</v-chip>
+        <v-chip v-else variant="outlined" color="rgb(245, 21, 107)">진행중</v-chip>
+      </div>
+      <!-- <router-link :to="{name: 'JobProgress', params: {jobId: job.jobId}}" class="event hover_cursor" v-for="job in jobs" :key="job">
         <div class="event-title">{{ job.title }}</div>
         <div class="event-date">{{ date_to_str(job.startDate, job.endDate) }}</div>
         <v-chip v-if="job.progress" variant="outlined" color="rgb(27, 182, 40)">완료</v-chip>
         <v-chip v-else variant="outlined" color="rgb(245, 21, 107)">진행중</v-chip>
-      </router-link>
+      </router-link> -->
       <!-- 추가하기 버튼 영역 -->
       <router-link :to="{name: 'JobCreate'}" class="add_event hover_cursor">
         <v-icon class="f_icon plus_icon">mdi-plus-box</v-icon>
         <div class="event-title add_title">이벤트 추가</div>
       </router-link>
-      <div v-if="jobs.length%2 == 0" class="event-else"></div>
+      <div v-if="allJob.count%2 == 0" class="event-else"></div>
     </div>
   </div>
 </template>
@@ -33,12 +39,14 @@ export default {
     },
     methods: {
       date_to_str(st, ed) {
-        const year1 = st.getFullYear();
-        const month1 = st.getMonth() + 1;
-        const date1 = st.getDate();
-        const year2 = ed.getFullYear();
-        const month2 = ed.getMonth() + 1;
-        const date2 = ed.getDate();
+        const arr1 = st.split('-')
+        const arr2 = ed.split('-')
+        const year1 = arr1[0];
+        const month1 = parseInt(arr1[1]);
+        const date1 = arr1[2]
+        const year2 = arr2[0];
+        const month2 = parseInt(arr2[1]);
+        const date2 = arr2[2];
         return `${year1}년 ${month1}월 ${date1}일 ~ ${year2}년 ${month2}월 ${date2}일`
       },
 
@@ -47,6 +55,9 @@ export default {
         const diffDate = d2.getTime() - d1.getTime();
         
         return diffDate / (1000 * 60 * 60 * 24) + 1; // 밀리세컨 * 초 * 분 * 시 = 일
+      },
+      goJobDetail(jobId) {
+        this.$store.dispatch('tempJob/growthSetting', jobId)
       }
     },
     created() {

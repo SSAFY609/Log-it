@@ -1,5 +1,6 @@
 import axiosConnector from "@/utils/axios-connector";
 import router from "@/router";
+// import axios from "axios";
 
 
 const tempJob = {
@@ -20,6 +21,7 @@ const tempJob = {
                         "resultStatus": "INPROGRESS",
                         "jobCategory": "서류",
                         "name": "서류",
+                        "pass": "합격",
                         "list": [
                             {
                                 "id": 13,
@@ -43,6 +45,7 @@ const tempJob = {
                         "resultStatus": "INPROGRESS",
                         "jobCategory": "코딩테스트",
                         "name": "코딩테스트",
+                        "pass": "합격",
                         "list": [
                             {
                                 "id": 6,
@@ -61,6 +64,7 @@ const tempJob = {
                         "resultStatus": "INPROGRESS",
                         "jobCategory": "면접",
                         "name": "인성면접",
+                        "pass": "불합격",
                         "list": [
                             {
                                 "id": 8,
@@ -94,6 +98,7 @@ const tempJob = {
                         "resultStatus": "INPROGRESS",
                         "jobCategory": "면접",
                         "name": "기술면접",
+                        "pass": "합격",
                         "list": [
                             {
                                 "id": 8,
@@ -114,6 +119,7 @@ const tempJob = {
                         "resultStatus": "INPROGRESS",
                         "jobCategory": "코딩테스트",
                         "name": "코테",
+                        "pass": "진행중",
                         "list": [
                             {
                                 "id": 6,
@@ -132,6 +138,7 @@ const tempJob = {
                         "resultStatus": "INPROGRESS",
                         "jobCategory": "서류",
                         "name": "자소서",
+                        "pass": "진행중",
                         "list": [
                             {
                                 "id": 13,
@@ -155,6 +162,7 @@ const tempJob = {
                         "resultStatus": "INPROGRESS",
                         "jobCategory": "기타",
                         "name": "과제",
+                        "pass": "합격",
                         "list": [
                             {
                                 "id": 10,
@@ -182,6 +190,7 @@ const tempJob = {
                         "resultStatus": "INPROGRESS",
                         "jobCategory": "면접",
                         "name": "인성면접",
+                        "pass": "진행중",
                         "list": [
                             {
                                 "id": 8,
@@ -202,6 +211,7 @@ const tempJob = {
                         "resultStatus": "INPROGRESS",
                         "jobCategory": "코딩테스트",
                         "name": "코딩테스트",
+                        "pass": "진행중",
                         "list": [
                             {
                                 "id": 6,
@@ -220,6 +230,7 @@ const tempJob = {
                         "resultStatus": "INPROGRESS",
                         "jobCategory": "서류",
                         "name": "서류",
+                        "pass": "불합격",
                         "list": [
                             {
                                 "id": 13,
@@ -243,6 +254,7 @@ const tempJob = {
                         "resultStatus": "INPROGRESS",
                         "jobCategory": "기타",
                         "name": "과제",
+                        "pass": "불합격",
                         "list": [
                             {
                                 "id": 10,
@@ -265,8 +277,7 @@ const tempJob = {
     },
     mutations: {
         GET_ALL_JOB(state, payload){
-            console.log(payload)
-            state.allJob = payload;
+            state.allJob = payload
             router.push({name: 'JobList'})
         },
 
@@ -311,14 +322,25 @@ const tempJob = {
             console.log(datas)
             axiosConnector.post('job/update', datas
             ).then(()=> {
-                dispatch('getJobs', datas.jobId)
+                dispatch('getJob', datas.jobId)
             }).catch((err)=> {
                 console.log('엑시오스 에러')
                 console.log(err)
             })
             
 
-        }
+        },
+        createJob({dispatch}, datas) {
+            console.log('createJob 실행')
+            axiosConnector.post('job', datas
+            ).then(()=> {
+                console.log('성공')
+                dispatch('getJob',datas.jobId)
+            }).catch((err)=> {
+                console.log('createJob 에러')
+                console.log(err)
+            })
+        },
 
         
     },

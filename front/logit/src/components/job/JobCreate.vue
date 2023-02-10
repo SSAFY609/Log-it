@@ -7,7 +7,7 @@
         <div class="category-title">
             💼&nbsp;&nbsp;어떤 기업을 목표로 하시나요?
         </div>
-        <div><v-text-field label="ex) 카카오" v-model="company_name"></v-text-field></div>
+        <div><v-text-field label="ex) 카카오" v-model="companyName"></v-text-field></div>
 
         <div class="category-title">
             📌&nbsp;&nbsp;채용을 위한 전형 추가
@@ -49,7 +49,7 @@ export default {
 
     data() {
         return {
-            company_name: "",
+            companyName: "",
             categoryList: [],
             selectedList: [],
             start_date: null,
@@ -84,17 +84,23 @@ export default {
 
 
         create() {
-            if (!this.company_name) {
+            if (!this.companyName) {
                 alert('기업명을 입력해주세요.')
             } else if (!this.start_date || !this.end_date) {
                 alert('날짜를 선택해 주세요.')
             } else {
-                console.log(this.company_name)
-                console.log(this.selectedList)
-                console.log(this.start_date)
-                console.log(this.end_date)
-                
-                
+                const jobs = {
+                        companyName: this.companyName,
+                        startDate :"2023-02-01",
+                        endDate: "2023-02-02",
+                        categroy: [],
+                }
+
+                this.selectedList.forEach(element => {
+                    jobs.categroy.push(element)
+                });
+                console.log(jobs);
+                this.$store.dispatch('tempJob/createJob', jobs)
                 
                 
             }
