@@ -47,7 +47,7 @@ public class SearchService {
 
     // 회원 검색 결과 반환 (이메일)
     public List<SearchResultDto> searchUserEmail(List<SearchResultDto> resultList, long userId, String keyword) {
-        Optional<List<User>> userList = userRepo.searchEmail(userId, keyword);
+        Optional<List<User>> userList = userRepo.searchEmail(keyword);
         if(userList.isPresent()) {
             List< UserDto> userDtoList = userList.get().stream().map(UserDto::new).collect(Collectors.toList());
             for(UserDto u: userDtoList) {
@@ -65,7 +65,7 @@ public class SearchService {
 
     // 회원 검색 결과 반환 (이름)
     public List<SearchResultDto> searchUserName(List<SearchResultDto> resultList, long userId, String keyword) {
-        Optional<List<User>> userList = userRepo.searchName(userId, keyword);
+        Optional<List<User>> userList = userRepo.searchName(keyword);
         if(userList.isPresent()) {
             List< UserDto> userDtoList = userList.get().stream().map(UserDto::new).collect(Collectors.toList());
             for(UserDto u: userDtoList) {
@@ -299,16 +299,16 @@ public class SearchService {
                             result[j] = contentArr[j];
                         }
                     } else {
-                        int lastLen = MAX_STR - nextContentLen;
-                        int startIdx = keyStartIdx - lastLen;
+                        int startIdx = content.length() - nextContentLen - keyword.length() - (30 - nextContentLen - keyword.length());
                         int idx = 0;
+
                         for(int j = startIdx; j < keyStartIdx; j++) {
                             result[idx++] = contentArr[j];
                         }
                         for(int j = keyStartIdx; j < keyNextIdx; j++) {
                             result[idx++] = contentArr[j];
                         }
-                        for(int j = keyNextIdx; j < MAX_STR; j++) {
+                        for(int j = keyNextIdx; j < content.length(); j++) {
                             result[idx++] = contentArr[j];
                         }
                     }

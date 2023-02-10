@@ -24,9 +24,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "select * from users where user_id not in (select user_id from growth_user where growth_id = ?1) and user_id != ?2 and name like %?3%", nativeQuery = true)
     public List<User> searchInviteUser(long growthId, long userId, String userName);
 
-    @Query(value = "select * from users where user_id = ?1 and email like %?2%", nativeQuery = true)
-    public Optional<List<User>> searchEmail(long userId, String keyword);
+    @Query(value = "select * from users where email like %?1%", nativeQuery = true)
+    public Optional<List<User>> searchEmail(String keyword);
 
-    @Query(value = "select * from users where user_id = ?1 and name like %?2%", nativeQuery = true)
-    public Optional<List<User>> searchName(long userId, String keyword);
+    @Query(value = "select * from users where name like %?1%", nativeQuery = true)
+    public Optional<List<User>> searchName(String keyword);
 }
