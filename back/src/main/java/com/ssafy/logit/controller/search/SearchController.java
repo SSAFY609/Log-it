@@ -35,6 +35,13 @@ public class SearchController {
         resultList = searchService.searchUserName(resultList, userId, keyword);
         resultList = searchService.searchGrowth(resultList, userId, keyword);
         resultList = searchService.searchProgress(resultList, userId, keyword);
+        resultList = searchService.searchCompany(resultList, userId, keyword);
+        resultList = searchService.searchDocQuestion(resultList, userId, keyword);
+        resultList = searchService.searchDocContent(resultList, userId, keyword);
+        resultList = searchService.searchCodingContent(resultList, userId, keyword);
+        resultList = searchService.searchInterviewQuestion(resultList, userId, keyword);
+        resultList = searchService.searchInterviewAnswer(resultList, userId, keyword);
+        resultList = searchService.searchEtcContent(resultList, userId, keyword);
         return new ResponseEntity<List<SearchResultDto>>(resultList, HttpStatus.OK);
     }
 }

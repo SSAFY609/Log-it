@@ -10,6 +10,14 @@ import com.ssafy.logit.model.job.dto.CreateJobEventResponse;
 import com.ssafy.logit.model.job.entity.JobEvent;
 import com.ssafy.logit.model.search.Repository.SearchRepository;
 import com.ssafy.logit.model.search.dto.SearchResultDto;
+import com.ssafy.logit.model.step_category.dto.category.codingtest.CodingTestResponse;
+import com.ssafy.logit.model.step_category.dto.category.document.DocumentResponse;
+import com.ssafy.logit.model.step_category.dto.category.etc.StepEtcResponse;
+import com.ssafy.logit.model.step_category.dto.category.interview.InterviewResponse;
+import com.ssafy.logit.model.step_category.entity.category.CodingTest;
+import com.ssafy.logit.model.step_category.entity.category.Document;
+import com.ssafy.logit.model.step_category.entity.category.Interview;
+import com.ssafy.logit.model.step_category.entity.category.StepEtc;
 import com.ssafy.logit.model.user.dto.UserDto;
 import com.ssafy.logit.model.user.entity.User;
 import com.ssafy.logit.model.user.repository.UserRepository;
@@ -99,7 +107,7 @@ public class SearchService {
                 result.setType("성장 과정");
                 result.setId(p.getProgressId());
 
-                if(p.getContent().length() > 30) {
+                if(p.getContent().length() > MAX_STR) {
                     String cutResult = cutStr(keyword, p.getContent());
                     result.setContent(cutResult);
                 } else {
@@ -111,19 +119,155 @@ public class SearchService {
         return resultList;
     }
 
-//    // 취업 여정 검색 결과 반환 (기업명)
-//    public List<SearchResultDto> searchJob(List<SearchResultDto> resultList, long userId, String keyword) {
-//        Optional<List<JobEvent>> jobEventList = searchRepo.searchCompany(userId, keyword);
-//        if(jobEventList.isPresent()) {
-//            List<CreateJobEventResponse> jobEventDtoList = jobEventList.get().stream().map(CreateJobEventResponse::new).collect(Collectors.toList());
-//            for(CreateJobEventResponse c: jobEventDtoList) {
-//                CreateJobEventResponse dto = new CreateJobEventResponse();
-//
-//            }
-//        }
-//    }
+    // 취업 여정 검색 결과 반환 (기업명)
+    public List<SearchResultDto> searchCompany(List<SearchResultDto> resultList, long userId, String keyword) {
+        Optional<List<JobEvent>> jobEventList = searchRepo.searchCompany(userId, keyword);
+        if(jobEventList.isPresent()) {
+            List<CreateJobEventResponse> jobResponseList = jobEventList.get().stream().map(CreateJobEventResponse::new).collect(Collectors.toList());
+            for(CreateJobEventResponse j: jobResponseList) {
+                SearchResultDto result = new SearchResultDto();
+                result.setType("취업 여정 기업명");
+                result.setId(j.getId());
+                result.setContent(j.getCompanyName());
+                resultList.add(result);
+            }
+        }
+        return resultList;
+    }
 
-    // 문자열 가공 (30자 이내, 키워드 포함)
+    // 취업 여정 서류 검색 결과 반환 (질문)
+    public List<SearchResultDto> searchDocQuestion(List<SearchResultDto> resultList, long userId, String keyword) {
+        Optional<List<Document>> documentList = searchRepo.searchDocQuestion(userId, keyword);
+        if(documentList.isPresent()) {
+            List<DocumentResponse> documentResponseList = documentList.get().stream().map(DocumentResponse::new).collect(Collectors.toList());
+            for(DocumentResponse d: documentResponseList) {
+                SearchResultDto result = new SearchResultDto();
+                result.setType("취업 여정 서류 질문");
+                result.setId(d.getId());
+
+                if(d.getQuestion().length() > MAX_STR) {
+                    String cutResult = cutStr(keyword, d.getQuestion());
+                    result.setContent(cutResult);
+                } else {
+                    result.setContent(d.getQuestion());
+                }
+                resultList.add(result);
+            }
+        }
+        return resultList;
+    }
+
+    // 취업 여정 서류 검색 결과 반환 (답변)
+    public List<SearchResultDto> searchDocContent(List<SearchResultDto> resultList, long userId, String keyword) {
+        Optional<List<Document>> documentList = searchRepo.searchDocAnswer(userId, keyword);
+        if(documentList.isPresent()) {
+            List<DocumentResponse> documentResponseList = documentList.get().stream().map(DocumentResponse::new).collect(Collectors.toList());
+            for(DocumentResponse d: documentResponseList) {
+                SearchResultDto result = new SearchResultDto();
+                result.setType("취업 여정 서류 답변");
+                result.setId(d.getId());
+
+                if(d.getAnswer().length() > MAX_STR) {
+                    String cutResult = cutStr(keyword, d.getAnswer());
+                    result.setContent(cutResult);
+                } else {
+                    result.setContent(d.getAnswer());
+                }
+                resultList.add(result);
+            }
+        }
+        return resultList;
+    }
+
+    // 취업 여정 코딩테스트 검색 결과 반환 (내용)
+    public List<SearchResultDto> searchCodingContent(List<SearchResultDto> resultList, long userId, String keyword) {
+        Optional<List<CodingTest>> codingTestList = searchRepo.searchCodingContent(userId, keyword);
+        if(codingTestList.isPresent()) {
+            List<CodingTestResponse> codingTestResponseList = codingTestList.get().stream().map(CodingTestResponse::new).collect(Collectors.toList());
+            for(CodingTestResponse c: codingTestResponseList) {
+                SearchResultDto result = new SearchResultDto();
+                result.setType("취업 여정 코딩테스트 내용");
+                result.setId(c.getId());
+
+                if(c.getContent().length() > MAX_STR) {
+                    String cutResult = cutStr(keyword, c.getContent());
+                    result.setContent(cutResult);
+                } else {
+                    result.setContent(c.getContent());
+                }
+                resultList.add(result);
+            }
+        }
+        return resultList;
+    }
+
+    // 취업 여정 면접 검색 결과 반환 (질문)
+    public List<SearchResultDto> searchInterviewQuestion(List<SearchResultDto> resultList, long userId, String keyword) {
+        Optional<List<Interview>> interviewList = searchRepo.searchInterviewQuestion(userId, keyword);
+        if(interviewList.isPresent()) {
+            List<InterviewResponse> interviewResponseList = interviewList.get().stream().map(InterviewResponse::new).collect(Collectors.toList());
+            for(InterviewResponse i: interviewResponseList) {
+                SearchResultDto result = new SearchResultDto();
+                result.setType("취업 여정 면접 질문");
+                result.setId(i.getId());
+
+                if(i.getQuestion().length() > MAX_STR) {
+                    String cutResult = cutStr(keyword, i.getQuestion());
+                    result.setContent(cutResult);
+                } else {
+                    result.setContent(i.getQuestion());
+                }
+                resultList.add(result);
+            }
+        }
+        return resultList;
+    }
+
+    // 취업 여정 면접 검색 결과 반환 (답변)
+    public List<SearchResultDto> searchInterviewAnswer(List<SearchResultDto> resultList, long userId, String keyword) {
+        Optional<List<Interview>> interviewList = searchRepo.searchInterviewAnswer(userId, keyword);
+        if(interviewList.isPresent()) {
+            List<InterviewResponse> interviewResponseList = interviewList.get().stream().map(InterviewResponse::new).collect(Collectors.toList());
+            for(InterviewResponse i: interviewResponseList) {
+                SearchResultDto result = new SearchResultDto();
+                result.setType("취업 여정 면접 답변");
+                result.setId(i.getId());
+
+                if(i.getAnswer().length() > MAX_STR) {
+                    String cutResult = cutStr(keyword, i.getAnswer());
+                    result.setContent(cutResult);
+                } else {
+                    result.setContent(i.getAnswer());
+                }
+                resultList.add(result);
+            }
+        }
+        return resultList;
+    }
+
+    // 취업 여정 기타 검색 결과 반환 (내용)
+    public List<SearchResultDto> searchEtcContent(List<SearchResultDto> resultList, long userId, String keyword) {
+        Optional<List<StepEtc>> stepEtcList = searchRepo.searchEtcContent(userId, keyword);
+        if(stepEtcList.isPresent()) {
+            List<StepEtcResponse> stepEtcResponseList = stepEtcList.get().stream().map(StepEtcResponse::new).collect(Collectors.toList());
+            for(StepEtcResponse s: stepEtcResponseList) {
+                SearchResultDto result = new SearchResultDto();
+                result.setType("취업 여정 기타 내용");
+                result.setId(s.getId());
+
+                if(s.getContent().length() > MAX_STR) {
+                    String cutResult = cutStr(keyword, s.getContent());
+                    result.setContent(cutResult);
+                } else {
+                    result.setContent(s.getContent());
+                }
+                resultList.add(result);
+            }
+        }
+        return resultList;
+    }
+
+    // 취업 여정 문자열 가공 (30자 이내, 키워드 포함)
     public String cutStr(String keyword, String content) {
         char[] contentArr = content.toCharArray();
         char[] keywordArr = keyword.toCharArray();
