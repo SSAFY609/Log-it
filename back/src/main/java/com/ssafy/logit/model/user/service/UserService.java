@@ -19,7 +19,6 @@ public class UserService {
     private static final String FAIL = "fail";
     private static final String DELETED = "이미 삭제됨";
     private static final String NONE = "사용자 없음";
-    private static final String IS_LOGINED = "이미 로그인된 사용자";
     private static final String PW_FAIL = "비밀번호 틀림";
     private static final String PRESENT = "이미 가입된 사용자";
 
@@ -152,10 +151,6 @@ public class UserService {
     public String confirmPw(String pw, String email) {
         Optional<User> user = userRepo.findByEmail(email);
 
-//        // 암호화 (입력받은 pw를 인코딩한 값이 기존에 저장된 값과 같은지 확인하기 위함)
-//        String encodingPw = passwordEncoder.encode(pw);
-
-        // 입력받은 비밀번호가 db에 저장된 비밀번호(암호화된)와 matches 되면 success
         UserDto userDto = user.get().toDto();
         if (passwordEncoder.matches(pw, userDto.getPw())) {
             return SUCCESS;
