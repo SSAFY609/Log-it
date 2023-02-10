@@ -22,6 +22,8 @@ public class JwtInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         log.info("JWT 인터셉터 호출");
 
+        log.info("[요청 URI] : {}", request.getRequestURI());
+
         // preflight를 위한 OPTIONS 요청은 그냥 전달
         if(request.getMethod().equals("OPTIONS")) {
             return true;
