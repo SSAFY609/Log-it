@@ -272,30 +272,17 @@ public class UserController {
         }
     }
 
-    @Operation(summary = "프로필 이미지 업로드", description = "프로필 이미지 업로드 (기존 프로필 사진 있을 경우 기존 사진 삭제 후 업로드)")
-    @PostMapping("/uploadImage")
-    public ResponseEntity<String> uploadImage(@RequestPart MultipartFile multipartFile, @RequestPart String defaultImage, @RequestAttribute String email) throws Exception {
+    // 프로필 이미지를 파일로 업로드
+    @Operation(summary = "프로필 이미지 파일 업로드", description = "프로필 이미지를 파일로 업로드")
+    @PostMapping("/uploadFile")
+    public ResponseEntity<String> uploadFile(@RequestPart MultipartFile multipartFile, @RequestAttribute String email) throws Exception {
         try {
-            if(!multipartFile.isEmpty()) { // 사용자가 프로필 이미지를 파일로 업로드 했을 때
-                String fileUrl = imageService.uploadImage(multipartFile, userService.getUser(email));
-                if(fileUrl.equals(FAIL)) {
-                    return new ResponseEntity<String>(FAIL, HttpStatus.OK);
-                } else {
-                    log.info("프로필 이미지 업로드 성공 -> url : " + fileUrl);
-                    return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
-                }
-            } else { // 사용자가 프로필 이미지를 default 이미지 중 골랐을 때
-                System.out.println(">>>>>>>>>>>> multipartFile : " + multipartFile.isEmpty());
-                System.out.println(">>>>>>>>>>>> multipartFile : " + multipartFile.getOriginalFilename());
-                System.out.println(">>>>>>>>>>>> multipartFile : " + multipartFile.getContentType());
-                System.out.println(">>>>>>>>>>>> multipartFile : " + multipartFile.getBytes());
-                String defaultImageNum = imageService.uploadDefaultImage(defaultImage, userService.getUser(email));
-                if(defaultImageNum.equals(FAIL)) {
-                    return new ResponseEntity<String>(FAIL, HttpStatus.OK);
-                } else {
-                    log.info("프로필 이미지 업로드 성공 -> num : " + defaultImageNum);
-                    return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
-                }
+            String fileUrl = imageService.uploadImage(multipartFile, userService.getUser(email));
+            if(fileUrl.equals(FAIL)) {
+                return new ResponseEntity<String>(FAIL, HttpStatus.OK);
+            } else {
+                log.info("프로필 이미지 업로드 성공 -> url : " + fileUrl);
+                return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -303,6 +290,25 @@ public class UserController {
         }
     }
 
+    // 프로필 이미지를 디폴트 이미지로 업로드
+    @Operation(summary = "프로필 이미지 디폴트 업로드", description = "프로필 이미지를 디폴트 이미지로 업로드")
+    @PostMapping("/uploadImage")
+    public ResponseEntity<String> uploadImage(@RequestPart String defaultImage, @RequestAttribute String email) throws Exception {
+        try {
+            String defaultImageNum = imageService.uploadDefaultImage(defaultImage, userService.getUser(email));
+            if(defaultImageNum.equals(FAIL)) {
+                return new ResponseEntity<String>(FAIL, HttpStatus.OK);
+            } else {
+                log.info("프로필 이미지 업로드 성공 -> num : " + defaultImageNum);
+                return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(FAIL, HttpStatus.OK);
+        }
+    }
+
+    // 프로필 이미지 삭제
     @Operation(summary = "프로필 이미지 삭제", description = "프로필 이미지 삭제")
     @DeleteMapping("/deleteImage")
     public ResponseEntity<String> dropImage(@RequestAttribute String email) throws Exception {
