@@ -14,9 +14,9 @@
           >
               <swiper-slide v-for="(date, index) in state.dates" :key="index">
                   <div class="grow">
-                    <router-link :to="{name: 'GrowthProgress', params: {growthId: data.growthId}}" v-for="(data, index) in date.growths" :key="index" :class="`event ${data.start} ${data.period} floor${index + 1}`">
+                    <div @click="goGrowth(data.growthId)" v-for="(data, index) in date.growths" :key="index" :class="`event ${data.start} ${data.period} floor${index + 1}`">
                       {{ data.title }}
-                    </router-link>
+                    </div>
                   </div>
                   <div class="bar">
                       <div class="hori-bar" v-for="(d, index) in date.str" :key="index">
@@ -31,7 +31,7 @@
                       </div>
                   </div>
                   <div class="job">
-                    <div v-for="(data, index) in date.growths" :key="index" :class="`event ${data.start} ${data.period} floor-${index + 1}`">
+                    <div @click="goJob(data.jobId)" v-for="(data, index) in date.jobs" :key="index" :class="`event ${data.start} ${data.period} floor-${index + 1}`">
                       {{ data.title }}
                     </div>
                   </div>
@@ -110,188 +110,214 @@ export default {
         return new Date(year, month, date);
       }
 
-      const min_date = (arr)=>{
-        let st = arr.reduce((prev,curr) => {
-          const p = str_to_date(prev.start_date);
-          const c = str_to_date(curr.start_date)
-          return p <= c ? prev : curr;
-        })
-        return st;
-      }
-      
-      const max_date = (arr)=>{
-        let ed = arr.reduce((prev, curr) => {
-          const p = str_to_date(prev.end_date);
-          const c = str_to_date(curr.end_date)
-          return c <= p ? prev : curr;
-        })
-        return ed;
-      }
+      const goGrowth = (id) => {
+        store.dispatch('growth/growthSetting', id)
+      };
+      const goJob = (id) => {
+        store.dispatch('job/jobSetting', id)
+      };
       
       onBeforeMount(()=>{
-        // 세션 스토리지에서 email 저장하고, 성장일지와 취업일지 가져옴
-        // const email = sessionStorage.getItem('email');
-        // store.dispatch('getGrowths', email);
-        // store.dispatch('getJobs', email);
-        
-        // vuex에 접근해서 events 가공하기............. 후하 이게 근데 되려나 싶기도 하공,,,,
-        const events = store.state.temp.events;
 
-        // const growths = store.state.timeline.growths;
-        // const jobs = store.state.timeline.jobs;
+        const growths = store.state.timeline.growths;
+        const jobs = store.state.timeline.jobs;
 
         // 정렬은 이미 되어있다고 생각
 
-        // const growth_st = min_date(growths);
-        // const growth_ed = max_date(growths);
-        // const job_st = min_date(jobs);
-        // const job_ed = max_date(jobs);
+        const growth_st_str = growths.reduce((prev, curr) => {
+          const p = str_to_date(prev.eventDate.startDate)
+          const c = str_to_date(curr.eventDate.startDate)
+          return p <= c ? prev : curr;
+        }).eventDate.startDate
+
+       
+        const growth_ed_str = growths.reduce((prev, curr) => {
+          const p = str_to_date(prev.eventDate.endDate)
+          const c = str_to_date(curr.eventDate.endDate)
+          return c <= p ? prev : curr;
+        }).eventDate.endDate
+
+        const job_st_str = jobs.data.reduce((prev, curr) => {
+          const p = str_to_date(prev.startDate)
+          const c = str_to_date(curr.startDate)
+          return p <= c ? prev : curr;
+        }).startDate
+
+        const job_ed_str = jobs.data.reduce((prev, curr) => {
+          const p = str_to_date(prev.endDate)
+          const c = str_to_date(curr.endDate)
+          return c <= p ? prev : curr;
+        }).endDate
+
+        const growth_st = str_to_date(growth_st_str)
+        const growth_ed = str_to_date(growth_ed_str)
+        const job_st = str_to_date(job_st_str)
+        const job_ed = str_to_date(job_ed_str)
 
         // 성장일지와 취업일지를 비교해 시작 날짜와 끝 날짜 뽑아냄
-        // const st = growth_st.start_date < job_st.start_date ? growth_st.start_date : job_st.start_date;
-        // const ed = growth_ed.end_date > job_ed.end_date ? growth_ed.end_date : job_ed.end_date;
+        let st = growth_st < job_st ? growth_st : job_st;
+        let ed = growth_ed > job_ed ? growth_ed : job_ed;
 
-          // event 가져와서 start_date 순으로 정렬 (오름차순)
-          // const events = state.events;
-          events.sort((a, b) => {
-            return a.start_date - b.start_date;
-          });
-        
-          // 들어온 events에서 최소날짜와 최대날짜 뽑기
-          let st = events.reduce((prev,curr) => {
-              return prev.start_date <= curr.start_date ? prev : curr;
-          })
-          // console.log(st.start_date.toLocaleDateString());
-          let ed = events.reduce((prev, curr) => {
-              return curr.end_date <= prev.end_date ? prev : curr;
-          })
-          // console.log(ed.end_date.toLocaleDateString());
+        // 시작날짜는 일요일부터, 끝나는 날짜는 토요일까지 될수 있도록
+        // 날짜 변경하기
+        if (st.getDay() != 0) {
+            const num = 0 - st.getDay();
+            st = addDays(st, num);
+        }
 
-          state.st = st.start_date;
-          state.ed = ed.end_date;
+        if (ed.getDay() != 6) {
+            const num = 6 - ed.getDay();
+            ed = addDays(ed, num);
+        }
 
+        // 테스트 (통)
+        // console.log(st.toLocaleDateString());
+        // console.log(ed.toLocaleDateString());
 
-          // 시작날짜는 일요일부터, 끝나는 날짜는 토요일까지 될수 있도록
-          // 날짜 변경하기
-          if (state.st.getDay() != 0) {
-              const num = 0 - state.st.getDay();
-              state.st = addDays(state.st, num);
-          }
-
-          if (state.ed.getDay() != 6) {
-              const num = 6 - state.ed.getDay();
-              state.ed = addDays(state.ed, num);
-          }
-
-          // 테스트 (통)
-          // console.log(state.st.toLocaleDateString());
-          // console.log(state.ed.toLocaleDateString());
-
-          // 최소 날짜와 최대 날짜 사이 일주일 단위로 끊기
-          let new_date = state.st;
-          let idx = 0;
-          const today = new Date();
-          while (new_date < state.ed){
-              const push_date = {
-                  sun: new Date(),
-                  sat: new Date(),
-                  str: [],
-                  growths: [],
-                  jobs: [],
-              };
-              push_date.sun = new_date;
-              for(let i=0; i<7; i++){
-                  const target = addDays(new_date, i);
-                  if (target.toLocaleDateString() == today.toLocaleDateString()){
-                    state.slide = idx;
-                    const day = target.getDay();
-                    push_date.str.push(`오늘(${state.day[day]})`);
-                  }
-                  else{
-                    // const year = target.getFullYear();
-                    const month = target.getMonth() + 1;
-                    const date = target.getDate();
-                    const day = target.getDay();
-                    push_date.str.push(`${month >= 10 ? month : '0' + month}/${date >= 10 ? date : '0' + date}(${state.day[day]})`);
-                  }
-                  if (i==6){
-                      push_date.sat = target;
-                  }
-              }
-
-              // 이벤트들 등록 (쪼개서)
-              for(let i=0; i<events.length; i++){
-                const sd = events[i].start_date;
-                const ed = events[i].end_date;
-                const name = events[i].name;
-                const growthId = events[i].event_id;
-                if (sd < push_date.sun) {
-                  if (ed < push_date.sun) {
-                    continue;
-                  } else if (push_date.sun <= ed && ed <= push_date.sat) {
-                    const week = ed.getDay();
-                    const event = {
-                      start: state.start[0],
-                      period: state.period[week],
-                      title: name,
-                      growthId: growthId,
-                    };
-                    push_date.growths.push(event);
-                  } else {
-                    const event = {
-                      start: state.start[0],
-                      period: state.period[6],
-                      title: name,
-                      growthId: growthId,
-                    };
-                    push_date.growths.push(event);
-                  }
-                } else if (push_date.sun <= sd && sd <= push_date.sat){
-                  if(push_date.sun <= ed && ed <= push_date.sat){
-                    const st_week = sd.getDay();
-                    const ed_week = ed.getDay();
-                    const event = {
-                      start: state.start[st_week],
-                      period: state.period[ed_week - st_week],
-                      title: name,
-                      growthId: growthId,
-                    };
-                    push_date.growths.push(event);
-                  } else {
-                    const st_week = sd.getDay();
-                    const event = {
-                      start: state.start[st_week],
-                      period: state.period[6 - st_week],
-                      title: name,
-                      growthId: growthId,
-                    };
-                    push_date.growths.push(event);
-                  }
-                } else {
-                  break;
+        // 최소 날짜와 최대 날짜 사이 일주일 단위로 끊기
+        let new_date = st;
+        let idx = 0;
+        const today = new Date();
+        while (new_date < ed){
+            const push_date = {
+                sun: new Date(),
+                sat: new Date(),
+                str: [],
+                growths: [],
+                jobs: [],
+            };
+            push_date.sun = new_date;
+            for(let i=0; i<7; i++){
+                const target = addDays(new_date, i);
+                if (target.toLocaleDateString() == today.toLocaleDateString()){
+                  state.slide = idx;
+                  const day = target.getDay();
+                  push_date.str.push(`오늘(${state.day[day]})`);
                 }
-              }
-              state.dates.push(push_date);
-              new_date = addDays(new_date, 7);
-              idx += 1;
-          }
-          // console.log(state.slide)
-          // console.log(state.dates);
+                else{
+                  // const year = target.getFullYear();
+                  const month = target.getMonth() + 1;
+                  const date = target.getDate();
+                  const day = target.getDay();
+                  push_date.str.push(`${month >= 10 ? month : '0' + month}/${date >= 10 ? date : '0' + date}(${state.day[day]})`);
+                }
+                if (i==6){
+                    push_date.sat = target;
+                }
+            }
 
-          // for (let i=-3; i<4; i++){
-          //     if(i == 0){
-          //         const day = today.getDay();
-          //         state.date.push(`오늘(${state.day[day]})`);
-          //     }else{
-          //         const target = addDays(today, i);
-          //         // const year = target.getFullYear();
-          //         const month = target.getMonth() + 1;
-          //         const date = target.getDate();
-          //         const day = target.getDay();
-          //         state.date.push(`${month >= 10 ? month : '0' + month}/${date >= 10 ? date : '0' + date}(${this.day[day]})`);
-          //     }
-          // }
-          // console.log(state.date);
+            // 성장여정 쪼개기
+            for(let i=0; i<growths.length; i++){
+              const sd = str_to_date(growths[i].eventDate.startDate);
+              const ed = str_to_date(growths[i].eventDate.endDate);
+              const name = growths[i].category;
+              const growthId = growths[i].growthId;
+              if (sd < push_date.sun) {
+                if (ed < push_date.sun) {
+                  continue;
+                } else if (push_date.sun <= ed && ed <= push_date.sat) {
+                  const week = ed.getDay();
+                  const event = {
+                    start: state.start[0],
+                    period: state.period[week],
+                    title: name,
+                    growthId: growthId,
+                  };
+                  push_date.growths.push(event);
+                } else {
+                  const event = {
+                    start: state.start[0],
+                    period: state.period[6],
+                    title: name,
+                    growthId: growthId,
+                  };
+                  push_date.growths.push(event);
+                }
+              } else if (push_date.sun <= sd && sd <= push_date.sat){
+                if(push_date.sun <= ed && ed <= push_date.sat){
+                  const st_week = sd.getDay();
+                  const ed_week = ed.getDay();
+                  const event = {
+                    start: state.start[st_week],
+                    period: state.period[ed_week - st_week],
+                    title: name,
+                    growthId: growthId,
+                  };
+                  push_date.growths.push(event);
+                } else {
+                  const st_week = sd.getDay();
+                  const event = {
+                    start: state.start[st_week],
+                    period: state.period[6 - st_week],
+                    title: name,
+                    growthId: growthId,
+                  };
+                  push_date.growths.push(event);
+                }
+              } else {
+                break;
+              }
+            }
+
+            // 취업 여정 쪼개기
+            for(let i=0; i<jobs.count; i++){
+              const sd = str_to_date(jobs.data[i].startDate);
+              const ed = str_to_date(jobs.data[i].endDate);
+              const name = jobs.data[i].companyName;
+              const jobId = jobs.data[i].id;
+              if (sd < push_date.sun) {
+                if (ed < push_date.sun) {
+                  continue;
+                } else if (push_date.sun <= ed && ed <= push_date.sat) {
+                  const week = ed.getDay();
+                  const event = {
+                    start: state.start[0],
+                    period: state.period[week],
+                    title: name,
+                    jobId: jobId,
+                  };
+                  push_date.jobs.push(event);
+                } else {
+                  const event = {
+                    start: state.start[0],
+                    period: state.period[6],
+                    title: name,
+                    jobId: jobId,
+                  };
+                  push_date.jobs.push(event);
+                }
+              } else if (push_date.sun <= sd && sd <= push_date.sat){
+                if(push_date.sun <= ed && ed <= push_date.sat){
+                  const st_week = sd.getDay();
+                  const ed_week = ed.getDay();
+                  const event = {
+                    start: state.start[st_week],
+                    period: state.period[ed_week - st_week],
+                    title: name,
+                    jobId: jobId,
+                  };
+                  push_date.jobs.push(event);
+                } else {
+                  const st_week = sd.getDay();
+                  const event = {
+                    start: state.start[st_week],
+                    period: state.period[6 - st_week],
+                    title: name,
+                    jobId: jobId,
+                  };
+                  push_date.jobs.push(event);
+                }
+              } else {
+                break;
+              }
+            }
+            // console.log(push_date)
+            state.dates.push(push_date);
+            new_date = addDays(new_date, 7);
+            idx += 1;
+        }
+
+          // console.log(state.dates)
       })
 
       onMounted(()=>{
@@ -326,8 +352,8 @@ export default {
           state,
           sidebar,
           loginUser,
-          min_date,
-          max_date,
+          goGrowth,
+          goJob,
           str_to_date,
           addDays,
           prevSlide,
@@ -434,6 +460,7 @@ export default {
   height: 30px;
   font-size: 20px;
   color: white;
+  cursor: pointer;
 }
 
 .mon {

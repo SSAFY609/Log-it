@@ -108,7 +108,7 @@
       border-radius: 8px;
       display: flex;
       align-items: center;
-      z-index: 200;
+      /* z-index: 200; */
    }
    .search_input {
       width: 660px;
@@ -128,7 +128,7 @@
       align-items: center;
       margin-top: 240px;
       justify-content: center;
-      z-index: 2000;
+      /* z-index: 2000; */
    }
    .search_btn_box {
       width: 100px;
@@ -139,7 +139,7 @@
       justify-content: center;
       align-items: center;
       font-size: 22px;
-      z-index: 2000;
+      /* z-index: 2000; */
    }
    .filterd_box {
       position: absolute;
@@ -166,6 +166,6 @@
       height: 100%;
       top:0px;
       left:0px;
-      z-index: 1000;
+      /* z-index: 1000; */
    }
   </style>

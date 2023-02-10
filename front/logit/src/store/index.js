@@ -6,6 +6,7 @@ import temp from './modules/temp.js'
 import growth from "./modules/growth.js";
 import timeline from "./modules/timeline.js";
 
+// const baseURL = "https://i8a609.p.ssafy.io/api/user";
 const baseURL = "http://localhost:9090/user";
 const getToken = () => {
   const token = sessionStorage.getItem("token");
@@ -23,6 +24,7 @@ export default createStore({
       state.loginUser = payload;
       console.log(state.loginUser);
       sessionStorage.setItem("token", payload["jwt-auth-token"]);
+      console.log(sessionStorage.getItem('token'))
       router.push({ name: "MainPage" });
     },
     LOG_OUT(state) {

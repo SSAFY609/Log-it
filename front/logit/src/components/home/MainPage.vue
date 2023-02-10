@@ -25,6 +25,7 @@
           </router-link>
         </div>
       </div>
+      <div @click="testTimeline">클릭!</div>
       <div class="img_box lay1">
         <v-img class="laptop_img"
                :src="require('../../assets/images/laptop02.png')"
@@ -43,6 +44,7 @@
 <script>
 import { mapState } from 'vuex';
 import { onMounted, onBeforeUnmount } from 'vue';
+import { useStore } from 'vuex';
 
 export default {
     name: 'MainPage',
@@ -64,6 +66,11 @@ export default {
       //   let postIt = document.querySelector(`.post-it`)
       //   observe.observe(postIt)
       // })
+      const store = useStore()
+
+      const testTimeline = () => {
+        store.dispatch('timeline/timelineSetting')
+      }
 
       onMounted(()=>{
         writeTitle('.text', '당신의 새로운 여정을 \n 매일 기록해 보세요', 1500)
@@ -138,6 +145,7 @@ export default {
 
       return {
         state,
+        testTimeline,
         writeTitle,
         onScroll,
 

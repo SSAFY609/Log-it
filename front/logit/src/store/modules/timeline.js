@@ -21,16 +21,17 @@ const timeline = {
         },
     },
     actions: {
-        getGrowths({commit}) {
+        getGrowths({commit, dispatch}) {
             axiosConnector.get(`growth/get_mine`
             ).then((res)=> {
                 commit('GET_GROWTHS', res.data)
+                dispatch('getJobs')
             }).catch((err)=>{
                 console.log(err)
             })
         },
         getJobs({commit}) {
-            axiosConnector.get(`job`
+            axiosConnector.get(`job/sort`
             ).then((res)=>{
                 commit('GET_JOBS', res.data)
             }).catch((err)=>{
@@ -39,7 +40,6 @@ const timeline = {
         },
         timelineSetting({dispatch}){
             dispatch('getGrowths')
-            dispatch('getJobs')
         }
     }
 

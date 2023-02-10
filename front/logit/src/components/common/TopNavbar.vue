@@ -13,7 +13,7 @@
         </div>
       </div>
 
-      <div v-if="!state.loginUser" class="login_btn_box right_box_items">
+      <div v-if="!loginUser.id" class="login_btn_box right_box_items">
         <router-link :to="{name: 'UserLogin'}" class="login_btn b_main btn_hover">
           <div class="login_btn_text f_white">로그인</div>
         </router-link>
@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import { computed } from '@vue/reactivity'
 import { useStore } from 'vuex'
 
 export default {
@@ -53,14 +54,16 @@ export default {
   },
   setup() {
     const state = {
-      loginUser: {
-        id: "leesh132",
-        name: "이성훈",
-        num: "848212",
-      },
+      // loginUser: {
+      //   id: "leesh132",
+      //   name: "이성훈",
+      //   num: "848212",
+      // },
     }
-
+  
     const store = useStore()
+    
+    const loginUser = computed(()=>store.state.loginUser)
 
     const openSidebar = () => {
       const eventTarget1 = document.querySelector('.SideNavbar_box')
@@ -81,6 +84,7 @@ export default {
     }
     return {
       state,
+      loginUser,
       openSidebar,
       openProfile,
     }

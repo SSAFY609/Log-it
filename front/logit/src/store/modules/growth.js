@@ -2,9 +2,18 @@ import router from "@/router";
 import axiosConnector from "@/utils/axios-connector";
 
 
+const today_to_str = ()=>{
+    const today = new Date();
+    const y = today.getFullYear();
+    const m = today.getMonth() + 1;
+    const d = today.getDate();
+    return `${y}-${m >= 10 ? m : '0' + m}-${d >= 10 ? d : '0' + d}`;
+}
+
 const growth = {
     namespaced: true,
     state:{
+        today: false,
         allGrowth: [],
         growth: {},
         growthUsers: [],
@@ -40,10 +49,18 @@ const growth = {
         },
         GET_FIRST_PROGRESS(state, payload){
             state.firstProgress = payload
+            if(payload[payload.length - 1].date == today_to_str()){
+                state.today = true
+            } else {
+                state.today = false
+            }
         },
         GET_DATE_PROGRESS(state, payload){
             state.dateProgress = payload
             router.push({name: 'ProgressDetail'})
+        },
+        GET_DATE_PROGRESS_ONLY(state, payload){
+            state.dateProgress = payload
         },
         GET_ALL_USER(state, payload){
             state.allUser = payload
@@ -94,7 +111,6 @@ const growth = {
             axiosConnector.get(`growth/get_event`, {
                 params: params
             }).then((res)=>{
-                console.log(res.data)
                 const payload = {
                     data: res.data,
                     growthId: growthId
@@ -106,14 +122,12 @@ const growth = {
         },
         // 이벤트 아이디에 해당하는 이벤트 참여 유저들 가져오기
         getGrowthUsers({commit}, growthId) {
-            console.log('여기야여기')
             axiosConnector.get(`growth/get_user`, {
                 params: {
                     growthId: growthId
                 }
             }
             ).then((res)=>{
-                console.log(res.data, '우잉')
                 commit('GET_GROWTH_USERS', res.data)
             }).catch((err)=>{
                 console.log(err)
@@ -150,12 +164,19 @@ const growth = {
                 console.log(err)
             })
         },
+        getDateProgressOnly({commit}, data){
+            axiosConnector.get(`growth/progress/${data.growthId}/${data.date}`
+            ).then((res)=>{
+                commit('GET_DATE_PROGRESS_ONLY', res.data)
+            }).catch((err)=>{
+                console.log(err)
+            })
+        },
         // 회원 추가를 위한 검색용 유저들 (가입되어있지 않은...)
         getAllUser({commit}, growthId) {
             axiosConnector.get(`growth/invite/get`, {
                 params: { growthId: growthId }
             }).then((res)=>{
-                console.log(res.data)
                 commit('GET_ALL_USER', res.data)
             }).catch((err)=>{
                 console.log(err)
@@ -245,11 +266,25 @@ const growth = {
                 console.log(err)
             })
         },
-
+        // 좋아요 / 좋아요 취소 -> true / false 를 바꾸는 것
+        likeProgress({dispatch}, data){
+            axiosConnector.put(`growth/like/${data.progressId}`
+            ).then(()=>{
+                console.log('성공')
+                const payload = {
+                    growthId: data.growthId,
+                    date: data.date
+                }
+                dispatch('getLikeProgress', data.growthId)
+                dispatch('getDateProgressOnly', payload)
+            }).catch((err)=>{
+                console.log(err)
+            })
+        },
         // 이벤트 첫 세팅 ㄱㄱ
         growthSetting({dispatch}, growthId){
-            dispatch('getGrowthUsers', growthId)
             dispatch('getFirstProgress', growthId)
+            dispatch('getGrowthUsers', growthId)
             dispatch('getLikeProgress', growthId)
             dispatch('getLog', growthId)
             dispatch('getGrowth', growthId)

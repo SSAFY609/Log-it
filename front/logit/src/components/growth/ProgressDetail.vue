@@ -5,7 +5,7 @@
       :cssMode="false"
       :modules="modules"
       class="mySwiper">
-      <swiper-slide v-for="progress in dateProgress" :key="progress.progressId" class="slide">
+      <swiper-slide v-for="(progress, index) in dateProgress" :key="progress.progressId" class="slide">
 
         <!-- 내가 쓴글이라면 -->
         <div v-if="progress.user.id == loginUser.id" class="memo-bg">
@@ -28,12 +28,9 @@
               :read-only="true" />
           </div>
           <div class="heart">
-            <v-btn v-if="myLikeProgress.indexOf(progress.progressId) != -1" variant="flat" icon="mdi-heart" color="red" @click="unlike(progress.progressId)"></v-btn>
-            <v-btn v-else variant="outlined" icon="mdi-heart" color="red" @click="like(progress.progressId)"></v-btn>
-            {{ progress.likeCnt }}
-          </div>
-          <div class="check">
-            <v-icon size="large" @click="dialog = false">mdi-close</v-icon>
+            <v-btn v-if="myLikeProgress.indexOf(progress.progressId) != -1" variant="text" icon="mdi-heart" color="red" @click="like(progress.progressId, index)"></v-btn>
+            <v-btn v-else variant="text" icon="mdi-heart-outline" color="red" @click="like(progress.progressId, index)"></v-btn>
+            <div style="font-size: 20px">{{ progress.likeCnt }}</div>
           </div>
         </div>
 
@@ -57,12 +54,9 @@
               :read-only="true" />
           </div>
           <div class="heart">
-            <!-- <v-btn v-if="myLikeProgress.indexOf(progress.progressId) != -1" variant="flat" icon="mdi-heart" color="red" @click="unlike(progress.progressId)"></v-btn>
-            <v-btn v-else variant="outlined" icon="mdi-heart" color="red" @click="like(progress.progressId)"></v-btn> -->
-            {{ progress.likeCnt }}
-          </div>
-          <div class="check">
-            <v-icon size="large" @click="dialog = false">mdi-close</v-icon>
+            <v-btn v-if="myLikeProgress.indexOf(progress.progressId) != -1" variant="text" icon="mdi-heart" color="red" @click="like(progress.progressId, index)"></v-btn>
+            <v-btn v-else variant="text" icon="mdi-heart-outline" color="red" @click="like(progress.progressId, index)"></v-btn>
+            <div style="font-size: 20px">{{ progress.likeCnt }}</div>
           </div>
         </div>
       </swiper-slide>
@@ -100,8 +94,14 @@ export default {
       updateProgress(progressId) {
         this.$store.dispatch('growth/getProgress', progressId);
       },
-      like(progressId) {
-        this.$store.dispatch('growth/likeProgress', progressId)
+      like(progressId, idx) {
+        const data = {
+          progressId: progressId,
+          growthId: this.dateProgress[idx].growth.growthId,
+          date: this.dateProgress[idx].progressDate.date
+        }
+        console.log(data)
+        this.$store.dispatch('growth/likeProgress', data)
       },
       unlike(progressId) {
         this.$store.dispatch('growth/unlikeProgress', progressId)
@@ -207,5 +207,6 @@ h1 {
 .heart>button{
   margin: 0 10px;
 }
+
 
 </style>
