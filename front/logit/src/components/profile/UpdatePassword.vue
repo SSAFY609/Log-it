@@ -53,6 +53,8 @@
 </template>
 
 <script>
+import axiosConnectorFormData from "@/utils/axios-connector-formData";
+
 // import { reactive } from "@vue/reactivity";
 // import { ref } from "vue";
 export default {
@@ -69,39 +71,44 @@ export default {
       password_tmp: "",
       pw: "",
       email: "",
-      name: "",
-      flag: "",
-      studentNo: "",
-      isDeleted: "",
-      image: "",
     
   }),
     // 다음 버튼 클릭
   methods: {
-      modifyPw ()  {
-        if (!this.password.trim() || !this.password_tmp.trim()) {
-          alert("입력한 비밀번호가 없습니다.");
-          return;
-        }
-        if (
-          !document
-            .querySelector(".profile-main-button-user")
-            .classList.contains("color")
-        ) {
-          alert("입력한 비밀번호가 일치하지 않습니다.");
-          return;
-        }
-        const user = {
-          pw: this.password_tmp,
-          email: this.email,
-          flag: this.flag,
-          studentNo: this.studentNo,
-          isDeleted: this.isDeleted,
-          image: this.image,
-        };
-        this.$store.dispatch("updateUser", user);
+    modifyPw() {
+      if (!this.password.trim() || !this.password_tmp.trim()) {
+        alert("입력한 비밀번호가 없습니다.");
+        return;
+      }
+      if (
+        !document
+          .querySelector(".profile-main-button-user")
+          .classList.contains("color")
+      ) {
+        alert("입력한 비밀번호가 일치하지 않습니다.");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('pw', this.password_tmp);
+      console.log(this.password_tmp);
+
+      axiosConnectorFormData.post("user/pw_change", formData
+        ).then((res) => {
+           console.log(res)
+            if (res.data == "success") {
+            alert("비밀번호가 변경되었습니다.")
+            }
+        }).catch((err) => {
+            alert("비밀번호 변경이 실패하였습니다.")
+            console.log(err)
+         })
+      
+        // this.$store.dispatch("updateUser", user);
         this.$router.push({ name: "ProfilePage" });
-      },
+    },
+
+    
       async chkPw () {
         const validate = await this.$refs.form.validate();
         if (validate.valid) {
@@ -120,11 +127,6 @@ export default {
   mounted() {
     const loginUser = this.$store.state.loginUser;
     this.email = loginUser.email;
-    this.name = loginUser.name;
-    this.flag = loginUser.flag;
-    this.studentNo = loginUser.studentNo;
-    this.isDeleted = loginUser.isDeleted;
-    this.image = loginUser.image;
     console.log("여기까지왔숨다")
   },
 }

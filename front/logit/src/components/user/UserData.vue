@@ -72,7 +72,7 @@ export default {
   data: () => ({
     rules1: {
       required: (value) => !!value || "",
-      min: (v) => v.length >= 6 || "학번을 정확히 입력해주세요..",
+      min: (v) => v.length >= 6 || "학번을 정확히 입력해주세요.",
     },
   }),
   methods: {

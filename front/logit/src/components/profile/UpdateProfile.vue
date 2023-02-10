@@ -84,7 +84,7 @@
           <v-slide-group-item v-slot="{ isSelected, toggle, selectedClass }">
             <label for="file" class="upload-btn">
               <!-- 사용자 파일 업로드 선택 창-->
-              <input @change="fileChg" id="file" type="file" accept="image/*" />
+              <input ref="fileImage"  @change="fileChg" id="file" type="file" accept="image/*" />
               <div class="ma-4 select hover_cursor hover_bigger">
                 <v-icon class="profile_icon f_icon lay3 btn_clicked2"
                   >mdi-folder-plus-outline</v-icon
@@ -126,11 +126,13 @@
 import { reactive, onMounted, computed  } from "@vue/runtime-core";
 // import { useRouter } from "vue-router";
 import { useStore } from "vuex";
-
+import { ref } from "vue";
 export default {
   name: "UpdateProfile",
   props: ["fileSrc"],
+
   setup() {
+    const fileImage = ref(null);
     // const router = useRouter();
     const state = reactive({
       model: null,
@@ -160,49 +162,52 @@ export default {
       // store.dispatch("updateUser", user);
 
       // 이미지 업로드
-      state.mutipartFile = state.image;
-      state.defaultImage = state.image;
 
-      if (state.image.length < 3) {
-        state.mutipartFile = null;
+      // 숫자일 경우
+      if (typeof(state.image) =='string') {
+        //
+        const formData = new FormData();
+        console.log(state.defaultImage)
+        formData.append("defaultImage", state.defaultImage);
+        store.dispatch("uploadImage", formData);
+      // 파일일 경우
       } else { 
-        state.defaultImage = null;
+        console.log("파일인지 알아보나?")
+        const formData = new FormData();
+        console.log(state.image)
+        formData.append('multipartFile', state.image );
+        store.dispatch("uploadFile", formData);
       }
-      const file = {
-        mutipartFile: state.mutipartFile,
-        defaultImage: state.defaultImage
-      }
-      console.log(file);
-      // const file = {
-      //   multipartFile: null,
-      //   defaultImage: "3",
-      // }
-      //console.log(file)
-      // store.dispatch("uploadImage", file);
+
     };
 
     const onShow = () => {
-      // console.log(state.photo);
       state.photo = !state.photo;
       state.fileChk = !state.fileChk;
     };
 
     // 파일 업로드 했을 때, 변화 저장
-    const fileChg = (file) => {
+    const fileChg = () => {
+      // console.log('file', file)
       // 파일 형식 수정
-      state.imageFile = file;
-      formData.append("image", state.imageFile);
       // 파일 미리보기
       const fileDOM = document.querySelector("#file");
       const previews = document.querySelectorAll(".image-box");
+      console.log(fileDOM.files)
+      
+      state.image = fileDOM.files[0];
+      console.log('state image', state.image);
+      // state.mutipartFile = ref.fileImage.files[0];
       state.imageSrc = URL.createObjectURL(fileDOM.files[0]);
+      // 여기서 화면 변함
       previews[0].src = state.imageSrc;
-      state.image = state.imageSrc;
-      // 파일 형식 바꾼거랑 파일 미리보기 형식 같은지 확인 중
+      // 구 버전
+      // state.image = state.imageSrc;
     };
 
     // 이미지 선택했을 때, 변화
     const onClicked = (i) => {
+      state.defaultImage = `${i}`;
       state.image = `${i}`;
       const previews = document.querySelector(".image-box");
       previews.src = require(`@/assets/profiles/scale (${i}).png`);
@@ -217,16 +222,26 @@ export default {
       state.email = loginUser.email;
       state.name = loginUser.name;
       state.studentNo = loginUser.studentNo;
-      state.image = loginUser.image;
-      
+
+      // 이미지가 파일인지 숫자인지 문자열 길이로 구분한다.
+      // 숫자면 바로 반영
+      console.log(loginUser.image.length)
       if (loginUser.image.length < 3) {
         previews.src = require(`@/assets/profiles/scale (${loginUser.image}).png`);
       } else {
-        previews.src = loginUser.image;
+      // 파일일 경우 가공해서 사용
+      // 파일 받아서 
+      const previews = document.querySelectorAll(".image-box");
+      // 어떻게 가공할지 생각
+      previews[0].src = loginUser.image; 
+      console.log(loginUser.image)
+      // 구 버전
+       // previews.src = loginUser.image;
       }
     });
 
     return {
+      fileImage,
       formData,
       state,
       updateUser,

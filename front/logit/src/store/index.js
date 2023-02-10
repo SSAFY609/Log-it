@@ -2,6 +2,8 @@ import { createStore } from "vuex";
 import axios from "axios";
 import router from "@/router";
 import axiosConnector from "@/utils/axios-connector";
+import axiosConnectorFormData from "@/utils/axios-connector-formData";
+
 // import { useRouter } from "vue-router";
 // import temp from './modules/temp.js'
 // import event from './modules/event.js'
@@ -97,7 +99,6 @@ export default createStore({
     //       console.log(err);
     //     });
     // },
-
     // 유저 로그아웃하기
     logout({ commit }) {
       axiosConnector
@@ -112,18 +113,8 @@ export default createStore({
         });
     },
     // 비밀번호 변경하기 => 고쳐야함
-    // updatePassword({ dispatch }, user) {
-    //   axiosConnector
-    //     .post("user", user)
-    //     .then(() => {
-    //       alert("정보 변경 성공했다구 ~~");
-    //       dispatch("getUser");
-    //     })
-    //     .catch((err) => {
-    //       alert("비.밀.번.호.변.경.실.패");
-    //       console.log(err);
-    //     });
-    // },
+    // updataPassword.vue에 작성
+
     // 비밀번호 재발급
     sendPw(context, email) {
       const URL = `${baseURL}/sendPw`;
@@ -147,16 +138,37 @@ export default createStore({
 
     // 이미지 업로드하기
     // 이미지 정보 갱신 : 이미지 업로드 후(uploadImage) 유저 정보를 불러와(getUser) vuex에 저장
-    uploadImage({ dispatch }, file) {
-      axiosConnector
-        .post("user/uploadImage", file)
+    uploadImage({ dispatch }, formData) {
+      axiosConnectorFormData
+        .post("user/uploadImage", formData)
         .then((res) => { 
+          if (res.data == "success") {
+            alert("이미지 업로드 성공 했쓰어 ~~");
+            dispatch("getUser");
+          }
           console.log(res.data)
-          alert("이미지 업로드 성공 했쓰어 ~~");
-          dispatch("getUser");
         })
         .catch((err) => { 
-          alert("이미지 업로드 실패했어..");
+          alert("이미지 업로드 실패했어....😥😥😥😥😥😥😥😥😥😥😥😥");
+          console.log(err);
+        })
+    },
+
+    uploadFile({ dispatch}, formData) {
+      // let response = await axiosConnectorFormData.post("user/uploadFile", formData)
+      // console.log(response);
+      // return response;
+      axiosConnectorFormData
+        .post("user/uploadFile", formData)
+        .then((res) => { 
+          if (res.data == "success") {
+            alert("파일 업로드 성공 했쓰어 ~~");
+            dispatch("getUser");
+          }
+          console.log(res.data)
+        })
+        .catch((err) => { 
+          alert("이미지 업로드 실패했어....😥😥😥😥😥😥😥😥😥😥😥😥");
           console.log(err);
         })
     },

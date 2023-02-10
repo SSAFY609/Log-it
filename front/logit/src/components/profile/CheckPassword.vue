@@ -26,8 +26,9 @@
           </div>
         </div>
         <div class="profile-main-button">
-          <div @click="chkPw">
+          <div >
             <v-btn
+            @click="checkPw"
               width="380"
               height="50"
               rounded="lg"
@@ -46,7 +47,7 @@
 
 <script>
 import { reactive, onMounted } from "@vue/runtime-core";
-
+import axiosConnectorFormData from "@/utils/axios-connector-formData";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 export default {
@@ -64,22 +65,41 @@ export default {
     const store = useStore();
     const router = useRouter();
 
-    const chkPw = () => {
-      if (state.password == store.state.loginUser.pw) {
-        router.push({ name: "UpdatePassword" });
-      } else {
-        alert("비밀번호를 다시 입력해주세요.");
-      }
-    };
+    const checkPw = () => {
+
+
+      const formData = new FormData();
+      formData.append('pw', state.password);
+
+      // 비밀번호 확인 
+      axiosConnectorFormData.post("user/pw_confirm", formData)
+        .then((res) => {
+          console.log(res)
+          if (res.data == "success") {
+             router.push({ name: "UpdatePassword" });  
+           }
+          if (res.data == "비밀번호 틀림") { 
+              alert("비밀번호를 다시 입력해주세요.")
+           }
+           }).catch((err) => {
+              alert("비밀번호를 다시 입력해주세요.")
+              console.log(err);
+           })
+     }
+      // if (state.password == store.state.loginUser.pw) {
+      //   router.push({ name: "UpdatePassword" });
+      // } else {
+      //   alert("비밀번호를 다시 입력해주세요.");
+      // }
     // 초기화면 세팅
     onMounted(() => {
       const loginUser = store.state.loginUser;
-      state.userPassword = loginUser.pw;
       state.email = loginUser.email;
+      // state.userPassword = loginUser.pw;
     });
     return {
+      checkPw,
       state,
-      chkPw,
     };
   },
 };
