@@ -27,7 +27,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtInterceptor)
                 .addPathPatterns("/**") // 기본 적용 경로
-                .excludePathPatterns("/api/user/login/**", "/api/user/regist/**", "/user/check/**", "/swagger-ui/**", "/api-docs/**"); // 적용 제외 경로
+                .excludePathPatterns("/user/login/**", "/user/regist/**", "/user/check/**", "/swagger-ui/**", "/api-docs/**"); // 적용 제외 경로
     }
 
     /*
