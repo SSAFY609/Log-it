@@ -17,7 +17,7 @@ public interface ProgressRepository  extends JpaRepository<Progress, Long> {
     @Query(value = "select * from progress where date = ?1", nativeQuery = true)
     public Optional<List<Progress>> findByDate(String date);
 
-    @Query(value = "select * from progress where growth_id = ?1 date = ?2 and user_id = ?3", nativeQuery = true)
+    @Query(value = "select * from progress where growth_id = ?1 and date = ?2 and user_id = ?3 order by progress_id asc limit 1", nativeQuery = true)
     public Optional<Progress> getMine(long growthId, String date, long userId);
 
     @Query(value = "select * from progress where growth_id = ?1 and date = ?2 order by like_cnt desc, progress_id asc limit 1", nativeQuery = true)
