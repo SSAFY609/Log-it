@@ -37,7 +37,7 @@ class StepCategoryServiceTest {
         User user1 = new User(1L, "test1", "test", "1234", 8, "1234", null, false, null);
         User user2 = new User(2L, "test2", "test2", "1234", 8, "1234", null, false, null);
 
-        JobEvent jobEvent = JobEvent.createJobEvent(user1, "company1", "type1", null);
+        JobEvent jobEvent = JobEvent.createJobEvent(user1, "company1", "type1", null,null);
 
         userRepository.save(user1);
         userRepository.save(user2);
@@ -55,7 +55,7 @@ class StepCategoryServiceTest {
         JobEvent jobEvent = jobRepository.findById(1L).get();
 
         //when
-        StepCategory category = StepCategory.createCategory(jobEvent, LocalDate.now(), JobCategory.DOCUMENT);
+        StepCategory category = StepCategory.createCategory(jobEvent, LocalDate.now(), JobCategory.DOCUMENT,"ㅎㅇ");
         StepCategory saveItem = stepCategoryRepository.save(category);
 
         StepCategory findCategory = stepCategoryRepository.findById(saveItem.getId()).get();
@@ -74,12 +74,12 @@ class StepCategoryServiceTest {
         //given
         JobEvent jobEvent = jobRepository.findById(1L).get();
 
-        StepCategory category = StepCategory.createCategory(jobEvent, LocalDate.now(), JobCategory.DOCUMENT);
+        StepCategory category = StepCategory.createCategory(jobEvent, LocalDate.now(), JobCategory.DOCUMENT,"ㅎㅇ");
         StepCategory saveItem = stepCategoryRepository.save(category);
         //when
         StepCategory findCategory = stepCategoryRepository.findById(saveItem.getId()).get();
 
-        findCategory.updateCategory(LocalDate.now().plusDays(1),ResultStatus.FAIL);
+        findCategory.updateCategory(LocalDate.now().plusDays(1),ResultStatus.FAIL,"GOOD");
 
         //then
 

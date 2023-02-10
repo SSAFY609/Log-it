@@ -1,7 +1,6 @@
 package com.ssafy.logit.model.job;
 
 import com.ssafy.logit.exception.DifferentUserException;
-import com.ssafy.logit.model.common.EventDate;
 import com.ssafy.logit.model.common.ResultStatus;
 import com.ssafy.logit.model.job.dto.UpdateJobEventRequest;
 import com.ssafy.logit.model.job.entity.JobEvent;
@@ -56,8 +55,8 @@ class JobServiceTest {
         LocalDate now = LocalDate.now();
         LocalDate tommorow = LocalDate.now().plusDays(1);
 
-        JobEvent jobEvent1 = JobEvent.createJobEvent(user1, "company3", "신입", EventDate.createEventDate(now, tommorow));
-        JobEvent jobEvent2 = JobEvent.createJobEvent(user2, "company4", "인턴", EventDate.createEventDate(now, tommorow));
+        JobEvent jobEvent1 = JobEvent.createJobEvent(user1, "company3", "신입",now,tommorow);
+        JobEvent jobEvent2 = JobEvent.createJobEvent(user2, "company4", "인턴", now,tommorow);
 
         jobRepository.save(jobEvent1);
         jobRepository.save(jobEvent2);
@@ -84,9 +83,9 @@ class JobServiceTest {
         LocalDate now = LocalDate.now();
         LocalDate tommorow = LocalDate.now().plusDays(1);
 
-        JobEvent jobEvent1 = JobEvent.createJobEvent(user1, "company1", "신입", EventDate.createEventDate(now, tommorow));
+        JobEvent jobEvent1 = JobEvent.createJobEvent(user1, "company1", "신입", now, tommorow);
         jobRepository.save(jobEvent1);
-        jobEvent1.updateInfo("회사2", "경력", ResultStatus.INPROGRESS, EventDate.createEventDate(tommorow, tommorow.plusDays(1)));
+        jobEvent1.updateInfo("회사2", "경력", ResultStatus.INPROGRESS, tommorow, tommorow.plusDays(1));
 
 
     }
@@ -101,7 +100,7 @@ class JobServiceTest {
         LocalDate now = LocalDate.now();
         LocalDate tommorow = LocalDate.now().plusDays(1);
 
-        JobEvent jobEvent1 = JobEvent.createJobEvent(user1, "company1", "신입", EventDate.createEventDate(now, tommorow));
+        JobEvent jobEvent1 = JobEvent.createJobEvent(user1, "company1", "신입", now,tommorow);
         jobRepository.save(jobEvent1);
 
         jobRepository.delete(jobEvent1);
@@ -119,11 +118,11 @@ class JobServiceTest {
         LocalDate now = LocalDate.now();
         LocalDate tommorow = LocalDate.now().plusDays(1);
         //when
-        JobEvent jobEvent1 = JobEvent.createJobEvent(user1, "company1", "신입", EventDate.createEventDate(now, tommorow));
-        JobEvent jobEvent2 = JobEvent.createJobEvent(user1, "company1", "신입", EventDate.createEventDate(now, tommorow));
-        JobEvent jobEvent3 = JobEvent.createJobEvent(user1, "company1", "신입", EventDate.createEventDate(now, tommorow));
-        JobEvent jobEvent4 = JobEvent.createJobEvent(user1, "company1", "신입", EventDate.createEventDate(now, tommorow));
-        JobEvent jobEvent5 = JobEvent.createJobEvent(user1, "company1", "신입", EventDate.createEventDate(now, tommorow));
+        JobEvent jobEvent1 = JobEvent.createJobEvent(user1, "company1", "신입", now, tommorow);
+        JobEvent jobEvent2 = JobEvent.createJobEvent(user1, "company1", "신입", now, tommorow);
+        JobEvent jobEvent3 = JobEvent.createJobEvent(user1, "company1", "신입", now, tommorow);
+        JobEvent jobEvent4 = JobEvent.createJobEvent(user1, "company1", "신입", now, tommorow);
+        JobEvent jobEvent5 = JobEvent.createJobEvent(user1, "company1", "신입", now, tommorow);
 
         jobRepository.save(jobEvent1);
         jobRepository.save(jobEvent2);
@@ -145,11 +144,11 @@ class JobServiceTest {
         LocalDate now = LocalDate.now();
         LocalDate tommorow = LocalDate.now().plusDays(1);
 
-        JobEvent jobEvent1 = JobEvent.createJobEvent(user1, "company1", "신입", EventDate.createEventDate(now, tommorow));
+        JobEvent jobEvent1 = JobEvent.createJobEvent(user1, "company1", "신입", now, tommorow);
         JobEvent save = jobRepository.save(jobEvent1);
         Long jobEventID = save.getId();
         //when
-        UpdateJobEventRequest request = new UpdateJobEventRequest("회사(UPdated)", "type(updated)", ResultStatus.PASS, EventDate.createEventDate(now, tommorow));
+        UpdateJobEventRequest request = new UpdateJobEventRequest("회사(UPdated)", "type(updated)", ResultStatus.PASS, now, tommorow);
 
         //then
         //다른 유저가 업데이트 시도
@@ -167,7 +166,7 @@ class JobServiceTest {
         LocalDate tommorow = LocalDate.now().plusDays(1);
 
         //when
-        JobEvent jobEvent1 = JobEvent.createJobEvent(user1, "company1", "신입", EventDate.createEventDate(now, tommorow));
+        JobEvent jobEvent1 = JobEvent.createJobEvent(user1, "company1", "신입", now, tommorow);
         JobEvent save = jobRepository.save(jobEvent1);
         Long jobEventID = save.getId();
 
