@@ -2,7 +2,7 @@
   <div class="container">
     <div class="event-list" >
       <!-- <h1>{{ allJob.data[0].id }}</h1> -->
-      <div @click="goJobDetail(item.id)" v-for="item in allJob.data" :key="item" class="event hover_cursor">
+      <div v-for="item in allJob.data" :key="item" class="event hover_cursor" @click="goJobDetail(item.id)">
         <div class="event-title">{{ item.companyName }}</div>
         <div class="event-date">{{ date_to_str(item.startDate, item.endDate) }}</div>
         <v-chip v-if="item.resultStatus" variant="outlined" color="rgb(27, 182, 40)">완료</v-chip>

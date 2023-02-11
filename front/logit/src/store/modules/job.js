@@ -32,7 +32,15 @@ const job = {
             })
             
 
-        }
+        },
+        // 취업여정이벤트 첫 세팅
+        jobSetting({dispatch}, jobId){
+            dispatch('getGrowthUsers', jobId)
+            dispatch('getFirstProgress', jobId)
+            dispatch('getLikeProgress', jobId)
+            dispatch('getLog', jobId)
+            dispatch('getGrowth', jobId)
+        },
 
         
     },

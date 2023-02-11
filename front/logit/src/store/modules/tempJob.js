@@ -284,6 +284,7 @@ const tempJob = {
 
         GET_JOB(state, payload) {
             state.jobs = payload
+            router.push({name: 'JobProgress'})
         },
 
     },
@@ -304,11 +305,7 @@ const tempJob = {
 
 
         getJob({commit}, jobId) {
-            axiosConnector.get('job/get', {
-                params: {
-                    jobId : jobId
-                }
-            }
+            axiosConnector.get(`job/${jobId}`
             ).then((res)=> {
                 commit('GET_DATAS', res.data)
             }).catch((err)=> {
@@ -337,8 +334,16 @@ const tempJob = {
                 dispatch('getJob',datas.jobId)
             }).catch((err)=> {
                 console.log('createJob 에러')
-                console.log(err)
+                console.log (err)
             })
+        },
+        // 취업여정이벤트 첫 세팅
+        jobSetting({dispatch}, jobId){
+            dispatch('getGrowthUsers', jobId)
+            dispatch('getFirstProgress', jobId)
+            dispatch('getLikeProgress', jobId)
+            dispatch('getLog', jobId)
+            dispatch('getGrowth', jobId)
         },
 
         
