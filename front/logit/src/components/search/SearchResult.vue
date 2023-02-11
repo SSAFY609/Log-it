@@ -12,19 +12,45 @@
         추천 검색어 : 알고리즘 | 스터디 | 코딩 | 자기소개서
       </div>
       <div class="result">
-        <div class="result-cnt">총 {{ searchResult[0].length + searchResult[1].length + searchResult[2].length }}개의 검색 결과</div>
+        <div class="result-cnt">총 {{ growths.length + jobs.length + users.length }}개의 검색 결과</div>
         <v-divider></v-divider>
         <div class="growth">
-          <div>성장일지</div>
-          <div v-for="item in searchResult[0]" :key="item.id"></div>
+          <div class="title">성장일지</div>
+          <div></div>
+          <div v-for="growth in growths" :key="growth.id">
+            <div>{{ growth.id }}</div>
+            <div style="display:flex;">
+              <div>{{ growth.preStr }}</div>
+              <div class="keyword">{{ growth.keyword }}</div>
+              <div>{{ growth.nextStr }}</div>
+            </div> 
+          </div>
         </div>
         <v-divider></v-divider>
         <div class="job">
-          <div>취업일지</div>
+          <div class="title">취업일지</div>
+          <div></div>
+          <div v-for="job in jobs" :key="job.id">
+            <div>{{ job.id }}</div>
+            <div style="display:flex;">
+              <div>{{ job.preStr }}</div>
+              <div class="keyword">{{ job.keyword }}</div>
+              <div>{{ job.nextStr }}</div>
+            </div> 
+          </div>
         </div>
         <v-divider></v-divider>
         <div class="user">
-          <div>사용자</div>
+          <div class="title">사용자</div>
+          <div></div>
+          <div v-for="user in users" :key="user.id">
+            <div>{{ user.id }}</div>
+            <div style="display:flex;">
+              <div>{{ user.preStr }}</div>
+              <div class="keyword">{{ user.keyword }}</div>
+              <div>{{ user.nextStr }}</div>
+            </div> 
+          </div>
         </div>
       </div>
     </div>
@@ -40,50 +66,67 @@
       // },
       data() {
         return {
-          searchResult: [
-            [{
-                "type": "성장 여정 이벤트",
-                "id": 13,
-                "content": "알고리즘",
-                "userEmail": null,
-                "userName": null,
-                "userProfile": null
-            },
-            {
-                "type": "성장 과정",
-                "id": 15,
-                "content": "알고리즘 공부 열시미 했어용",
-                "userEmail": null,
-                "userName": null,
-                "userProfile": null
-            },
-            {
-                "type": "성장 과정",
-                "id": 20,
-                "content": "저두 알고리즘 공부 열시미 했어용",
-                "userEmail": null,
-                "userName": null,
-                "userProfile": null
-            },
-            {
-                "type": "성장 과정",
-                "id": 28,
-                "content": "안녕하세요 저는 김설희입니다. 오늘은 알고리즘을 공부했",
-                "userEmail": null,
-                "userName": null,
-                "userProfile": null
-            }],
-            [{
-                "type": "취업 여정 기업명",
-                "id": 29,
-                "content": "알고리즘 회사",
-                "userEmail": null,
-                "userName": null,
-                "userProfile": null
-            }],
-            []
+          growths: [
+              {
+                  "type": "성장 과정",
+                  "id": 7,
+                  "preStr": "",
+                  "keyword": "알고",
+                  "nextStr": "리즘 열심히 해야됩니다. 생각보다 더 어렵습니다. ",
+                  "userEmail": null,
+                  "userName": null,
+                  "userProfile": null,
+                  "long": false
+              },
+              {
+                  "type": "성장 과정",
+                  "id": 8,
+                  "preStr": "를 했습니다. ",
+                  "keyword": "알고",
+                  "nextStr": "리즘은 내일 더 열심",
+                  "userEmail": null,
+                  "userName": null,
+                  "userProfile": null,
+                  "long": false
+              },
+              {
+                  "type": "성장 과정",
+                  "id": 9,
+                  "preStr": "를 했습니다. ",
+                  "keyword": "알고",
+                  "nextStr": "리즘은 내일 더 열심",
+                  "userEmail": null,
+                  "userName": null,
+                  "userProfile": null,
+                  "long": false
+              }
           ],
-          
+          jobs: [
+              {
+                  "type": "취업 여정 기업명",
+                  "id": 2,
+                  "preStr": "",
+                  "keyword": "알고",
+                  "nextStr": "리즘 회사",
+                  "userEmail": null,
+                  "userName": null,
+                  "userProfile": null,
+                  "long": false
+              }
+          ],
+          users: [
+              {
+                  "type": "회원 이름",
+                  "id": 5,
+                  "preStr": "",
+                  "keyword": "알고",
+                  "nextStr": "리즘러버",
+                  "userEmail": "love_algorithm@naver.com",
+                  "userName": "알고리즘러버",
+                  "userProfile": "1",
+                  "long": false
+              }
+          ],          
         }
       }
   }
@@ -143,7 +186,7 @@
    input:focus {
       outline: none;
       margin-top: 60px;
-      width: 1200px;
+      width: 1000px;
       
    }
 
@@ -166,5 +209,18 @@
 
    .result-cnt {
     text-align: right;
+   }
+
+   hr {
+    margin-bottom: 10px;
+   }
+
+   .title {
+    /* font-size: 20px; */
+    margin-bottom: 10px;
+   }
+
+   .keyword {
+    color: #FF0A54;
    }
   </style>
