@@ -4,18 +4,7 @@ import router from "@/router";
 import axiosConnector from "@/utils/axios-connector";
 import axiosConnectorFormData from "@/utils/axios-connector-formData";
 
-// import { useRouter } from "vue-router";
-// import temp from './modules/temp.js'
-// import event from './modules/event.js'
-// import timeline from './modules/timeline.js'
-
-// const getToken = () => {
-//   const token = sessionStorage.getItem("token");
-//   return {
-//     Authorization: `bearer ${token}`,
-//   };
-// }; 
-
+// 모듈 import
 import temp from './modules/temp.js'
 import growth from "./modules/growth.js";
 import timeline from "./modules/timeline.js";
@@ -26,7 +15,8 @@ const baseURL = "http://localhost:9090/user";
 export default createStore({
 
   state: {
-    loginUser : {}
+    loginUser : {},
+    sidebar: true,
   },
   getters: {},
   mutations: {
@@ -50,6 +40,12 @@ export default createStore({
       console.log(state.loginUser);
       router.push({ name: "ProfilePage" });
     },
+    OPEN_SIDEBAR(state){
+      state.sidebar = true;
+    },
+    CLOSE_SIDEBAR(state){
+      state.sidebar = false;
+    },
   },
   actions: {
     // 유저 로그인
@@ -69,12 +65,9 @@ export default createStore({
             alert("로그인에 실패하였습니다.")
             return
           }
-          alert("로그인 성공했어 ~")
-          console.log(res);
           commit("LOGIN_USER", res.data);
         })
         .catch((err) => {
-          alert("으악!!!!!!! 로그인 실패");
           console.log(err);
         });
     },
@@ -87,42 +80,26 @@ export default createStore({
         data: user,
       })
         .then(() => {
-          alert("회원가입 성공했어 ~😚");
           dispatch("login", user);
           router.push({ name: "UserSignupComplete" });
         })
         .catch((err) => {
-          alert("으악!!!!!!! 회원가입 실패");
           console.log(err);
         });
     },
 
-    // signup({dispatch}, user) {
-    //   axiosConnector
-    //     .post("user/regist", user)
-    //     .then(() => {
-    //       alert("회원가입 성공했어 ~ ^^ ");
-    //       dispatch("login", user);
-    //       router.push({ name: "UserSignupComplete" });
-    //     })
-    //     .catch((err) => {
-    //       alert("회원가입 실패했어 ~!!!");
-    //       console.log(err);
-    //     });
-    // },
     // 유저 로그아웃하기
     logout({ commit }) {
       axiosConnector
         .post("user/logout")
         .then(() => {
-          console.log("성공했어 ~크크큭 😋");
           commit("LOG_OUT");
         })
         .catch((err) => {
-          alert("으악!!!!!!! 로그아웃 실패");
           console.log(err);
         });
     },
+
     // 비밀번호 변경하기 => 고쳐야함
     // updataPassword.vue에 작성
 
@@ -154,32 +131,24 @@ export default createStore({
         .post("user/uploadImage", formData)
         .then((res) => { 
           if (res.data == "success") {
-            alert("이미지 업로드 성공 했쓰어 ~~");
             dispatch("getUser");
           }
-          console.log(res.data)
         })
         .catch((err) => { 
-          alert("이미지 업로드 실패했어....😥😥😥😥😥😥😥😥😥😥😥😥");
           console.log(err);
         })
     },
 
     uploadFile({ dispatch}, formData) {
-      // let response = await axiosConnectorFormData.post("user/uploadFile", formData)
-      // console.log(response);
-      // return response;
       axiosConnectorFormData
         .post("user/uploadFile", formData)
         .then((res) => { 
           if (res.data == "success") {
-            alert("파일 업로드 성공 했쓰어 ~~");
             dispatch("getUser");
           }
           console.log(res.data)
         })
         .catch((err) => { 
-          alert("이미지 업로드 실패했어....😥😥😥😥😥😥😥😥😥😥😥😥");
           console.log(err);
         })
     },
@@ -191,11 +160,8 @@ export default createStore({
         .post("user", user)
         .then((res) => {
           if (res.data.result == "사용자 없음") {
-            console.log("사용자가 없습니다~(업데이트 실패)");
             return
           }       
-            console.log(res.data)
-            console.log("유저 정보 업데이트 성공해쓰어 ~");
             dispatch("getUser");
         })
         .catch((err) =>{ 
@@ -209,14 +175,22 @@ export default createStore({
       axiosConnector
         .get("user")
         .then((res) => {
-          alert("사용자 정보 가져오기 성공이유 ~")
           commit("GET_USER", res.data);
         })
         .catch((err) => {
-          alert("여기서 실패 헀스니다.");
           console.log(err);
         });
     },
+
+    // sidebar 열기
+    openSidebar({commit}){
+      commit('OPEN_SIDEBAR');
+    },
+    // sidebar 닫기
+    closeSidebar({commit}){
+      commit('CLOSE_SIDEBAR');
+    },
+
   },
 
   modules: {

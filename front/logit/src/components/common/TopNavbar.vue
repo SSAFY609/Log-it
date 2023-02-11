@@ -77,7 +77,7 @@ export default {
       eventTarget2.classList.toggle('nosee')
 
 
-      store.dispatch(`temp/openSidebar`)
+      store.dispatch(`openSidebar`)
 
     }
     const openProfile = () => {

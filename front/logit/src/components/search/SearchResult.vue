@@ -16,40 +16,68 @@
         <v-divider></v-divider>
         <div class="growth">
           <div class="title">성장일지</div>
-          <div></div>
-          <div v-for="growth in growths" :key="growth.id">
-            <div>{{ growth.id }}</div>
-            <div style="display:flex;">
-              <div>{{ growth.preStr }}</div>
-              <div class="keyword">{{ growth.keyword }}</div>
-              <div>{{ growth.nextStr }}</div>
-            </div> 
+          <div v-for="growth in growths" :key="growth.id" class="result-one">
+            <div v-if="growth.type == '성장 여정 이벤트'">
+              <div class="eventName">
+                <div>{{ growth.preStr }}</div>
+                <div class="keyword">{{ growth.keyword }}</div>
+                <div>{{ growth.nextStr }}</div>
+              </div>
+              <div class="eventDate">
+                {{ growth.startDate }} ~ {{ growth.endDate }}
+              </div>
+            </div>
+            <div v-else>
+              <div class="eventName">
+                {{ growth.eventName }}
+              </div>
+              <div class="progress">
+                ...
+                <div>{{ growth.preStr }}</div>
+                <div class="keyword">{{ growth.keyword }}</div>
+                <div>{{ growth.nextStr }}</div>
+                ...
+              </div> 
+            </div>
           </div>
         </div>
+        <div class="spacer"></div>
         <v-divider></v-divider>
         <div class="job">
           <div class="title">취업일지</div>
           <div></div>
-          <div v-for="job in jobs" :key="job.id">
-            <div>{{ job.id }}</div>
-            <div style="display:flex;">
-              <div>{{ job.preStr }}</div>
-              <div class="keyword">{{ job.keyword }}</div>
-              <div>{{ job.nextStr }}</div>
-            </div> 
+          <div v-for="job in jobs" :key="job.id" class="result-one">
+            <div v-if="job.type == '취업 여정 기업명'">
+              <div class="eventName">
+                <div>{{ job.preStr }}</div>
+                <div class="keyword">{{ job.keyword }}</div>
+                <div>{{ job.nextStr }}</div>
+              </div>
+              <div class="eventDate">
+                {{ job.startDate }} ~ {{ job.endDate }}
+              </div>
+            </div>
           </div>
         </div>
+        <div class="spacer"></div>
         <v-divider></v-divider>
         <div class="user">
           <div class="title">사용자</div>
           <div></div>
-          <div v-for="user in users" :key="user.id">
-            <div>{{ user.id }}</div>
-            <div style="display:flex;">
-              <div>{{ user.preStr }}</div>
-              <div class="keyword">{{ user.keyword }}</div>
-              <div>{{ user.nextStr }}</div>
-            </div> 
+          <div v-for="user in users" :key="user.id" class="result-one">
+            <div class="result-user">
+              <div class="user-image">
+                <img :src="require(`@/assets/profiles/scale (${user.userProfile}).png`)">
+              </div>
+              <div>
+                <div class="eventName">
+                  <div>{{ user.preStr }}</div>
+                  <div class="keyword">{{ user.keyword }}</div>
+                  <div>{{ user.nextStr }}</div>
+                </div>
+                <div class="user-email">{{ user.userEmail }}</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -68,51 +96,63 @@
         return {
           growths: [
               {
-                  "type": "성장 과정",
-                  "id": 7,
+                  "type": "성장 여정 이벤트",
+                  "id": 12,
                   "preStr": "",
                   "keyword": "알고",
-                  "nextStr": "리즘 열심히 해야됩니다. 생각보다 더 어렵습니다. ",
+                  "nextStr": "리즘 스터디",
                   "userEmail": null,
                   "userName": null,
                   "userProfile": null,
+                  "startDate": "2023-02-15",
+                  "endDate": "2023-02-20",
+                  "eventName": null,
                   "long": false
               },
               {
                   "type": "성장 과정",
-                  "id": 8,
-                  "preStr": "를 했습니다. ",
+                  "id": 14,
+                  "preStr": "",
                   "keyword": "알고",
-                  "nextStr": "리즘은 내일 더 열심",
+                  "nextStr": "리즘 공부하고 싶지 않아서 안했습니다. 다음",
                   "userEmail": null,
                   "userName": null,
                   "userProfile": null,
-                  "long": false
+                  "startDate": null,
+                  "endDate": null,
+                  "eventName": "알고리즘 스터디",
+                  "long": true
               },
               {
                   "type": "성장 과정",
-                  "id": 9,
-                  "preStr": "를 했습니다. ",
+                  "id": 15,
+                  "preStr": ". 전 그냥 ",
                   "keyword": "알고",
-                  "nextStr": "리즘은 내일 더 열심",
+                  "nextStr": "리즘이나 풀게요ㅜㅜ",
                   "userEmail": null,
                   "userName": null,
                   "userProfile": null,
-                  "long": false
+                  "startDate": null,
+                  "endDate": null,
+                  "eventName": "cs 스터디",
+                  "long": true
               }
           ],
           jobs: [
-              {
-                  "type": "취업 여정 기업명",
-                  "id": 2,
-                  "preStr": "",
-                  "keyword": "알고",
-                  "nextStr": "리즘 회사",
-                  "userEmail": null,
-                  "userName": null,
-                  "userProfile": null,
-                  "long": false
-              }
+            {
+                "type": "취업 여정 기업명",
+                "id": 16,
+                "preStr": "",
+                "keyword": "알고",
+                "nextStr": "리즘 회사",
+                "userEmail": null,
+                "userName": null,
+                "userProfile": null,
+                "startDate": null,
+                "endDate": null,
+                "eventName": null,
+                "long": false
+            }
           ],
           users: [
               {
@@ -124,6 +164,9 @@
                   "userEmail": "love_algorithm@naver.com",
                   "userName": "알고리즘러버",
                   "userProfile": "1",
+                  "startDate": null,
+                  "endDate": null,
+                  "eventName": null,
                   "long": false
               }
           ],          
@@ -202,6 +245,7 @@
    }
 
    .result {
+    display: none;
     width: 97%;
     margin-top: 30px;
     margin-left: 32px;
@@ -217,10 +261,48 @@
 
    .title {
     /* font-size: 20px; */
-    margin-bottom: 10px;
+    margin-bottom: 20px;
    }
 
    .keyword {
     color: #FF0A54;
+   }
+
+   .result-one {
+    margin-bottom: 20px;
+   }
+
+   .eventName {
+    font-size: 24px;
+    font-family: appleM;
+    display: flex;
+    cursor: pointer;
+   }
+
+   .eventName:hover {
+    font-family: appleB;
+   }
+
+   .eventDate {
+    margin-left: 10px;
+   }
+
+   .progress {
+    display: flex;
+    margin-left: 10px;
+   }
+
+   .result-user {
+    display: flex;
+   }
+
+   .user-image img{
+    height: 60px;
+    width: 60px;
+    margin-right: 20px;
+   }
+
+   .spacer {
+    height: 30px;
    }
   </style>

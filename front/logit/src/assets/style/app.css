@@ -254,4 +254,7 @@ ul, li {
   padding-left:0px;
 }
 
+.v-snackbar__content {
+  text-align: center;
+}
 /* alert 창을 위한 CSS */
