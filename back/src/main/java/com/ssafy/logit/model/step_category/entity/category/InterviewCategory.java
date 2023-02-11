@@ -1,5 +1,7 @@
 package com.ssafy.logit.model.step_category.entity.category;
 
+import com.ssafy.logit.exception.WrongCategoryException;
+
 public enum InterviewCategory {
     NETWORK("네트워크"),
     DATABASE("데이터베이스"),
@@ -13,6 +15,16 @@ public enum InterviewCategory {
 
     InterviewCategory(String value) {
         this.value = value;
+    }
+
+    // String -> enum 변환
+    public static InterviewCategory nameOf(String value){
+        for(InterviewCategory category : InterviewCategory.values()){
+            if(category.getValue().equals(value)){
+                return category;
+            }
+        }
+        return InterviewCategory.ETC; // default 기타
     }
 
     public String getValue() {

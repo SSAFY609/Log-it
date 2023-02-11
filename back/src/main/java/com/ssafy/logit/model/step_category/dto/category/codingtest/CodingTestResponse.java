@@ -17,13 +17,13 @@ public class CodingTestResponse {
     private String content;
 
     @Schema(description = "알고리즘 분류" )
-    private AlgoCategory category;
+    private String category;
 
     // 생성자
     public CodingTestResponse(CodingTest codingTest) {
         this.id = codingTest.getId();
         this.content = codingTest.getContent();
-        this.category = codingTest.getAlgoCategory();
+        this.category = codingTest.getAlgoCategory().getValue();
     }
 
 }

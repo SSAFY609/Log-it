@@ -2,12 +2,15 @@ package com.ssafy.logit.model.step_category.service.category;
 
 import com.ssafy.logit.exception.DifferentUserException;
 import com.ssafy.logit.exception.WrongCategoryException;
+import com.ssafy.logit.model.step_category.dto.category.entire.AllCategoryRequest;
 import com.ssafy.logit.model.step_category.dto.category.interview.CreateInterviewRequest;
 import com.ssafy.logit.model.step_category.dto.category.interview.InterviewCategoryStatistics;
 import com.ssafy.logit.model.step_category.dto.category.interview.UpdateInterviewRequest;
 import com.ssafy.logit.model.step_category.entity.JobCategory;
 import com.ssafy.logit.model.step_category.entity.StepCategory;
+import com.ssafy.logit.model.step_category.entity.category.CodingTest;
 import com.ssafy.logit.model.step_category.entity.category.Interview;
+import com.ssafy.logit.model.step_category.entity.category.InterviewCategory;
 import com.ssafy.logit.model.step_category.repository.category.InterviewRepository;
 import com.ssafy.logit.model.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -93,6 +96,22 @@ public class InterviewService {
                 interviewRepository.save(interview);
             }else{
                 update(user, request.getInterviewId(), request);
+            }
+        }
+    }
+
+    @Transactional
+    public void createUpdateAll(StepCategory stepCategory, List<AllCategoryRequest> list) {
+        for (AllCategoryRequest request : list) {
+            InterviewCategory category = InterviewCategory.nameOf(request.getCategory());
+            if(request.getId()==null){
+                Interview interview = Interview.create(stepCategory, request.getQuestion(),request.getAnswer(),category);
+                interviewRepository.save(interview);
+            }else{
+                System.out.println("inteviewId = " + request.getId());
+                Interview interview = interviewRepository.findById(request.getId()).orElseThrow(NoSuchElementException::new);
+                System.out.println("여기가 에러임");
+                interview.update(request.getQuestion(), request.getAnswer(), category);
             }
         }
     }

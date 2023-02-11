@@ -1,11 +1,22 @@
 package com.ssafy.logit.controller.job;
 
 import com.ssafy.logit.model.common.ResultDto;
+import com.ssafy.logit.model.job.dto.CreateJobEventCategoryRequest;
 import com.ssafy.logit.model.job.dto.CreateJobEventRequest;
 import com.ssafy.logit.model.job.dto.CreateJobEventResponse;
 import com.ssafy.logit.model.job.dto.UpdateJobEventRequest;
 import com.ssafy.logit.model.job.entity.JobEvent;
+import com.ssafy.logit.model.job.repository.JobRepository;
 import com.ssafy.logit.model.job.service.JobService;
+import com.ssafy.logit.model.step_category.dto.StepCategoryDto;
+import com.ssafy.logit.model.step_category.dto.category.StepCategoryResultDto;
+import com.ssafy.logit.model.step_category.dto.category.entire.JobEventAllRequest;
+import com.ssafy.logit.model.step_category.entity.StepCategory;
+import com.ssafy.logit.model.step_category.service.StepCategoryService;
+import com.ssafy.logit.model.step_category.service.category.CodingTestService;
+import com.ssafy.logit.model.step_category.service.category.DocumentService;
+import com.ssafy.logit.model.step_category.service.category.InterviewService;
+import com.ssafy.logit.model.step_category.service.category.StepEtcService;
 import com.ssafy.logit.model.user.entity.User;
 import com.ssafy.logit.model.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,8 +28,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -29,11 +42,29 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class JobController {
     private final JobService jobService;
+    private final StepCategoryService stepCategoryService;
     private final UserService userService;
+    private final InterviewService interviewService;
+    private final CodingTestService codingTestService;
+    private final StepEtcService stepEtcService;
+    private final DocumentService documentService;
+    private final JobRepository jobRepository;
 
-    @Operation(summary = "취업 이벤트 생성", description = "취업 이벤트를 생성")
+
+    @Operation(summary = "취업 이벤트 생성", description = "취업 이벤트를 생성합니다. 채용전형이 있는 경우 같이 생성")
     @PostMapping
-    public ResponseEntity<CreateJobEventResponse> create(@RequestAttribute String email, @RequestBody @Validated CreateJobEventRequest request) {
+    public ResponseEntity<CreateJobEventResponse> create(@RequestAttribute String email, @RequestBody @Validated CreateJobEventCategoryRequest request) {
+        User user = getUser(email);
+        JobEvent jobEvent = jobService.createAll(user, request);
+
+        CreateJobEventResponse createJobEventResponse = new CreateJobEventResponse(jobEvent);
+        return new ResponseEntity<>(createJobEventResponse, HttpStatus.CREATED);
+    }
+
+
+    @Operation(summary = "취업 이벤트 순수 생성", description = "취업 이벤트를 생성")
+    @PostMapping("/basic-create")
+    public ResponseEntity<CreateJobEventResponse> basicCreate(@RequestAttribute String email, @RequestBody @Validated CreateJobEventRequest request) {
         User user = getUser(email);
         JobEvent jobEvent = jobService.create(user, request);
         CreateJobEventResponse createJobEventResponse = new CreateJobEventResponse(jobEvent);
@@ -63,6 +94,32 @@ public class JobController {
         return new ResponseEntity<>(createJobEventResponse, HttpStatus.OK);
     }
 
+    @Operation(summary = "jobId의 모든 정보 조회",description = "지원한 기업의 모든 정보를 조회")
+    @GetMapping("/{id}")
+    public ResponseEntity<StepCategoryResultDto> test(@RequestAttribute String email, @PathVariable Long id) {
+        User user = getUser(email);
+        JobEvent jobEvent = jobRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        List<StepCategory> stepCategories = stepCategoryService.findStepCategories(jobEvent);
+
+        List<Object> stepList = stepCategories.stream()
+                .map(o -> stepCategoryService.getStepCategory(o))
+                .collect(Collectors.toList());
+        List<StepCategoryDto> results = new ArrayList<>();
+
+        for (int i = 0; i < stepCategories.size(); i++) {
+            results.add(new StepCategoryDto(stepCategories.get(i), stepList.get(i)));
+        }
+        return new ResponseEntity<>(new StepCategoryResultDto(
+                jobEvent.getId(),
+                jobEvent.getCompanyName(),
+                jobEvent.getResultStatus().getValue(),
+                jobEvent.getStartDate(),
+                jobEvent.getEndDate(),
+                results.size(),
+                results), HttpStatus.OK);
+    }
+
+
     @Operation(summary = "취업 이벤트 삭제", description = "id값을 이용하여 취업 이벤트 삭제합니다.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, String>> delete(@RequestAttribute String email, @PathVariable Long id, @RequestBody @Validated CreateJobEventRequest request) {
@@ -83,6 +140,15 @@ public class JobController {
                 .map(o -> new CreateJobEventResponse(o))
                 .collect(Collectors.toList());
         return new ResponseEntity<>(new ResultDto(collect.size(), collect), HttpStatus.OK);
+    }
+
+
+    @Operation(summary = "취업 이벤트 생성 ", description = "취업이벤트 모두 생성 합니다.")
+    @PostMapping("/post-all")
+    public ResponseEntity<Void> postAll(@RequestAttribute String email, @RequestBody JobEventAllRequest request) {
+        User user = getUser(email);
+        jobService.postAll(user,request);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     private User getUser(String email) {

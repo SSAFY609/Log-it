@@ -17,8 +17,6 @@ public class CreateJobEventResponse {
     @Schema(description = "회사이름")
     private String companyName;
 
-    @Schema(description = "채용 유형", example = "인턴")
-    private String type;
 
     @Schema(description = "결과")
     private ResultStatus resultStatus;
@@ -33,7 +31,6 @@ public class CreateJobEventResponse {
     public CreateJobEventResponse(JobEvent jobEvent) {
         this.id = jobEvent.getId();
         this.companyName = jobEvent.getCompanyName();
-        this.type = jobEvent.getType();
         this.resultStatus = jobEvent.getResultStatus();
         this.startDate = jobEvent.getStartDate();
         this.endDate = jobEvent.getEndDate();

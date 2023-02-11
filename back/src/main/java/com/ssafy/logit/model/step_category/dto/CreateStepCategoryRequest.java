@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.Max;
 import java.time.LocalDate;
 
 @Data
@@ -28,10 +27,6 @@ public class CreateStepCategoryRequest {
     private ResultStatus resultStatus;
     @Schema(description = "전형 분류",example = "CODING")
     private JobCategory jobCategory;
-
-    @Schema(description = "이름 작성",example = "코테 뿌셔버리기")
-    @Max(30)
-    private String name;
 
 
     @JsonSerialize(using = JobCateogorySerializer.class)
