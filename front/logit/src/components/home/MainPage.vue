@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import router from '@/router';
+// import router from '@/router';
 import { mapState } from 'vuex';
 import { onMounted, onBeforeUnmount } from 'vue';
 import { useStore } from 'vuex';
@@ -146,7 +146,7 @@ export default {
     }
 
       return {
-        start,
+        // start,
         state,
         testTimeline,
         writeTitle,

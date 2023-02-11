@@ -64,6 +64,10 @@ export default createStore({
           if (res.data.result == "사용자 없음") { 
             alert("사용자가 없습니다.")
             return
+          }          
+          if (res.data.result == "비밀번호 틀림") { 
+            alert("로그인에 실패하였습니다.")
+            return
           }
           alert("로그인 성공했어 ~")
           console.log(res);
