@@ -2,6 +2,7 @@ package com.ssafy.logit.model.job.service;
 
 
 import com.ssafy.logit.exception.DifferentUserException;
+import com.ssafy.logit.exception.NotPassException;
 import com.ssafy.logit.exception.WrongDateException;
 import com.ssafy.logit.model.common.ResultStatus;
 import com.ssafy.logit.model.job.dto.CreateJobEventCategoryRequest;
@@ -166,6 +167,11 @@ public class JobService {
     public void postAll(User user, JobEventAllRequest request) {
         JobEvent jobEvent = jobRepository.findById(request.getJobId()).orElseThrow(NoSuchElementException::new);
         checkUser(user,jobEvent);
+        ResultStatus jobResultStatus = ResultStatus.nameOf(request.getResultStatus());
+        if(jobResultStatus==ResultStatus.PASS){
+            validateJobResult(jobEvent);
+        }
+        jobEvent.updateInfo(request.getCompanyName(), jobResultStatus, request.getStartDate(), request.getEndDate());
         List<StepCategoryAllRequest> datas = request.getDatas();
         for (StepCategoryAllRequest stepRequest : datas) {
             StepCategory stepCategory;
@@ -191,7 +197,19 @@ public class JobService {
                     break;
             }
         }
+    }
 
+    /**
+     * 모든 채용전형이 합격이어야 해당 기업이 합격이 될 수 있다.
+     * @param jobEvent
+     */
+    private void validateJobResult(JobEvent jobEvent){
+        List<StepCategory> stepCategoryList = jobEvent.getStepCategoryList();
+        for (StepCategory stepCategory : stepCategoryList) {
+            if(stepCategory.getResultStatus()!=ResultStatus.PASS){
+                throw new NotPassException();
+            }
+        }
 
     }
 

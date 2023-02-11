@@ -1,6 +1,7 @@
 package com.ssafy.logit.exHandler.advice;
 
 import com.ssafy.logit.exHandler.ErrorResult;
+import com.ssafy.logit.exception.NotPassException;
 import com.ssafy.logit.exception.WrongDateException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,13 @@ public class JobControllerAdvice {
     public ResponseEntity<ErrorResult> WrongDateHandler(WrongDateException e){
         log.error("[WrongDateException] Handler");
         ErrorResult errorResult = new ErrorResult("WrongDate",e.getMessage());
+        return new ResponseEntity<>(errorResult, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResult> NotPassHandler(NotPassException e){
+        log.error("[NotPassException] Handler");
+        ErrorResult errorResult = new ErrorResult("Step Category Not pass",e.getMessage());
         return new ResponseEntity<>(errorResult, HttpStatus.BAD_REQUEST);
     }
 

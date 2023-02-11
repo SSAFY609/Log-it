@@ -12,6 +12,10 @@ import java.time.LocalDate;
 public class StepCategoryResultDto<T> {
     @Schema(description = "jobEvent id")
     private Long jobId;
+    @Schema(description = "회사 이름")
+    private String companyName;
+    @Schema(description = "진행 상황")
+    private String resultStatus;
     @Schema(description = "시작날짜")
     private LocalDate startDate;
     @Schema(description = "종료날짜")

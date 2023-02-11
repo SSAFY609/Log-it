@@ -111,8 +111,10 @@ public class JobController {
         }
         return new ResponseEntity<>(new StepCategoryResultDto(
                 jobEvent.getId(),
+                jobEvent.getCompanyName(),
+                jobEvent.getResultStatus().getValue(),
                 jobEvent.getStartDate(),
-                jobEvent.getStartDate(),
+                jobEvent.getEndDate(),
                 results.size(),
                 results), HttpStatus.OK);
     }
