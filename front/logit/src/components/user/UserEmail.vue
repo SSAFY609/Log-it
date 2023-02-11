@@ -30,6 +30,8 @@
 </template>
 
 <script>
+import axiosConnector from "@/utils/axios-connector";
+
 export default {
   name: "UserEmail",
   data: () => ({
@@ -63,14 +65,24 @@ export default {
       this.$router.push({ name: "UserPassword" });
     },
 
-    // 이메일 검사 - 유효성 검사, 중복 검사,
+    // 이메일 검사 - 유효성 검사, 중복 검사
     async chkEmail() {
       const validate = await this.$refs.form.validate();
-      // 이메일 유효성 검사 완료하면
+      // 이메일 유효성 검사
       if (validate.valid) {
         // 이메일 중복 검사
-        this.$store.dispatch("chkEmail", this.email);
-        this.email_help = `${this.email}은 사용 가능한 이메일입니다.`;
+        axiosConnector.get("user/check", {
+          params: {
+            email:this.email
+          }
+        })
+          .then((res)=>{
+            console.log(res)
+            this.email_help = `${this.email}은 사용 가능한 이메일입니다.`;
+          }).catch((err)=>{
+            console.log(err);
+            this.email_help = `${this.email}은 사용할 수 없는 이메일입니다.`;
+          })
         document.querySelector(".signup-email-chkText").innerHTML =
           this.email_help;
         document.querySelector(".signup-button").classList.add("color");
@@ -109,7 +121,6 @@ export default {
   text-decoration: underline;
 }
 .signup-button:hover {
-  background-color: #ff0a54;
   cursor: pointer;
 }
 .signup-button:active {

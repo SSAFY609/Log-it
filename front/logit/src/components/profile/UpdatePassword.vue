@@ -1,4 +1,5 @@
 <template>
+   <!-- 프로필 페이지 → 비밀번호 변경 페이지 -->
   <div class="profile-container">
     <div class="profile-title">비밀번호 변경</div>
     <div class="profile-main">
@@ -6,6 +7,7 @@
         <div class="profile-main-form-text">
           <v-form ref="form" v-model="valid" lazy-validation @keyup="chkPw">
             <div class="profile-main-form-text-email">
+          <!-- 비밀번호 입력 창-->
               <div>새 비밀번호를 입력해주세요.</div>
               <v-text-field
                 v-model="password"
@@ -34,19 +36,18 @@
           </v-form>
         </div>
         <div class="profile-main-button">
-          <router-link :to="{ name: 'ProfilePage' }">
+          <div>
             <v-btn
               width="380"
               height="50"
               rounded="lg"
-              color="#FF0A54 "
               class="profile-main-button-user"
-              style="color: white; font-size: 15px; margin-top: 15px"
+              style="font-size: 15px; margin-top: 15px"
               @click="modifyPw"
             >
               다음
             </v-btn>
-          </router-link>
+          </div>
         </div>
       </div>
     </div>
@@ -54,49 +55,95 @@
 </template>
 
 <script>
+import axiosConnectorFormData from "@/utils/axios-connector-formData";
 export default {
   name: "UpdatePassword",
   data: () => ({
-    rules1: {
-      required: (value) => !!value || "",
-      min: (v) => v.length >= 8 || "최소 8자리 이상 입력해주세요.",
-    },
-    name: "이름",
-    email: "asdas@gmail.com",
-    ssafyNum: "084182",
-    model: null,
-    photo: false,
-    password: "",
-    show1: false,
-    show2: false,
-    password_tmp: "",
+    // 비밀번호 유효성 검사 규칙
+      rules1: {
+        required: (value) => !!value || "",
+        min: (v) => v.length >= 8 || "최소 8자리 이상 입력해주세요.",
+      },
+      model: null,
+      password: "",
+      show1: false,
+      show2: false,
+      password_tmp: "",
+      pw: "",
+      email: "",
+    
   }),
   methods: {
-    onShow() {
-      this.photo = !this.photo;
-    },
+    // '다음' 버튼
+    //  비밀번호를 서버에 보내서 사용자 비밀번호 업데이드
     modifyPw() {
-      if (!this.password_tmp.trim()) {
-        alert("입력된 암호가 없습니다.");
+      // 비밀번호 입력했는지 검사
+      if (!this.password.trim() || !this.password_tmp.trim()) {
+        alert("입력한 비밀번호가 없습니다.");
         return;
       }
       if (
-        !document.querySelector(".password-button").classList.contains("color")
+        !document
+          .querySelector(".profile-main-button-user")
+          .classList.contains("color")
       ) {
-        alert("입력된 암호가 일치하지 않습니다.");
+        alert("입력한 비밀번호가 일치하지 않습니다.");
         return;
       }
-      this.$router.push({ name: "ProfilePage" });
+      // 비밀번호 변경 → 1. 비밀번호를 formData에 담는다
+      const formData = new FormData();
+      formData.append('pw', this.password_tmp);
+      // 비밀번호 변경 → 2. formData를 서버에 보낸다
+      axiosConnectorFormData.post("user/pw_change", formData
+        ).then((res) => {
+           console.log(res)
+            if (res.data == "success") {
+            alert("비밀번호가 변경되었습니다.")
+            }
+        }).catch((err) => {
+            alert("비밀번호 변경이 실패하였습니다.")
+            console.log(err)
+         })
+        this.$router.push({ name: "ProfilePage" });
     },
+
+    // 비밀번호 유효성 검사
+      async chkPw () {
+        const validate = await this.$refs.form.validate();
+        if (validate.valid) {
+          if (this.password == this.password_tmp) {
+            document
+              .querySelector(".profile-main-button-user")
+              .classList.add("color");
+          }
+        } else {
+          document
+            .querySelector(".profile-main-button-user")
+            .classList.remove("color");
+        }
+      }
   },
-};
+  mounted() {
+    const loginUser = this.$store.state.loginUser;
+    this.email = loginUser.email;
+    console.log("여기까지왔숨다")
+  },
+}
+
+
 </script>
 
 <style scoped>
+.profile-main-button-user {
+  background-color: #ededed;
+  color: white;
+}
+.color {
+  background-color: #ff0a54 !important;
+}
 .img_box {
   width: 200px;
   margin: 100px;
-  background-color: red;
 }
 .hover_bigger {
   height: 110px;

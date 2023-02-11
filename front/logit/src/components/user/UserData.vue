@@ -7,7 +7,7 @@
           &nbsp;&nbsp;사용자 이름을 입력해주세요.
         </div>
         <v-text-field
-          v-model="userName"
+          v-model="state.userName"
           name="input-10-1"
           label="예) 홍길동"
           counter
@@ -16,17 +16,17 @@
           &nbsp;&nbsp;SSAFY 학번을 입력해주세요.
         </div>
         <v-text-field
-          v-model="ssafyNum"
+          v-model="state.ssafyNum"
           name="input-10-1"
           :rules="[rules1.required, rules1.min]"
           label="예) 080000"
           counter
         ></v-text-field>
-        <router-link @click="signup" :to="{ name: 'UserSignupComplete' }">
+        <div @click="signup">
           <div class="data-button b_lightgray_l">
-            <div>게정 생성</div>
+            <div>계정 생성</div>
           </div>
-        </router-link>
+        </div>
         <div class="data-link">
           <span class="data-link-Email"> 뒤로가기</span>
         </div>
@@ -36,24 +36,35 @@
 </template>
 
 <script>
+import { useStore } from "vuex";
+import { reactive} from "vue"
 export default {
+
   name: "UserData",
   props: ["user"],
   setup(props, { emit }) {
+    const store = useStore();
+    const state = reactive({
+      userName: "",
+      ssafyNum: "",
+    });
+
     const signup = () => {
-      emit("updateUserData", this.userName, this.ssafyNum);
-      // const user = {
-      //   email: props.user.email,
-      //   pw: props.user.pw,
-      //   image: props.user.profile,
-      //   name: props.user.uName,
-      //   studentNo: props.user.sfNum,
-      //   flag: 1,
-      //   isDeleted: 0,
-      // };
-      // store.dispatch("signup", user);
+      emit("updateUserData", state.userName, state.ssafyNum);
+      const user = {
+        email: props.user.email,
+        pw: props.user.password,
+        image: (props.user.profile).toString(),
+        name: props.user.uName,
+        studentNo: props.user.sfNum,
+        flag: parseInt(props.user.sfNum.substr(1,1)),
+        isDeleted: 0,
+      };
+      console.log(user)
+      store.dispatch("signup", user);
     };
     return {
+      state,
       signup,
     };
   },
@@ -61,10 +72,8 @@ export default {
   data: () => ({
     rules1: {
       required: (value) => !!value || "",
-      min: (v) => v.length >= 6 || "학번을 정확히 입력해주세요..",
+      min: (v) => v.length >= 6 || "학번을 정확히 입력해주세요.",
     },
-    userName: "",
-    ssafyNum: "",
   }),
   methods: {
     async chkPw() {
@@ -105,7 +114,6 @@ Email {
   text-decoration: underline;
 }
 .data-button:hover {
-  background-color: #ff0a54;
   cursor: pointer;
 }
 .data-button:active {

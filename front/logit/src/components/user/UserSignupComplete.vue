@@ -7,27 +7,39 @@
         {{ state.uName }}님의 회원가입 축하드립니다.
       </div>
     </div>
-    <router-link :to="{ name: 'MainPage' }" class="signup-button b_lightgray_l">
+    <div @click="toMain" class="signup-button b_lightgray_l">
       <div>시작하기</div>
-    </router-link>
+    </div>
   </div>
 </template>
 
 <script>
+
 import { reactive, onBeforeMount } from "vue";
+import { useStore } from "vuex";
 
 export default {
   name: "UserSignupComplete",
   props: ["user"],
   setup(props) {
     const state = reactive({
-      uName: "메렁",
+      uName: "",
     });
+
+    const store = useStore()
 
     onBeforeMount(() => {
       state.uName = props.user.uName;
     });
+    const toMain = () => {
+      const user = {
+        email: props.user.email,
+        pw:props.user.password,
+      }
+      store.dispatch('login', user);
+    }
     return {
+      toMain,
       state,
     };
   },

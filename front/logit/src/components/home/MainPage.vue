@@ -42,16 +42,18 @@
 </template>
 
 <script>
+// import router from '@/router';
 import { mapState } from 'vuex';
 import { onMounted, onBeforeUnmount } from 'vue';
 import { useStore } from 'vuex';
 
-export default {
+export default {  
     name: 'MainPage',
     setup() {
       const state = {
         loginUser: {name: '이성훈'},
       }
+
 
       // let observe = new IntersectionObserver((e)=>{
       //   e.forEach((box)=>{
@@ -144,6 +146,7 @@ export default {
     }
 
       return {
+        // start,
         state,
         testTimeline,
         writeTitle,
@@ -154,7 +157,7 @@ export default {
     computed: { 
       ...mapState(['loginUser'])
   },
-  
+
 }
 </script>
 
