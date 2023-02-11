@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import SearchView from '../views/SearchView.vue'
-import EventView from '../views/EventView.vue'
+import GrowthView from '../views/GrowthView.vue'
 import JobView from '../views/JobView.vue'
 import ProfileView from '../views/ProfileView.vue'
 import UserView from '../views/UserView.vue'
@@ -10,11 +10,12 @@ import MainPage from '../components/home/MainPage.vue'
 import FirstTimeline from '../components/home/FirstTimeline.vue'
 import TimeLine from '../components/home/TimeLine.vue'
 import SearchResult from '../components/search/SearchResult.vue'
-import EventList from '../components/event/EventList.vue'
-import EventCreate from '../components/event/EventCreate.vue'
-import EventProgress from '../components/event/EventProgress.vue'
-import ProgressCreate from '../components/event/ProgressCreate.vue'
-import ProgressDetail from '../components/event/ProgressDetail.vue'
+import GrowthList from '../components/growth/GrowthList.vue'
+import GrowthCreate from '../components/growth/GrowthCreate.vue'
+import GrowthProgress from '../components/growth/GrowthProgress.vue'
+import ProgressCreate from '../components/growth/ProgressCreate.vue'
+import ProgressDetail from '../components/growth/ProgressDetail.vue'
+import ProgressUpdate from '../components/growth/ProgressUpdate.vue'
 import JobCreate from '../components/job/JobCreate.vue'
 import JobList from '../components/job/JobList.vue'
 import JobProgress from '../components/job/JobProgress.vue'
@@ -73,35 +74,42 @@ const router = createRouter({
       ],
     },
     {
-      path: "/event",
-      name: "EventView",
-      component: EventView,
+      path: "/growth",
+      name: "GrowthView",
+      component: GrowthView,
       children: [
         {
           path: "",
-          name: "EventList",
-          component: EventList,
+          name: "GrowthList",
+          component: GrowthList,
         },
         {
           path: 'create',
-          name: 'EventCreate',
-          component: EventCreate,
+          name: 'GrowthCreate',
+          component: GrowthCreate,
           props: true,
         },
         {
-          path: ':eventId',
-          name: 'EventProgress',
-          component: EventProgress
-        },
-        {
-          path: ":eventId/create",
-          name: "ProgressCreate",
-          component: ProgressCreate,
-        },
-        {
-          path: ":eventId/:progressId",
-          name: "ProgressDetail",
-          component: ProgressDetail,
+          path: ':growthId',
+          name: 'GrowthProgress',
+          component: GrowthProgress,
+          children: [
+            {
+              path: "create",
+              name: "ProgressCreate",
+              component: ProgressCreate,
+            },
+            {
+              path: "detail",
+              name: "ProgressDetail",
+              component: ProgressDetail,
+            },
+            {
+              path: "update",
+              name: "ProgressUpdate",
+              component: ProgressUpdate,
+            }
+          ]
         },
       ],
     },

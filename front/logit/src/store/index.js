@@ -16,6 +16,12 @@ import axiosConnectorFormData from "@/utils/axios-connector-formData";
 //   };
 // }; 
 
+import temp from './modules/temp.js'
+import growth from "./modules/growth.js";
+import timeline from "./modules/timeline.js";
+import search from "./modules/search.js";
+
+// const baseURL = "https://i8a609.p.ssafy.io/api/user";
 const baseURL = "http://localhost:9090/user";
 export default createStore({
 
@@ -29,7 +35,8 @@ export default createStore({
       state.loginUser = payload
       console.log(state.loginUser);
       sessionStorage.setItem("token", payload["jwt-auth-token"]);
-      sessionStorage.setItem("email", payload["user"]);
+
+      console.log(sessionStorage.getItem('token'))
       router.push({ name: "MainPage" });
     },
     LOG_OUT(state) {
@@ -209,8 +216,9 @@ export default createStore({
   },
 
   modules: {
-    // temp: temp,
-    // event: event,
-    // timeline: timeline,
+    temp: temp,
+    growth: growth,
+    timeline: timeline,
+    search: search,
   },
 });

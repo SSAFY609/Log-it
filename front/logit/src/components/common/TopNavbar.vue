@@ -14,14 +14,13 @@
           ></v-autocomplete>
         </div>
       </div>
-      
-      <div v-if="!state.loginUser" class="login_btn_box right_box_items">
+      <div v-if="!loginUser.id" class="login_btn_box right_box_items">
         <router-link :to="{name: 'UserLogin'}" class="login_btn b_main btn_hover">
           <div class="login_btn_text f_white">로그인</div>
         </router-link>
       </div>
       <div v-else class="profile_box right_box_items lay1">
-        <div @click="openProfile" class="profile_id lay2 hover_cursor ">{{state.loginUser.name}} 님</div>
+        <!-- <div @click="openProfile" class="profile_id lay2 hover_cursor ">{{state.loginUser.name}} 님</div> -->
         <div @click="openProfile" class="profile_img_box hover_cursor lay2">
           <v-img class="logo_img"
             :src="require('../../assets/profiles/scale (3).png')"
@@ -46,8 +45,8 @@
 
 <script>
 
-import { useStore } from 'vuex';
-
+import { computed } from '@vue/reactivity'
+import { useStore } from 'vuex'
 
 export default {
   name: 'TopNavbar',
@@ -58,33 +57,17 @@ export default {
   },
   setup() {
     const state = {
-      loginUser: {
-        id: "leesh132",
-        name: "이성훈",
-        num: "848212",
-      },
-      SearchList: [
-        "알고리즘",
-        "알고리즘A형",
-        "알고리즘B형",
-        "알고리즘IM형",
-        "관통프로젝트",
-        "알고리즘A동생",
-        "알고리즘B동생",
-        "알고리즘A누나",
-        "알고리즘B누나",
-        "이성훈",
-        "공진호",
-        "김설희",
-        "김나현",
-        "오하늘",
-        "최강혁",
-        "김신일",
-      ]
-        // loginUser: null,
-    }
 
-    const store = useStore();
+      // loginUser: {
+      //   id: "leesh132",
+      //   name: "이성훈",
+      //   num: "848212",
+      // },
+    }
+  
+    const store = useStore()
+    
+    const loginUser = computed(()=>store.state.loginUser)
 
     const openSidebar = () => {
       const eventTarget1 = document.querySelector('.SideNavbar_box')
@@ -93,7 +76,8 @@ export default {
       eventTarget1.classList.toggle('nosee')
       eventTarget2.classList.toggle('nosee')
 
-      store.dispatch('temp/openSidebar');
+
+      store.dispatch(`temp/openSidebar`)
 
     }
     const openProfile = () => {
@@ -115,6 +99,7 @@ export default {
     }
     return {
       state,
+      loginUser,
       openSidebar,
       openProfile,
       openSearch,
@@ -231,20 +216,15 @@ export default {
     justify-content: center;
   } 
   .profile_img_box {
-    width: 46px;
-    height: 46px;
+    width: 30px;
+    height: 30px;
     border-radius: 50px;
     background-color: gray;
     margin-right: 10px;
   }
   .profile_id {
     margin-right: 10px;
-    margin-top: 2px;
-    font-size: 18px;
-    width: 154px;
-    display: flex;
-    justify-content: end;
-    border-left: 1.5px solid lightgray;
+    font-size: 15px;
   }
   .profile_slider_box {
     margin: 0 auto;

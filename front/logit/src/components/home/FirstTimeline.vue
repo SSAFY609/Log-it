@@ -3,26 +3,6 @@
     <div class="box">
         <h1 class="welcome">날짜를 선택해 ✔</h1>
         <h1 class="welcome" style="margin-bottom: 100px">타임라인에 일정을 추가해보세요</h1>
-        <div class="show-btn" v-show="this.is_click">
-            <div v-if="this.choose_date" style="margin-bottom: 20px; font-size:30px">
-                {{ choose_date }}
-            </div>
-            <div>
-                <span class="add-event"><v-btn>성장여정추가</v-btn></span>
-                <span class="add-job"><v-btn>취업여정추가</v-btn></span>
-            </div>
-        </div>
-        <!-- <v-btn @click="dialog=true">열기</v-btn>
-        <v-dialog v-model="dialog">
-          <v-card>
-            <v-card-text>
-              모달창열렸땀
-            </v-card-text>
-            <v-card-actions>
-              <v-btn color="primary" block @click="dialog = false">닫기</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog> -->
         <div class="bar-box">
           <div class="bar">
               <div class="hori-bar" v-for="index in 7" :key="index">
@@ -33,14 +13,14 @@
                       {{ date[index-1] }}
                   </div>
                   <span class="circle">
-                      <v-menu open-on-click transition="slide-y-transition">
+                      <v-menu open-on-click location="top" transition="slide-y-transition">
                         <template v-slot:activator="{ props }"><button class="hover" v-bind="props" style="font-size:large" @click="choose_date = real_date[index-1]">+</button></template>
                         <v-list>
-                          <v-list-item>
-                            <v-list-item-title><router-link :to="{name: 'EventCreate', query: {st: date_to_str}}">성장 여정 추가</router-link></v-list-item-title>
+                          <v-list-item class="list-item">
+                            <router-link :to="{name: 'GrowthCreate', query: {st: date_to_str}}">성장 여정 추가</router-link>
                           </v-list-item>
-                          <v-list-item>
-                            <v-list-item-title><router-link :to="{name: 'JobCreate', query: {st: date_to_str}}">취업 여정 추가</router-link></v-list-item-title>
+                          <v-list-item class="list-item">
+                            <router-link :to="{name: 'JobCreate', query: {st: date_to_str}}">취업 여정 추가</router-link>
                           </v-list-item>
                         </v-list>
                       </v-menu>
@@ -60,10 +40,7 @@ export default {
           real_date: [],
           date: [],
           day: ['일', '월', '화', '수', '목', '금', '토'],
-          is_show: false,
           choose_date: new Date(),
-          is_click: false,
-          dialog: false,
       }
   },
   computed: {
@@ -80,19 +57,6 @@ export default {
           clone.setDate(date.getDate() + days)
           return clone;
       },
-      show(index){
-          const idx = index - 1;
-          this.choose_date = this.date[idx];
-          this.is_click = true;
-
-          // const btn1 = document.querySelector(".add-event");
-          // const btn2 = document.querySelector(".add-job");
-          // btn1.classList.toggle('nosee');
-          // btn2.classList.toggle('nosee');
-      },
-      open_menu(i) {
-        console.log(i)
-      }
   },
   created(){
       const today = new Date();        
@@ -104,14 +68,12 @@ export default {
           }else{
               const target = this.addDays(today, i);
               this.real_date.push(target);
-              // const year = target.getFullYear();
               const month = target.getMonth() + 1;
               const date = target.getDate();
               const day = target.getDay();
               this.date.push(`${month >= 10 ? month : '0' + month}/${date >= 10 ? date : '0' + date}(${this.day[day]})`);
           }
       }
-      // console.log(this.date);
   }
 }
 </script>
@@ -133,6 +95,7 @@ export default {
 
 .welcome {
   margin-bottom: 10px;
+  font-family: appleB;
   font-size: 50px;
 }
 
@@ -190,8 +153,13 @@ export default {
   top: 30px;
 }**/
 
-.nosee {
-  display: none;
+.list-item {
+  font-family: appleL;
+  font-size: 20px;
+}
+
+.list-item:hover {
+  background-color: rgba(133, 133, 133, 0.473);
 }
 
 /* .show-btn {
