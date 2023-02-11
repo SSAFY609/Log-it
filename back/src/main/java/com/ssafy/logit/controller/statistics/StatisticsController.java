@@ -37,16 +37,16 @@ public class StatisticsController {
 
     @GetMapping("/algorithm")
     @Operation(summary = "알고리즘 통계",description = "전체 사용자 알고리즘 통계")
-    public ResponseEntity<List<AlgoCategoryStatistics>> getAlgoStatics(){
-        List<AlgoCategoryStatistics> algoStatics = codingTestService.getAlgoStatics();
-        return new ResponseEntity<>(algoStatics, HttpStatus.OK);
+    public ResponseEntity<List<GroupByDto>> getMyApplyStatistics(){
+        List<GroupByDto> algoStatistics = statisticsService.getAlgoStatistics();
+        return new ResponseEntity<>(algoStatistics, HttpStatus.OK);
     }
 
     @GetMapping("/interview")
     @Operation(summary = "면접 통계",description = "전체 사용자 면접유형 통계")
-    public  ResponseEntity<List<InterviewCategoryStatistics>> GetInterivewStatics(){
-        List<InterviewCategoryStatistics> interviewStatics = interviewService.getInterviewStatics();
-        return new ResponseEntity<>(interviewStatics, HttpStatus.OK);
+    public  ResponseEntity<List<GroupByDto>> GetInterivewStatics(){
+        List<GroupByDto> interviewStatistics = statisticsService.getInterviewStatistics();
+        return new ResponseEntity<>(interviewStatistics, HttpStatus.OK);
     }
 
     @GetMapping("/my/apply")
