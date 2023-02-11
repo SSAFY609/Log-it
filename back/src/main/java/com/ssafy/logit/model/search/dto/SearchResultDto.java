@@ -19,7 +19,15 @@ public class SearchResultDto {
     String keyword;      // 검색된 keyword
     String nextStr;      // 검색된 내용 중 keyword 뒤에 위치하는 내용
 
-    String userEmail;    // 회원 이메일 (회원 이름 검색 결과에만 추가로 제공)
-    String userName;     // 회원 이름 (회원 이메일 검색 결과에만 추가로 제공)
-    String userProfile;  // 회원 프로필 이미지 (회원 검색 결과에만 추가로 제공)
+    // 회원 이름 검색 결과에만 추가 제공
+    String userEmail;    // 회원 이메일
+    String userName;     // 회원 이름
+    String userProfile;  // 회원 프로필 이미지
+
+    // 성장 이벤트 검색 결과에만 추가 제공
+    String startDate;
+    String endDate;
+
+    // 성장 과정 or 취업 내용 검색 결과에만 추가 제공
+    String eventName;
 }
