@@ -10,6 +10,9 @@ import java.util.List;
 @Schema(description = "기업에 대한 취업 여정 리스트 생성/수정")
 public class JobEventAllRequest{
 
+    @Schema(description = "jobEventId")
+    private Long jobEventId;
+
     @Schema(description = "시작날짜")
     private LocalDate startDate;
     @Schema(description = "종료날짜")

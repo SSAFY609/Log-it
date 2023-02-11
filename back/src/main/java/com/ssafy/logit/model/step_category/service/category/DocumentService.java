@@ -5,6 +5,7 @@ import com.ssafy.logit.exception.DifferentUserException;
 import com.ssafy.logit.exception.WrongCategoryException;
 import com.ssafy.logit.model.step_category.dto.category.document.CreateDocumentRequest;
 import com.ssafy.logit.model.step_category.dto.category.document.UpdateDocumentRequest;
+import com.ssafy.logit.model.step_category.dto.category.entire.AllCategoryRequest;
 import com.ssafy.logit.model.step_category.entity.JobCategory;
 import com.ssafy.logit.model.step_category.entity.StepCategory;
 import com.ssafy.logit.model.step_category.entity.category.Document;
@@ -99,6 +100,19 @@ public class DocumentService {
                 documentRepository.save(document);
             }else{
                 update(user, request.getDocumentId(), request);
+            }
+        }
+    }
+
+    @Transactional
+    public void  createUpdateAll(StepCategory stepCategory, List<AllCategoryRequest> list) {
+        for (AllCategoryRequest request : list) {
+            if(request.getId()==null){
+                Document document = Document.create(stepCategory, request.getQuestion(), request.getAnswer());
+                documentRepository.save(document);
+            }else{
+                Document document = documentRepository.findById(request.getId()).orElseThrow(NoSuchElementException::new);
+                document.update(request.getQuestion(), request.getContent());
             }
         }
     }

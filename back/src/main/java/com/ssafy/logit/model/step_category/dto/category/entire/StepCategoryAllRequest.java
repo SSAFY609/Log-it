@@ -8,6 +8,7 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Schema(description = "채용전형에 대한 리스트 생성/수정 id가 있어야 수정")
@@ -24,5 +25,7 @@ public class StepCategoryAllRequest {
 
     @Schema(description = "전형 분류",example = "CODING")
     private JobCategory jobCategory;
+
+    private List<AllCategoryRequest> list;
 
 }

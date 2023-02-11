@@ -2,11 +2,13 @@ package com.ssafy.logit.model.step_category.service.category;
 
 import com.ssafy.logit.exception.DifferentUserException;
 import com.ssafy.logit.exception.WrongCategoryException;
+import com.ssafy.logit.model.step_category.dto.category.entire.AllCategoryRequest;
 import com.ssafy.logit.model.step_category.dto.category.interview.CreateInterviewRequest;
 import com.ssafy.logit.model.step_category.dto.category.interview.InterviewCategoryStatistics;
 import com.ssafy.logit.model.step_category.dto.category.interview.UpdateInterviewRequest;
 import com.ssafy.logit.model.step_category.entity.JobCategory;
 import com.ssafy.logit.model.step_category.entity.StepCategory;
+import com.ssafy.logit.model.step_category.entity.category.CodingTest;
 import com.ssafy.logit.model.step_category.entity.category.Interview;
 import com.ssafy.logit.model.step_category.repository.category.InterviewRepository;
 import com.ssafy.logit.model.user.entity.User;
@@ -93,6 +95,20 @@ public class InterviewService {
                 interviewRepository.save(interview);
             }else{
                 update(user, request.getInterviewId(), request);
+            }
+        }
+    }
+
+    @Transactional
+    public void createUpdateAll(StepCategory stepCategory, List<AllCategoryRequest> list) {
+        for (AllCategoryRequest request : list) {
+            if(request.getId()==null){
+                System.out.println("request = " + request.getInterviewCategory());
+                Interview interview = Interview.create(stepCategory, request.getQuestion(),request.getAnswer(),request.getInterviewCategory());
+                interviewRepository.save(interview);
+            }else{
+                Interview interview = interviewRepository.findById(request.getId()).orElseThrow(NoSuchElementException::new);
+                interview.update(request.getQuestion(), request.getAnswer(), request.getInterviewCategory());
             }
         }
     }

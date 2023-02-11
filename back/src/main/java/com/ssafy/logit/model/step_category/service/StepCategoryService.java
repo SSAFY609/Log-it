@@ -11,6 +11,7 @@ import com.ssafy.logit.model.step_category.dto.category.document.DocumentRespons
 import com.ssafy.logit.model.step_category.dto.category.entire.StepCategoryAllRequest;
 import com.ssafy.logit.model.step_category.dto.category.etc.StepEtcResponse;
 import com.ssafy.logit.model.step_category.dto.category.interview.InterviewResponse;
+import com.ssafy.logit.model.step_category.entity.JobCategory;
 import com.ssafy.logit.model.step_category.entity.StepCategory;
 import com.ssafy.logit.model.step_category.repository.StepCategoryRepository;
 import com.ssafy.logit.model.user.entity.User;
@@ -37,10 +38,6 @@ public class StepCategoryService {
     public StepCategory create(User user, CreateStepCategoryRequest request) {
         JobEvent jobEvent = jobRepository.findById(request.getJobEventId()).orElseThrow(NoSuchElementException::new);
         User eventUser = jobEvent.getUser();
-        System.out.println("eventUser.getId() = " + eventUser);
-        System.out.println("user.getId() = " + user);
-        log.info("",eventUser.getId());
-        log.info("",user.getId());
         checkUser(user, eventUser);
 
         StepCategory stepCategory = StepCategory.createCategory(
@@ -53,8 +50,20 @@ public class StepCategoryService {
     }
 
     @Transactional
-    public StepCategory create(User user, StepCategoryAllRequest request){
+    public StepCategory create(JobEvent jobEvent, StepCategoryAllRequest request){
+        StepCategory stepCategory = StepCategory.createCategory(
+                jobEvent,
+                request.getTypeDate(),
+                request.getJobCategory()
+        );
+        StepCategory saveCategory = stepCategoryRepository.save(stepCategory);
+        return saveCategory;
+    }
 
+    @Transactional
+    public void create(JobEvent jobEvent, JobCategory jobCategory){
+        StepCategory category = StepCategory.createCategory(jobEvent, null, jobCategory);
+        stepCategoryRepository.save(category);
     }
 
 
@@ -71,6 +80,14 @@ public class StepCategoryService {
         StepCategory updateCategory = stepCategory.updateCategory(request.getTypeDate(), request.getResultStatus());
         return updateCategory;
     }
+
+    @Transactional
+    public StepCategory update(StepCategoryAllRequest request) {
+        StepCategory stepCategory = stepCategoryRepository.findById(request.getStepId()).orElseThrow(NoSuchElementException::new);
+        StepCategory updateCategory = stepCategory.updateCategory(request.getTypeDate(), request.getResultStatus());
+        return updateCategory;
+    }
+
 
     @Transactional
     public void delete(User user, Long id) {

@@ -4,11 +4,14 @@ package com.ssafy.logit.model.job.service;
 import com.ssafy.logit.exception.DifferentUserException;
 import com.ssafy.logit.exception.WrongDateException;
 import com.ssafy.logit.model.common.ResultStatus;
+import com.ssafy.logit.model.job.dto.CreateJobEventCategoryRequest;
 import com.ssafy.logit.model.job.dto.CreateJobEventRequest;
 import com.ssafy.logit.model.job.dto.CreateJobEventResponse;
 import com.ssafy.logit.model.job.dto.UpdateJobEventRequest;
 import com.ssafy.logit.model.job.entity.JobEvent;
 import com.ssafy.logit.model.job.repository.JobRepository;
+import com.ssafy.logit.model.step_category.entity.JobCategory;
+import com.ssafy.logit.model.step_category.service.StepCategoryService;
 import com.ssafy.logit.model.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -25,6 +29,7 @@ import java.util.NoSuchElementException;
 @Slf4j
 public class JobService {
     private final JobRepository jobRepository;
+    private final StepCategoryService stepCategoryService;
 
     /**
      * 유저에 대한 모든 취업 이벤트 반환
@@ -75,6 +80,32 @@ public class JobService {
         JobEvent updateEvent = jobEvent.updateInfo(companyName,  resultStatus, startDate,endDate);
 
         return updateEvent;
+    }
+
+    @Transactional
+    public JobEvent createAll(User user, CreateJobEventCategoryRequest request){
+        CreateJobEventRequest createJobEventRequest = new CreateJobEventRequest(request.getCompanyName(), request.getStartDate(), request.getEndDate());
+
+        JobEvent jobEvent = create(user, createJobEventRequest);
+        List<String> jobCategoryResult = request.getJobCategoryList();
+        // String -> Enum 변환
+        List<JobCategory> jobCategoryList = jobCategoryResult.stream()
+                .map(o -> JobCategory.nameOf(o))
+                .collect(Collectors.toList());
+        for (JobCategory jobCategory : jobCategoryList) {
+            stepCategoryService.create(jobEvent, jobCategory);
+        }
+        return jobEvent;
+    }
+
+    /**
+     * id을 이용하여 JobEvnet을 반환합니다.
+     * @param jobEventId
+     * @return
+     */
+    public JobEvent getOne(Long jobEventId){
+        JobEvent jobEvent = jobRepository.findById(jobEventId).orElseThrow(NoSuchElementException::new);
+        return jobEvent;
     }
 
 
