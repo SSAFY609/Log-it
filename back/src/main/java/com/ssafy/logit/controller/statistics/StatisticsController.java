@@ -3,12 +3,9 @@ package com.ssafy.logit.controller.statistics;
 import com.ssafy.logit.model.statistics.dto.GroupByDto;
 import com.ssafy.logit.model.statistics.dto.ResultStatisticsDto;
 import com.ssafy.logit.model.statistics.service.StatisticsService;
-import com.ssafy.logit.model.step_category.dto.category.codingtest.AlgoCategoryStatistics;
-import com.ssafy.logit.model.step_category.dto.category.interview.InterviewCategoryStatistics;
 import com.ssafy.logit.model.step_category.service.category.CodingTestService;
 import com.ssafy.logit.model.step_category.service.category.InterviewService;
 import com.ssafy.logit.model.user.entity.User;
-import com.ssafy.logit.model.user.repository.UserRepository;
 import com.ssafy.logit.model.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -60,6 +57,14 @@ public class StatisticsController {
     public  ResponseEntity<List<GroupByDto>> GetInterivewStatics(){
         List<GroupByDto> interviewStatistics = statisticsService.getInterviewStatistics();
         return new ResponseEntity<>(interviewStatistics, HttpStatus.OK);
+    }
+    
+    
+    @GetMapping("/random-interview")
+    @Operation(summary = "면접 질문 랜덤 10개",description = "면접 질문을 랜덤으로 10개 반환")
+    public ResponseEntity<List<String>> getRandomInterview(){
+        List<String> randomInterviews = interviewService.getRandomInterviews();
+        return new ResponseEntity<>(randomInterviews, HttpStatus.OK);
     }
 
     @GetMapping("/my/apply")
