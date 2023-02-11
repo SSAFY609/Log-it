@@ -9,6 +9,7 @@ import com.ssafy.logit.model.step_category.dto.category.codingtest.UpdateCodingT
 import com.ssafy.logit.model.step_category.dto.category.entire.AllCategoryRequest;
 import com.ssafy.logit.model.step_category.entity.JobCategory;
 import com.ssafy.logit.model.step_category.entity.StepCategory;
+import com.ssafy.logit.model.step_category.entity.category.AlgoCategory;
 import com.ssafy.logit.model.step_category.entity.category.CodingTest;
 import com.ssafy.logit.model.step_category.repository.StepCategoryRepository;
 import com.ssafy.logit.model.step_category.repository.category.CodingTestRepository;
@@ -104,12 +105,13 @@ public class CodingTestService {
     @Transactional
     public void createUpdateAll(StepCategory stepCategory, List<AllCategoryRequest> list) {
         for (AllCategoryRequest request : list) {
+            AlgoCategory category = AlgoCategory.nameOf(request.getCategory());
             if(request.getId()==null){
-                CodingTest document = CodingTest.createCodingTest(stepCategory, request.getContent(),request.getAlgoCategory());
+                CodingTest document = CodingTest.createCodingTest(stepCategory, request.getContent(),category);
                 codingTestRepository.save(document);
             }else{
                 CodingTest codingTest = codingTestRepository.findById(request.getId()).orElseThrow(NoSuchElementException::new);
-                codingTest.update(request.getContent(), request.getAlgoCategory());
+                codingTest.update(request.getContent(), category);
             }
         }
     }

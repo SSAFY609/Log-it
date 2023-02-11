@@ -10,6 +10,5 @@ public class AllCategoryRequest {
     private String question;
     private String answer;
     private String content;
-    private AlgoCategory algoCategory;
-    private InterviewCategory interviewCategory;
+    private String category;
 }

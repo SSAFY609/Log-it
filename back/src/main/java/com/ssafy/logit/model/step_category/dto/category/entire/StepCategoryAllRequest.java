@@ -21,10 +21,10 @@ public class StepCategoryAllRequest {
     private LocalDate typeDate;
 
     @Schema(description = "채용 전형 상황",example = "PASS")
-    private ResultStatus resultStatus;
+    private String resultStatus;
 
     @Schema(description = "전형 분류",example = "CODING")
-    private JobCategory jobCategory;
+    private String jobCategory;
 
     private List<AllCategoryRequest> list;
 

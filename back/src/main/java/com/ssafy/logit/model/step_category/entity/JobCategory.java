@@ -1,5 +1,7 @@
 package com.ssafy.logit.model.step_category.entity;
 
+import com.ssafy.logit.exception.WrongCategoryException;
+
 public enum JobCategory {
     DOCUMENT("서류"),
     CODINGTEST("코테"),
@@ -20,7 +22,7 @@ public enum JobCategory {
                 return category;
             }
         }
-        return null;
+        throw new WrongCategoryException("채용전형 카테고리가 없습니다.");
     }
 
     public String getJobCategory() {

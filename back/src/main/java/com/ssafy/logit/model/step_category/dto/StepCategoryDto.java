@@ -19,14 +19,11 @@ public class StepCategoryDto {
     private LocalDate typeDate;
 
     @Schema(description = "결과 상태")
-    private ResultStatus resultStatus;
+    private String resultStatus;
 
     @Schema(description = "취업 전형 분류")
-    private JobCategory jobCategory;
+    private String jobCategory;
     
-    @Schema(description = "이름")
-    private String name;
-
     @Schema(description = "목록")
     private Object list;
 
@@ -34,8 +31,8 @@ public class StepCategoryDto {
     public StepCategoryDto(StepCategory stepCategory, Object o){
         this.stepId = stepCategory.getId();
         this.typeDate = stepCategory.getTypeDate();
-        this.resultStatus = stepCategory.getResultStatus();
-        this.jobCategory = stepCategory.getJobCategory();
+        this.resultStatus = stepCategory.getResultStatus().getValue();
+        this.jobCategory = stepCategory.getJobCategory().getJobCategory();
         this.list = o;
     }
 

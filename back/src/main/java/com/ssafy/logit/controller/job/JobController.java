@@ -69,7 +69,7 @@ public class JobController {
 
 
     @Operation(summary = "취업 이벤트 순수 생성", description = "취업 이벤트를 생성")
-    @PostMapping("/basicCreate")
+    @PostMapping("/basic-create")
     public ResponseEntity<CreateJobEventResponse> basicCreate(@RequestAttribute String email, @RequestBody @Validated CreateJobEventRequest request) {
         User user = getUser(email);
         JobEvent jobEvent = jobService.create(user, request);
@@ -116,6 +116,7 @@ public class JobController {
             results.add(new StepCategoryDto(stepCategories.get(i), stepList.get(i)));
         }
         return new ResponseEntity<>(new StepCategoryResultDto(
+                jobEvent.getId(),
                 jobEvent.getStartDate(),
                 jobEvent.getStartDate(),
                 results.size(),
@@ -148,9 +149,9 @@ public class JobController {
 
     @Operation(summary = "취업 이벤트 생성 ", description = "취업이벤트 모두 생성 합니다.")
     @PostMapping("/post-all")
-    public ResponseEntity<ResultDto> postAll(@RequestAttribute String email, @RequestBody JobEventAllRequest request) {
+    public ResponseEntity<Void> postAll(@RequestAttribute String email, @RequestBody JobEventAllRequest request) {
         User user = getUser(email);
-        JobEvent jobEvent = jobService.getOne(request.getJobEventId());
+        JobEvent jobEvent = jobService.getOne(request.getJobId());
 
         if (user != jobEvent.getUser()) {
             throw new DifferentUserException();
@@ -165,7 +166,9 @@ public class JobController {
                 stepCategory = stepCategoryService.update(stepRequest);
             }
             List<AllCategoryRequest> list = stepRequest.getList();
-            switch (stepRequest.getJobCategory()) {
+            JobCategory jobCategory = JobCategory.nameOf(stepRequest.getJobCategory());
+            System.out.println("jobCategory.getJobCategory() = " + jobCategory.getJobCategory());
+            switch (jobCategory) {
                 case CODINGTEST:
                     codingTestService.createUpdateAll(stepCategory, list);
                 case INTERVIEW:
@@ -176,7 +179,7 @@ public class JobController {
                     documentService.createUpdateAll(stepCategory, list);
             }
         }
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     private User getUser(String email) {

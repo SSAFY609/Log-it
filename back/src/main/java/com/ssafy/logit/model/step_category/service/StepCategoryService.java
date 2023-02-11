@@ -2,6 +2,7 @@ package com.ssafy.logit.model.step_category.service;
 
 
 import com.ssafy.logit.exception.DifferentUserException;
+import com.ssafy.logit.model.common.ResultStatus;
 import com.ssafy.logit.model.job.entity.JobEvent;
 import com.ssafy.logit.model.job.repository.JobRepository;
 import com.ssafy.logit.model.step_category.dto.CreateStepCategoryRequest;
@@ -51,10 +52,11 @@ public class StepCategoryService {
 
     @Transactional
     public StepCategory create(JobEvent jobEvent, StepCategoryAllRequest request){
+        JobCategory jobCategory = JobCategory.nameOf(request.getJobCategory());
         StepCategory stepCategory = StepCategory.createCategory(
                 jobEvent,
                 request.getTypeDate(),
-                request.getJobCategory()
+                jobCategory
         );
         StepCategory saveCategory = stepCategoryRepository.save(stepCategory);
         return saveCategory;
@@ -84,7 +86,8 @@ public class StepCategoryService {
     @Transactional
     public StepCategory update(StepCategoryAllRequest request) {
         StepCategory stepCategory = stepCategoryRepository.findById(request.getStepId()).orElseThrow(NoSuchElementException::new);
-        StepCategory updateCategory = stepCategory.updateCategory(request.getTypeDate(), request.getResultStatus());
+        ResultStatus resultStatus = ResultStatus.nameOf(request.getResultStatus());
+        StepCategory updateCategory = stepCategory.updateCategory(request.getTypeDate(), resultStatus);
         return updateCategory;
     }
 

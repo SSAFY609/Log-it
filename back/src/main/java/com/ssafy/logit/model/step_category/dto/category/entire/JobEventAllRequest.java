@@ -11,14 +11,12 @@ import java.util.List;
 public class JobEventAllRequest{
 
     @Schema(description = "jobEventId")
-    private Long jobEventId;
+    private Long jobId;
 
     @Schema(description = "시작날짜")
     private LocalDate startDate;
     @Schema(description = "종료날짜")
     private LocalDate endDate;
-    @Schema(description = "크기")
-    private int size;
     @Schema(description = "데이터 목록")
     private List<StepCategoryAllRequest> datas;
 }

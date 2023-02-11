@@ -10,6 +10,7 @@ import com.ssafy.logit.model.step_category.entity.JobCategory;
 import com.ssafy.logit.model.step_category.entity.StepCategory;
 import com.ssafy.logit.model.step_category.entity.category.CodingTest;
 import com.ssafy.logit.model.step_category.entity.category.Interview;
+import com.ssafy.logit.model.step_category.entity.category.InterviewCategory;
 import com.ssafy.logit.model.step_category.repository.category.InterviewRepository;
 import com.ssafy.logit.model.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -102,13 +103,14 @@ public class InterviewService {
     @Transactional
     public void createUpdateAll(StepCategory stepCategory, List<AllCategoryRequest> list) {
         for (AllCategoryRequest request : list) {
+            InterviewCategory category = InterviewCategory.nameOf(request.getCategory());
             if(request.getId()==null){
-                System.out.println("request = " + request.getInterviewCategory());
-                Interview interview = Interview.create(stepCategory, request.getQuestion(),request.getAnswer(),request.getInterviewCategory());
+                Interview interview = Interview.create(stepCategory, request.getQuestion(),request.getAnswer(),category);
                 interviewRepository.save(interview);
             }else{
+                System.out.println("inteviewId = " + request.getId());
                 Interview interview = interviewRepository.findById(request.getId()).orElseThrow(NoSuchElementException::new);
-                interview.update(request.getQuestion(), request.getAnswer(), request.getInterviewCategory());
+                interview.update(request.getQuestion(), request.getAnswer(), category);
             }
         }
     }
