@@ -167,11 +167,7 @@ public class JobService {
     public void postAll(User user, JobEventAllRequest request) {
         JobEvent jobEvent = jobRepository.findById(request.getJobId()).orElseThrow(NoSuchElementException::new);
         checkUser(user,jobEvent);
-        ResultStatus jobResultStatus = ResultStatus.nameOf(request.getResultStatus());
-        if(jobResultStatus==ResultStatus.PASS){
-            validateJobResult(jobEvent);
-        }
-        jobEvent.updateInfo(request.getCompanyName(), jobResultStatus, request.getStartDate(), request.getEndDate());
+
         List<StepCategoryAllRequest> datas = request.getDatas();
         for (StepCategoryAllRequest stepRequest : datas) {
             StepCategory stepCategory;
@@ -197,6 +193,13 @@ public class JobService {
                     break;
             }
         }
+
+        // 해당 기업 합격여부 업데이트
+        ResultStatus jobResultStatus = ResultStatus.nameOf(request.getResultStatus());
+        if(jobResultStatus==ResultStatus.PASS){
+            validateJobResult(jobEvent);
+        }
+        jobEvent.updateInfo(request.getCompanyName(), jobResultStatus, request.getStartDate(), request.getEndDate());
     }
 
     /**
