@@ -1,6 +1,7 @@
 package com.ssafy.logit.controller.statistics;
 
 import com.ssafy.logit.model.statistics.dto.GroupByDto;
+import com.ssafy.logit.model.statistics.dto.ResultStatisticsDto;
 import com.ssafy.logit.model.statistics.service.StatisticsService;
 import com.ssafy.logit.model.step_category.dto.category.codingtest.AlgoCategoryStatistics;
 import com.ssafy.logit.model.step_category.dto.category.interview.InterviewCategoryStatistics;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -33,6 +35,17 @@ public class StatisticsController {
     private final UserService userService;
     private final StatisticsService statisticsService;
 
+
+    @GetMapping
+    @Operation(summary = "모든 통계 확인",description = "모든 통계 데이터를 확인합니다.")
+    public ResponseEntity<List<ResultStatisticsDto>> getAll(@RequestAttribute String email){
+        User user = userService.getUserEntity(email);
+        List<ResultStatisticsDto> results = new ArrayList<>();
+        results.add(new ResultStatisticsDto("algorithm", statisticsService.getAlgoStatistics()));
+        results.add(new ResultStatisticsDto("interview", statisticsService.getInterviewStatistics()));
+        results.add(new ResultStatisticsDto("myApply", statisticsService.getMyApplyStatus(user)));
+        return new ResponseEntity<>(results, HttpStatus.OK);
+    }
 
 
     @GetMapping("/algorithm")
