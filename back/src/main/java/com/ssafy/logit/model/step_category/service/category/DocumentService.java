@@ -112,7 +112,7 @@ public class DocumentService {
                 documentRepository.save(document);
             }else{
                 Document document = documentRepository.findById(request.getId()).orElseThrow(NoSuchElementException::new);
-                document.update(request.getQuestion(), request.getContent());
+                document.update(request.getQuestion(), request.getAnswer());
             }
         }
     }

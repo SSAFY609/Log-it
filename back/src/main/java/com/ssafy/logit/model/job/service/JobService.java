@@ -10,8 +10,16 @@ import com.ssafy.logit.model.job.dto.CreateJobEventResponse;
 import com.ssafy.logit.model.job.dto.UpdateJobEventRequest;
 import com.ssafy.logit.model.job.entity.JobEvent;
 import com.ssafy.logit.model.job.repository.JobRepository;
+import com.ssafy.logit.model.step_category.dto.category.entire.AllCategoryRequest;
+import com.ssafy.logit.model.step_category.dto.category.entire.JobEventAllRequest;
+import com.ssafy.logit.model.step_category.dto.category.entire.StepCategoryAllRequest;
 import com.ssafy.logit.model.step_category.entity.JobCategory;
+import com.ssafy.logit.model.step_category.entity.StepCategory;
 import com.ssafy.logit.model.step_category.service.StepCategoryService;
+import com.ssafy.logit.model.step_category.service.category.CodingTestService;
+import com.ssafy.logit.model.step_category.service.category.DocumentService;
+import com.ssafy.logit.model.step_category.service.category.InterviewService;
+import com.ssafy.logit.model.step_category.service.category.StepEtcService;
 import com.ssafy.logit.model.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +38,10 @@ import java.util.stream.Collectors;
 public class JobService {
     private final JobRepository jobRepository;
     private final StepCategoryService stepCategoryService;
+    private final CodingTestService codingTestService;
+    private final StepEtcService stepEtcService;
+    private final InterviewService interviewService;
+    private final DocumentService documentService;
 
     /**
      * 유저에 대한 모든 취업 이벤트 반환
@@ -142,6 +154,48 @@ public class JobService {
         JobEvent jobEvent = jobRepository.findById(jobEventId).orElseThrow(NoSuchElementException::new);
         return new CreateJobEventResponse(jobEvent);
     }
+
+
+    /**
+     * 전체 생성, 수정
+     * @param user
+     * @param request
+     */
+
+    @Transactional
+    public void postAll(User user, JobEventAllRequest request) {
+        JobEvent jobEvent = jobRepository.findById(request.getJobId()).orElseThrow(NoSuchElementException::new);
+        checkUser(user,jobEvent);
+        List<StepCategoryAllRequest> datas = request.getDatas();
+        for (StepCategoryAllRequest stepRequest : datas) {
+            StepCategory stepCategory;
+            if (stepRequest.getStepId() == null) {
+                stepCategory = stepCategoryService.create(jobEvent, stepRequest);
+            } else {
+                stepCategory = stepCategoryService.update(stepRequest);
+            }
+            List<AllCategoryRequest> list = stepRequest.getList();
+            JobCategory jobCategory = JobCategory.nameOf(stepRequest.getJobCategory());
+            switch (jobCategory) {
+                case CODINGTEST:
+                    codingTestService.createUpdateAll(stepCategory, list);
+                    break;
+                case INTERVIEW:
+                    interviewService.createUpdateAll(stepCategory, list);
+                    break;
+                case ETC:
+                    stepEtcService.createUpdateAll(stepCategory, list);
+                    break;
+                case DOCUMENT:
+                    documentService.createUpdateAll(stepCategory, list);
+                    break;
+            }
+        }
+
+
+    }
+
+
 
     /**
      * 유저 확인 => 토큰의 유저와 비교

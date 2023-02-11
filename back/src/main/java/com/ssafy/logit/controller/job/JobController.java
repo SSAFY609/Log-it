@@ -1,6 +1,5 @@
 package com.ssafy.logit.controller.job;
 
-import com.ssafy.logit.exception.DifferentUserException;
 import com.ssafy.logit.model.common.ResultDto;
 import com.ssafy.logit.model.job.dto.CreateJobEventCategoryRequest;
 import com.ssafy.logit.model.job.dto.CreateJobEventRequest;
@@ -11,13 +10,8 @@ import com.ssafy.logit.model.job.repository.JobRepository;
 import com.ssafy.logit.model.job.service.JobService;
 import com.ssafy.logit.model.step_category.dto.StepCategoryDto;
 import com.ssafy.logit.model.step_category.dto.category.StepCategoryResultDto;
-import com.ssafy.logit.model.step_category.dto.category.entire.AllCategoryRequest;
 import com.ssafy.logit.model.step_category.dto.category.entire.JobEventAllRequest;
-import com.ssafy.logit.model.step_category.dto.category.entire.StepCategoryAllRequest;
-import com.ssafy.logit.model.step_category.dto.category.interview.InterviewResponse;
-import com.ssafy.logit.model.step_category.entity.JobCategory;
 import com.ssafy.logit.model.step_category.entity.StepCategory;
-import com.ssafy.logit.model.step_category.entity.category.CodingTest;
 import com.ssafy.logit.model.step_category.service.StepCategoryService;
 import com.ssafy.logit.model.step_category.service.category.CodingTestService;
 import com.ssafy.logit.model.step_category.service.category.DocumentService;
@@ -151,34 +145,7 @@ public class JobController {
     @PostMapping("/post-all")
     public ResponseEntity<Void> postAll(@RequestAttribute String email, @RequestBody JobEventAllRequest request) {
         User user = getUser(email);
-        JobEvent jobEvent = jobService.getOne(request.getJobId());
-
-        if (user != jobEvent.getUser()) {
-            throw new DifferentUserException();
-        }
-
-        List<StepCategoryAllRequest> datas = request.getDatas();
-        for (StepCategoryAllRequest stepRequest : datas) {
-            StepCategory stepCategory;
-            if (stepRequest.getStepId() == null) {
-                stepCategory = stepCategoryService.create(jobEvent, stepRequest);
-            } else {
-                stepCategory = stepCategoryService.update(stepRequest);
-            }
-            List<AllCategoryRequest> list = stepRequest.getList();
-            JobCategory jobCategory = JobCategory.nameOf(stepRequest.getJobCategory());
-            System.out.println("jobCategory.getJobCategory() = " + jobCategory.getJobCategory());
-            switch (jobCategory) {
-                case CODINGTEST:
-                    codingTestService.createUpdateAll(stepCategory, list);
-                case INTERVIEW:
-                    interviewService.createUpdateAll(stepCategory, list);
-                case ETC:
-                    stepEtcService.createUpdateAll(stepCategory, list);
-                case DOCUMENT:
-                    documentService.createUpdateAll(stepCategory, list);
-            }
-        }
+        jobService.postAll(user,request);
         return new ResponseEntity(HttpStatus.OK);
     }
 

@@ -110,6 +110,7 @@ public class InterviewService {
             }else{
                 System.out.println("inteviewId = " + request.getId());
                 Interview interview = interviewRepository.findById(request.getId()).orElseThrow(NoSuchElementException::new);
+                System.out.println("여기가 에러임");
                 interview.update(request.getQuestion(), request.getAnswer(), category);
             }
         }
