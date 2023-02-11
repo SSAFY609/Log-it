@@ -12,6 +12,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StatisticsService {
     private final StatisticsRepository statisticsRepository;
+
+    public List<GroupByDto> getInterviewStatistics(){
+        return statisticsRepository.getInterviewStatics();
+    }
+
+    public List<GroupByDto> getAlgoStatistics(){
+        return statisticsRepository.getAlgoStatics();
+    }
     public List<GroupByDto> getMyApplyStatus(User user){
         return statisticsRepository.getMyApplyStatus(user);
     }
