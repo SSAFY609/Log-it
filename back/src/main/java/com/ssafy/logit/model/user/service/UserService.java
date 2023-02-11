@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -83,7 +82,14 @@ public class UserService {
                 result.put("pw", userDto.getPw());
                 result.put("flag", userDto.getFlag());
                 result.put("studentNo", userDto.getStudentNo());
-                result.put("image", bucketUrl + "/" + userDto.getImage());
+
+                String image = userDto.getImage();
+                if(image.length() < 3) {
+                    result.put("image", image);
+                } else {
+                    result.put("image", bucketUrl + "/" + image);
+                }
+
                 result.put("deleted", userDto.isDeleted());
                 result.put("createdTime", userDto.getCreatedTime());
                 result.put("loginTime", userDto.getLoginTime());
@@ -202,7 +208,14 @@ public class UserService {
             List<UserDto> userDtoList = new ArrayList<>();
             for(User u: userList) {
                 UserDto userDto = u.toDto();
-                userDto.setImage(bucketUrl + "/" + userDto.getImage());
+
+                String image = userDto.getImage();
+                if(image.length() < 3) {
+                    userDto.setImage(image);
+                } else {
+                    userDto.setImage(bucketUrl + "/" + image);
+                }
+
                 userDtoList.add(userDto);
             }
             return userDtoList;
@@ -217,7 +230,14 @@ public class UserService {
         if(userRepo.findByEmail(email).isPresent()) {
             System.out.println("===== getUser =====");
             UserDto userDto = userRepo.findByEmail(email).get().toDto();
-            userDto.setImage(bucketUrl + "/" + userDto.getImage());
+
+            String image = userDto.getImage();
+            if(image.length() < 3) {
+                userDto.setImage(image);
+            } else {
+                userDto.setImage(bucketUrl + "/" + userDto.getImage());
+            }
+
             return userDto;
         } else {
             System.out.println("getUser : " + email + "에 해당하는 사용자 없음");
@@ -230,7 +250,14 @@ public class UserService {
         if(userRepo.findById(id).isPresent()) {
             System.out.println("===== getUser =====");
             UserDto userDto = userRepo.findById(id).get().toDto();
-            userDto.setImage(bucketUrl + "/" + userDto.getImage());
+
+            String image = userDto.getImage();
+            if(image.length() < 3) {
+                userDto.setImage(image);
+            } else {
+                userDto.setImage(bucketUrl + "/" + userDto.getImage());
+            }
+
             return userDto;
         } else {
             System.out.println("getUser : " + id + "에 해당하는 사용자 없음");
@@ -246,7 +273,14 @@ public class UserService {
             List<UserDto> userDtoList = new ArrayList<>();
             for(User u: userList) {
                 UserDto userDto = u.toDto();
-                userDto.setImage(bucketUrl + "/" + userDto.getImage());
+
+                String image = userDto.getImage();
+                if(image.length() < 3) {
+                    userDto.setImage(image);
+                } else {
+                    userDto.setImage(bucketUrl + "/" + userDto.getImage());
+                }
+
                 userDtoList.add(userDto);
             }
             return userDtoList;
