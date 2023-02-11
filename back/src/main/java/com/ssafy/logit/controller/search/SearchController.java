@@ -12,7 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -28,13 +30,22 @@ public class SearchController {
 
     @Operation(summary = "", description = "")
     @GetMapping
-    public ResponseEntity<List<SearchResultDto>> search(@RequestParam String keyword, @RequestAttribute String email) {
+    public ResponseEntity<Map<String, List<SearchResultDto>>> search(@RequestParam String keyword, @RequestAttribute String email) {
         long userId = userService.getUser(email).getId();
+
+        Map<String, List<SearchResultDto>> resultMap = new HashMap<>();
+
         List<SearchResultDto> resultList = new ArrayList<>();
         resultList = searchService.searchUserEmail(resultList, userId, keyword);
         resultList = searchService.searchUserName(resultList, userId, keyword);
+        resultMap.put("USER", resultList);
+
+        resultList = new ArrayList<>();
         resultList = searchService.searchGrowth(resultList, userId, keyword);
         resultList = searchService.searchProgress(resultList, userId, keyword);
+        resultMap.put("GROWTH", resultList);
+
+        resultList = new ArrayList<>();
         resultList = searchService.searchCompany(resultList, userId, keyword);
         resultList = searchService.searchDocQuestion(resultList, userId, keyword);
         resultList = searchService.searchDocContent(resultList, userId, keyword);
@@ -42,6 +53,8 @@ public class SearchController {
         resultList = searchService.searchInterviewQuestion(resultList, userId, keyword);
         resultList = searchService.searchInterviewAnswer(resultList, userId, keyword);
         resultList = searchService.searchEtcContent(resultList, userId, keyword);
-        return new ResponseEntity<List<SearchResultDto>>(resultList, HttpStatus.OK);
+        resultMap.put("JOB", resultList);
+
+        return new ResponseEntity<Map<String, List<SearchResultDto>>>(resultMap, HttpStatus.OK);
     }
 }

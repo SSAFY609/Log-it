@@ -24,7 +24,9 @@ import com.ssafy.logit.model.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -48,14 +50,23 @@ public class SearchService {
     // 회원 검색 결과 반환 (이메일)
     public List<SearchResultDto> searchUserEmail(List<SearchResultDto> resultList, long userId, String keyword) {
         Optional<List<User>> userList = userRepo.searchEmail(keyword);
-        if(userList.isPresent()) {
-            List< UserDto> userDtoList = userList.get().stream().map(UserDto::new).collect(Collectors.toList());
-            for(UserDto u: userDtoList) {
+        if (userList.isPresent()) {
+            List<UserDto> userDtoList = userList.get().stream().map(UserDto::new).collect(Collectors.toList());
+            for (UserDto u : userDtoList) {
                 SearchResultDto result = new SearchResultDto();
                 result.setType("회원 이메일");
                 result.setId(u.getId());
-                result.setContent(u.getEmail());
+
+                String content = u.getEmail();
+                Map<String, Integer> cutResultMap = cutStr(keyword, content, false);
+                Map<String, String> makeResultMap = makeResult(keyword, content, cutResultMap);
+
+                result.setPreStr(makeResultMap.get("preStr"));
+                result.setKeyword(makeResultMap.get("keyword"));
+                result.setNextStr(makeResultMap.get("nxtStr"));
+
                 result.setUserName(u.getName());
+                result.setUserEmail(content);
                 result.setUserProfile(u.getImage());
                 resultList.add(result);
             }
@@ -66,13 +77,22 @@ public class SearchService {
     // 회원 검색 결과 반환 (이름)
     public List<SearchResultDto> searchUserName(List<SearchResultDto> resultList, long userId, String keyword) {
         Optional<List<User>> userList = userRepo.searchName(keyword);
-        if(userList.isPresent()) {
-            List< UserDto> userDtoList = userList.get().stream().map(UserDto::new).collect(Collectors.toList());
-            for(UserDto u: userDtoList) {
+        if (userList.isPresent()) {
+            List<UserDto> userDtoList = userList.get().stream().map(UserDto::new).collect(Collectors.toList());
+            for (UserDto u : userDtoList) {
                 SearchResultDto result = new SearchResultDto();
                 result.setType("회원 이름");
                 result.setId(u.getId());
-                result.setContent(u.getName());
+
+                String content = u.getName();
+                Map<String, Integer> cutResultMap = cutStr(keyword, content, false);
+                Map<String, String> makeResultMap = makeResult(keyword, content, cutResultMap);
+
+                result.setPreStr(makeResultMap.get("preStr"));
+                result.setKeyword(makeResultMap.get("keyword"));
+                result.setNextStr(makeResultMap.get("nxtStr"));
+
+                result.setUserName(content);
                 result.setUserEmail(u.getEmail());
                 result.setUserProfile(u.getImage());
                 resultList.add(result);
@@ -84,13 +104,21 @@ public class SearchService {
     // 성장 여정 이벤트 검색 결과 반환 (카테고리)
     public List<SearchResultDto> searchGrowth(List<SearchResultDto> resultList, long userId, String keyword) {
         Optional<List<Growth>> growthList = growthRepo.search(userId, keyword);
-        if(growthList.isPresent()) {
+        if (growthList.isPresent()) {
             List<GrowthDto> growthDtoList = growthList.get().stream().map(GrowthDto::new).collect(Collectors.toList());
-            for(GrowthDto g: growthDtoList) {
+            for (GrowthDto g : growthDtoList) {
                 SearchResultDto result = new SearchResultDto();
                 result.setType("성장 여정 이벤트");
                 result.setId(g.getGrowthId());
-                result.setContent(g.getCategory());
+
+                String content = g.getCategory();
+                Map<String, Integer> cutResultMap = cutStr(keyword, content, false);
+                Map<String, String> makeResultMap = makeResult(keyword, content, cutResultMap);
+
+                result.setPreStr(makeResultMap.get("preStr"));
+                result.setKeyword(makeResultMap.get("keyword"));
+                result.setNextStr(makeResultMap.get("nxtStr"));
+
                 resultList.add(result);
             }
         }
@@ -107,12 +135,19 @@ public class SearchService {
                 result.setType("성장 과정");
                 result.setId(p.getProgressId());
 
-                if(p.getContent().length() > MAX_STR) {
-                    String cutResult = cutStr(keyword, p.getContent());
-                    result.setContent(cutResult);
+                String content = p.getContent();
+                Map<String, Integer> cutResultMap = new HashMap<>();
+                if(content.length() > 30) {
+                    cutResultMap = cutStr(keyword, content, true);
                 } else {
-                    result.setContent(p.getContent());
+                    cutResultMap = cutStr(keyword, content, false);
                 }
+                Map<String, String> makeResultMap = makeResult(keyword, content, cutResultMap);
+
+                result.setPreStr(makeResultMap.get("preStr"));
+                result.setKeyword(makeResultMap.get("keyword"));
+                result.setNextStr(makeResultMap.get("nxtStr"));
+
                 resultList.add(result);
             }
         }
@@ -122,13 +157,21 @@ public class SearchService {
     // 취업 여정 검색 결과 반환 (기업명)
     public List<SearchResultDto> searchCompany(List<SearchResultDto> resultList, long userId, String keyword) {
         Optional<List<JobEvent>> jobEventList = searchRepo.searchCompany(userId, keyword);
-        if(jobEventList.isPresent()) {
+        if (jobEventList.isPresent()) {
             List<CreateJobEventResponse> jobResponseList = jobEventList.get().stream().map(CreateJobEventResponse::new).collect(Collectors.toList());
-            for(CreateJobEventResponse j: jobResponseList) {
+            for (CreateJobEventResponse j : jobResponseList) {
                 SearchResultDto result = new SearchResultDto();
                 result.setType("취업 여정 기업명");
                 result.setId(j.getId());
-                result.setContent(j.getCompanyName());
+
+                String content = j.getCompanyName();
+                Map<String, Integer> cutResultMap = cutStr(keyword, content, false);
+                Map<String, String> makeResultMap = makeResult(keyword, content, cutResultMap);
+
+                result.setPreStr(makeResultMap.get("preStr"));
+                result.setKeyword(makeResultMap.get("keyword"));
+                result.setNextStr(makeResultMap.get("nxtStr"));
+
                 resultList.add(result);
             }
         }
@@ -138,19 +181,26 @@ public class SearchService {
     // 취업 여정 서류 검색 결과 반환 (질문)
     public List<SearchResultDto> searchDocQuestion(List<SearchResultDto> resultList, long userId, String keyword) {
         Optional<List<Document>> documentList = searchRepo.searchDocQuestion(userId, keyword);
-        if(documentList.isPresent()) {
+        if (documentList.isPresent()) {
             List<DocumentResponse> documentResponseList = documentList.get().stream().map(DocumentResponse::new).collect(Collectors.toList());
-            for(DocumentResponse d: documentResponseList) {
+            for (DocumentResponse d : documentResponseList) {
                 SearchResultDto result = new SearchResultDto();
                 result.setType("취업 여정 서류 질문");
                 result.setId(d.getId());
 
-                if(d.getQuestion().length() > MAX_STR) {
-                    String cutResult = cutStr(keyword, d.getQuestion());
-                    result.setContent(cutResult);
+                String content = d.getQuestion();
+                Map<String, Integer> cutResultMap = new HashMap<>();
+                if(content.length() > 30) {
+                    cutResultMap = cutStr(keyword, content, true);
                 } else {
-                    result.setContent(d.getQuestion());
+                    cutResultMap = cutStr(keyword, content, false);
                 }
+                Map<String, String> makeResultMap = makeResult(keyword, content, cutResultMap);
+
+                result.setPreStr(makeResultMap.get("preStr"));
+                result.setKeyword(makeResultMap.get("keyword"));
+                result.setNextStr(makeResultMap.get("nxtStr"));
+
                 resultList.add(result);
             }
         }
@@ -160,19 +210,26 @@ public class SearchService {
     // 취업 여정 서류 검색 결과 반환 (답변)
     public List<SearchResultDto> searchDocContent(List<SearchResultDto> resultList, long userId, String keyword) {
         Optional<List<Document>> documentList = searchRepo.searchDocAnswer(userId, keyword);
-        if(documentList.isPresent()) {
+        if (documentList.isPresent()) {
             List<DocumentResponse> documentResponseList = documentList.get().stream().map(DocumentResponse::new).collect(Collectors.toList());
-            for(DocumentResponse d: documentResponseList) {
+            for (DocumentResponse d : documentResponseList) {
                 SearchResultDto result = new SearchResultDto();
                 result.setType("취업 여정 서류 답변");
                 result.setId(d.getId());
 
-                if(d.getAnswer().length() > MAX_STR) {
-                    String cutResult = cutStr(keyword, d.getAnswer());
-                    result.setContent(cutResult);
+                String content = d.getAnswer();
+                Map<String, Integer> cutResultMap = new HashMap<>();
+                if(content.length() > 30) {
+                    cutResultMap = cutStr(keyword, content, true);
                 } else {
-                    result.setContent(d.getAnswer());
+                    cutResultMap = cutStr(keyword, content, false);
                 }
+                Map<String, String> makeResultMap = makeResult(keyword, content, cutResultMap);
+
+                result.setPreStr(makeResultMap.get("preStr"));
+                result.setKeyword(makeResultMap.get("keyword"));
+                result.setNextStr(makeResultMap.get("nxtStr"));
+
                 resultList.add(result);
             }
         }
@@ -182,19 +239,26 @@ public class SearchService {
     // 취업 여정 코딩테스트 검색 결과 반환 (내용)
     public List<SearchResultDto> searchCodingContent(List<SearchResultDto> resultList, long userId, String keyword) {
         Optional<List<CodingTest>> codingTestList = searchRepo.searchCodingContent(userId, keyword);
-        if(codingTestList.isPresent()) {
+        if (codingTestList.isPresent()) {
             List<CodingTestResponse> codingTestResponseList = codingTestList.get().stream().map(CodingTestResponse::new).collect(Collectors.toList());
-            for(CodingTestResponse c: codingTestResponseList) {
+            for (CodingTestResponse c : codingTestResponseList) {
                 SearchResultDto result = new SearchResultDto();
                 result.setType("취업 여정 코딩테스트 내용");
                 result.setId(c.getId());
 
-                if(c.getContent().length() > MAX_STR) {
-                    String cutResult = cutStr(keyword, c.getContent());
-                    result.setContent(cutResult);
+                String content = c.getContent();
+                Map<String, Integer> cutResultMap = new HashMap<>();
+                if(content.length() > 30) {
+                    cutResultMap = cutStr(keyword, content, true);
                 } else {
-                    result.setContent(c.getContent());
+                    cutResultMap = cutStr(keyword, content, false);
                 }
+                Map<String, String> makeResultMap = makeResult(keyword, content, cutResultMap);
+
+                result.setPreStr(makeResultMap.get("preStr"));
+                result.setKeyword(makeResultMap.get("keyword"));
+                result.setNextStr(makeResultMap.get("nxtStr"));
+
                 resultList.add(result);
             }
         }
@@ -204,19 +268,26 @@ public class SearchService {
     // 취업 여정 면접 검색 결과 반환 (질문)
     public List<SearchResultDto> searchInterviewQuestion(List<SearchResultDto> resultList, long userId, String keyword) {
         Optional<List<Interview>> interviewList = searchRepo.searchInterviewQuestion(userId, keyword);
-        if(interviewList.isPresent()) {
+        if (interviewList.isPresent()) {
             List<InterviewResponse> interviewResponseList = interviewList.get().stream().map(InterviewResponse::new).collect(Collectors.toList());
-            for(InterviewResponse i: interviewResponseList) {
+            for (InterviewResponse i : interviewResponseList) {
                 SearchResultDto result = new SearchResultDto();
                 result.setType("취업 여정 면접 질문");
                 result.setId(i.getId());
 
-                if(i.getQuestion().length() > MAX_STR) {
-                    String cutResult = cutStr(keyword, i.getQuestion());
-                    result.setContent(cutResult);
+                String content = i.getQuestion();
+                Map<String, Integer> cutResultMap = new HashMap<>();
+                if(content.length() > 30) {
+                    cutResultMap = cutStr(keyword, content, true);
                 } else {
-                    result.setContent(i.getQuestion());
+                    cutResultMap = cutStr(keyword, content, false);
                 }
+                Map<String, String> makeResultMap = makeResult(keyword, content, cutResultMap);
+
+                result.setPreStr(makeResultMap.get("preStr"));
+                result.setKeyword(makeResultMap.get("keyword"));
+                result.setNextStr(makeResultMap.get("nxtStr"));
+
                 resultList.add(result);
             }
         }
@@ -226,20 +297,25 @@ public class SearchService {
     // 취업 여정 면접 검색 결과 반환 (답변)
     public List<SearchResultDto> searchInterviewAnswer(List<SearchResultDto> resultList, long userId, String keyword) {
         Optional<List<Interview>> interviewList = searchRepo.searchInterviewAnswer(userId, keyword);
-        if(interviewList.isPresent()) {
+        if (interviewList.isPresent()) {
             List<InterviewResponse> interviewResponseList = interviewList.get().stream().map(InterviewResponse::new).collect(Collectors.toList());
-            for(InterviewResponse i: interviewResponseList) {
+            for (InterviewResponse i : interviewResponseList) {
                 SearchResultDto result = new SearchResultDto();
                 result.setType("취업 여정 면접 답변");
                 result.setId(i.getId());
 
-                if(i.getAnswer().length() > MAX_STR) {
-                    String cutResult = cutStr(keyword, i.getAnswer());
-                    result.setContent(cutResult);
+                String content = i.getAnswer();
+                Map<String, Integer> cutResultMap = new HashMap<>();
+                if(content.length() > 30) {
+                    cutResultMap = cutStr(keyword, content, true);
                 } else {
-                    result.setContent(i.getAnswer());
+                    cutResultMap = cutStr(keyword, content, false);
                 }
-                resultList.add(result);
+                Map<String, String> makeResultMap = makeResult(keyword, content, cutResultMap);
+
+                result.setPreStr(makeResultMap.get("preStr"));
+                result.setKeyword(makeResultMap.get("keyword"));
+                result.setNextStr(makeResultMap.get("nxtStr"));
             }
         }
         return resultList;
@@ -248,74 +324,111 @@ public class SearchService {
     // 취업 여정 기타 검색 결과 반환 (내용)
     public List<SearchResultDto> searchEtcContent(List<SearchResultDto> resultList, long userId, String keyword) {
         Optional<List<StepEtc>> stepEtcList = searchRepo.searchEtcContent(userId, keyword);
-        if(stepEtcList.isPresent()) {
+        if (stepEtcList.isPresent()) {
             List<StepEtcResponse> stepEtcResponseList = stepEtcList.get().stream().map(StepEtcResponse::new).collect(Collectors.toList());
-            for(StepEtcResponse s: stepEtcResponseList) {
+            for (StepEtcResponse s : stepEtcResponseList) {
                 SearchResultDto result = new SearchResultDto();
                 result.setType("취업 여정 기타 내용");
                 result.setId(s.getId());
 
-                if(s.getContent().length() > MAX_STR) {
-                    String cutResult = cutStr(keyword, s.getContent());
-                    result.setContent(cutResult);
+                String content = s.getContent();
+                Map<String, Integer> cutResultMap = new HashMap<>();
+                if(content.length() > 30) {
+                    cutResultMap = cutStr(keyword, content, true);
                 } else {
-                    result.setContent(s.getContent());
+                    cutResultMap = cutStr(keyword, content, false);
                 }
+                Map<String, String> makeResultMap = makeResult(keyword, content, cutResultMap);
+
+                result.setPreStr(makeResultMap.get("preStr"));
+                result.setKeyword(makeResultMap.get("keyword"));
+                result.setNextStr(makeResultMap.get("nxtStr"));
+
                 resultList.add(result);
             }
         }
         return resultList;
     }
 
-    // 취업 여정 문자열 가공 (30자 이내, 키워드 포함)
-    public String cutStr(String keyword, String content) {
-        char[] contentArr = content.toCharArray();
-        char[] keywordArr = keyword.toCharArray();
+    // 검색 결과를 세 블록으로 나눠 리턴 (keyword 이전의 내용, keyword, keyword 이후의 내용)
+    public Map<String, Integer> cutStr(String keyword, String content, boolean isLong) {
+        Map<String, Integer> resultMap = new HashMap<>();
+        int preStartIdx = 0;
+        int keyStartIdx = 0;
+        int nxtStartIdx = 0;
+        int endIdx = 0;
 
-        for(int i = 0; i < content.length(); i++) {
-            if(contentArr[i] == keywordArr[0]) {
-                boolean isHere = false;
-                for(int j = 0; j < keyword.length(); j++) {
-                    if(contentArr[i+j] != keywordArr[j]) {
-                        isHere = false;
-                        break;
-                    } else {
-                        isHere = true;
-                    }
-                }
-
-                // 검색 keyword의 위치 찾고 검색 결과 반환
-                if(isHere) {
-                    int keyStartIdx = i;
-                    int keyNextIdx = i + keyword.length();
-                    int nextContentLen = content.length() - keyNextIdx; // content에서 keyword 이후에 남은 문자열 길이
-
-                    char[] result = new char[MAX_STR];
-                    if(nextContentLen >= MAX_STR - keyword.length()) {
-                        for(int j = 0; j < keyword.length(); j++) {
-                            result[j] = keywordArr[j];
-                        }
-                        for(int j = keyNextIdx; j < MAX_STR; j++) {
-                            result[j] = contentArr[j];
-                        }
-                    } else {
-                        int startIdx = content.length() - nextContentLen - keyword.length() - (30 - nextContentLen - keyword.length());
-                        int idx = 0;
-
-                        for(int j = startIdx; j < keyStartIdx; j++) {
-                            result[idx++] = contentArr[j];
-                        }
-                        for(int j = keyStartIdx; j < keyNextIdx; j++) {
-                            result[idx++] = contentArr[j];
-                        }
-                        for(int j = keyNextIdx; j < content.length(); j++) {
-                            result[idx++] = contentArr[j];
-                        }
-                    }
-                    return new String(result);
+        for (int i = 0; i < content.length(); i++) {
+            // keyword 찾기
+            boolean isEqual = true;
+            for (int j = 0; j < keyword.length(); j++) {
+                if (content.charAt(i + j) != keyword.charAt(j)) {
+                    isEqual = false;
+                    break;
                 }
             }
+
+            // keyword 찾기에 성공하여 그 위치를 추출
+            if (isEqual) {
+                if (isLong) {
+                    Map<String, Integer> idxMap = findLongIdx(keyword, content, i);
+                    preStartIdx = idxMap.get("preStartIdx");
+                    nxtStartIdx = idxMap.get("nxtStartIdx");
+                    endIdx = idxMap.get("endIdx");
+                } else {
+                    nxtStartIdx = i + keyword.length();
+                    endIdx = content.length() - 1;
+                }
+
+                resultMap.put("preStartIdx", preStartIdx);
+                resultMap.put("keyStartIdx", i);
+                resultMap.put("nxtStartIdx", nxtStartIdx);
+                resultMap.put("endIdx", endIdx);
+
+                break;
+            }
         }
-        return null;
+
+        return resultMap;
+    }
+
+    // 30자를 초과하는 검색 결과에 대한 연산
+    public Map<String, Integer> findLongIdx(String keyword, String content, int keyStartIdx) {
+        Map<String, Integer> resultMap = new HashMap<>();
+        int preStartIdx = -1;
+        int nxtStartIdx = keyStartIdx + keyword.length();
+        int endIdx = 30 - 1;
+
+        // keyword 를 포함한 이후 문자의 개수가 30개 미만일 경우, keyword 이전의 문자열도 포함하도록 함
+        int keyToEnd = content.length() - keyStartIdx + keyword.length();
+        if (keyToEnd < MAX_STR) {
+            preStartIdx = keyStartIdx - (30 - keyToEnd);
+        }
+
+        resultMap.put("preStartIdx", preStartIdx);
+        resultMap.put("nxtStartIdx", nxtStartIdx);
+        resultMap.put("endIdx", endIdx);
+
+        return resultMap;
+    }
+
+    // 세 블록으로 나누어 반환
+    public Map<String, String> makeResult(String keyword, String content, Map<String, Integer> infoMap) {
+        int preStartIdx = infoMap.get("preStartIdx");
+        int keyStartIdx = infoMap.get("keyStartIdx");
+        int nxtStartIdx = infoMap.get("nxtStartIdx");
+        int endIdx = infoMap.get("endIdx");
+
+        Map<String, String> resultMap = new HashMap<>();
+        if (preStartIdx < 0) {
+            resultMap.put("preStr", "");
+        } else {
+            resultMap.put("preStr", content.substring(preStartIdx, keyStartIdx));
+        }
+
+        resultMap.put("keyword", keyword);
+        resultMap.put("nxtStr", content.substring(nxtStartIdx, endIdx + 1));
+
+        return resultMap;
     }
 }
