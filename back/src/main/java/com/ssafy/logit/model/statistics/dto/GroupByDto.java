@@ -11,21 +11,21 @@ import lombok.Data;
 @AllArgsConstructor
 public class GroupByDto {
     private String name;
-    private Long cnt;
+    private Long count;
 
 
-    public  GroupByDto(ResultStatus status,Long cnt){
+    public  GroupByDto(ResultStatus status,Long count){
         this.name = status.getValue();
-        this.cnt = cnt;
+        this.count = count;
     }
-    public  GroupByDto(AlgoCategory category, Long cnt){
+    public  GroupByDto(AlgoCategory category, Long count){
         this.name = category.getValue();
-        this.cnt = cnt;
+        this.count = count;
     }
 
-    public  GroupByDto(InterviewCategory category, Long cnt){
+    public  GroupByDto(InterviewCategory category, Long count){
         this.name = category.getValue();
-        this.cnt = cnt;
+        this.count = count;
     }
 
 

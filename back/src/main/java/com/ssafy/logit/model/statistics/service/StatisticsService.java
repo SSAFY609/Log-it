@@ -16,7 +16,6 @@ public class StatisticsService {
     public List<GroupByDto> getInterviewStatistics(){
         return statisticsRepository.getInterviewStatics();
     }
-
     public List<GroupByDto> getAlgoStatistics(){
         return statisticsRepository.getAlgoStatics();
     }

@@ -210,6 +210,7 @@ public class JobService {
         List<StepCategory> stepCategoryList = jobEvent.getStepCategoryList();
         for (StepCategory stepCategory : stepCategoryList) {
             if(stepCategory.getResultStatus()!=ResultStatus.PASS){
+                System.out.println("stepCategory.getResultStatus() = " + stepCategory.getResultStatus().getValue());
                 throw new NotPassException();
             }
         }
