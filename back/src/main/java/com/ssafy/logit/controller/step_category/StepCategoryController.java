@@ -78,25 +78,6 @@ public class StepCategoryController {
         return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
     }
     
-    @GetMapping("/test/{jobEventId}")
-    public ResponseEntity<StepCategoryResultDto> test(@RequestAttribute String email, @PathVariable Long jobEventId){
-        User user = getUser(email);
-        JobEvent jobEvent = jobRepository.findById(jobEventId).get();
-        List<StepCategory> stepCategories = stepCategoryService.findStepCategories(jobEvent);
-        List<Object> stepList = stepCategories.stream()
-                .map(o -> stepCategoryService.getStepCategory(o))
-                .collect(Collectors.toList());
-        List<StepCategoryDto> results = new ArrayList<>();
-
-        for(int i = 0 ; i<stepCategories.size();i++){
-            results.add(new StepCategoryDto(stepCategories.get(i), stepList.get(i)));
-        }
-        return new ResponseEntity<>(new StepCategoryResultDto(
-                jobEvent.getStartDate(),
-                jobEvent.getStartDate(),
-                results.size(),
-                results), HttpStatus.OK);
-    }
 
 
     private User getUser(String email) {

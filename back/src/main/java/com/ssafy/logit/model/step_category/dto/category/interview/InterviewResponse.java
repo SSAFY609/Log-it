@@ -19,14 +19,14 @@ public class InterviewResponse {
     private String answer;
 
     @Schema(description = "면접 유형")
-    private InterviewCategory category;
+    private String category;
 
     // 생성자
     public InterviewResponse(Interview interview){
         this.id = interview.getId();
         this.question = interview.getQuestion();
         this.answer = interview.getAnswer();
-        this.category = interview.getInterviewCategory();
+        this.category = interview.getInterviewCategory().getValue();
     }
 
 

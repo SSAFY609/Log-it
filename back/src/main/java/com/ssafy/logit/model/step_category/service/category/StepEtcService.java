@@ -1,6 +1,7 @@
 package com.ssafy.logit.model.step_category.service.category;
 
 import com.ssafy.logit.exception.DifferentUserException;
+import com.ssafy.logit.model.step_category.dto.category.entire.AllCategoryRequest;
 import com.ssafy.logit.model.step_category.dto.category.etc.CreateStepEtcRequest;
 import com.ssafy.logit.model.step_category.dto.category.etc.UpdateStepEtcRequest;
 import com.ssafy.logit.model.step_category.entity.StepCategory;
@@ -90,6 +91,19 @@ public class StepEtcService {
                 stepEtcRepository.save(stepEtc);
             } else {
                 update(user, request.getEtcId(), request);
+            }
+        }
+    }
+
+    @Transactional
+    public void createUpdateAll( StepCategory stepCategory, List<AllCategoryRequest> list) {
+        for (AllCategoryRequest request : list) {
+            if (request.getId() == null) {
+                StepEtc stepEtc = StepEtc.create(stepCategory, request.getContent());
+                stepEtcRepository.save(stepEtc);
+            } else {
+                StepEtc stepEtc = stepEtcRepository.findById(request.getId()).orElseThrow(NoSuchElementException::new);
+                stepEtc.update(request.getContent());
             }
         }
     }

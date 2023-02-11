@@ -2,6 +2,7 @@ package com.ssafy.logit.model.job.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 
 @Data
 @Schema(description = "취업여정 이벤트 생성 요청")
+@AllArgsConstructor
 public class CreateJobEventRequest {
 
     @Column(length = 30)
@@ -18,9 +20,6 @@ public class CreateJobEventRequest {
     @NotBlank
     private String companyName;
 
-    @Column(length = 30)
-    @Schema(description = "채용 유형",example = "인턴")
-    private String type;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
@@ -31,4 +30,5 @@ public class CreateJobEventRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     @Schema(description = "종료 날짜")
     private LocalDate endDate;
+
 }

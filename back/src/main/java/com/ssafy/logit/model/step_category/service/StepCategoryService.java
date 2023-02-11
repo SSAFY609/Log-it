@@ -2,14 +2,17 @@ package com.ssafy.logit.model.step_category.service;
 
 
 import com.ssafy.logit.exception.DifferentUserException;
+import com.ssafy.logit.model.common.ResultStatus;
 import com.ssafy.logit.model.job.entity.JobEvent;
 import com.ssafy.logit.model.job.repository.JobRepository;
 import com.ssafy.logit.model.step_category.dto.CreateStepCategoryRequest;
 import com.ssafy.logit.model.step_category.dto.UpdateStepCategoryRequest;
 import com.ssafy.logit.model.step_category.dto.category.codingtest.CodingTestResponse;
 import com.ssafy.logit.model.step_category.dto.category.document.DocumentResponse;
+import com.ssafy.logit.model.step_category.dto.category.entire.StepCategoryAllRequest;
 import com.ssafy.logit.model.step_category.dto.category.etc.StepEtcResponse;
 import com.ssafy.logit.model.step_category.dto.category.interview.InterviewResponse;
+import com.ssafy.logit.model.step_category.entity.JobCategory;
 import com.ssafy.logit.model.step_category.entity.StepCategory;
 import com.ssafy.logit.model.step_category.repository.StepCategoryRepository;
 import com.ssafy.logit.model.user.entity.User;
@@ -36,21 +39,36 @@ public class StepCategoryService {
     public StepCategory create(User user, CreateStepCategoryRequest request) {
         JobEvent jobEvent = jobRepository.findById(request.getJobEventId()).orElseThrow(NoSuchElementException::new);
         User eventUser = jobEvent.getUser();
-        System.out.println("eventUser.getId() = " + eventUser);
-        System.out.println("user.getId() = " + user);
-        log.info("",eventUser.getId());
-        log.info("",user.getId());
         checkUser(user, eventUser);
 
         StepCategory stepCategory = StepCategory.createCategory(
                 jobEvent,
                 request.getTypeDate(),
-                request.getJobCategory(),
-                request.getName());
+                request.getJobCategory());
         StepCategory saveCategory = stepCategoryRepository.save(stepCategory);
 
         return saveCategory;
     }
+
+    @Transactional
+    public StepCategory create(JobEvent jobEvent, StepCategoryAllRequest request){
+        JobCategory jobCategory = JobCategory.nameOf(request.getJobCategory());
+        StepCategory stepCategory = StepCategory.createCategory(
+                jobEvent,
+                request.getTypeDate(),
+                jobCategory
+        );
+        StepCategory saveCategory = stepCategoryRepository.save(stepCategory);
+        return saveCategory;
+    }
+
+    @Transactional
+    public void create(JobEvent jobEvent, JobCategory jobCategory){
+        StepCategory category = StepCategory.createCategory(jobEvent, null, jobCategory);
+        stepCategoryRepository.save(category);
+    }
+
+
 
     public StepCategory get(Long id) {
         StepCategory stepCategory = stepCategoryRepository.findById(id).orElseThrow(NoSuchElementException::new);
@@ -61,9 +79,18 @@ public class StepCategoryService {
     public StepCategory update(User user, Long id, UpdateStepCategoryRequest request) {
         StepCategory stepCategory = stepCategoryRepository.findById(id).orElseThrow(NoSuchElementException::new);
         checkUser(user, stepCategory);
-        StepCategory updateCategory = stepCategory.updateCategory(request.getTypeDate(), request.getResultStatus(),request.getName());
+        StepCategory updateCategory = stepCategory.updateCategory(request.getTypeDate(), request.getResultStatus());
         return updateCategory;
     }
+
+    @Transactional
+    public StepCategory update(StepCategoryAllRequest request) {
+        StepCategory stepCategory = stepCategoryRepository.findById(request.getStepId()).orElseThrow(NoSuchElementException::new);
+        ResultStatus resultStatus = ResultStatus.nameOf(request.getResultStatus());
+        StepCategory updateCategory = stepCategory.updateCategory(request.getTypeDate(), resultStatus);
+        return updateCategory;
+    }
+
 
     @Transactional
     public void delete(User user, Long id) {
