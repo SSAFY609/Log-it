@@ -5,6 +5,7 @@ import com.ssafy.logit.model.user.dto.UserDto;
 import com.ssafy.logit.model.user.entity.User;
 import com.ssafy.logit.model.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,9 @@ public class UserService {
     private static final String NONE = "사용자 없음";
     private static final String PW_FAIL = "비밀번호 틀림";
     private static final String PRESENT = "이미 가입된 사용자";
+
+    @Value("${s3.url}")
+    private String bucketUrl;
 
     @Autowired
     private UserRepository userRepo;
@@ -79,7 +83,7 @@ public class UserService {
                 result.put("pw", userDto.getPw());
                 result.put("flag", userDto.getFlag());
                 result.put("studentNo", userDto.getStudentNo());
-                result.put("image", userDto.getImage());
+                result.put("image", bucketUrl + "/" + userDto.getImage());
                 result.put("deleted", userDto.isDeleted());
                 result.put("createdTime", userDto.getCreatedTime());
                 result.put("loginTime", userDto.getLoginTime());
