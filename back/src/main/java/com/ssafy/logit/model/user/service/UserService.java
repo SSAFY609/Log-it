@@ -5,12 +5,12 @@ import com.ssafy.logit.model.user.dto.UserDto;
 import com.ssafy.logit.model.user.entity.User;
 import com.ssafy.logit.model.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -21,6 +21,9 @@ public class UserService {
     private static final String NONE = "사용자 없음";
     private static final String PW_FAIL = "비밀번호 틀림";
     private static final String PRESENT = "이미 가입된 사용자";
+
+    @Value("${s3.url}")
+    private String bucketUrl;
 
     @Autowired
     private UserRepository userRepo;
@@ -79,7 +82,14 @@ public class UserService {
                 result.put("pw", userDto.getPw());
                 result.put("flag", userDto.getFlag());
                 result.put("studentNo", userDto.getStudentNo());
-                result.put("image", userDto.getImage());
+
+                String image = userDto.getImage();
+                if(image.length() < 3) {
+                    result.put("image", image);
+                } else {
+                    result.put("image", bucketUrl + "/" + image);
+                }
+
                 result.put("deleted", userDto.isDeleted());
                 result.put("createdTime", userDto.getCreatedTime());
                 result.put("loginTime", userDto.getLoginTime());
@@ -195,7 +205,20 @@ public class UserService {
         List<User> userList = userRepo.findAll();
         if(userList.size() > 0) {
             System.out.println("===== getAllUser =====");
-            return userRepo.findAll().stream().map(UserDto::new).collect(Collectors.toList());
+            List<UserDto> userDtoList = new ArrayList<>();
+            for(User u: userList) {
+                UserDto userDto = u.toDto();
+
+                String image = userDto.getImage();
+                if(image.length() < 3) {
+                    userDto.setImage(image);
+                } else {
+                    userDto.setImage(bucketUrl + "/" + image);
+                }
+
+                userDtoList.add(userDto);
+            }
+            return userDtoList;
         } else  {
             System.out.println("getAllUser : 사용자 없음");
             return null;
@@ -206,7 +229,16 @@ public class UserService {
     public UserDto getUser(String email) {
         if(userRepo.findByEmail(email).isPresent()) {
             System.out.println("===== getUser =====");
-            return userRepo.findByEmail(email).get().toDto();
+            UserDto userDto = userRepo.findByEmail(email).get().toDto();
+
+            String image = userDto.getImage();
+            if(image.length() < 3) {
+                userDto.setImage(image);
+            } else {
+                userDto.setImage(bucketUrl + "/" + userDto.getImage());
+            }
+
+            return userDto;
         } else {
             System.out.println("getUser : " + email + "에 해당하는 사용자 없음");
             return null;
@@ -217,19 +249,41 @@ public class UserService {
     public UserDto getUser(long id) {
         if(userRepo.findById(id).isPresent()) {
             System.out.println("===== getUser =====");
-            return userRepo.findById(id).get().toDto();
+            UserDto userDto = userRepo.findById(id).get().toDto();
+
+            String image = userDto.getImage();
+            if(image.length() < 3) {
+                userDto.setImage(image);
+            } else {
+                userDto.setImage(bucketUrl + "/" + userDto.getImage());
+            }
+
+            return userDto;
         } else {
             System.out.println("getUser : " + id + "에 해당하는 사용자 없음");
             return null;
         }
     }
 
-    // 이름으로 회원 검색
+    // 이름으로 회원 다건 조회
     public List<UserDto> searchUser(String name) {
         List<User> userList = userRepo.findByName(name);
         if(userList.size() > 0) {
             System.out.println("===== searchUser =====");
-            return userList.stream().map(UserDto::new).collect(Collectors.toList());
+            List<UserDto> userDtoList = new ArrayList<>();
+            for(User u: userList) {
+                UserDto userDto = u.toDto();
+
+                String image = userDto.getImage();
+                if(image.length() < 3) {
+                    userDto.setImage(image);
+                } else {
+                    userDto.setImage(bucketUrl + "/" + userDto.getImage());
+                }
+
+                userDtoList.add(userDto);
+            }
+            return userDtoList;
         } else {
             System.out.println("searchUser : " + name + "에 해당하는 사용자 없음");
             return null;
