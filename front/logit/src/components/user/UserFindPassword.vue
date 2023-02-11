@@ -31,7 +31,6 @@
  </template>
  
  <script>
-
  export default {
    name: "UserEmail",
    data: () => ({

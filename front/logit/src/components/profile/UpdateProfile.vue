@@ -1,4 +1,5 @@
 <template>
+ <!-- 프로필 페이지 → 프로필 정보 변경 페이지 -->
   <div class="profile-container">
     <div class="profile-title">프로필</div>
     <div class="profile-main">
@@ -63,7 +64,10 @@
       </div>
       <!-- 사용자 프로필 사진 -->
       <div class="profile-main-photo" @click="onShow">
-        <img class="image-box" width="200" />
+        <img 
+        class="image-box"
+        width="200"
+        height="200" />
       </div>
     </div>
     <div class="profile-input-icon" @click="onShow">
@@ -72,7 +76,7 @@
         >mdi-check</v-icon
       >
     </div>
-    <!-- 아래 프로필 사진 선택 창-->
+    <!-- 프로필 사진 창 -->
     <div v-show="state.photo" class="profile-photo">
       <v-sheet class="mx-auto" max-width="990">
         <v-slide-group
@@ -81,9 +85,10 @@
           selected-class="bg-primary"
           show-arrows
         >
+    <!-- 프로필 사진 선택 창-->
           <v-slide-group-item v-slot="{ isSelected, toggle, selectedClass }">
+              <!-- 사용자 파일 선택 창-->
             <label for="file" class="upload-btn">
-              <!-- 사용자 파일 업로드 선택 창-->
               <input ref="fileImage"  @change="fileChg" id="file" type="file" accept="image/*" />
               <div class="ma-4 select hover_cursor hover_bigger">
                 <v-icon class="profile_icon f_icon lay3 btn_clicked2"
@@ -124,7 +129,6 @@
 
 <script>
 import { reactive, onMounted, computed  } from "@vue/runtime-core";
-// import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { ref } from "vue";
 export default {
@@ -133,7 +137,6 @@ export default {
 
   setup() {
     const fileImage = ref(null);
-    // const router = useRouter();
     const state = reactive({
       model: null,
       email: "",
@@ -152,91 +155,75 @@ export default {
     const store = useStore();
     const formData = new FormData();
 
-    // 업데이트 요청
+    // 프로필 이미지 업데이트 요청
+    // '입력 저장' 버튼을 누르면 숫자(디즈니)와 파일일 경우를 구분해서 서버에 데이터를 보낸다. 
+    //  state.image : 파일 or 숫자
+    //  state.defaultImage : 숫자(디즈니)
     const updateUser = () => {
-      // 이름, 학번 업데이트
-      // const user = {
-      //   name: state.name, // 변경된 데이터
-      //   studentNo: state.studentNo, //변경된 데이터
-      // };
-      // store.dispatch("updateUser", user);
-
-      // 이미지 업로드
-
-      // 숫자일 경우
-      if (typeof(state.image) =='string') {
-        //
+      // 숫자(디즈니)일 경우
+      if (typeof (state.image) == 'string') {
         const formData = new FormData();
-        console.log(state.defaultImage)
         formData.append("defaultImage", state.defaultImage);
         store.dispatch("uploadImage", formData);
       // 파일일 경우
       } else { 
-        console.log("파일인지 알아보나?")
         const formData = new FormData();
-        console.log(state.image)
         formData.append('multipartFile', state.image );
         store.dispatch("uploadFile", formData);
       }
 
     };
 
+    // 프로필 이미지 선택 창 나오게 해줌 
     const onShow = () => {
       state.photo = !state.photo;
       state.fileChk = !state.fileChk;
     };
 
-    // 파일 업로드 했을 때, 변화 저장
+    // 파일 업로드 했을 때 호출
+    // 파일 미리보기, 파일 저장하기
     const fileChg = () => {
-      // console.log('file', file)
-      // 파일 형식 수정
       // 파일 미리보기
       const fileDOM = document.querySelector("#file");
-      const previews = document.querySelectorAll(".image-box");
-      console.log(fileDOM.files)
-      
-      state.image = fileDOM.files[0];
-      console.log('state image', state.image);
-      // state.mutipartFile = ref.fileImage.files[0];
+      const previews = document.querySelectorAll(".image-box");      
       state.imageSrc = URL.createObjectURL(fileDOM.files[0]);
-      // 여기서 화면 변함
       previews[0].src = state.imageSrc;
-      // 구 버전
-      // state.image = state.imageSrc;
+      // 파일 저장하기
+      state.image = fileDOM.files[0];
     };
 
-    // 이미지 선택했을 때, 변화
+    // 디즈니 이미지 선택했을 때 호출
+    // 이미지 미리보기, 숫자 저장하기
     const onClicked = (i) => {
-      state.defaultImage = `${i}`;
-      state.image = `${i}`;
+      // 이미지 미리보기
       const previews = document.querySelector(".image-box");
       previews.src = require(`@/assets/profiles/scale (${i}).png`);
+      // 숫자 저장하기
+      state.defaultImage = `${i}`;
+      state.image = `${i}`;
     };
 
     const loginUser = computed(() => store.state.loginUser)
     
     // 초기화면 세팅
     onMounted(() => {
-      const previews = document.querySelector(".image-box");
+      const previews = document.querySelectorAll(".image-box");
       const loginUser = store.state.loginUser;
       state.email = loginUser.email;
       state.name = loginUser.name;
       state.studentNo = loginUser.studentNo;
+      state.image = loginUser.image;
 
-      // 이미지가 파일인지 숫자인지 문자열 길이로 구분한다.
+      // 사용자 프로필 이미지 세팅
       // 숫자면 바로 반영
-      console.log(loginUser.image.length)
-      if (loginUser.image.length < 3) {
-        previews.src = require(`@/assets/profiles/scale (${loginUser.image}).png`);
+      if (state.image.length < 5) {
+      previews[0].src = require(`@/assets/profiles/scale (${loginUser.image}).png`);
+      // const previews = document.querySelectorAll(".image-box");
+      // previews[0].src = state.image
       } else {
-      // 파일일 경우 가공해서 사용
-      // 파일 받아서 
-      const previews = document.querySelectorAll(".image-box");
-      // 어떻게 가공할지 생각
-      previews[0].src = loginUser.image; 
-      console.log(loginUser.image)
-      // 구 버전
-       // previews.src = loginUser.image;
+      // 파일일 경우 
+      // const previews = document.querySelectorAll(".image-box");
+      previews[0].src = state.image
       }
     });
 

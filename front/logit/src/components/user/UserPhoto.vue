@@ -3,16 +3,7 @@
     <h2 class="profile-title">프로필 생성</h2>
     <div class="profile-scroll-container fill-height">
       <div class="profile-scroll">
-        <!-- 파일 업로드 부분
-        <label for="file" class="upload-btn">
-          <input @change="fileChg" id="file" type="file" accept="image/*" />
-          <div class="ma-4 select hover_cursor hover_bigger">
-            <v-icon class="profile_icon f_icon lay3 btn_clicked2"
-              >mdi-folder-plus-outline</v-icon
-            >
-          </div>
-        </label>
-        -->
+        <!-- 파일 업로드 부분 -->
         <v-col
           cols="3"
           v-for="i in 36"
@@ -42,16 +33,6 @@ export default {
     const state = reactive({
       image: "",
     });
-    // 파일 업로드 함수 
-    // const fileChg = () => {
-    //   // const fileDOM = document.querySelector("#file");
-    //   // const imageSrc = URL.createObjectURL.createObjectURL(fileDOM.files[0]);
-    //   // emit("chgFileDOM", imageSrc);
-    //   // router.push({
-    //   //   name: 'UserProfile',
-    //   // })
-    // };
-
     const onClicked = (i) => {
       emit("updateUserPhoto", i);
     };

@@ -1,4 +1,5 @@
 <template>
+   <!-- 프로필 페이지 → 비밀번호 변경 페이지 -->
   <div class="profile-container">
     <div class="profile-title">비밀번호 변경</div>
     <div class="profile-main">
@@ -6,6 +7,7 @@
         <div class="profile-main-form-text">
           <v-form ref="form" v-model="valid" lazy-validation @keyup="chkPw">
             <div class="profile-main-form-text-email">
+          <!-- 비밀번호 입력 창-->
               <div>새 비밀번호를 입력해주세요.</div>
               <v-text-field
                 v-model="password"
@@ -54,12 +56,10 @@
 
 <script>
 import axiosConnectorFormData from "@/utils/axios-connector-formData";
-
-// import { reactive } from "@vue/reactivity";
-// import { ref } from "vue";
 export default {
   name: "UpdatePassword",
-  data:() => ({
+  data: () => ({
+    // 비밀번호 유효성 검사 규칙
       rules1: {
         required: (value) => !!value || "",
         min: (v) => v.length >= 8 || "최소 8자리 이상 입력해주세요.",
@@ -73,9 +73,11 @@ export default {
       email: "",
     
   }),
-    // 다음 버튼 클릭
   methods: {
+    // '다음' 버튼
+    //  비밀번호를 서버에 보내서 사용자 비밀번호 업데이드
     modifyPw() {
+      // 비밀번호 입력했는지 검사
       if (!this.password.trim() || !this.password_tmp.trim()) {
         alert("입력한 비밀번호가 없습니다.");
         return;
@@ -88,11 +90,10 @@ export default {
         alert("입력한 비밀번호가 일치하지 않습니다.");
         return;
       }
-
+      // 비밀번호 변경 → 1. 비밀번호를 formData에 담는다
       const formData = new FormData();
       formData.append('pw', this.password_tmp);
-      console.log(this.password_tmp);
-
+      // 비밀번호 변경 → 2. formData를 서버에 보낸다
       axiosConnectorFormData.post("user/pw_change", formData
         ).then((res) => {
            console.log(res)
@@ -103,12 +104,10 @@ export default {
             alert("비밀번호 변경이 실패하였습니다.")
             console.log(err)
          })
-      
-        // this.$store.dispatch("updateUser", user);
         this.$router.push({ name: "ProfilePage" });
     },
 
-    
+    // 비밀번호 유효성 검사
       async chkPw () {
         const validate = await this.$refs.form.validate();
         if (validate.valid) {

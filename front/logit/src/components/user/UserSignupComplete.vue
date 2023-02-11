@@ -5,13 +5,6 @@
       <div class="signup-content-text-top">회원가입이 완료되었습니다.</div>
       <div class="signup-content-text-bottom">
         {{ state.uName }}님의 회원가입 축하드립니다.
-        <!--
-        {{ state.email }}
-        {{ state.pw }}
-        {{ state.img }}
-        {{ state.flag }}
-        {{ state.sfNum }}
-          -->
       </div>
     </div>
     <div @click="toMain" class="signup-button b_lightgray_l">

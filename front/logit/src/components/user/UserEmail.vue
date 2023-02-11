@@ -65,16 +65,12 @@ export default {
       this.$router.push({ name: "UserPassword" });
     },
 
-    // 이메일 검사 - 유효성 검사, 중복 검사,
+    // 이메일 검사 - 유효성 검사, 중복 검사
     async chkEmail() {
       const validate = await this.$refs.form.validate();
-      // 이메일 유효성 검사 완료하면
+      // 이메일 유효성 검사
       if (validate.valid) {
         // 이메일 중복 검사
-        // this.$store.dispatch("checkEmail",this.$store.loginUser.email);
-          // const params = {
-          //   email: this.email
-          // }
         axiosConnector.get("user/check", {
           params: {
             email:this.email

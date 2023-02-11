@@ -73,6 +73,7 @@ export default {
       this.$router.push({ name: "UserProfile" });
     },
 
+    // 비밀번호 유효성 검사
     async chkPw() {
       const validate = await this.$refs.form.validate();
       if (validate.valid) {

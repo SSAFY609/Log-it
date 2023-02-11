@@ -1,4 +1,5 @@
 <template>
+ <!-- 프로필 페이지 → 비밀번호 인증 페이지 -->
   <div class="profile-container">
     <div class="profile-title">비밀번호 변경</div>
     <div class="profile-main">
@@ -65,13 +66,13 @@ export default {
     const store = useStore();
     const router = useRouter();
 
+    // '다음' 버튼
+    //  서버에 비밀번호를 보내서 이메일과 맞는 비밀번호인지 확인
     const checkPw = () => {
-
-
+      // 비밀번호 확인 → 1. 비밀번호 formData에 담기
       const formData = new FormData();
       formData.append('pw', state.password);
-
-      // 비밀번호 확인 
+      // 비밀번호 확인 → 2. formData 서버에 보내서 비밀번호 확인
       axiosConnectorFormData.post("user/pw_confirm", formData)
         .then((res) => {
           console.log(res)
@@ -85,17 +86,12 @@ export default {
               alert("비밀번호를 다시 입력해주세요.")
               console.log(err);
            })
-     }
-      // if (state.password == store.state.loginUser.pw) {
-      //   router.push({ name: "UpdatePassword" });
-      // } else {
-      //   alert("비밀번호를 다시 입력해주세요.");
-      // }
+    }
+     
     // 초기화면 세팅
     onMounted(() => {
       const loginUser = store.state.loginUser;
       state.email = loginUser.email;
-      // state.userPassword = loginUser.pw;
     });
     return {
       checkPw,

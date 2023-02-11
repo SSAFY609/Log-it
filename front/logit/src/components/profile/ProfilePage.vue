@@ -1,10 +1,12 @@
 <template>
+  <!-- 프로필 페이지 -->
   <div class="profile-container">
     <div class="profile-title">프로필</div>
     <div class="profile-main">
       <div class="profile-main-form">
         <v-form disabled>
           <div class="profile-main-form-text">
+            <!-- 프로필 정보 -->
             <div class="profile-main-form-text-email">
               <div>이메일</div>
               <v-text-field v-model="state.email" density="compact"></v-text-field>
@@ -65,7 +67,6 @@ import { useStore } from "vuex";
 
 export default {
   name: "ProfilePage",
-  props: ['fileSrc'],
   setup() {
     const router = useRouter();   
     const state = reactive({
@@ -76,26 +77,37 @@ export default {
     });
 
     const store = useStore()
-
     const loginUser = computed(()=>store.state.loginUser)
-    
+
+    // '정보 수정' 버튼
+    // 프로필 페이지(ProfilePage) → 프로필 변경 페이지(UpdateProfile)
     const toUpdate = () => {
       router.push({name:"UpdateProfile"});
     }
 
+    // 초기화면 세팅
     onMounted(() => {
-      const previews = document.querySelector(".image-box");
+      const previews = document.querySelectorAll(".image-box");
       const loginUser = store.state.loginUser
       state.email = loginUser.email;
       state.name = loginUser.name;
       state.studentNo = loginUser.studentNo;
-      console.log(loginUser.image)
-      if (loginUser.image.length < 3) {
-        previews.src = require(`@/assets/profiles/scale (${loginUser.image}).png`)
+      state.image = loginUser.image;
+
+      // 사용자 프로필 이미지 세팅
+        // 숫자(디즈니)일 경우 
+        console.log(state.image)
+      if (state.image.length < 5) {
+        previews[0].src = require(`@/assets/profiles/scale (${loginUser.image}).png`)
+        // const previews = document.querySelectorAll(".image-box");
+        // previews[0].src = state.image;
       } else {
-        previews.src = loginUser.image
+        // 파일일 경우 
+        // const previews = document.querySelectorAll(".image-box");
+        previews[0].src = state.image;
       }
     });
+
     return {
       toUpdate,
       loginUser,
