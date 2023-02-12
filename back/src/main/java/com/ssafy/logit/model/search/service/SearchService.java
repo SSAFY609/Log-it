@@ -173,7 +173,6 @@ public class SearchService {
                 result.setKeyword(makeResultMap.get("keyword"));
                 result.setNextStr(makeResultMap.get("nxtStr"));
 
-                System.out.println(">>>>>>>>>>>>>> " + p.getGrowthId());
                 result.setEventName(growthRepo.findById(p.getGrowthId()).get().getCategory());
                 resultList.add(result);
             }
@@ -198,6 +197,9 @@ public class SearchService {
                 result.setPreStr(makeResultMap.get("preStr"));
                 result.setKeyword(makeResultMap.get("keyword"));
                 result.setNextStr(makeResultMap.get("nxtStr"));
+
+                result.setStartDate(j.getStartDate().toString());
+                result.setEndDate(j.getEndDate().toString());
 
                 resultList.add(result);
             }
