@@ -19,7 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
 @RequestMapping("/statistics")
@@ -42,6 +45,17 @@ public class StatisticsController {
         results.add(new ResultStatisticsDto("interview", statisticsService.getInterviewStatistics()));
         results.add(new ResultStatisticsDto("myApply", statisticsService.getMyApplyStatus(user)));
         return new ResponseEntity<>(results, HttpStatus.OK);
+    }
+    @GetMapping("/test")
+    @Operation(summary = "모든 통계 테스트",description = "모든 통계 데이터를 확인합니다.")
+    public ResponseEntity<Map<String,Object>> getAllTest(@RequestAttribute String email){
+        User user = userService.getUserEntity(email);
+        Map<String, Object> hm = new ConcurrentHashMap<>();
+        hm.put("algorithm",statisticsService.getAlgoStatistics());
+        hm.put("interview", statisticsService.getInterviewStatistics());
+        hm.put("myApply", statisticsService.getMyApplyStatus(user));
+        hm.put("random-interview", interviewService.getRandomInterviews());
+        return new ResponseEntity<>(hm, HttpStatus.OK);
     }
 
 
