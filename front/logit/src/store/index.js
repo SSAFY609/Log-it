@@ -4,7 +4,20 @@ import router from "@/router";
 import axiosConnector from "@/utils/axios-connector";
 import axiosConnectorFormData from "@/utils/axios-connector-formData";
 
-// 모듈 import
+// import { useRouter } from "vue-router";
+// import temp from './modules/temp.js'
+// import event from './modules/event.js'
+// import timeline from './modules/timeline.js'
+
+// const getToken = () => {
+//   const token = sessionStorage.getItem("token");
+//   return {
+//     Authorization: `bearer ${token}`,
+//   };
+// }; 
+
+import tempJob from './modules/tempJob.js'
+import job from './modules/job.js'
 import temp from './modules/temp.js'
 import growth from "./modules/growth.js";
 import timeline from "./modules/timeline.js";
@@ -47,6 +60,7 @@ export default createStore({
     // 유저 로그인
     login({ commit }, user) {
       const URL = `${baseURL}/login`;
+      console.log(user)
       axios({
         url: URL,
         method: "POST",
@@ -194,5 +208,7 @@ export default createStore({
     growth: growth,
     timeline: timeline,
     search: search,
+    job: job,
+    tempJob: tempJob,
   },
 });

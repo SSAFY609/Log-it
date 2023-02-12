@@ -1,7 +1,7 @@
 
 /* 아웃라인 보고싶지 않으면 주석처리 */
   
-  /* .lay1 {
+  .lay1 {
     outline: 1px dashed crimson;
   }
   .lay2 {
@@ -9,7 +9,7 @@
   }
   .lay3 {
     outline: 1px dashed green;
-  } */
+  }
 
 
   .first {
@@ -258,3 +258,7 @@ ul, li {
   text-align: center;
 }
 /* alert 창을 위한 CSS */
+
+input[type=radio] {
+  display: none;
+}
