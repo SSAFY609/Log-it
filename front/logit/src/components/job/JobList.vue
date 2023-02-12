@@ -61,7 +61,7 @@ export default {
       }
     },
     created() {
-
+      this.$store.dispatch('tempJob/getAllJob')
     }
 
 }
