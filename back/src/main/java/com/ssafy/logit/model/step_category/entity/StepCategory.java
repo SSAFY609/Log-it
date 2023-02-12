@@ -45,16 +45,16 @@ public class StepCategory {
     @Column(length = 20,updatable = false)
     private JobCategory jobCategory;
 
-    @OneToMany(mappedBy = "stepCategory")
+    @OneToMany(mappedBy = "stepCategory",cascade = CascadeType.REMOVE)
     private List<Document> documentList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "stepCategory")
+    @OneToMany(mappedBy = "stepCategory",cascade = CascadeType.REMOVE)
     private List<CodingTest> codingTestList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "stepCategory")
+    @OneToMany(mappedBy = "stepCategory",cascade = CascadeType.REMOVE)
     private List<StepEtc> stepEtcList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "stepCategory")
+    @OneToMany(mappedBy = "stepCategory",cascade = CascadeType.REMOVE)
     private List<Interview> interviewList = new ArrayList<>();
 
 
