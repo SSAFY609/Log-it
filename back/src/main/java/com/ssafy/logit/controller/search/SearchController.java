@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @RestController
@@ -32,9 +33,9 @@ public class SearchController {
     @GetMapping
     public ResponseEntity<Map<String, List<SearchResultDto>>> search(@RequestParam String keyword, @RequestAttribute String email) {
         long userId = userService.getUser(email).getId();
-        log.info("keyword = 2143{}2143", keyword);
+        log.info("keyword = {}", keyword);
 
-        Map<String, List<SearchResultDto>> resultMap = new HashMap<>();
+        Map<String, List<SearchResultDto>> resultMap = new ConcurrentHashMap<>();
 
         List<SearchResultDto> resultList = new ArrayList<>();
         resultList = searchService.searchUserEmail(resultList, userId, keyword);
