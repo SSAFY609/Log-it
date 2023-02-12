@@ -31,11 +31,11 @@ public class SearchController {
 
     @Operation(summary = "", description = "")
     @GetMapping
-    public ResponseEntity<Map<String, List<SearchResultDto>>> search(@RequestParam String keyword, @RequestAttribute String email) {
+    public ResponseEntity<ConcurrentHashMap<String, List<SearchResultDto>>> search(@RequestParam String keyword, @RequestAttribute String email) {
         long userId = userService.getUser(email).getId();
         log.info("keyword = {}", keyword);
 
-        Map<String, List<SearchResultDto>> resultMap = new ConcurrentHashMap<>();
+        ConcurrentHashMap<String, List<SearchResultDto>> resultMap = new ConcurrentHashMap<>();
 
         List<SearchResultDto> resultList = new ArrayList<>();
         resultList = searchService.searchUserEmail(resultList, userId, keyword);
@@ -57,6 +57,6 @@ public class SearchController {
         resultList = searchService.searchEtcContent(resultList, userId, keyword);
         resultMap.put("JOB", resultList);
 
-        return new ResponseEntity<Map<String, List<SearchResultDto>>>(resultMap, HttpStatus.OK);
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 }
