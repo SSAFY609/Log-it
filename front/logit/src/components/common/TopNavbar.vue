@@ -18,7 +18,6 @@
         </router-link>
       </div>
       <div v-else class="profile_box right_box_items">
-        <div @click="openProfile" class="profile_id hover_cursor ">{{state.loginUser.name}} 님</div>
         <div @click="openProfile" class="profile_img_box hover_cursor">
           <v-img class="logo_img"
             :src="require('../../assets/profiles/scale (3).png')"
@@ -90,11 +89,7 @@ export default {
   setup() {
     const state = {
 
-      // loginUser: {
-      //   id: "leesh132",
-      //   name: "이성훈",
-      //   num: "848212",
-      // },
+
     }
   
     const store = useStore()
