@@ -79,7 +79,7 @@
     </div>
     <div class="snackbar">
       <v-snackbar v-model="snackbar" min-height="300px" variant="tonal" location="top" color="#FF0A54" class="snackbar">
-        <strong>로그인</strong>을 하고 이용해주세요
+        <strong>로그인</strong>을 하고 이용해주세요.
       </v-snackbar>
     </div>
   </div>
