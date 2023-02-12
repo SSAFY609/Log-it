@@ -24,7 +24,7 @@
           >
               <swiper-slide v-for="(date, index) in state.dates" :key="index">
                   <div class="grow">
-                    <div @click="goGrowth(data.growthId)" v-for="(data, index) in date.growths" :key="index" :class="`event ${data.start} ${data.period} floor${index + 1}`">
+                    <div @click="goGrowth(data.growthId)" v-for="(data, index) in date.growths" :key="index" :class="`event growth-event ${data.start} ${data.period} floor${index + 1}`">
                       {{ data.title }}
                     </div>
                   </div>
@@ -41,7 +41,7 @@
                       </div>
                   </div>
                   <div class="job">
-                    <div @click="goJob(data.jobId)" v-for="(data, index) in date.jobs" :key="index" :class="`event ${data.start} ${data.period} floor-${index + 1}`">
+                    <div @click="goJob(data.jobId)" v-for="(data, index) in date.jobs" :key="index" :class="`event job-event ${data.start} ${data.period} floor-${index + 1}`">
                       {{ data.title }}
                     </div>
                   </div>
@@ -555,7 +555,7 @@ export default {
   align-items: center;
   position: absolute;
   border-radius: 50px;
-  height: 40px;
+  height: 34px;
   font-size: 20px;
   color: white;
   cursor: pointer;
@@ -614,68 +614,49 @@ export default {
   width: 100%;
 }
 
-.floor1:hover {
-  /* background: rgb(255,185,185);
-  background: linear-gradient(90deg, rgba(255,185,185,1) 0%, rgba(255,133,132,1) 24%, rgba(255,0,48,1) 100%); */
-  background-position: 99% 50%;
-  /* top: 115px; */
 
-}
-
-.floor1 {
-  top: 100px;
+.growth-event{
   background: rgb(255,0,48) repeat-x;
   background: linear-gradient(90deg, #ff0030 0%, #ff8584 50%, #ff8584 76%, #ff0030 100%);
   background-size: 300% 300%;
   background-position: 1% 50%;
   transition: all 1s ease;
 }
+.growth-event:hover,
+.job-event:hover {
+  background-position: 99% 50%;
+}
+.job-event{
+  background: rgb(255, 196, 0) repeat-x;
+  background: linear-gradient(90deg, rgb(255, 196, 0) 0%, rgba(255,182,56,1) 76%, rgba(255,226,175,1) 100%);
+  background-size: 300% 300%;
+  background-position: 1% 50%;
+  transition: all 1s ease;
+}
+
+.floor1 {
+  top: 100px;
+}
 .floor2 {
-  top: 55px;
-  /* background-color: rgb(255, 185, 100); */
-  background: rgb(255,0,48);
-background: linear-gradient(90deg, rgba(255,0,48,1) 0%, rgba(255,133,132,1) 76%, rgba(255,185,185,1) 100%);
+  top: 60px;
 }
 .floor3 {
   top: 20px;
-  /* background-color: rgb(255, 126, 147); */
-  background-color: #ff7096c0;
 }
-
 .floor4 {
-  background-color: #ff85a2bb;
-  top: 5px;
-  /* background-color: rgb(255, 210, 46); */
+  top: -20px;
 }
 .floor-1 {
   top: 250px;
-  /* background-color: rgb(27, 171, 255); */
-
-background: rgb(255, 196, 0);
-background: linear-gradient(90deg, rgb(255, 196, 0) 0%, rgba(255,182,56,1) 76%, rgba(255,226,175,1) 100%);
 }
 .floor-2 {
-  top: 300px;
-  /* background-color: rgb(255, 210, 155); */
-  /* background-color: rgb(255, 126, 147); */
-
-  background: rgb(255, 196, 0);
-background: linear-gradient(90deg, rgb(255, 196, 0) 0%, rgba(255,182,56,1) 76%, rgba(255,226,175,1) 100%);
+  top: 290px;
 }
 .floor-3 {
-  top: 350px;
-  /* background-color: rgb(255, 255, 172); */
-  /* background-color: rgb(255, 185, 100); */
-
-  background: rgb(255, 196, 0);
-background: linear-gradient(90deg, rgb(255, 196, 0) 0%, rgba(255,182,56,1) 76%, rgba(255,226,175,1) 100%);
+  top: 330px;
 }
-
 .floor-4 {
-  top: 355px;
-  /* background-color: rgb(255, 126, 147); */
-  /* background-color: rgb(183, 255, 183); */
-  background-color: #ffd000bf;
+  top: 370px;
 
 }
 

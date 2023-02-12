@@ -77,11 +77,6 @@
       </router-link>
       
     </div>
-    <div class="snackbar">
-      <v-snackbar v-model="snackbar" min-height="300px" variant="tonal" timeout="1000" location="top" color="#FF0A54" class="snackbar">
-        <strong>로그인</strong>을 하고 이용해주세요.
-      </v-snackbar>
-    </div>
   </div>
 </template>
 
@@ -90,11 +85,6 @@ import { mapState } from 'vuex'
 
 export default {
   name: 'SideNavbar',
-  data(){
-    return {
-      snackbar: false,
-    }
-  },
   computed: {
     ...mapState(['loginUser'])
   },
@@ -113,7 +103,7 @@ export default {
 
     btnClicked(select) {      
       if(!this.loginUser.id){
-        this.snackbar = true;
+        this.$router.push({name: 'UserLogin'})
         return
       } 
       const target = event.target.parentElement
@@ -257,52 +247,6 @@ export default {
   .btn_clicked2 {
     font-weight: 900;
     color: #191919;
-  }
-
-  .snackbar {
-    font-size: 20px;
-    transform-origin: 50% 0%;
-    animation-name: shake;
-    animation-duration: 1s;
-    animation-iteration-count: 1;
-    animation-delay: 0.2s;
-  }
-
-  @keyframes shake {
-    /* 0% {
-      transform: rotate(-40deg);
-    }
-    100% {
-      transform: rotate(40deg);
-    } */
-    0%{
-      transform: rotate(0deg);
-    }
-    10%{
-      transform: rotate(8deg);
-    }
-    20%{
-      transform: rotate(-8deg);
-    }
-    30%{
-      transform: rotate(5deg);
-    }
-    40%{
-      transform: rotate(-5deg);
-    }
-    50%{
-      transform: rotate(4deg);
-    }
-    60%{
-      transform: rotate(-4deg);
-    }
-    70%{
-      transform: rotate(2deg);
-    }
-    100%{
-      transform: rotate(0deg);
-    }
-    
   }
 
   
