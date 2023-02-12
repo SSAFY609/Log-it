@@ -32,7 +32,7 @@ public class SearchController {
     @GetMapping
     public ResponseEntity<Map<String, List<SearchResultDto>>> search(@RequestParam String keyword, @RequestAttribute String email) {
         long userId = userService.getUser(email).getId();
-        log.info("keyword = {}", keyword);
+        log.info("keyword = 2143{}2143", keyword);
 
         Map<String, List<SearchResultDto>> resultMap = new HashMap<>();
 
