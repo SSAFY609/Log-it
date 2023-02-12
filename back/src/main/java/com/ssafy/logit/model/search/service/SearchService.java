@@ -28,10 +28,10 @@ import com.ssafy.logit.model.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Service
@@ -158,9 +158,8 @@ public class SearchService {
                 SearchResultDto result = new SearchResultDto();
                 result.setType("성장 과정");
                 result.setId(p.getProgressId());
-
                 String content = p.getContent();
-                Map<String, Integer> cutResultMap = new HashMap<>();
+                Map<String, Integer> cutResultMap = new ConcurrentHashMap<>();
                 if(content.length() > 30) {
                     cutResultMap = cutStr(keyword, content, true);
                     result.setLong(true);
@@ -216,7 +215,7 @@ public class SearchService {
                 result.setId(d.getId());
 
                 String content = d.getQuestion();
-                Map<String, Integer> cutResultMap = new HashMap<>();
+                Map<String, Integer> cutResultMap = new ConcurrentHashMap<>();
                 if(content.length() > 30) {
                     cutResultMap = cutStr(keyword, content, true);
                     result.setLong(true);
@@ -247,7 +246,7 @@ public class SearchService {
                 result.setId(d.getId());
 
                 String content = d.getAnswer();
-                Map<String, Integer> cutResultMap = new HashMap<>();
+                Map<String, Integer> cutResultMap = new ConcurrentHashMap<>();
                 if(content.length() > 30) {
                     cutResultMap = cutStr(keyword, content, true);
                     result.setLong(true);
@@ -278,7 +277,7 @@ public class SearchService {
                 result.setId(c.getId());
 
                 String content = c.getContent();
-                Map<String, Integer> cutResultMap = new HashMap<>();
+                Map<String, Integer> cutResultMap = new ConcurrentHashMap<>();
                 if(content.length() > 30) {
                     cutResultMap = cutStr(keyword, content, true);
                     result.setLong(true);
@@ -309,7 +308,7 @@ public class SearchService {
                 result.setId(i.getId());
 
                 String content = i.getQuestion();
-                Map<String, Integer> cutResultMap = new HashMap<>();
+                Map<String, Integer> cutResultMap = new ConcurrentHashMap<>();
                 if(content.length() > 30) {
                     cutResultMap = cutStr(keyword, content, true);
                     result.setLong(true);
@@ -340,7 +339,7 @@ public class SearchService {
                 result.setId(i.getId());
 
                 String content = i.getAnswer();
-                Map<String, Integer> cutResultMap = new HashMap<>();
+                Map<String, Integer> cutResultMap = new ConcurrentHashMap<>();
                 if(content.length() > 30) {
                     cutResultMap = cutStr(keyword, content, true);
                     result.setLong(true);
@@ -371,7 +370,7 @@ public class SearchService {
                 result.setId(s.getId());
 
                 String content = s.getContent();
-                Map<String, Integer> cutResultMap = new HashMap<>();
+                Map<String, Integer> cutResultMap = new ConcurrentHashMap<>();
                 if(content.length() > 30) {
                     cutResultMap = cutStr(keyword, content, true);
                     result.setLong(true);
@@ -393,7 +392,7 @@ public class SearchService {
 
     // 검색 결과를 세 블록으로 나눠 리턴 (keyword 이전의 내용, keyword, keyword 이후의 내용)
     public Map<String, Integer> cutStr(String keyword, String content, boolean isLong) {
-        Map<String, Integer> resultMap = new HashMap<>();
+        Map<String, Integer> resultMap = new ConcurrentHashMap<>();
         int preStartIdx = 0;
         int nxtStartIdx = 0;
         int endIdx = 0;
@@ -434,7 +433,7 @@ public class SearchService {
 
     // 30자를 초과하는 검색 결과에 대한 연산
     public Map<String, Integer> findLongIdx(String keyword, String content, int keyStartIdx) {
-        Map<String, Integer> resultMap = new HashMap<>();
+        Map<String, Integer> resultMap = new ConcurrentHashMap<>();
         int preStartIdx = -1;
         int nxtStartIdx = keyStartIdx + keyword.length();
         int endIdx = 30 - 1;
@@ -459,7 +458,7 @@ public class SearchService {
         int nxtStartIdx = infoMap.get("nxtStartIdx");
         int endIdx = infoMap.get("endIdx");
 
-        Map<String, String> resultMap = new HashMap<>();
+        Map<String, String> resultMap = new ConcurrentHashMap<>();
         if (preStartIdx < 0) {
             resultMap.put("preStr", "");
         } else {
