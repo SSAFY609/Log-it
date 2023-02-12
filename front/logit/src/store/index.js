@@ -16,13 +16,17 @@ import axiosConnectorFormData from "@/utils/axios-connector-formData";
 //   };
 // }; 
 
+import tempJob from './modules/tempJob.js'
+import job from './modules/job.js'
 import temp from './modules/temp.js'
 import growth from "./modules/growth.js";
 import timeline from "./modules/timeline.js";
 import search from "./modules/search.js";
 
-// const baseURL = "https://i8a609.p.ssafy.io/api/user";
-const baseURL = "http://localhost:9090/user";
+// const baseURL = "http://localhost:9090/user";
+
+const baseURL = "https://i8a609.p.ssafy.io/api/user/";
+
 export default createStore({
 
   state: {
@@ -55,6 +59,7 @@ export default createStore({
     // 유저 로그인
     login({ commit }, user) {
       const URL = `${baseURL}/login`;
+      console.log(user)
       axios({
         url: URL,
         method: "POST",
@@ -224,5 +229,7 @@ export default createStore({
     growth: growth,
     timeline: timeline,
     search: search,
+    job: job,
+    tempJob: tempJob,
   },
 });

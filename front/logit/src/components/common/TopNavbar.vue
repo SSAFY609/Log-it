@@ -3,15 +3,13 @@
     <div class="left_box">
       <div @click="openSidebar" class="slider_hover slider_box b_lightgray"><v-icon class="silder_icon f_white">mdi-chevron-double-right</v-icon></div>
     </div>
-    <div class="right_box lay3">
-      <div class="search_box_container lay1">
-        <div @click="openSearch" class="search_box right_box_items hover_cursor  lay2">
-          <v-icon class="search_icon lay3">mdi-magnify</v-icon>
-          <div class="search_content lay3">검색</div>
-          <v-autocomplete class="search_input_text nosee" autofocus
-            clearable
-            :items=state.SearchList
-          ></v-autocomplete>
+    <div class="right_box">
+      <div class="search_box_container">
+        <div class="search_box right_box_items hover_cursor"  id="searchId" @click="searchSlider">
+          <div class="search_icon_box"><v-icon class="search_icon">mdi-magnify</v-icon></div>
+          <div class="search_content_box">
+            <input class="search_content" type="text" placeholder="검색">    
+          </div>  
         </div>
       </div>
       <div v-if="!loginUser.id" class="login_btn_box right_box_items">
@@ -19,15 +17,15 @@
           <div class="login_btn_text f_white">로그인</div>
         </router-link>
       </div>
-      <div v-else class="profile_box right_box_items lay1">
-        <!-- <div @click="openProfile" class="profile_id lay2 hover_cursor ">{{state.loginUser.name}} 님</div> -->
-        <div @click="openProfile" class="profile_img_box hover_cursor lay2">
+      <div v-else class="profile_box right_box_items">
+        <div @click="openProfile" class="profile_id hover_cursor ">{{state.loginUser.name}} 님</div>
+        <div @click="openProfile" class="profile_img_box hover_cursor">
           <v-img class="logo_img"
             :src="require('../../assets/profiles/scale (3).png')"
             height="110"
           />    
         </div>
-        <div class="profile_slider_box lay3 nosee">
+        <div class="profile_slider_box nosee">
           <ul>
             <li>설정</li>
             <li>친구목록</li>
@@ -39,6 +37,7 @@
       </div>
     </div>
     
+    <div v-if="modal" class="out_box_area" @click="minimize_search" :v-model="modal"></div>
 
   </div>
 </template>
@@ -50,10 +49,43 @@ import { useStore } from 'vuex'
 
 export default {
   name: 'TopNavbar',
+  data() {
+    return {
+      modal : false
+    }
+  },
+
   methods: {
     logout() {
       this.$store.dispatch('logout')
     },
+    searchSlider() {
+      const target = document.querySelector('.search_box')
+      const target2 = document.querySelector('.search_icon_box')
+      const target3 = document.querySelector('.search_icon')
+      const target4 = document.querySelector('.search_content_box')
+      const target5 = document.querySelector('.search_content')
+      const targetInput = document.querySelector('.search_content')
+
+
+        
+      if(event.target == target || event.target == target2 || event.target == target3 || event.target == target4 || event.target == target5)  {
+        target.classList.add('max_animation')
+        target.classList.add('search_back_on')
+        targetInput.focus()
+        this.modal = true
+        
+      }
+
+    },
+    minimize_search() {
+      const target = document.querySelector('.search_box')
+      target.classList.remove('max_animation')
+      target.classList.remove('search_back_on')
+      this.modal = false
+    }
+    
+
   },
   setup() {
     const state = {
@@ -85,24 +117,13 @@ export default {
 
       target.classList.toggle('nosee')
     }
-    const openSearch = () => {
-      const target = document.querySelector('.search_box')
-      const target2 = document.querySelector('.search_input_text') 
-      const target3 = document.querySelector('.search_content') 
-
-      target.classList.add('max_animation')
-      target2.style.display="inline-block"
-      target2.focus()
-      target3.classList.add('nosee')
-
     
-    }
+
     return {
       state,
       loginUser,
       openSidebar,
       openProfile,
-      openSearch,
     }
     
   },
@@ -150,13 +171,15 @@ export default {
     height: 100%;
   }
   .search_box {
-    width: 70px;
+    z-index: 500;
+    width: 100px;
     height: 40px;
     display: flex;
     align-items: center;
     justify-content: start;
     border-radius: 4px;
     margin-right: 10px;
+    /* background-color: aqua; */
   }
   .search_box:hover {
     background-color: #efefef;
@@ -193,23 +216,23 @@ export default {
     font-size: 16px;
   }
   .search_icon {
-    width: 40px;
-    height: 100%;
-    font-size: 20px;
-    padding-right: 0px;
-    margin-right:0px;
-
+    font-size: 26px;
+    margin-left:10px;
 
   }
   .search_content {
-    height: 100%;
-    width: 60px;
-    font-size: 18px;
-    padding-top: 6px;
+    height: 26px;
+    width: 100%;
+    margin-left: 10px;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    font-size: 20px;
+
   }
 
   .search_content_box {
-    width: 40px;
+    width: 100%;
     height: 36px;  
     display: flex;
     align-items: center;
@@ -269,7 +292,7 @@ export default {
 
   .max_animation {
   animation-duration: 0.4s;
-  animation-name: maxAnimation;
+  animation-name: max_animation;
   animation-fill-mode:forwards;
   animation-direction: alternate;
   background-color: #efefef;
@@ -280,8 +303,9 @@ export default {
   from {
     width: 100px;
   }
-  to {    
-    width: 400px
+
+  to {
+    width: 370px
   }
 }
 
@@ -293,5 +317,21 @@ input:focus {outline: none;}
   margin-bottom: 14px;
 }
 
+input:focus {
+  outline: none;
+  width: 100%;
+}
 
+.out_box_area {
+  position: absolute;
+  z-index: 400;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 1080px;
+  background-color: transparent;
+}
+.search_back_on {
+  background-color: #efefef;
+}
 </style>

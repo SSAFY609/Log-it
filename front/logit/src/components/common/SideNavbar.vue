@@ -33,12 +33,12 @@
           <div class="menu_text_box f_darkgray lay3">성장일지</div>
         </div>
       </router-link>
-      <router-link :to="{name: 'JobList'}" class="menu_item_box lay2 hover_cursor">
+      <div @click="goJob" class="menu_item_box lay2 hover_cursor">
         <div class="menu_icon_box lay3" @click="btnClicked">
           <v-icon class="menu_icon f_icon">mdi-briefcase</v-icon>  
           <div class="menu_text_box f_darkgray lay3">취업일지</div>
         </div>
-      </router-link>
+      </div>
       <router-link :to="{name: 'ProfilePage'}" class="menu_item_box lay2 hover_cursor">
         <div class="menu_icon_box lay3" @click="btnClicked">
           <v-icon class="menu_icon f_icon">mdi-account-circle</v-icon>  
@@ -110,6 +110,10 @@ export default {
       target.classList.toggle('btn_clicked')
       target.firstChild.classList.toggle('btn_clicked2')
       target.lastChild.classList.toggle('btn_clicked2')
+    },
+
+    goJob() {
+      this.$store.dispatch('tempJob/getAllJob')
     }
   },
 }
