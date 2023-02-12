@@ -278,7 +278,7 @@ const tempJob = {
     mutations: {
         GET_ALL_JOB(state, payload){
             state.allJob = payload
-            router.push({name: 'JobList'})
+            // router.push({name: 'JobList'})
         },
 
 
