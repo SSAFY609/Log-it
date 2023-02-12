@@ -169,7 +169,7 @@ export default {
 
       const store = useStore()
 
-      const sidebar = computed(()=>store.state.temp.sidebar)
+      const sidebar = computed(()=>store.state.sidebar)
       const loginUser = computed(()=>store.state.loginUser)
 
       const onSwiper = (swiper) => {
@@ -550,17 +550,17 @@ export default {
 }
 
 .event {
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: absolute;
   border-radius: 50px;
-  height: 30px;
+  height: 40px;
   font-size: 20px;
   color: white;
   cursor: pointer;
 }
-.event:hover {
-  
-}
+
 
 .mon {
   left: 14.28%;
@@ -615,24 +615,29 @@ export default {
 }
 
 .floor1:hover {
-  background: rgb(255,185,185);
-  background: linear-gradient(90deg, rgba(255,185,185,1) 0%, rgba(255,133,132,1) 24%, rgba(255,0,48,1) 100%);
+  /* background: rgb(255,185,185);
+  background: linear-gradient(90deg, rgba(255,185,185,1) 0%, rgba(255,133,132,1) 24%, rgba(255,0,48,1) 100%); */
+  background-position: 99% 50%;
+  /* top: 115px; */
+
 }
 
 .floor1 {
-  top: 110px;
+  top: 100px;
   background: rgb(255,0,48) repeat-x;
-  background: linear-gradient(90deg, #ff0030 0%, #ff8584 76%, #ffb9b9 100%) repeat-x;
+  background: linear-gradient(90deg, #ff0030 0%, #ff8584 50%, #ff8584 76%, #ff0030 100%);
+  background-size: 300% 300%;
+  background-position: 1% 50%;
   transition: all 1s ease;
 }
 .floor2 {
-  top: 75px;
+  top: 55px;
   /* background-color: rgb(255, 185, 100); */
   background: rgb(255,0,48);
 background: linear-gradient(90deg, rgba(255,0,48,1) 0%, rgba(255,133,132,1) 76%, rgba(255,185,185,1) 100%);
 }
 .floor3 {
-  top: 40px;
+  top: 20px;
   /* background-color: rgb(255, 126, 147); */
   background-color: #ff7096c0;
 }
@@ -650,7 +655,7 @@ background: rgb(255, 196, 0);
 background: linear-gradient(90deg, rgb(255, 196, 0) 0%, rgba(255,182,56,1) 76%, rgba(255,226,175,1) 100%);
 }
 .floor-2 {
-  top: 285px;
+  top: 300px;
   /* background-color: rgb(255, 210, 155); */
   /* background-color: rgb(255, 126, 147); */
 
@@ -658,7 +663,7 @@ background: linear-gradient(90deg, rgb(255, 196, 0) 0%, rgba(255,182,56,1) 76%, 
 background: linear-gradient(90deg, rgb(255, 196, 0) 0%, rgba(255,182,56,1) 76%, rgba(255,226,175,1) 100%);
 }
 .floor-3 {
-  top: 320px;
+  top: 350px;
   /* background-color: rgb(255, 255, 172); */
   /* background-color: rgb(255, 185, 100); */
 

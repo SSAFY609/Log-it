@@ -1,133 +1,142 @@
 <template>
   <div class="container">
-    <div class="header">
-      <div class="title">
-        <div class="event-title">{{ growth.category }}</div>
-        <div class="event-date">{{ date_to_str(growth.eventDate.startDate, growth.eventDate.endDate) }}</div>
-        <div class="show-member-list" @click="member = true">
-          <div v-if="growthUsers.length == 0"> {{ growth.user.name }} 님 참여중 <v-icon>mdi-account-multiple-plus</v-icon></div>
-          <div v-else> {{ growth.user.name }} 님 외 {{ growthUsers.length }}명 참여중 <v-icon>mdi-account-multiple-plus</v-icon></div>
-        </div>
-      </div>
-      <div class="grass-box">
-        <div class="grass">
-          <div class="days">
-            <div v-for="i in 10" :key="i" class="day">{{ i }}</div>
-          </div>
-          <!-- <div v-for="i in week" :key="i" class="week">
-            <div v-for="j in 10" class="square" :key="j"></div>
-          </div>
-          <div class="week">
-            <div v-for="j in rest" :key="j" class="square"></div>
-          </div> -->
-          <div class="week">
-            <div v-for="grass in log" :key="grass.idx">
-              <div v-if="!grass.written" class="not"></div>
-              <div v-else :class="`done ${grass.date}`" @click="check($event)">
-                <v-tooltip activator="parent" location="bottom">{{ grass.date }}</v-tooltip>
-              </div>
-            </div>
+    <div class="print">
+      <div class="header">
+        <div class="title">
+          <div class="event-title">{{ growth.category }}</div>
+          <div class="event-date">{{ date_to_str(growth.eventDate.startDate, growth.eventDate.endDate) }}</div>
+          <div class="show-member-list" @click="member = true">
+            <div v-if="growthUsers.length == 0"> {{ growth.user.name }} 님 참여중 <v-icon>mdi-account-multiple-plus</v-icon></div>
+            <div v-else> {{ growth.user.name }} 님 외 {{ growthUsers.length }}명 참여중 <v-icon>mdi-account-multiple-plus</v-icon></div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="progress">
-      <v-timeline side="end" align="center" line-thickness="5">
-        <v-timeline-item v-show="!today" class="progress-item" dot-color="rgb(255, 225, 121)" size="small">
-          <div class="memo-box">
-            <div class="memo-date">{{date_after(new Date())}}</div>
-            <div class="memo" @click="dialog = true, progressCreate()">
-              <div>텍스트를 입력하세요</div>
+        <div class="grass-box">
+          <div class="grass">
+            <div v-if="log.length < 10" class="days">
+              <div v-for="i in log.length" :key="i" class="day">{{ i }}</div>
             </div>
-          </div>
-        </v-timeline-item>
-        <v-timeline-item
-          class="progress-item"
-          v-for=" progress in [...this.firstProgress].reverse()"
-          dot-color="rgb(255, 225, 121)"
-          :key="progress.progressDto.progressId"
-          size="small"
-        >
-          <div class="memo-box" :id="progress.date">
-            <div class="memo-date">{{progress.date}}</div>
-            <div v-if="progress.progressDto.user.id == loginUser.id" class="memo" @click="dialog = true, progressDetail(progress.date)">
-              <div v-html="progress.progressDto.content"></div>
+            <div v-else class="days">
+              <div v-for="i in 10" :key="i" class="day">{{ i }}</div>
             </div>
-            <div v-else class="memo isMine" @click="dialog = true, progressDetail(progress.date)">
-              <div v-html="progress.progressDto.content"></div>
+            <!-- <div v-for="i in week" :key="i" class="week">
+              <div v-for="j in 10" class="square" :key="j"></div>
             </div>
-          </div>
-        </v-timeline-item>
-      </v-timeline> 
-
-      <!-- 여기부터 이벤트 유저 모달창 -->
-      <v-dialog
-        v-model="member"
-        class="member-dialog"
-      >
-        <v-card class="member-dialog member-box">
-          <v-card-title class="member-title"><v-icon>mdi-account-multiple</v-icon> 참여 목록</v-card-title>
-          <div class="member-list">
-            <v-avatar>
-              <v-img :src="require(`@/assets/profiles/scale (${growth.user.image}).png`)"></v-img>
-            </v-avatar>
-            <span style="margin: 0px 10px">{{ growth.user.name }}</span>
-            <v-chip color="#FF0A54">호스트</v-chip>
-          </div>
-          <div v-for="member in growthUsers" :key="member.id" class="member-list">
-            <v-avatar>
-              <v-img :src="require(`@/assets/profiles/scale (${member.image}).png`)"></v-img>
-            </v-avatar>
-            <span style="margin: 0px 10px">{{ member.name }}</span>
-            <div class="member">
-              <v-chip color="#2d8bff">멤버</v-chip>
-              <v-icon v-if="is_host" color="red" class="member-delete" @click="member_delete(member.email)">mdi-close</v-icon>
-            </div>
-          </div>
-          <v-card-actions style="justify-content:space-between" class="hover_cursor" @click="searchSet(), show = !show">
-            <div>
-              <v-avatar><v-icon>mdi-plus</v-icon></v-avatar>
-              추가하기
-            </div>
-            <v-btn
-              :icon="show ? 'mdi-chevron-up' : 'mdi-chevron-down'"
-              style="text-align:right"
-            ></v-btn>
-          </v-card-actions>
-          <v-expand-transition>
-            <div v-show="show" style="text-align: center;">
-              <v-divider></v-divider>
-              <v-text-field variant="outlined" v-model:model-value="searchText" placeholder="유저를 검색해 주세요" prepend-inner-icon="mdi-magnify" @keyup="search"></v-text-field>
-              <div class="search-list">
-                <div v-for="user in searchUser" :key="user.email" class="search-result">
-                  <div>
-                    {{ user.name }}({{ user.email }})
-                  </div>
-                  <v-btn color="#FF0A54" variant="text" @click="addEventUser(user.id)" icon="mdi-send"></v-btn>
+            <div class="week">
+              <div v-for="j in rest" :key="j" class="square"></div>
+            </div> -->
+            <div class="week">
+              <div v-for="grass in log" :key="grass.idx">
+                <div v-if="!grass.written" class="not"></div>
+                <div v-else :class="`done ${grass.date}`" @click="check($event)">
+                  <v-tooltip activator="parent" location="bottom">{{ grass.date }}</v-tooltip>
                 </div>
               </div>
             </div>
-          </v-expand-transition>
-        </v-card>
-      </v-dialog>
+          </div>
+        </div>
+      </div>
+      <div class="progress">
+        <v-timeline side="end" align="center" line-thickness="5">
+          <v-timeline-item v-show="!today" class="progress-item" dot-color="rgb(255, 225, 121)" size="small">
+            <div class="memo-box">
+              <div class="memo-date">{{date_after(new Date())}}</div>
+              <div class="memo" @click="dialog = true, progressCreate()">
+                <div>텍스트를 입력하세요</div>
+              </div>
+            </div>
+          </v-timeline-item>
+          <v-timeline-item
+            class="progress-item"
+            v-for=" progress in [...this.firstProgress].reverse()"
+            dot-color="rgb(255, 225, 121)"
+            :key="progress.progressDto.progressId"
+            size="small"
+          >
+            <div class="memo-box" :id="progress.date">
+              <div class="memo-date">{{progress.date}}</div>
+              <div v-if="progress.progressDto.user.id == loginUser.id" class="memo" @click="dialog = true, progressDetail(progress.date)">
+                <div v-html="progress.progressDto.content"></div>
+              </div>
+              <div v-else class="memo isMine" @click="dialog = true, progressDetail(progress.date)">
+                <div v-html="progress.progressDto.content"></div>
+              </div>
+            </div>
+          </v-timeline-item>
+        </v-timeline> 
 
-      <!-- 여기부터는 포스트잇 화면 -->
-      <v-dialog
-        v-model="dialog"
-        class="memo-dialog"
-      >
-        <router-view></router-view>
-      </v-dialog>
-    </div>
-    <div class="navi">
-      <v-btn variant="outlined" icon="mdi-chevron-up" @click="pageUp"></v-btn>
-      <v-btn variant="outlined" icon="mdi-chevron-down" @click="pageDown"></v-btn>
+        <!-- 여기부터 이벤트 유저 모달창 -->
+        <v-dialog
+          v-model="member"
+          class="member-dialog"
+        >
+          <v-card class="member-dialog member-box">
+            <v-card-title class="member-title"><v-icon>mdi-account-multiple</v-icon> 참여 목록</v-card-title>
+            <div class="member-list">
+              <v-avatar>
+                <v-img :src="require(`@/assets/profiles/scale (${growth.user.image}).png`)"></v-img>
+              </v-avatar>
+              <span style="margin: 0px 10px">{{ growth.user.name }}</span>
+              <v-chip color="#FF0A54">호스트</v-chip>
+            </div>
+            <div v-for="member in growthUsers" :key="member.id" class="member-list">
+              <v-avatar>
+                <v-img :src="require(`@/assets/profiles/scale (${member.image}).png`)"></v-img>
+              </v-avatar>
+              <span style="margin: 0px 10px">{{ member.name }}</span>
+              <div class="member">
+                <v-chip color="#2d8bff">멤버</v-chip>
+                <v-icon v-if="is_host" color="red" class="member-delete" @click="member_delete(member.email)">mdi-close</v-icon>
+              </div>
+            </div>
+            <v-card-actions style="justify-content:space-between" class="hover_cursor" @click="searchSet(), show = !show">
+              <div>
+                <v-avatar><v-icon>mdi-plus</v-icon></v-avatar>
+                추가하기
+              </div>
+              <v-btn
+                :icon="show ? 'mdi-chevron-up' : 'mdi-chevron-down'"
+                style="text-align:right"
+              ></v-btn>
+            </v-card-actions>
+            <v-expand-transition>
+              <div v-show="show" style="text-align: center;">
+                <v-divider></v-divider>
+                <v-text-field variant="outlined" v-model:model-value="searchText" placeholder="유저를 검색해 주세요" prepend-inner-icon="mdi-magnify" @keyup="search"></v-text-field>
+                <div class="search-list">
+                  <div v-for="user in searchUser" :key="user.email" class="search-result">
+                    <div>
+                      {{ user.name }}({{ user.email }})
+                    </div>
+                    <v-btn color="#FF0A54" variant="text" @click="addEventUser(user.id)" icon="mdi-send"></v-btn>
+                  </div>
+                </div>
+              </div>
+            </v-expand-transition>
+          </v-card>
+        </v-dialog>
+
+        <!-- 여기부터는 포스트잇 화면 -->
+        <v-dialog
+          v-model="dialog"
+          class="memo-dialog"
+          click:outside="reSetting"
+        >
+          <router-view></router-view>
+        </v-dialog>
+      </div>
+      <div class="navi" data-html2canvas-ignore="true">
+        <v-btn color="grey" icon="mdi-printer" @click="makePDF"></v-btn>
+        <v-btn variant="outlined" icon="mdi-chevron-up" @click="pageUp"></v-btn>
+        <v-btn variant="outlined" icon="mdi-chevron-down" @click="pageDown"></v-btn>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 export default {
     name: 'GrowthProgress',
@@ -142,6 +151,7 @@ export default {
         is_host: false,
         search_user: null,
         searchText: '',
+        propTitle: 'mypdf',
       }
     },
     computed: {
@@ -240,23 +250,45 @@ export default {
       pageDown() {
         window.scrollTo({left: 0, top: document.body.scrollHeight, behavior: 'smooth'});
       },
-      like(id) {
-        const data = {
-          idx: this.now_idx,
-          progressId: id
-        }
-        this.$store.dispatch('temp/likeProgress', data)
-        // for(let i=0; i<this.$store.state.temp.shareProgress[this.now_idx].length; i++){
-        //   if(id == this.this.$store.state.temp.shareProgress[this.now_idx].contents)
-        // }
-      },
-      unlike(id){
-        const data = {
-          idx: this.now_idx,
-          progressId: id
-        }
-        this.$store.dispatch('temp/unlikeProgress', data)
-      },
+      makePDF () {
+			window.html2canvas = html2canvas //Vue.js 특성상 window 객체에 직접 할당해야한다.
+			let that = this
+			let pdf = new jsPDF('p', 'mm', 'a4')
+			let canvas = pdf.canvas
+			const pageWidth = 210 //캔버스 너비 mm
+			const pageHeight = 295 //캔버스 높이 mm
+			canvas.width = pageWidth
+
+			let ele = document.querySelector(".print")
+			let width = ele.offsetWidth // 셀렉트한 요소의 px 너비
+			let height = ele.offsetHeight // 셀렉트한 요소의 px 높이
+			let imgHeight = pageWidth * height/width // 이미지 높이값 px to mm 변환
+
+			if(!ele){
+				console.warn('not exist.')
+				return false
+			}
+			html2canvas(ele).then((canvas) => {
+					let position = 0
+					const imgData = canvas.toDataURL('image/png')
+					pdf.addImage(imgData, 'png', 0, position, pageWidth, imgHeight, undefined, 'slow')
+          
+					//Paging 처리
+					let heightLeft = imgHeight //페이징 처리를 위해 남은 페이지 높이 세팅.
+					heightLeft -= pageHeight
+					while (heightLeft >= 0) {
+            position = heightLeft - imgHeight
+						pdf.addPage();
+						pdf.addImage(imgData, 'png', 0, position, pageWidth, imgHeight)
+						heightLeft -= pageHeight
+					}
+          
+					pdf.save(that.growth.category +'.pdf')
+				},
+        
+			);	
+
+		},
       search() {
         if (this.searchText){
           const data = {
@@ -272,6 +304,9 @@ export default {
         if(this.show){
           this.$store.commit('growth/SEARCH_USER_RESET')
         }
+      },
+      reSetting() {
+        this.$store.dispatch('growth/growthSetting')
       }
     },
     created() {
@@ -285,11 +320,8 @@ export default {
       // }
 
 
-      console.log(this.loginUser.id)
-      console.log(this.growth.user.id)
       if (this.loginUser.id == this.growth.user.id) {
         this.is_host = true
-        console.log(this.is_host)
       }
     },
 }
@@ -322,7 +354,7 @@ h1 {
 
 .container {
   /* background-color: gold; */
-  margin-top: 150px;
+  margin-top: 50px;
   height: 100%;
   width:100%;
   display: flex;
@@ -331,6 +363,10 @@ h1 {
   /* justify-content: center; */
 }
 
+.print {
+  width: 100%;
+  padding-top: 100px;
+}
 .title {
   text-align: center;
   display: flex;

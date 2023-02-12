@@ -7,7 +7,7 @@
         />
       </div>
       <div>
-        <div v-if="state.loginUser.name">
+        <div v-if="!loginUser.name">
           <div class="writeTitle">
             <h1 class="text"></h1>
           </div>
@@ -17,8 +17,10 @@
           </router-link>
         </div>
         <div v-else>
-          <h1>{{ state.loginUser.name }} 님 환영합니다.</h1>
-          <h1>지금 바로 기록해보세요.</h1>
+          <div class="title-after-login">
+            <h1>{{ loginUser.name }} 님 환영합니다.</h1>
+            <h1>지금 바로 기록해보세요.</h1>
+          </div>
           <p>진행중인 이벤트와 취업여정을 기록하면서 달라진 나의 모습을 발견하세요.</p>
           <router-link :to="{name: 'FirstTimeline'}" class="login_btn_box b_main btn_hover">
             <div class="login_btn_text f_white">시작하기</div>
@@ -44,16 +46,13 @@
 <script>
 // import router from '@/router';
 import { mapState } from 'vuex';
-import { onMounted, onBeforeUnmount } from 'vue';
+import { onMounted, onBeforeUnmount, computed } from 'vue';
 import { useStore } from 'vuex';
 
 export default {  
     name: 'MainPage',
     setup() {
-      const state = {
-        loginUser: {name: '이성훈'},
-      }
-
+      
 
       // let observe = new IntersectionObserver((e)=>{
       //   e.forEach((box)=>{
@@ -73,6 +72,7 @@ export default {
       const testTimeline = () => {
         store.dispatch('timeline/timelineSetting')
       }
+      const loginUser = computed(()=>store.state.loginUser)
 
       onMounted(()=>{
         writeTitle('.text', '당신의 새로운 여정을 \n 매일 기록해 보세요', 1500)
@@ -147,7 +147,8 @@ export default {
 
       return {
         // start,
-        state,
+        // state,
+        loginUser,
         testTimeline,
         writeTitle,
         onScroll,
@@ -173,11 +174,11 @@ export default {
   transition: all 1s;
 }
 
-h1 {
+/* h1 {
   margin: 500px 0;
   position: relative;
   z-index: 2500;
-}
+} */
   .text::after {
     content: '';
     margin-left: .4rem;
@@ -195,6 +196,14 @@ h1 {
   .writeTitle {
     display: flex;
     align-items: center;
+    justify-content: center;
+    height: 250px;
+  }
+
+  .title-after-login {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
     justify-content: center;
     height: 250px;
   }
