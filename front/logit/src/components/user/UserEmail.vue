@@ -30,14 +30,14 @@
 </template>
 
 <script>
-import axiosConnector from "@/utils/axios-connector";
+import axios from 'axios';
 
 export default {
   name: "UserEmail",
   data: () => ({
     rules2: [
       (value) => !!value || "",
-      (value) => (value || "").length <= 20 || "최대 20자를 초과하였습니다.",
+      (value) => (value || "").length <= 30 || "최대 30자를 초과하였습니다.",
       (value) => {
         const pattern =
           /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -71,16 +71,18 @@ export default {
       // 이메일 유효성 검사
       if (validate.valid) {
         // 이메일 중복 검사
-        axiosConnector.get("user/check", {
-          params: {
-            email:this.email
-          }
-        })
-          .then((res)=>{
+        console.log(this.email)
+        axios({
+            url: "https://i8a609.p.ssafy.io/api/user/check",
+            method: "GET",
+            params: this.email,
+          }).then((res)=>{
             console.log(res)
+            console.log('hey............')
             this.email_help = `${this.email}은 사용 가능한 이메일입니다.`;
           }).catch((err)=>{
             console.log(err);
+            console.log('what..........')
             this.email_help = `${this.email}은 사용할 수 없는 이메일입니다.`;
           })
         document.querySelector(".signup-email-chkText").innerHTML =

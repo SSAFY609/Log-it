@@ -14,13 +14,13 @@
     </div>
 
     <!-- 사이드바 메뉴 영역-->
-    <router-link :to="{name: 'MainPage'}" class="menu_container lay1">
-      <div class="menu_item_box lay2 hover_cursor">
-        <div class="menu_icon_box lay2 btn_clicked" @click="btnClicked(-1)">
+    <div class="menu_container lay1">
+      <router-link :to="{name: 'MainPage'}" class="menu_item_box lay2 hover_cursor">
+        <div class="menu_icon_box lay2 btn_clicked">
           <v-icon class="menu_icon f_icon lay3 btn_clicked2">mdi-layers</v-icon>  
           <div class="menu_text_box f_darkgray lay3 btn_clicked2">홈</div>
         </div>
-      </div>
+      </router-link>
       <div class="menu_item_box lay2 hover_cursor">
         <div class="menu_icon_box lay3" @click="btnClicked('SearchResult')">
           <v-icon class="menu_icon f_icon">mdi-magnify</v-icon>  
@@ -51,7 +51,7 @@
           <div class="menu_text_box f_darkgray lay3">통계</div>
         </div>
       </div>
-    </router-link>
+    </div>
 
 
     <!-- 하단 옵션 메뉴 -->
@@ -111,23 +111,8 @@ export default {
       this.$store.dispatch(`closeSidebar`)
     },
 
-    btnClicked(select) {
-      if(select == -1){
-        const target = event.target.parentElement
-        const removeList = document.querySelectorAll('.menu_icon_box')
-  
-        
-        removeList.forEach((element) => {
-          element.classList.remove("btn_clicked")
-          element.firstChild.classList.remove("btn_clicked2")
-          element.lastChild.classList.remove("btn_clicked2")
-  
-        })
-        target.classList.toggle('btn_clicked')
-        target.firstChild.classList.toggle('btn_clicked2')
-        target.lastChild.classList.toggle('btn_clicked2')
-        
-      } else if(!this.loginUser.id){
+    btnClicked(select) {      
+      if(!this.loginUser.id){
         this.snackbar = true;
         return
       } 
@@ -144,6 +129,7 @@ export default {
       target.classList.toggle('btn_clicked')
       target.firstChild.classList.toggle('btn_clicked2')
       target.lastChild.classList.toggle('btn_clicked2')
+
       this.$router.push({name: select})
     }
   },

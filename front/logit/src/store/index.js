@@ -10,8 +10,8 @@ import growth from "./modules/growth.js";
 import timeline from "./modules/timeline.js";
 import search from "./modules/search.js";
 
-// const baseURL = "https://i8a609.p.ssafy.io/api/user";
-const baseURL = "http://localhost:9090/user";
+const baseURL = "https://i8a609.p.ssafy.io/api/user";
+// const baseURL = "http://localhost:9090/user";
 export default createStore({
 
   state: {
@@ -21,12 +21,8 @@ export default createStore({
   getters: {},
   mutations: {
     LOGIN_USER(state, payload) {
-      console.log(payload);
       state.loginUser = payload
-      console.log(state.loginUser);
       sessionStorage.setItem("token", payload["jwt-auth-token"]);
-
-      console.log(sessionStorage.getItem('token'))
       router.push({ name: "MainPage" });
     },
     LOG_OUT(state) {

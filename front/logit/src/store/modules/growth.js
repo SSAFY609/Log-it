@@ -49,7 +49,9 @@ const growth = {
         },
         GET_FIRST_PROGRESS(state, payload){
             state.firstProgress = payload
-            if(payload[payload.length - 1].date == today_to_str()){
+            if(payload.length == 0){
+                state.today = false
+            } else if(payload[payload.length - 1].date == today_to_str()){
                 state.today = true
             } else {
                 state.today = false

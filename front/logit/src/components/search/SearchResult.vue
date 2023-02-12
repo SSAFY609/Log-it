@@ -7,11 +7,14 @@
       <!-- <v-icon style="color:grey; margin-right: 10px; ">mdi-magnify</v-icon> -->
       <v-icon class="magnify">mdi-magnify</v-icon>
       <input class="search_input" type="text"
-        placeholder="검색어를 입력하세요." >
+        placeholder="검색어를 입력하세요."
+        :value="keyword"
+        @input="search" 
+        >
       <div class="recommend">
         추천 검색어 : 알고리즘 | 스터디 | 코딩 | 자기소개서
       </div>
-      <div class="result">
+      <div v-show="keyword == '알고'" class="result">
         <div class="result-cnt">총 {{ growths.length + jobs.length + users.length }}개의 검색 결과</div>
         <v-divider></v-divider>
         <div class="growth">
@@ -94,6 +97,7 @@
       // },
       data() {
         return {
+          keyword: '',
           growths: [
               {
                   "type": "성장 여정 이벤트",
@@ -171,6 +175,13 @@
               }
           ],          
         }
+      },
+      methods: {
+        search(e) {
+          this.keyword = e.target.value
+          console.log(this.keyword)
+          // this.$store.dispatch('search/getSearchResult', this.searchInput)
+        }
       }
   }
   </script>
@@ -234,10 +245,15 @@
    }
 
    input:focus ~.recommend {
+    display: block;
+   }
+   input:focus ~.result {
     display: none;
    }
 
+
    .recommend {
+    /* display: none; */
     font-size: 18px;
     padding-left: 40px;
     text-align: left;

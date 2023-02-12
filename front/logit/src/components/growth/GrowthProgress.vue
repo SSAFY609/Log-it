@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <div @click="makePDF">@@@@@@@@@@@@@@@@@@@@2</div>
     <div class="print">
       <div class="header">
         <div class="title">
@@ -13,7 +12,10 @@
         </div>
         <div class="grass-box">
           <div class="grass">
-            <div class="days">
+            <div v-if="log.length < 10" class="days">
+              <div v-for="i in log.length" :key="i" class="day">{{ i }}</div>
+            </div>
+            <div v-else class="days">
               <div v-for="i in 10" :key="i" class="day">{{ i }}</div>
             </div>
             <!-- <div v-for="i in week" :key="i" class="week">
@@ -117,11 +119,13 @@
         <v-dialog
           v-model="dialog"
           class="memo-dialog"
+          click:outside="reSetting"
         >
           <router-view></router-view>
         </v-dialog>
       </div>
       <div class="navi" data-html2canvas-ignore="true">
+        <v-btn color="grey" icon="mdi-printer" @click="makePDF"></v-btn>
         <v-btn variant="outlined" icon="mdi-chevron-up" @click="pageUp"></v-btn>
         <v-btn variant="outlined" icon="mdi-chevron-down" @click="pageDown"></v-btn>
       </div>
@@ -279,7 +283,7 @@ export default {
 						heightLeft -= pageHeight
 					}
           
-					pdf.save(that.propTitle.toLowerCase() +'.pdf')
+					pdf.save(that.growth.category +'.pdf')
 				},
         
 			);	
@@ -300,6 +304,9 @@ export default {
         if(this.show){
           this.$store.commit('growth/SEARCH_USER_RESET')
         }
+      },
+      reSetting() {
+        this.$store.dispatch('growth/growthSetting')
       }
     },
     created() {
@@ -313,11 +320,8 @@ export default {
       // }
 
 
-      console.log(this.loginUser.id)
-      console.log(this.growth.user.id)
       if (this.loginUser.id == this.growth.user.id) {
         this.is_host = true
-        console.log(this.is_host)
       }
     },
 }

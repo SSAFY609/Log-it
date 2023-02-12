@@ -3,8 +3,8 @@ import axios from 'axios';
 
 // local 주소
 
-// const baseURL = "https://i8a609.p.ssafy.io/api/"
-const baseURL = "http://localhost:9090/"
+const baseURL = "https://i8a609.p.ssafy.io/api/"
+// const baseURL = "http://localhost:9090/"
 
 
 const axiosConnector = axios.create({
