@@ -14,9 +14,9 @@
     </div>
 
     <!-- 사이드바 메뉴 영역-->
-    <div class="menu_container lay1">
+    <router-link :to="{name: 'MainPage'}" class="menu_container lay1">
       <div class="menu_item_box lay2 hover_cursor">
-        <div class="menu_icon_box lay2 btn_clicked" @click="btnClicked('MainPage')">
+        <div class="menu_icon_box lay2 btn_clicked" @click="btnClicked(-1)">
           <v-icon class="menu_icon f_icon lay3 btn_clicked2">mdi-layers</v-icon>  
           <div class="menu_text_box f_darkgray lay3 btn_clicked2">홈</div>
         </div>
@@ -51,7 +51,7 @@
           <div class="menu_text_box f_darkgray lay3">통계</div>
         </div>
       </div>
-    </div>
+    </router-link>
 
 
     <!-- 하단 옵션 메뉴 -->
@@ -78,7 +78,7 @@
       
     </div>
     <div class="snackbar">
-      <v-snackbar v-model="snackbar" min-height="300px" variant="tonal" location="top" color="#FF0A54" class="snackbar">
+      <v-snackbar v-model="snackbar" min-height="300px" variant="tonal" timeout="1000" location="top" color="#FF0A54" class="snackbar">
         <strong>로그인</strong>을 하고 이용해주세요.
       </v-snackbar>
     </div>
@@ -112,7 +112,22 @@ export default {
     },
 
     btnClicked(select) {
-      if(!this.loginUser.id){
+      if(select == -1){
+        const target = event.target.parentElement
+        const removeList = document.querySelectorAll('.menu_icon_box')
+  
+        
+        removeList.forEach((element) => {
+          element.classList.remove("btn_clicked")
+          element.firstChild.classList.remove("btn_clicked2")
+          element.lastChild.classList.remove("btn_clicked2")
+  
+        })
+        target.classList.toggle('btn_clicked')
+        target.firstChild.classList.toggle('btn_clicked2')
+        target.lastChild.classList.toggle('btn_clicked2')
+        
+      } else if(!this.loginUser.id){
         this.snackbar = true;
         return
       } 
@@ -129,7 +144,6 @@ export default {
       target.classList.toggle('btn_clicked')
       target.firstChild.classList.toggle('btn_clicked2')
       target.lastChild.classList.toggle('btn_clicked2')
-
       this.$router.push({name: select})
     }
   },
@@ -261,6 +275,48 @@ export default {
 
   .snackbar {
     font-size: 20px;
+    transform-origin: 50% 0%;
+    animation-name: shake;
+    animation-duration: 1s;
+    animation-iteration-count: 1;
+    animation-delay: 0.2s;
+  }
+
+  @keyframes shake {
+    /* 0% {
+      transform: rotate(-40deg);
+    }
+    100% {
+      transform: rotate(40deg);
+    } */
+    0%{
+      transform: rotate(0deg);
+    }
+    10%{
+      transform: rotate(8deg);
+    }
+    20%{
+      transform: rotate(-8deg);
+    }
+    30%{
+      transform: rotate(5deg);
+    }
+    40%{
+      transform: rotate(-5deg);
+    }
+    50%{
+      transform: rotate(4deg);
+    }
+    60%{
+      transform: rotate(-4deg);
+    }
+    70%{
+      transform: rotate(2deg);
+    }
+    100%{
+      transform: rotate(0deg);
+    }
+    
   }
 
   
