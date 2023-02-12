@@ -59,12 +59,13 @@ const tempJob = {
             
 
         },
-        sendJobs({dispatch}, datas) {
+        sendJobs({dispatch}, jobs) {
             console.log('sendJobs 실행')
-            console.log(datas)
-            axiosConnector.post('job/update', datas
+            console.log(jobs)
+            axiosConnector.post('job/post-all', jobs
             ).then(()=> {
-                dispatch('getJob', datas.jobId)
+                console.log('sendJobs 성공')
+                dispatch('getJob', jobs.jobId)
             }).catch((err)=> {
                 console.log('엑시오스 에러')
                 console.log(err)

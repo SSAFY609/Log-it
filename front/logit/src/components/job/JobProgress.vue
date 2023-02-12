@@ -48,7 +48,7 @@
 
                 <!-- 인풋창 영역-->
                 <div class="contents_box lay2">
-                  <div class="q_input_area nosee">
+                  <div class="q_input_area">
                     <div class="q_input_box">
                       <input class="q_text" type="text" placeholder="질문을 추가하세요." autofocus>
                     </div>
@@ -89,22 +89,41 @@
                       <div class="chip_box hover_cursor" v-for="item in testList" :key="item">
                         <input class="radio_item" type="radio" :name="`ct_category${index}`" :id="`${item}`"  :value="`${item}`">
                         <label :for="`${item}`" @click="changeOption(index, item)">{{ item }}</label>
-                        <!-- <div class="hidden_data">{{ index }}</div> -->
                       </div>
-                      
 
-
-                      
-                    
                     </div>
                     <div class="ct_contents_area">
                       <textarea class="ct_textarea" v-model="el.content"></textarea>
                     </div>
                   </div>
+
                 </div>
-                 <!-- 추가하기 버튼 -->
+
+
+
+                <!-- 코테 추가 입력 창-->
+                <div class="ct_add_input_area" id="ct_add_input_area">
+                  
+                    <div class="num_btn">
+                      <p>문제 추가</p>
+                    </div>
+      
+                    <div class="option_types_area">
+                      <div class="chip_box hover_cursor" v-for="item in testList" :key="item">
+                        <input class="radio_item" type="radio" name="added_ct_option" :value="`${item}`">
+                        <label :for="`${item}`" @click="addChangeOption(item)">{{ item }}</label>
+                      </div>
+
+                    </div>
+                    <div class="ct_contents_area">
+                      <textarea class="added_ct_textarea ct_textarea" id="added_ct_textarea" v-model="added_ct_text"></textarea>
+                    </div>
+                  
+                </div>
+
+                 <!-- 코테 추가하기 버튼 -->
                  <div class="add_container">
-                    <div class="add_q_btn_box hover_cursor" @click="addQuestion">
+                    <div class="add_q_btn_box hover_cursor" @click="addCT">
                       <div name="add_q_btn" id="add_q_btn" class="q_btn " >
                        <v-icon class="f_icon plus_icon">mdi-plus</v-icon>
                      </div>
@@ -118,7 +137,7 @@
 
 
 
-                <!-- 서류전형-->
+                <!-- 면접 전형-->
                 <div v-show="i.jobCategory=='면접'">
                   <div class="db_board_list" v-for="(item, index) in i.list" :key="index">
                     <div class="num_btn">
@@ -133,20 +152,21 @@
                 </div>
                 
 
+                <!-- 면접 전형 인풋창 영역-->
                 <!-- 인풋창 영역-->
                 <div class="contents_box lay2">
-                  <div class="q_input_area nosee">
+                  <div class="document_input_area" id="document_input_area">
                     <div class="q_input_box">
-                      <input class="q_text" type="text" placeholder="질문을 추가하세요." autofocus>
+                      <input class="q_text" type="text" placeholder="면접 질문을 추가하세요." >
                     </div>
                     <div class="a_input_box">
-                      <textarea  class="a_text" placeholder="답변을 작성하세요."></textarea>
+                      <textarea  class="a_text" placeholder="면접 답변을 작성하세요."></textarea>
                     </div>  
                   </div>
 
                   <!-- 추가하기 버튼 -->
                   <div class="add_container">
-                    <div class="add_q_btn_box hover_cursor" @click="addQuestion">
+                    <div class="add_q_btn_box hover_cursor" @click="addDocument">
                       <div name="add_q_btn" id="add_q_btn" class="q_btn " >
                        <v-icon class="f_icon plus_icon">mdi-plus</v-icon>
                      </div>
@@ -166,7 +186,7 @@
                  <!-- 추가하기 버튼 -->
                  <div class="add_container">
                     <div class="add_q_btn_box hover_cursor" @click="addQuestion">
-                      <div name="add_q_btn" id="add_q_btn" class="q_btn " >
+                      <div name="add_q_btn" id="add_q_btn" class="q_btn ">
                        <v-icon class="f_icon plus_icon">mdi-plus</v-icon>
                      </div>
                       <p>추가하기</p>
@@ -205,27 +225,54 @@ import { mapState } from 'vuex';
 
     data () {
       return {
-        create_content: '',
         update: false,
-        chip: true,
         clicked: '',
         jobId: '',
-        datas: {},
         ct_datas: {},
         category: {},
-        newDatas: {},
         jobs: {},
- 
+        new_ct_data: { 
+          id: null,
+          content: '', 
+          category: '',
+        },
+        added_ct_text: '',
       }
     },
 
     methods: {
+
+      // 추가하기 메서드
       addQuestion() {
-        const target = document.querySelector('.q_input_area')
-        target.classList.toggle('nosee')
+
+        
+      },
+      addDocument() {
 
 
       },
+
+      // 코테 저장하기
+      addCT() {
+
+        // console.log(this.added_ct_text)
+
+        this.new_ct_data.content = this.added_ct_text
+
+        console.log(this.new_ct_data)
+        
+        this.jobs.datas.forEach(element => {
+          if(element.jobCategory == '코테') {
+            element.list.push(this.new_ct_data)
+          }  
+        });
+
+        this.added_ct_text = ''
+        
+
+      },
+
+
       clickTab() {
 
         const removeList = document.querySelectorAll('.tab_item_box')
@@ -247,8 +294,6 @@ import { mapState } from 'vuex';
       date_to_str(startDate, endDate) {
         const st = startDate.split('-')
         const ed = endDate.split('-')
-        console.log(st)
-        console.log(ed)
         const year1 = st[0];
         const month1 = st[1];
         const date1 = st[2];
@@ -258,10 +303,32 @@ import { mapState } from 'vuex';
         return `${year1}년 ${month1}월 ${date1}일 ~ ${year2}년 ${month2}월 ${date2}일`
       },
 
+      addChangeOption(item) {
+        // console.log('추가 코테 옵션')
+        // console.log(item)
+
+        const removeList = document.getElementsByName('added_ct_option')
+        
+        // console.log(removeList)
+        removeList.forEach(element => {
+          // console.log(element.parentElement.innerText)
+          element.parentElement.classList.remove('selected_item')
+          if(element.parentElement.innerText == item) {  
+            element.parentElement.classList.add('selected_item')
+            this.new_ct_data.category = item
+            
+            // console.log(this.new_ct_data)
+          }
+        })
+
+      },
+
+
+      // 코테 카테고리 선택시 변경되는 메서드
       changeOption(index, item) {
 
-        // event.preventDefault()
-        // event.stopPropagation()
+        event.preventDefault()
+        event.stopPropagation()
         // console.log(event.target)
         // console.log(index)
         // console.log(item)
@@ -277,7 +344,7 @@ import { mapState } from 'vuex';
             this.category[`ct_category${index}`] = item
             
 
-            this.datas.datas.forEach(datas => {
+            this.jobs.datas.forEach(datas => {
               if(datas.jobCategory=='코테') {
 
                 // console.log(datas.list[index].category)
@@ -285,10 +352,6 @@ import { mapState } from 'vuex';
                 // console.log(datas.list[index].category)
               }
             });
-            // for(let i = 0; i < this.datas.datas.length; i++ ) {
-            //   this.
-            // }
-
           }
         });
 
@@ -302,7 +365,7 @@ import { mapState } from 'vuex';
       
 
       sendData() {
-        this.$store.dispatch('tempJob/sendJobs', this.datas)
+        this.$store.dispatch('tempJob/sendJobs', this.jobs)
       }
 
 
@@ -315,21 +378,6 @@ import { mapState } from 'vuex';
       this.jobId =jobId
 
 
-
-      // const datas = this.$store.state.tempJob.jobs
-
-      // const newDatas_len = this.newDatas.length;
-      
-      // DB에서 받아온 전체 jobs 중에서 jobId가 일치하는 경우의 데이터만 다시 뽑기
-      // if(this.newDatas) {
-      //   for(let i=0; i < newDatas_len; i++) {
-
-      //     if(this.newDatas[i].id == jobId) {
-      //       this.jobs = this.newDatas[i]
-      //     }
-      //   }
-
-      // }
 
       const jobs = this.jobs
 
@@ -355,9 +403,11 @@ import { mapState } from 'vuex';
 
         const target = document.querySelector('.tab_area_box')
         
-        console.log('.tabarea 요소 타겟')
-        console.log(target)
+        // console.log('.tabarea 요소 타겟')
+        // console.log(target)
         
+
+        // 선택된 옵션에 효과주기
         if(target) {
           target.firstChild.classList.add('selected_item')
           this.clicked = target.firstChild.innerText
@@ -490,6 +540,7 @@ span {
 
 }
 .contents_box {
+  background-color: transparent;
   margin-top: 30px;
   width: 100%;
 }
@@ -581,7 +632,6 @@ textarea:focus {
 .db_board_list {
   display: flex;
   flex-direction: column;
-  background-color: transparent;
   margin-top: 20px;
 }
 
@@ -630,7 +680,6 @@ textarea:focus {
 }
 
 .ct_contents_area {
-  background-color: transparent;
   width: 100%;
 }
 
@@ -709,5 +758,9 @@ label:hover {
   background-color: #FF0A54 ;
   color: white;
   z-index: 1000;
+}
+.ct_add_input_area {
+  width: 100%;
+  height: 500px;
 }
  </style>
