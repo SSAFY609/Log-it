@@ -35,6 +35,7 @@ export default createStore({
   mutations: {
     LOGIN_USER(state, payload) {
       state.loginUser = payload
+      console.log(state.loginUser)
       sessionStorage.setItem("token", payload["jwt-auth-token"]);
       router.push({ name: "MainPage" });
     },

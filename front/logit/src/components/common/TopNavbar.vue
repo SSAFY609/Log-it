@@ -18,10 +18,10 @@
         </router-link>
       </div>
       <div v-else class="profile_box right_box_items">
-        <div @click="openProfile" class="profile_id hover_cursor ">{{state.loginUser.name}} 님</div>
+        <div @click="openProfile" class="profile_id hover_cursor ">{{loginUser.name}} 님</div>
         <div @click="openProfile" class="profile_img_box hover_cursor">
           <v-img class="logo_img"
-            :src="require('../../assets/profiles/scale (3).png')"
+            :src="require(`../../assets/profiles/scale (${loginUser.image}).png`)"
             height="110"
           />    
         </div>

@@ -78,6 +78,9 @@ const growth = {
         },
         GET_LOG(state, payload){
             state.log = payload
+        },
+        RESET_SEARCH_USER(state){
+            state.searchUser = []
         }
     },
     actions: {

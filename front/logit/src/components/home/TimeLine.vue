@@ -463,11 +463,11 @@ export default {
 
 .swiper {
   position: static;
-  height: 400px;
+  height: 450px;
 }
 
 .box {
-  margin-top: 180px;
+  margin-top: 150px;
   width: 70%;
   text-align: center;
   /* background-color: pink; */
@@ -478,13 +478,13 @@ export default {
   justify-content: center;
   align-items: center;
   /* margin-bottom: 40px; */
-  font-size: 60px;
+  font-size: 50px;
   font-family: appleB;
   color: #191919;
 }
 
 .user-name {
-  font-size: 60px;
+  font-size: 50px;
   /* font-size: 45px; */
   /* font-family: galaxy; */
   font-family: appleB;
@@ -555,7 +555,7 @@ export default {
   align-items: center;
   position: absolute;
   border-radius: 50px;
-  height: 34px;
+  height: 32px;
   font-size: 20px;
   color: white;
   cursor: pointer;
@@ -617,7 +617,7 @@ export default {
 
 .growth-event{
   background: rgb(255,0,48) repeat-x;
-  background: linear-gradient(90deg, #ff0030 0%, #ff8584 50%, #ff8584 76%, #ff0030 100%);
+  background: linear-gradient(90deg, #ff0030 0%, #ff6060 20%, #ff8584 30%, #ff8584 76%, #ff0030 100%);
   background-size: 300% 300%;
   background-position: 1% 50%;
   transition: all 1s ease;
@@ -635,28 +635,28 @@ export default {
 }
 
 .floor1 {
-  top: 100px;
+  top: 130px;
 }
 .floor2 {
-  top: 60px;
+  top: 90px;
 }
 .floor3 {
-  top: 20px;
+  top: 50px;
 }
 .floor4 {
-  top: -20px;
+  top: 10px;
 }
 .floor-1 {
-  top: 250px;
+  top: 270px;
 }
 .floor-2 {
-  top: 290px;
+  top: 310px;
 }
 .floor-3 {
-  top: 330px;
+  top: 350px;
 }
 .floor-4 {
-  top: 370px;
+  top: 390px;
 
 }
 

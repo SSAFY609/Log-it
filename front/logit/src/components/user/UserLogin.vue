@@ -15,6 +15,7 @@
           <!-- 비밀번호 입력 칸-->
           <v-text-field
             v-model="user.pw"
+            class="pw-input"
             :append-inner-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
             :rules="[rules1.required, rules1.min]"
             :type="show1 ? 'text' : 'password'"
@@ -27,7 +28,7 @@
       </div>
       <!-- 소셜 로그인 버튼 칸-->
       <div class="login-form-OauthBtn">
-        <div class="logo-img-kakao">
+        <!-- <div class="logo-img-kakao">
           <v-img
             class="logo-img kakao-logo-img"
             :src="require('../../assets/images/kakao_logo.png')"
@@ -42,7 +43,7 @@
             height="22px"
           />
           <span class="logo-text google-logo-text">구글 로그인</span>
-        </div>
+        </div> -->
       </div>
       <div class="login-form-input-button">
         <div @click="login" class="login-form-input-button-btn b_lightgray_l">
@@ -168,13 +169,14 @@ export default {
   font-size: 45px;
   font-family: AppleB;
   margin-top: -13px;
-  margin-bottom: 5px;
+  margin-bottom: 22px;
 }
 .login-form {
   width: 100%;
   padding: 0px 30px;
 }
 .login-form-OauthBtn {
+  height: 36px;
   display: flex;
   justify-content: space-between;
 }
@@ -257,5 +259,8 @@ export default {
 }
 .google-logo-text {
   right: 27px;
+}
+.pw-input {
+  margin-top: 16px;
 }
 </style>
