@@ -202,7 +202,7 @@ public class UserController {
 
     // email로 회원 조회
     @Operation(summary = "회원 조회", description = "email로 회원 단건 조회")
-    @GetMapping
+    @GetMapping()
     public ResponseEntity<UserDto> getUser(@RequestAttribute String email) throws Exception {
         return new ResponseEntity<UserDto>(userService.getUser(email), HttpStatus.OK);
     }
