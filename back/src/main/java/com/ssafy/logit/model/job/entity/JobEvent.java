@@ -39,7 +39,7 @@ public class JobEvent {
     private LocalDate startDate;
     private LocalDate endDate;
 
-    @OneToMany(mappedBy = "jobEvent")
+    @OneToMany(mappedBy = "jobEvent",cascade = CascadeType.REMOVE)
     private List<StepCategory> stepCategoryList = new ArrayList<>();
 
 
