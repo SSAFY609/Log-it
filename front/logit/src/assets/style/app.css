@@ -151,7 +151,7 @@
     height: 100%;
   }
   .nosee {
-    display: none;
+    display: none!important;
   }
   .hover_cursor:hover {
     cursor: pointer;
