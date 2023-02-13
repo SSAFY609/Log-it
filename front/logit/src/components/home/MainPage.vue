@@ -46,8 +46,9 @@
 <script>
 // import router from '@/router';
 import { mapState } from 'vuex';
-import { onMounted, onBeforeUnmount, computed } from 'vue';
+import { onBeforeMount, onMounted, onBeforeUnmount, computed } from 'vue';
 import { useStore } from 'vuex';
+import { useToast } from 'vue-toastification';
 
 export default {  
     name: 'MainPage',
@@ -68,11 +69,22 @@ export default {
       //   observe.observe(postIt)
       // })
       const store = useStore()
+      const toast = useToast()
+      const invites = computed(()=>store.state.invites)
 
       const testTimeline = () => {
         store.dispatch('timeline/timelineSetting')
       }
       const loginUser = computed(()=>store.state.loginUser)
+
+      onBeforeMount(()=>{
+        if(invites.value){
+          toast('알림입니다', {
+            timeout: 2000,
+          })
+          
+        }
+      })
 
       onMounted(()=>{
         writeTitle('.text', '당신의 새로운 여정을 \n 매일 기록해 보세요', 1500)
@@ -149,6 +161,7 @@ export default {
         // start,
         // state,
         loginUser,
+        invites,
         testTimeline,
         writeTitle,
         onScroll,

@@ -30,7 +30,8 @@
 </template>
 
 <script>
-import Swal from 'sweetalert2'
+import { useToast } from 'vue-toastification';
+const toast = useToast();
 
 export default {
     name: 'GrowthCreate',
@@ -57,18 +58,17 @@ export default {
         },
         create() {
             if (!this.select_category) {
-                Swal.fire({
-                    // title: '선택된 카테고리가 없습니다',
-                    text: '선택된 카테고리가 없습니다',
-                    icon: 'error',
-                    confirmButtonColor: '#FF0A54',
+                toast.error('선택된 카테고리가 없습니다', {
+                    timeout: 12000,
+                    position: 'bottom-right',
+                    // icon: {
+                    //     iconClass: 'mdi-bell mdi v-icon',
+                    //     iconTag: 'i'
+                    // }
                 })
             } else if (!this.start_date || !this.end_date) {
-                Swal.fire({
-                    // title: '선택된 카테고리가 없습니다',
-                    text: '선택된 날짜가 없습니다',
-                    icon: 'error',
-                    confirmButtonColor: '#FF0A54',
+                toast.error('선택된 날짜가 없습니다.', {
+                    timeout: 2000
                 })
             } else {
                 const growth = {

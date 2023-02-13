@@ -73,7 +73,8 @@ export default {
       },
     },
     mounted() {
-      
+      window.scrollTo(0,0)
+
       const $text = document.querySelector(".typing");
       // 글자 입력 속도
       const speed = 100;
