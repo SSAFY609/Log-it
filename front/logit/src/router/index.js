@@ -34,6 +34,7 @@ import UserPasswordReset from '../components/user/UserPasswordReset.vue'
 import UserSignupComplete from '../components/user/UserSignupComplete.vue'
 import PageSetting from '../components/etc/PageSetting.vue'
 import DeveloperList from '../components/etc/DeveloperList.vue'
+import OpenSource from '../components/etc/OpenSource.vue'
 
 
 const router = createRouter({
@@ -236,6 +237,11 @@ const router = createRouter({
           path: "/developers",
           name: "DeveloperList",
           component: DeveloperList,
+        },
+        {
+          path: "/demo",
+          name: "OpenSource",
+          component: OpenSource,
         },
       ],
     },
