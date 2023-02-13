@@ -18,12 +18,6 @@
             <div v-else class="days">
               <div v-for="i in 10" :key="i" class="day">{{ i }}</div>
             </div>
-            <!-- <div v-for="i in week" :key="i" class="week">
-              <div v-for="j in 10" class="square" :key="j"></div>
-            </div>
-            <div class="week">
-              <div v-for="j in rest" :key="j" class="square"></div>
-            </div> -->
             <div class="week">
               <div v-for="grass in log" :key="grass.idx">
                 <div v-if="!grass.written" class="not"></div>
@@ -105,6 +99,7 @@
                 <div class="search-list">
                   <div v-for="user in searchUser" :key="user.email" class="search-result">
                     <div>
+                      <img :src="require(`@/assets/profiles/scale (${user.image}).png`)" class="user-image">
                       {{ user.name }}({{ user.email }})
                     </div>
                     <v-btn color="#FF0A54" variant="text" @click="addEventUser(user.id)" icon="mdi-send"></v-btn>
@@ -119,7 +114,6 @@
         <v-dialog
           v-model="dialog"
           class="memo-dialog"
-          click:outside="reSetting"
         >
           <router-view></router-view>
         </v-dialog>
@@ -162,6 +156,11 @@ export default {
         return `@assets/profiles/scale (${id}).png`;
       }
     },
+    watch: {
+      dialog (val) {
+        !val && this.$store.dispatch('growth/growthSetting', this.growthId)
+      }
+    },  
     methods: {
       progressCreate(){
         this.$router.push({name: 'ProgressCreate'})
@@ -224,6 +223,8 @@ export default {
           }
           console.log(data);
           this.$store.dispatch('growth/addGrowthUser', data);
+          this.$store.commit('growth/RESET_SEARCH_USER')
+          
 
           // 추가하기 버튼 누르면 어디까지 닫아야 하남,,,,??
           // this.show = false;
@@ -231,17 +232,9 @@ export default {
         
       },
       check(event){
-        // console.log(event.target.classList)
         if(event.target.classList.contains('done')){
           const go = event.target.classList[1]
-          // console.log(go)
-          // console.log(this.$refs[go])
-          // this.$refs[go].scrollIntoView({behavior: "smooth", block: 'center'})
-          // console.log(go)
-          // this.$refs['state3'].scrollIntoView({behavior: "smooth"})
-          // this.$refs['bottom'].scrollIntoView({behavior: "smooth"})
           document.getElementById(go).scrollIntoView({behavior: "smooth", block: 'center'})
-          // window.scrollTo(0,100)
         }
       },
       pageUp() {
@@ -251,44 +244,44 @@ export default {
         window.scrollTo({left: 0, top: document.body.scrollHeight, behavior: 'smooth'});
       },
       makePDF () {
-			window.html2canvas = html2canvas //Vue.js 특성상 window 객체에 직접 할당해야한다.
-			let that = this
-			let pdf = new jsPDF('p', 'mm', 'a4')
-			let canvas = pdf.canvas
-			const pageWidth = 210 //캔버스 너비 mm
-			const pageHeight = 295 //캔버스 높이 mm
-			canvas.width = pageWidth
+        window.html2canvas = html2canvas //Vue.js 특성상 window 객체에 직접 할당해야한다.
+        let that = this
+        let pdf = new jsPDF('p', 'mm', 'a4')
+        let canvas = pdf.canvas
+        const pageWidth = 210 //캔버스 너비 mm
+        const pageHeight = 295 //캔버스 높이 mm
+        canvas.width = pageWidth
 
-			let ele = document.querySelector(".print")
-			let width = ele.offsetWidth // 셀렉트한 요소의 px 너비
-			let height = ele.offsetHeight // 셀렉트한 요소의 px 높이
-			let imgHeight = pageWidth * height/width // 이미지 높이값 px to mm 변환
+        let ele = document.querySelector(".print")
+        let width = ele.offsetWidth // 셀렉트한 요소의 px 너비
+        let height = ele.offsetHeight // 셀렉트한 요소의 px 높이
+        let imgHeight = pageWidth * height/width // 이미지 높이값 px to mm 변환
 
-			if(!ele){
-				console.warn('not exist.')
-				return false
-			}
-			html2canvas(ele).then((canvas) => {
-					let position = 0
-					const imgData = canvas.toDataURL('image/png')
-					pdf.addImage(imgData, 'png', 0, position, pageWidth, imgHeight, undefined, 'slow')
+        if(!ele){
+          console.warn('not exist.')
+          return false
+        }
+        html2canvas(ele).then((canvas) => {
+            let position = 0
+            const imgData = canvas.toDataURL('image/png')
+            pdf.addImage(imgData, 'png', 0, position, pageWidth, imgHeight, undefined, 'slow')
+            
+            //Paging 처리
+            let heightLeft = imgHeight //페이징 처리를 위해 남은 페이지 높이 세팅.
+            heightLeft -= pageHeight
+            while (heightLeft >= 0) {
+              position = heightLeft - imgHeight
+              pdf.addPage();
+              pdf.addImage(imgData, 'png', 0, position, pageWidth, imgHeight)
+              heightLeft -= pageHeight
+            }
+            
+            pdf.save(that.growth.category +'.pdf')
+          },
           
-					//Paging 처리
-					let heightLeft = imgHeight //페이징 처리를 위해 남은 페이지 높이 세팅.
-					heightLeft -= pageHeight
-					while (heightLeft >= 0) {
-            position = heightLeft - imgHeight
-						pdf.addPage();
-						pdf.addImage(imgData, 'png', 0, position, pageWidth, imgHeight)
-						heightLeft -= pageHeight
-					}
-          
-					pdf.save(that.growth.category +'.pdf')
-				},
-        
-			);	
+        );	
 
-		},
+      },
       search() {
         if (this.searchText){
           const data = {
@@ -305,9 +298,6 @@ export default {
           this.$store.commit('growth/SEARCH_USER_RESET')
         }
       },
-      reSetting() {
-        this.$store.dispatch('growth/growthSetting')
-      }
     },
     created() {
       // 파람스로 이벤트 아이디 추출
@@ -323,6 +313,7 @@ export default {
       if (this.loginUser.id == this.growth.user.id) {
         this.is_host = true
       }
+      // console.log(this.log)
     },
 }
 </script>
@@ -497,6 +488,11 @@ h1 {
   font-family: appleL;
 }
 
+.user-image {
+  height: 36px;
+  width: 36px;
+  margin-right: 12px;
+}
 
 .search-list {
   font-size: 16px;
@@ -510,6 +506,10 @@ h1 {
   padding: 0 10px;
 }
 
+.search-result>div{
+  display: flex;
+  align-items: center;
+}
 
 .progress {
   margin-top: 100px;

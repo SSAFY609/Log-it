@@ -100,6 +100,8 @@ export default {
 }
 
 .event:hover {
+  height: 200px;
+  width: 500px;
   background-color: rgba(219, 219, 219, 0.335);
 }
 
@@ -124,6 +126,8 @@ export default {
   border: 6px dashed rgba(219, 219, 219, 0.335);
 }
 .add_event:hover {
+  height: 210px;
+  width: 510px;
   background-color: rgba(219, 219, 219, 0.616);
   border: 6px  rgba(219, 219, 219, 0.692);
 }

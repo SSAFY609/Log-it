@@ -22,6 +22,7 @@ const search = {
     },
     actions: {
         getSearchResult({commit}, keyword){
+            console.log(`검색어: ${keyword}`)
             axiosConnector.get(`search`, {
                 params: {
                     keyword: keyword,

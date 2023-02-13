@@ -18,13 +18,11 @@
           <swiper 
           class="mySwiper"
           :modules="modules"
-          :navigation="true"
-          :pagination="true"
           @swiper="onSwiper"
           >
               <swiper-slide v-for="(date, index) in state.dates" :key="index">
                   <div class="grow">
-                    <div @click="goGrowth(data.growthId)" v-for="(data, index) in date.growths" :key="index" :class="`event ${data.start} ${data.period} floor${index + 1}`">
+                    <div @click="goGrowth(data.growthId)" v-for="(data, index) in date.growths" :key="index" :class="`event growth-event ${data.start} ${data.period} floor${index + 1}`">
                       {{ data.title }}
                     </div>
                   </div>
@@ -41,7 +39,7 @@
                       </div>
                   </div>
                   <div class="job">
-                    <div @click="goJob(data.jobId)" v-for="(data, index) in date.jobs" :key="index" :class="`event ${data.start} ${data.period} floor-${index + 1}`">
+                    <div @click="goJob(data.jobId)" v-for="(data, index) in date.jobs" :key="index" :class="`event job-event ${data.start} ${data.period} floor-${index + 1}`">
                       {{ data.title }}
                     </div>
                   </div>
@@ -106,16 +104,12 @@
 
 <script>
 import { Swiper, SwiperSlide } from "vue-awesome-swiper";
-import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
+import { Scrollbar, A11y } from 'swiper';
 import { reactive, onBeforeMount, onMounted, computed } from "vue";
 import { useStore } from "vuex";
 
 import "swiper/css";
   
-import "swiper/css/navigation";
-// import 'swiper/css/pagination';
-// import 'swiper/css/scrollbar';
-
 export default {
   name: 'FirstTimeline',
   components: {
@@ -432,7 +426,7 @@ export default {
           prevSlide,
           nextSlide,
           goslide,
-          modules: [Navigation, Pagination, Scrollbar, A11y],
+          modules: [ Scrollbar, A11y],
       };
   },
 }
@@ -463,11 +457,11 @@ export default {
 
 .swiper {
   position: static;
-  height: 400px;
+  height: 450px;
 }
 
 .box {
-  margin-top: 180px;
+  margin-top: 150px;
   width: 70%;
   text-align: center;
   /* background-color: pink; */
@@ -478,13 +472,13 @@ export default {
   justify-content: center;
   align-items: center;
   /* margin-bottom: 40px; */
-  font-size: 60px;
+  font-size: 50px;
   font-family: appleB;
   color: #191919;
 }
 
 .user-name {
-  font-size: 60px;
+  font-size: 50px;
   /* font-size: 45px; */
   /* font-family: galaxy; */
   font-family: appleB;
@@ -555,7 +549,7 @@ export default {
   align-items: center;
   position: absolute;
   border-radius: 50px;
-  height: 40px;
+  height: 32px;
   font-size: 20px;
   color: white;
   cursor: pointer;
@@ -614,68 +608,49 @@ export default {
   width: 100%;
 }
 
-.floor1:hover {
-  /* background: rgb(255,185,185);
-  background: linear-gradient(90deg, rgba(255,185,185,1) 0%, rgba(255,133,132,1) 24%, rgba(255,0,48,1) 100%); */
-  background-position: 99% 50%;
-  /* top: 115px; */
 
-}
-
-.floor1 {
-  top: 100px;
+.growth-event{
   background: rgb(255,0,48) repeat-x;
-  background: linear-gradient(90deg, #ff0030 0%, #ff8584 50%, #ff8584 76%, #ff0030 100%);
+  background: linear-gradient(90deg, #ff0030 0%, #ff6060 20%, #ff8584 30%, #ff8584 76%, #ff0030 100%);
   background-size: 300% 300%;
   background-position: 1% 50%;
   transition: all 1s ease;
 }
+.growth-event:hover,
+.job-event:hover {
+  background-position: 99% 50%;
+}
+.job-event{
+  background: rgb(255, 196, 0) repeat-x;
+  background: linear-gradient(90deg, rgb(255, 196, 0) 0%, rgba(255,182,56,1) 76%, rgba(255,226,175,1) 100%);
+  background-size: 300% 300%;
+  background-position: 1% 50%;
+  transition: all 1s ease;
+}
+
+.floor1 {
+  top: 130px;
+}
 .floor2 {
-  top: 55px;
-  /* background-color: rgb(255, 185, 100); */
-  background: rgb(255,0,48);
-background: linear-gradient(90deg, rgba(255,0,48,1) 0%, rgba(255,133,132,1) 76%, rgba(255,185,185,1) 100%);
+  top: 90px;
 }
 .floor3 {
-  top: 20px;
-  /* background-color: rgb(255, 126, 147); */
-  background-color: #ff7096c0;
+  top: 50px;
 }
-
 .floor4 {
-  background-color: #ff85a2bb;
-  top: 5px;
-  /* background-color: rgb(255, 210, 46); */
+  top: 10px;
 }
 .floor-1 {
-  top: 250px;
-  /* background-color: rgb(27, 171, 255); */
-
-background: rgb(255, 196, 0);
-background: linear-gradient(90deg, rgb(255, 196, 0) 0%, rgba(255,182,56,1) 76%, rgba(255,226,175,1) 100%);
+  top: 270px;
 }
 .floor-2 {
-  top: 300px;
-  /* background-color: rgb(255, 210, 155); */
-  /* background-color: rgb(255, 126, 147); */
-
-  background: rgb(255, 196, 0);
-background: linear-gradient(90deg, rgb(255, 196, 0) 0%, rgba(255,182,56,1) 76%, rgba(255,226,175,1) 100%);
+  top: 310px;
 }
 .floor-3 {
   top: 350px;
-  /* background-color: rgb(255, 255, 172); */
-  /* background-color: rgb(255, 185, 100); */
-
-  background: rgb(255, 196, 0);
-background: linear-gradient(90deg, rgb(255, 196, 0) 0%, rgba(255,182,56,1) 76%, rgba(255,226,175,1) 100%);
 }
-
 .floor-4 {
-  top: 355px;
-  /* background-color: rgb(255, 126, 147); */
-  /* background-color: rgb(183, 255, 183); */
-  background-color: #ffd000bf;
+  top: 390px;
 
 }
 

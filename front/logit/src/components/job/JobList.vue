@@ -61,6 +61,7 @@ export default {
       }
     },
     created() {
+      console.log('실행중임')
       this.$store.dispatch('tempJob/getAllJob')
     }
 
