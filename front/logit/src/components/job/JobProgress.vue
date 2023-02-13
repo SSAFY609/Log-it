@@ -56,14 +56,19 @@
                   </div>
                   <div v-if="i.resultStatus==`진행중`" class="image_box">
                     <v-img class="logo_img"
-                      :src="require('../../assets/images/failed.png')"
+                      :src="require('../../assets/images/passed01.png')"
                       height="110"
                     />
                   </div>
-                  <div class="select_pass_area">
-                    <v-select class="select_area"
-                      :items="['진행중', '합격', '불합격',]"
-                    ></v-select>
+                  <div class="right_box_area">
+                    <div class="select_pass_area" @click="openProgress">
+                      <input class="doc_progress_text" type="text" v-model="doc_progress" readonly>
+                    </div>
+                    <ul class="show_selection" v-if="modal">
+                      <li @click="selectDoc('진행중')">진행중</li>
+                      <li @click="selectDoc('합격')">합격</li>
+                      <li @click="selectDoc('불합격')">불합격</li>
+                    </ul>
                   </div>
                 </div>
  
@@ -290,7 +295,10 @@ import { mapState } from 'vuex';
         interview_answer: '',
         doc_question: '',
         doc_answer: '',
-        }
+        doc_progress: '진행중',
+        modal: false,
+        
+      }
     },
 
     methods: {
@@ -334,6 +342,13 @@ import { mapState } from 'vuex';
         this.interview_answer = ''
         this.sendData()
         
+      },
+
+
+      selectDoc(value) {
+        this.doc_progress = value
+        this.modal = false;
+
       },
 
 
@@ -525,7 +540,9 @@ import { mapState } from 'vuex';
 
       //   }    
       // }
-
+      openProgress() {
+        this.modal = !this.modal
+      }
 
     },
 
@@ -982,7 +999,7 @@ label:hover {
   height: 60px;
   /* background-color: royalblue; */
   display: flex;
-  justify-content: start;
+  justify-content: space-between;
 
 }
 .logo_img {
@@ -998,27 +1015,52 @@ label:hover {
   left: 620px;
 
 }
-/* .select_pass_area {
+.select_pass_area {
   width: 100px;
   height: 40px;
-  background-color: rgb(197, 197, 197);
-  margin-left: 510px;
+  background-color: rgb(145, 145, 145);
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 6px;
-} */
-
-select {
-  font-size: 20px
+}
+.show_selection li {
+  display: flex;
+  justify-content: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 100%;
+  height: 100%;
+}
+.show_selection li:hover {
+  cursor: pointer;
+  background-color: #d4d4d4;
+}
+.show_selection {
+  position: absolute;
+  top: 470px;
+  width: 100px;
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+}
+.doc_progress_text {
+  display: flex;
+  padding-left: 26px;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  border-radius: 6px;
 }
 
-select:focus {
-  outline: none;  
-}
-
-.select_area {
-  margin-left: 460px;
-  width: 120px;
+.right_box_area {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  text-align: end;
+  width: 100px;
 }
 </style>
