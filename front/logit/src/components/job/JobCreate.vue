@@ -93,13 +93,14 @@ export default {
                         companyName: this.companyName,
                         startDate :"2023-02-01",
                         endDate: "2023-02-02",
-                        categroy: [],
+                        jobCategoryList: [],
                 }
 
+                console.log('selectedList')
+                console.log(this.selectedList)
                 this.selectedList.forEach(element => {
-                    jobs.categroy.push(element)
+                    jobs.jobCategoryList.push(element)
                 });
-                console.log(jobs);
                 this.$store.dispatch('tempJob/createJob', jobs)
                 
                 
