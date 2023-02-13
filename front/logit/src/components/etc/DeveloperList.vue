@@ -15,15 +15,63 @@
       <div class="timeline-subtitle">일정을 등록하고, 스와이프 기능을 활용해 일정을 한눈에 보고 관리해보세요.</div>
       <img :src="require('@/assets/images/오픈 소스 타임라인2.png')" class="timeline-image">
       <router-link :to="{name: 'OpenSource'}" class="demo">데모 페이지 바로가기 &gt;</router-link>
-      <a href="https://github.com/SSAFY609/Logit-TimeLine" class="demo">깃허브 바로가기 &gt;</a>
     </div>
     <img :src="require('@/assets/images/scroll.gif')" class="scroll2">
+    <div class="code-block">
+      <div class="code-block-title">오픈 소스 사용법</div>
+      <div class="code-block-subtitle">events에 나만의 event를 넣어 사용해 주세요.</div>
+      <div class="code">
+        <div class="line"></div>
+        <div style="margin-top: 24px">
+          <div class="tag">&lt;script&gt;</div>
+          <div>...</div>
+          <div>export default &#123;</div>
+          <div>setup &#40;&#41; &#123;</div>
+          <div class="inner-1">const state = reactive &#40;&#123;</div>
+          <div class="inner-2"><div class="pink">events</div> : [</div>
+          <div class="inner-3">&#123;<div class="code-hv" @click="scroll('go_title')">title</div>: '이벤트 1',<div class="code-hv" @click="scroll('st')">startDate</div>: '2023-02-13', <div class="code-hv" @click="scroll('ed')">endDate</div>:'2023-03-01'&#125;</div>
+          <div class="inner-3">&#123;<div class="code-hv" @click="scroll('go_title')">title</div>: '이벤트 2',<div class="code-hv" @click="scroll('st')">startDate</div>: '2023-02-16', <div class="code-hv" @click="scroll('ed')">endDate</div>:'2023-03-10'&#125;</div>
+          <div class="inner-3">&#123;<div class="code-hv" @click="scroll('go_title')">title</div>: '이벤트 3',<div class="code-hv" @click="scroll('st')">startDate</div>: '2023-02-17', <div class="code-hv" @click="scroll('ed')">endDate</div>:'2023-03-05'&#125;</div>
+          <div class="inner-3">&#123;<div class="code-hv" @click="scroll('go_title')">title</div>: '이벤트 4',<div class="code-hv" @click="scroll('st')">startDate</div>: '2023-02-01', <div class="code-hv" @click="scroll('ed')">endDate</div>:'2023-02-13'&#125;</div>
+          <div class="inner-2">]</div>
+          <div class="inner-1">&#125;&#41;</div>
+          <div>&#125;</div>
+          <div>&#125;</div>
+          <div>...</div>
+          <div class="tag">&lt;/script&gt;</div>
+        </div>
+      </div>
+      <a href="https://github.com/SSAFY609/Logit-TimeLine" class="demo github">코드 전문 보러가기 &gt;</a>
+    </div>
+    <div class="usage">
+      <div class="params">변수 설명</div>
+      <div class="usage-box" id="go_title">
+        <div class="usage-title">title</div>
+        <div class="usage-content">이벤트의 제목을 뜻하는 변수입니다.</div>
+      </div>
+      <div class="usage-box" id="st">
+        <div class="usage-title">startDate</div>
+        <div class="usage-content">이벤트의 시작 날짜를 뜻하는 변수입니다. &#40; 'yyyy-MM-dd' 의 형태로 입력하세요. &#41;</div>
+      </div>
+      <div class="usage-box" id="ed">
+        <div class="usage-title">endDate</div>
+        <div class="usage-content">이벤트의 종료 날짜를 뜻하는 변수입니다. &#40; 'yyyy-MM-dd' 의 형태로 입력하세요. &#41;</div>
+      </div>
+    </div>
+    <div>
+       
+    </div>
   </div>
 </template>
 
 <script>
 export default {
     name: 'DeveloperList',
+    methods: {
+      scroll(target){
+          document.getElementById(target).scrollIntoView({behavior: "smooth", block: 'center'})
+      },
+    },
     mounted() {
       
       const $text = document.querySelector(".typing");
@@ -176,20 +224,124 @@ export default {
 
 .demo {
   font-size: 20px;
-  color: #FF0A54;
+  color: #191919;
   position: relative;
-  left: 500px;
+  left: 400px;
+  top: -300px;
+}
+.github {
+  color: #191919;
+  left: 560px;
+  top: -770px;
+  font-family: appleL;
+  font-size: 20px;
 }
 
 .demo:hover {
-  animation: twinkle 0.5s infinite;
   font-family: appleM;
   font-size: 22px;
+  color:#ff004c;
 }
 
-@keyframes twinkle {
-    from { color: #FF0A54; }
-    to { color:#ff7ba2; }
-  }
+.code-block-title {
+  font-size: 50px;
+  font-family: appleB;
+}
 
+.code-block-subtitle {
+  font-size: 20px;
+  margin-bottom: 40px;
+}
+
+.code-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.code {
+  background: #222222e5;
+  display: flex;
+  padding: 30px;
+  padding-left: 60px;
+  font-family: consola;
+  font-size: 22px;
+  color: rgb(215, 215, 215);
+  height: 640px;
+  border-radius: 20px;
+  width: 80%;
+  text-align: left;
+  margin-bottom: 80px;
+}
+.line {
+  height: 580px;
+  margin-right: 70px;
+  border-right: solid 2px rgba(255, 255, 255, 0.177);
+}
+
+.inner-1 {
+  display: flex;
+  margin-left: 40px;
+}
+.inner-2 {
+  display: flex;
+  margin-left: 80px;
+}
+.inner-3 {
+  display: flex;
+  margin-left: 120px;
+}
+
+.tag {
+  color: rgb(0, 234, 255);
+}
+
+.pink {
+  color: #fff200;
+}
+
+.code-hv {
+  cursor: pointer;
+  margin: 0 10px;
+}
+
+.code-hv:hover {
+  color: #26ff00;
+  /* font-family: consolaB; */
+}
+
+.params {
+  font-size: 50px;
+  font-family: appleB;
+  margin-bottom: 40px;
+}
+
+.usage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: left;
+  padding: 50px 0;
+}
+
+.usage-box {
+  background-color: #ededed;
+  width: 80%;
+  height: 60px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.usage-title{
+  font-size: 36px;
+  font-family: appleM;
+  margin-left: 40px;
+  width: 160px;
+}
+
+.usage-title{
+  font-size: 26px;
+}
 </style>
