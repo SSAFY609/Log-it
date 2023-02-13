@@ -3,19 +3,32 @@
     <div class="job_box_area lay3">
       <div class="header_area lay2">
         <h1>{{ jobs.companyName }} 취업 여정</h1>
-        <h1>{{  jobs }}</h1>
-
-
-
-        <v-btn @click="sendData">저장</v-btn>
+        <!-- <h1>{{  jobs.resultStatus }}</h1> -->
         <span v-if="jobs.endDate">{{ date_to_str(jobs.startDate, jobs.endDate) }}</span>  
         <span v-else>{{ jobs.startDate}} ~ 진행중</span>
+
+        <div class="progress_box">{{  jobs.resultStatus }}</div>
+
+
+        <!-- 저장 버튼-->
+        <!-- <v-btn @click="sendData">저장</v-btn> -->
+
       </div>
       <div class="tab_area lay3">
         <div v-for="i in jobs.datas" :key="i" class="tab_area_box">
           <div class="tab_item_box f_main hover_cursor" @click="clickTab">{{ i.jobCategory }}</div>
         </div>
-        <div class="add_btn f_main hover_cursor">+전형 추가</div>
+        <div class="add_area">
+          <div class="add_btn f_main hover_cursor" @click="showAddCategory">
+          +전형 추가
+          </div>
+          <div class="show_add_category_area nosee">
+            <div class="add_category_item" @click="addTab('서류')">+ 서류 전형</div>
+            <div class="add_category_item" @click="addTab('코테')">+ 코테 전형</div>
+            <div class="add_category_item" @click="addTab('면접')">+ 면접 전형</div>
+            <div class="add_category_item" @click="addTab('기타')">+ 기타 전형</div>
+          </div>
+        </div>
       </div>
 
 
@@ -28,11 +41,32 @@
           <div class="show_box" v-for="i in jobs.datas" :key="i">
             <div v-show="clicked==i.jobCategory" class="show_inner_box">
 
-              <h2 class="category_text">{{i.jobCategory}} 전형</h2>
+              
               
               
               <!-- 서류전형-->
               <div v-show="i.jobCategory=='서류'">
+                <div class="image_area">
+                  <h2 class="category_text">💼 {{i.jobCategory}} 전형</h2>
+                  <div v-if="i.resultStatus==`합격`" class="image_box">
+                    <v-img class="logo_img"
+                      :src="require('../../assets/images/passed01.png')"
+                      height="110"
+                    />
+                  </div>
+                  <div v-if="i.resultStatus==`진행중`" class="image_box">
+                    <v-img class="logo_img"
+                      :src="require('../../assets/images/failed.png')"
+                      height="110"
+                    />
+                  </div>
+                  <div class="select_pass_area">
+                    <v-select class="select_area"
+                      :items="['진행중', '합격', '불합격',]"
+                    ></v-select>
+                  </div>
+                </div>
+ 
                 <div class="db_board_list" v-for="(el, index) in i.list" :key="index">
                   <div class="num_btn">
                     <p>질문 {{ index + 1 }}</p>
@@ -50,16 +84,16 @@
                 <div class="contents_box lay2">
                   <div class="q_input_area">
                     <div class="q_input_box">
-                      <input class="q_text" type="text" placeholder="질문을 추가하세요." autofocus>
+                      <input class="q_text" type="text" placeholder="질문을 추가하세요." v-model="doc_question">
                     </div>
                     <div class="a_input_box">
-                      <textarea  class="a_text" placeholder="답변을 작성하세요."></textarea>
+                      <textarea  class="a_text" placeholder="답변을 작성하세요." v-model="doc_answer"></textarea>
                     </div>  
                   </div>
 
                   <!-- 추가하기 버튼 -->
                   <div class="add_container">
-                    <div class="add_q_btn_box hover_cursor" @click="addQuestion">
+                    <div class="add_q_btn_box hover_cursor" @click="addDocument">
                       <div name="add_q_btn" id="add_q_btn" class="q_btn " >
                        <v-icon class="f_icon plus_icon">mdi-plus</v-icon>
                      </div>
@@ -76,6 +110,13 @@
               </div>
               <!-- 코테 영역 -->
               <div v-show="i.jobCategory=='코테'">
+                <h2 class="category_text">🎓 {{i.jobCategory}} 전형</h2>
+                <div v-if="i.resultStatus==`진행중`" class="image_box">
+                    <v-img class="logo_img"
+                      :src="require('../../assets/images/passed01.png')"
+                      height="110"
+                    />
+                  </div>
                    
                 <!-- 인풋창 영역-->
                 <div class="ct_input_area">
@@ -139,6 +180,13 @@
 
                 <!-- 면접 전형-->
                 <div v-show="i.jobCategory=='면접'">
+                  <h2 class="category_text">👔 {{i.jobCategory}} 전형</h2>
+                  <div v-if="i.resultStatus==`진행중`" class="image_box">
+                    <v-img class="logo_img"
+                      :src="require('../../assets/images/passed01.png')"
+                      height="110"
+                    />
+                  </div>
                   <div class="db_board_list" v-for="(item, index) in i.list" :key="index">
                     <div class="num_btn">
                       <p>질문 {{ index + 1 }}</p>
@@ -157,16 +205,16 @@
                 <div class="contents_box lay2">
                   <div class="document_input_area" id="document_input_area">
                     <div class="q_input_box">
-                      <input class="q_text" type="text" placeholder="면접 질문을 추가하세요." >
+                      <input class="q_text" type="text" placeholder="면접 질문을 추가하세요." v-model="interview_question">
                     </div>
                     <div class="a_input_box">
-                      <textarea  class="a_text" placeholder="면접 답변을 작성하세요."></textarea>
+                      <textarea  class="a_text" placeholder="면접 답변을 작성하세요." v-model="interview_answer"></textarea>
                     </div>  
                   </div>
 
                   <!-- 추가하기 버튼 -->
                   <div class="add_container">
-                    <div class="add_q_btn_box hover_cursor" @click="addDocument">
+                    <div class="add_q_btn_box hover_cursor" @click="addQuestion">
                       <div name="add_q_btn" id="add_q_btn" class="q_btn " >
                        <v-icon class="f_icon plus_icon">mdi-plus</v-icon>
                      </div>
@@ -181,6 +229,7 @@
 
               
               <div v-show="i.jobCategory=='기타'">
+                <h2 class="category_text">{{i.jobCategory}} 전형</h2>
                 기타영역
 
                  <!-- 추가하기 버튼 -->
@@ -237,19 +286,77 @@ import { mapState } from 'vuex';
           category: '',
         },
         added_ct_text: '',
-      }
+        interview_question: '',
+        interview_answer: '',
+        doc_question: '',
+        doc_answer: '',
+        }
     },
 
     methods: {
+      showAddCategory() {
+        const target = document.querySelector('.show_add_category_area')
 
+        target.classList.toggle('nosee')
+      },
       // 추가하기 메서드
-      addQuestion() {
 
+      addTab(type) {
+        console.log(type)
+
+
+      },
+
+
+
+      // 면접 저장하기
+      addQuestion() {
+        // console.log(this.jobs.datas)
+
+
+        const newData = {
+          id: null,
+          question: '',
+          answer: '',
+        }
+
+        this.jobs.datas.forEach(element => {
+          if(element.jobCategory == '면접') {
+            newData.question = this.interview_question
+            newData.answer = this.interview_answer
+            element.list.push(newData)
+            // console.log(element.list)
+          }
+        });
+
+
+        this.interview_question = ''
+        this.interview_answer = ''
+        this.sendData()
         
       },
+
+
+      // 서류 저장하기
       addDocument() {
+        const newData = {
+          id: null,
+          question: '',
+          answer: '',
+        }
+        this.jobs.datas.forEach(element => {
+          if(element.jobCategory == '서류') {
+            newData.question = this.doc_question
+            newData.answer = this.doc_answer
+            element.list.push(newData)
+            // console.log(element.list)
+          }
+        });
 
 
+        this.doc_question = ''
+        this.doc_answer = ''
+        this.sendData()
       },
 
       // 코테 저장하기
@@ -257,18 +364,30 @@ import { mapState } from 'vuex';
 
         // console.log(this.added_ct_text)
 
-        this.new_ct_data.content = this.added_ct_text
-
-        console.log(this.new_ct_data)
+        const new_ct_data = { 
+          id: null,
+          content: this.added_ct_text, 
+          category: this.new_ct_data.category,
+        }
+        // console.log(this.new_ct_data)
         
         this.jobs.datas.forEach(element => {
           if(element.jobCategory == '코테') {
-            element.list.push(this.new_ct_data)
+            element.list.push(new_ct_data)
           }  
         });
-
-        this.added_ct_text = ''
         
+        
+
+        this.added_ct_text = '' // 통과
+        
+        // select chip box 지우는 작업 통과
+        const t = document.getElementsByName('added_ct_option');
+        t.forEach(element => {
+          element.parentElement.classList.remove('selected_item')
+        });
+        this.$store.dispatch('tempJob/jobSetting', this.jobs.jobId)
+        this.sendData()
 
       },
 
@@ -283,11 +402,14 @@ import { mapState } from 'vuex';
 
 
         removeList.forEach(element => {
-          element.classList.remove('selected_item')
+          element.classList.remove('selected_item2')
         });
 
-        target.classList.add('selected_item')
+        target.classList.add('selected_item2')
         this.clicked = target.innerText
+
+        this.sendData()
+
       },
 
 
@@ -366,7 +488,43 @@ import { mapState } from 'vuex';
 
       sendData() {
         this.$store.dispatch('tempJob/sendJobs', this.jobs)
-      }
+      },
+
+
+      // 선택된 옵션 다시 선택하는 함수
+      // selectedCt() {
+
+        
+      //   console.log('selcetedCt() 시작')
+        
+      //   const targetArray = []
+
+      //   if(this.category) {
+          
+      //     const c_length = Object.keys(this.category).length
+
+      //     for(let i = 0; i < c_length; i++) {
+            
+      //       targetArray.push(this.ct_datas.list[i].category)
+  
+      //     }
+          
+  
+          
+      //     for(let i = 0; i < c_length; i++) {
+      //       const targetList = document.getElementsByName(`ct_category${i}`)
+  
+  
+      //       targetList.forEach(element => {
+      //         // console.log(element.name)
+      //         if(element.value == targetArray[i]) {
+      //           element.parentElement.classList.add('selected_item')
+      //         }
+      //       });
+      //   }
+
+      //   }    
+      // }
 
 
     },
@@ -401,20 +559,23 @@ import { mapState } from 'vuex';
     mounted() {
 
 
-        const target = document.querySelector('.tab_area_box')
+        
         
         // console.log('.tabarea 요소 타겟')
         // console.log(target)
         
 
-        // 선택된 옵션에 효과주기
+        // 선택된 옵션에 효과주기 함수
+        const target = document.querySelector('.tab_area_box')
         if(target) {
-          target.firstChild.classList.add('selected_item')
+          target.firstChild.classList.add('selected_item2')
           this.clicked = target.firstChild.innerText
 
         }
 
 
+
+        // 선택된 옵션에 효과주기 함수
         const targetArray = []
 
         if(this.category) {
@@ -515,6 +676,7 @@ span {
 .add_btn {
   height: 40px;
   background-color: #F6F6F6;
+  color: black;
   border-radius: 6px;
   margin-right: 6px;
   display: flex;
@@ -523,6 +685,10 @@ span {
   padding: 0px 30px;
   font-family: appleL;
   font-size: 22px;
+}
+.add_btn:hover {
+  background-color: #ececec;
+  color:#FF0A54;
 }
 
 .contents_area {
@@ -704,7 +870,7 @@ textarea:focus {
   margin-right: 10px;
 }
 .chip_box:hover {
-  background-color: #FF0A54;
+  background-color: #808080;
   color: white;
 }
 
@@ -722,6 +888,7 @@ label:hover {
 .category_text {
   font-family: appleB;
   font-size: 30px;
+  width: 180px;
 }
 .selected_chip {
   background-color: #FF0A54;
@@ -755,6 +922,11 @@ label:hover {
 
 }
 .selected_item {
+  background-color: #808080 ;
+  color: white;
+  z-index: 1000;
+}
+.selected_item2 {
   background-color: #FF0A54 ;
   color: white;
   z-index: 1000;
@@ -763,4 +935,90 @@ label:hover {
   width: 100%;
   height: 500px;
 }
- </style>
+.add_area {
+  display: flex;
+  height: 40px;
+}
+.show_add_category_area {
+  width: 120px;
+  height: 160px;
+  border-radius: 8px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-shadow: 4px 4px 20px 4px rgba(59, 59, 59, 0.1);
+  color: rgb(53, 53, 53);
+  z-index: 9900;
+  
+}
+.add_category_item {
+  width: 100%;
+  height: 100%;
+  padding-top: 6px;
+  padding-left: 10px;
+  font-size: 18px;
+}
+.add_category_item:hover {
+  cursor: pointer;
+  background-color: #ececec;
+  color: rgb(19, 19, 19);
+}
+.progress_box {
+  border-radius: 50px;
+  outline: 1px solid balck;
+  width: 80px;
+  height: 40px;
+  background-color: #ececec;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+.image_area {
+  width: 100%;
+  height: 60px;
+  /* background-color: royalblue; */
+  display: flex;
+  justify-content: start;
+
+}
+.logo_img {
+  display: flex;
+  justify-content: start;
+}
+.image_box {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  position: absolute;
+  top: 380px;
+  left: 620px;
+
+}
+/* .select_pass_area {
+  width: 100px;
+  height: 40px;
+  background-color: rgb(197, 197, 197);
+  margin-left: 510px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+} */
+
+select {
+  font-size: 20px
+}
+
+select:focus {
+  outline: none;  
+}
+
+.select_area {
+  margin-left: 460px;
+  width: 120px;
+}
+</style>
