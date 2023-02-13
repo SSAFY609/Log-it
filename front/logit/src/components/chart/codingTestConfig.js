@@ -1,22 +1,9 @@
 export const data = {
-    labels: ['네트워크', '운영체제', '프로젝트', '데이터베이스'],
-    datasets: [
-        {
-            backgroundColor: ["rgb(242,165,152)",
-                "rgb(255,232,157)",
-                "rgb(236,107,109)",
-                "rgb(122,231,125)",
-                "rgb(195,233,151)"],
-            // backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
-            data: [40, 20, 80, 10]
-        }
-    ]
-};
-
-export const codingTestData = {
     labels: ['그래프 탐색', 'BFS', '동적 프로그래밍', '자료구조', '힙'],
     datasets: [
         {
+
+
             backgroundColor: ["#99CCFF",
                 "#999933",
                 "#666699",
@@ -27,39 +14,24 @@ export const codingTestData = {
                 "#CCCC99",
                 "#666666",],
             // backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
-            data: [40, 20, 80, 10, 30]
+            data: [40, 20, 80, 10,30]
         }
     ]
-}
-
-export const myApplyData = {
-    labels: ['합격', '불합격', '진행중'],
-    datasets: [
-        {
-            backgroundColor: ["blue",
-                "red",
-                "white"],
-            // backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
-            data: [40, 20, 80]
-        }
-    ]
-}
-
+};
 
 export const options = {
     plugins: {
         legend: {
             display: true,
-            position: "right",
+            position: "left",
             labels: {
                 boxWidth: 8,
                 padding: 10,
                 usePointStyle: true,
                 pointStyle: "circle",
                 font: {
-                    size: 14,
-                    family: 'AppleM'
-                },
+                    size: 14
+                }
             },
             fullSize: true,
             align: "center"
