@@ -1,12 +1,12 @@
 <template>
   <div class="container b_transparentgray">
     <div class="logo_box">
-      <router-link :to="{name: 'MainPage'}" class="logo_img_box">
+      <div @click="btnClicked('MainPage')" class="logo_img_box">
         <v-img class="logo_img"
             :src="require('../../assets/images/logit_logo_text.png')"
             height="110"
       />
-      </router-link>
+      </div>
       
     <div @click="closeSidebar" class="slider_box b_lightgray slider_hover lay2">
         <v-icon class="silder_icon f_white">mdi-chevron-double-left</v-icon>
@@ -16,7 +16,7 @@
     <!-- 사이드바 메뉴 영역-->
     <div class="menu_container lay1">
       <router-link :to="{name: 'MainPage'}" class="menu_item_box lay2 hover_cursor">
-        <div class="menu_icon_box lay2 btn_clicked">
+        <div class="menu_icon_box lay2 btn_clicked" @click="btnClicked('MainPage')">
           <v-icon class="menu_icon f_icon lay3 btn_clicked2">mdi-layers</v-icon>  
           <div class="menu_text_box f_darkgray lay3 btn_clicked2">홈</div>
         </div>
@@ -101,7 +101,11 @@ export default {
       this.$store.dispatch(`closeSidebar`)
     },
 
-    btnClicked(select) {      
+    btnClicked(select) {
+      if(select == 'MainPage'){
+        this.$router.push({name: select})
+        return
+      }   
       if(!this.loginUser.id){
         this.$router.push({name: 'UserLogin'})
         return

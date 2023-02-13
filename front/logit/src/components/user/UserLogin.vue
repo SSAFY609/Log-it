@@ -114,7 +114,6 @@ export default {
         email: this.user.email,
         pw: this.user.pw,
       };
-      console.log(user)
       this.$store.dispatch("login", user);
     },
     toSignup() {

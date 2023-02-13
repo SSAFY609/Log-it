@@ -49,9 +49,10 @@ const growth = {
         },
         GET_FIRST_PROGRESS(state, payload){
             state.firstProgress = payload
+            const id = sessionStorage.getItem('id')
             if(payload.length == 0){
                 state.today = false
-            } else if(payload[payload.length - 1].date == today_to_str()){
+            } else if(payload[payload.length - 1].date == today_to_str() && payload[payload.length-1].progressDto.user.id == id){
                 state.today = true
             } else {
                 state.today = false

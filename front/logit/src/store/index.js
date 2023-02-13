@@ -35,13 +35,13 @@ export default createStore({
   mutations: {
     LOGIN_USER(state, payload) {
       state.loginUser = payload
-      console.log(state.loginUser)
       sessionStorage.setItem("token", payload["jwt-auth-token"]);
+      sessionStorage.setItem('id', payload.id)
       router.push({ name: "MainPage" });
     },
     LOG_OUT(state) {
       sessionStorage.removeItem("token");
-      sessionStorage.removeItem("email");
+      sessionStorage.removeItem("id");
       state.loginUser = {};
       router.push({name: 'MainPage'})
     },
@@ -49,6 +49,9 @@ export default createStore({
       state.loginUser = payload;
       console.log(state.loginUser);
       router.push({ name: "ProfilePage" });
+    },
+    GET_USER_ONLY(state, payload){
+      state.loginUser = payload;
     },
     OPEN_SIDEBAR(state){
       state.sidebar = true;
@@ -61,7 +64,6 @@ export default createStore({
     // 유저 로그인
     login({ commit }, user) {
       const URL = `${baseURL}/login`;
-      console.log(user)
       axios({
         url: URL,
         method: "POST",
@@ -191,6 +193,15 @@ export default createStore({
         .catch((err) => {
           console.log(err);
         });
+    },
+    // profile page로 가지 않을 getUser
+    getUserOnly({commit}){
+      axiosConnector.get(`user`
+      ).then((res)=>{
+        commit('GET_USER_ONLY', res.data)
+      }).catch((err)=>{
+        console.log(err)
+      })
     },
 
     // sidebar 열기
