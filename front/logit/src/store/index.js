@@ -42,8 +42,8 @@ export default createStore({
     LOG_OUT(state) {
       sessionStorage.removeItem("token");
       sessionStorage.removeItem("email");
-
       state.loginUser = {};
+      router.push({name: 'MainPage'})
     },
     GET_USER(state, payload) {
       state.loginUser = payload;

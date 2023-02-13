@@ -18,8 +18,6 @@
           <swiper 
           class="mySwiper"
           :modules="modules"
-          :navigation="true"
-          :pagination="true"
           @swiper="onSwiper"
           >
               <swiper-slide v-for="(date, index) in state.dates" :key="index">
@@ -106,16 +104,12 @@
 
 <script>
 import { Swiper, SwiperSlide } from "vue-awesome-swiper";
-import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
+import { Scrollbar, A11y } from 'swiper';
 import { reactive, onBeforeMount, onMounted, computed } from "vue";
 import { useStore } from "vuex";
 
 import "swiper/css";
   
-import "swiper/css/navigation";
-// import 'swiper/css/pagination';
-// import 'swiper/css/scrollbar';
-
 export default {
   name: 'FirstTimeline',
   components: {
@@ -432,7 +426,7 @@ export default {
           prevSlide,
           nextSlide,
           goslide,
-          modules: [Navigation, Pagination, Scrollbar, A11y],
+          modules: [ Scrollbar, A11y],
       };
   },
 }
