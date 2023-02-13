@@ -15,6 +15,7 @@
       <div class="timeline-subtitle">일정을 등록하고, 스와이프 기능을 활용해 일정을 한눈에 보고 관리해보세요.</div>
       <img :src="require('@/assets/images/오픈 소스 타임라인2.png')" class="timeline-image">
       <router-link :to="{name: 'OpenSource'}" class="demo">데모 페이지 바로가기 &gt;</router-link>
+      <a href="https://github.com/SSAFY609/Logit-TimeLine" class="demo">깃허브 바로가기 &gt;</a>
     </div>
     <img :src="require('@/assets/images/scroll.gif')" class="scroll2">
   </div>
