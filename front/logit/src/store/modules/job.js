@@ -5,7 +5,7 @@ import axiosConnector from "@/utils/axios-connector";
 const job = {
     namespaced: true,
     state:{
-        categoryList: [ "서류 전형", "코딩테스트", "면접 전형", "기타 전형" ],
+        categoryList: [ "서류", "코테", "면접", "기타" ],
         testList: [ "BFS", "DFS", "그래프", "구현", "문자열", "정렬", "이분탐색", "자료구조", "완전탐색", "힙", "트리", "DP", "그리디", "백트랙킹"
         ],
 

@@ -2,18 +2,17 @@
   <div class="container">
     <div class="job_box_area lay3">
       <div class="header_area lay2">
-        <h1>{{ datas.title }} 취업 여정</h1>
-        <h1>^^^^^^^^^</h1>
-        <h1>{{  newDatas }}</h1>
+        <h1>{{ jobs.companyName }} 취업 여정</h1>
+        <h1>{{  jobs }}</h1>
 
 
 
         <v-btn @click="sendData">저장</v-btn>
-        <span v-if="datas.endDate">{{ date_to_str(datas.startDate, datas.endDate) }}</span>  
-        <span v-else>{{ datas.startDate}} ~ 진행중</span>
+        <span v-if="jobs.endDate">{{ date_to_str(jobs.startDate, jobs.endDate) }}</span>  
+        <span v-else>{{ jobs.startDate}} ~ 진행중</span>
       </div>
       <div class="tab_area lay3">
-        <div v-for="i in datas.datas" :key="i" class="tab_area_box">
+        <div v-for="i in jobs.datas" :key="i" class="tab_area_box">
           <div class="tab_item_box f_main hover_cursor" @click="clickTab">{{ i.jobCategory }}</div>
         </div>
         <div class="add_btn f_main hover_cursor">+전형 추가</div>
@@ -23,12 +22,13 @@
       <div class="contents_area"> 
 
 
+
         <!-- DB에서 불러온 데이터 보여주는 영역 -->
         <div class="show_container">
-          <div class="show_box" v-for="i in datas.datas" :key="i">
+          <div class="show_box" v-for="i in jobs.datas" :key="i">
             <div v-show="clicked==i.jobCategory" class="show_inner_box">
 
-              <h2 class="category_text">{{i.name}} 전형</h2>
+              <h2 class="category_text">{{i.jobCategory}} 전형</h2>
               
               
               <!-- 서류전형-->
@@ -75,7 +75,7 @@
             
               </div>
               <!-- 코테 영역 -->
-              <div v-show="i.jobCategory=='코딩테스트'" class="ct_area">
+              <div v-show="i.jobCategory=='코테'">
                    
                 <!-- 인풋창 영역-->
                 <div class="ct_input_area">
@@ -175,9 +175,6 @@
               </div>
             </div>
 
-
-
-
           </div>    
         </div>
 
@@ -190,7 +187,6 @@
  </template>
  
  <script>
-
 
 
 
@@ -218,6 +214,7 @@ import { mapState } from 'vuex';
         ct_datas: {},
         category: {},
         newDatas: {},
+        jobs: {},
  
       }
     },
@@ -232,6 +229,8 @@ import { mapState } from 'vuex';
       clickTab() {
 
         const removeList = document.querySelectorAll('.tab_item_box')
+
+      
         const target = event.target
         
 
@@ -245,13 +244,17 @@ import { mapState } from 'vuex';
       },
 
 
-      date_to_str(st, ed) {
-        const year1 = st.getFullYear();
-        const month1 = st.getMonth() + 1;
-        const date1 = st.getDate();
-        const year2 = ed.getFullYear();
-        const month2 = ed.getMonth() + 1;
-        const date2 = ed.getDate();
+      date_to_str(startDate, endDate) {
+        const st = startDate.split('-')
+        const ed = endDate.split('-')
+        console.log(st)
+        console.log(ed)
+        const year1 = st[0];
+        const month1 = st[1];
+        const date1 = st[2];
+        const year2 = ed[0];
+        const month2 = ed[1];
+        const date2 = ed[2];
         return `${year1}년 ${month1}월 ${date1}일 ~ ${year2}년 ${month2}월 ${date2}일`
       },
 
@@ -275,7 +278,7 @@ import { mapState } from 'vuex';
             
 
             this.datas.datas.forEach(datas => {
-              if(datas.jobCategory=='코딩테스트') {
+              if(datas.jobCategory=='코테') {
 
                 // console.log(datas.list[index].category)
                 datas.list[index].category = item
@@ -307,47 +310,40 @@ import { mapState } from 'vuex';
 
     created() {
       const jobId = this.$route.params.jobId
-    
-      // console.log(jobId)
+      this.jobs = this.$store.state.tempJob.jobs
 
-      const datas = this.$store.state.tempJob.jobs
+      this.jobId =jobId
 
+
+
+      // const datas = this.$store.state.tempJob.jobs
+
+      // const newDatas_len = this.newDatas.length;
       
-      
-      this.$store.state.tempJob.allJob.data.forEach(element => {
+      // DB에서 받아온 전체 jobs 중에서 jobId가 일치하는 경우의 데이터만 다시 뽑기
+      // if(this.newDatas) {
+      //   for(let i=0; i < newDatas_len; i++) {
 
-        console.log('파라미터 아이디')
-        console.log(jobId)
-        console.log('새로운 데이터')
-        console.log(element)
-        if(element.id == jobId) {
-          console.log('파라미터로 보낸 아이디와 반복만 아이디 일치')
-          this.newDatas = this.$store.state.tempJob.allJob.data
+      //     if(this.newDatas[i].id == jobId) {
+      //       this.jobs = this.newDatas[i]
+      //     }
+      //   }
+
+      // }
+
+      const jobs = this.jobs
+
+      if(jobs) {
+
+        for(let i=0; i < jobs.datas.length; i++) {
+            if (jobs.datas[i].jobCategory == '코테') {
+              this.ct_datas = jobs.datas[i]
+            }
         }
-      
-      
-      });
-
-      this.newDatas = this.$store.state.tempJob.allJob.data
-      
-      // console.log(datas)
-
-      // console.log(this.newDatas)
-
-      for(let i=0; i< datas.length; i++) {
-        if(datas[i].jobId == jobId) {
-          this.datas = datas[i]
-        } 
-      }
-
-      for(let i=0; i < this.datas.datas.length; i++) {
-          if (this.datas.datas[i].jobCategory == '코딩테스트') {
-            this.ct_datas = this.datas.datas[i]
-          }
-      }
-
-      for(let i=0; i < this.ct_datas.list.length; i++) {
-        this.category[`ct_category${i}`] = this.ct_datas.list[i].category
+  
+        for(let i=0; i < this.ct_datas.list.length; i++) {
+          this.category[`ct_category${i}`] = this.ct_datas.list[i].category
+        }
       }
 
       
@@ -359,35 +355,41 @@ import { mapState } from 'vuex';
 
         const target = document.querySelector('.tab_area_box')
         
-        target.firstChild.classList.add('selected_item')
-        this.clicked = target.firstChild.innerText
+        console.log('.tabarea 요소 타겟')
+        console.log(target)
+        
+        if(target) {
+          target.firstChild.classList.add('selected_item')
+          this.clicked = target.firstChild.innerText
 
-        // console.log(this.datas)
+        }
 
 
         const targetArray = []
-        const c_length = Object.keys(this.category).length
-        for(let i = 0; i < c_length; i++) {
+
+        if(this.category) {
           
-          targetArray.push(this.ct_datas.list[i].category)
+          const c_length = Object.keys(this.category).length
 
-        
-
-
+          for(let i = 0; i < c_length; i++) {
+            
+            targetArray.push(this.ct_datas.list[i].category)
+  
+          }
+          
+  
+          
+          for(let i = 0; i < c_length; i++) {
+            const targetList = document.getElementsByName(`ct_category${i}`)
+  
+  
+            targetList.forEach(element => {
+              // console.log(element.name)
+              if(element.value == targetArray[i]) {
+                element.parentElement.classList.add('selected_item')
+              }
+            });
         }
-        
-
-        
-        for(let i = 0; i < c_length; i++) {
-          const targetList = document.getElementsByName(`ct_category${i}`)
-
-
-          targetList.forEach(element => {
-            // console.log(element.name)
-            if(element.value == targetArray[i]) {
-              element.parentElement.classList.add('selected_item')
-            }
-          });
 
         }
 

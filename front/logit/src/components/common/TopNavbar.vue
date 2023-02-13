@@ -90,11 +90,7 @@ export default {
   setup() {
     const state = {
 
-      // loginUser: {
-      //   id: "leesh132",
-      //   name: "이성훈",
-      //   num: "848212",
-      // },
+
     }
   
     const store = useStore()
