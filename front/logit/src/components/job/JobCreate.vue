@@ -91,8 +91,8 @@ export default {
             } else {
                 const jobs = {
                         companyName: this.companyName,
-                        startDate :"2023-02-01",
-                        endDate: "2023-02-02",
+                        startDate : this.start_date,
+                        endDate: this.end_date,
                         jobCategoryList: [],
                 }
 

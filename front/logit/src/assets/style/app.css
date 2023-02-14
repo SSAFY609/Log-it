@@ -13,7 +13,7 @@
 
 
   .first {
-    font-family: AppleL, AppleM, AppleB, AppleH, event, galaxy, google;
+    font-family: AppleL, AppleM, AppleB, AppleH, event, galaxy, google, consola, consolaB;
     height: 100%;
   }
   /* 아래로 내려갈수록 두꺼운 글씨체 */
@@ -45,6 +45,14 @@
   @font-face {
   font-family:'google';
   src: url('../fonts/Product Sans Bold.ttf') format('truetype');
+  }
+  @font-face {
+    font-family: 'consola';
+    src: url(../fonts/CONSOLA.TTF);
+  }
+  @font-face {
+    font-family: 'consolaB';
+    src: url(../fonts/CONSOLAB.TTF);
   }
 
     
@@ -143,7 +151,7 @@
     height: 100%;
   }
   .nosee {
-    display: none;
+    display: none!important;
   }
   .hover_cursor:hover {
     cursor: pointer;

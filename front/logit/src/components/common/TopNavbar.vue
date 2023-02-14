@@ -87,6 +87,12 @@ export default {
     
 
   },
+  created(){
+    const token = sessionStorage.getItem('token')
+    if(token){
+      this.$store.dispatch('getUserOnly')
+    }
+  },
   setup() {
     const state = {
 

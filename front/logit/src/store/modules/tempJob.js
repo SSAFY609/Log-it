@@ -35,7 +35,7 @@ const tempJob = {
         getAllJob({commit}) {
             axiosConnector.get(`job`
             ).then((res)=> {
-                console.log('응답 성공')
+                console.log('getAllJob 성공')
                 commit('GET_ALL_JOB', res.data)
             }).catch((err)=>{
                 console.log(err)
@@ -59,12 +59,13 @@ const tempJob = {
             
 
         },
-        sendJobs({dispatch}, datas) {
+        sendJobs({dispatch}, jobs) {
             console.log('sendJobs 실행')
-            console.log(datas)
-            axiosConnector.post('job/update', datas
+            // console.log(jobs)
+            axiosConnector.post('job/post-all', jobs
             ).then(()=> {
-                dispatch('getJob', datas.jobId)
+                console.log('sendJobs 성공')
+                dispatch('getJob', jobs.jobId)
             }).catch((err)=> {
                 console.log('엑시오스 에러')
                 console.log(err)
@@ -73,7 +74,7 @@ const tempJob = {
         },
         createJob({dispatch}, datas) {
             console.log('createJob 실행')
-            console.log(datas)
+            // console.log(datas)
             axiosConnector.post('job', datas
             ).then((res)=> {
                 console.log('createJob성공 후 응답')
