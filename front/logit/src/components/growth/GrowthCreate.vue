@@ -59,7 +59,7 @@ export default {
         create() {
             if (!this.select_category) {
                 toast.error('선택된 카테고리가 없습니다', {
-                    timeout: 12000,
+                    timeout: 2000,
                     position: 'bottom-right',
                     // icon: {
                     //     iconClass: 'mdi-bell mdi v-icon',
@@ -68,7 +68,8 @@ export default {
                 })
             } else if (!this.start_date || !this.end_date) {
                 toast.error('선택된 날짜가 없습니다.', {
-                    timeout: 2000
+                    timeout: 2000,
+                    position: 'bottom-right',
                 })
             } else {
                 const growth = {

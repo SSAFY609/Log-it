@@ -6,14 +6,11 @@ const job = {
     namespaced: true,
     state:{
         categoryList: [ "서류", "코테", "면접", "기타" ],
-        testList: [ "BFS", "DFS", "그래프", "구현", "문자열", "정렬", "이분탐색", "자료구조", "완전탐색", "힙", "트리", "DP", "그리디", "백트랙킹"
-        ],
-
-    
+        testList: [ "BFS", "DFS", "그래프", "구현", "문자열", "정렬", "이분탐색", "자료구조", "완전탐색", "힙", "트리", "DP", "그리디", "백트랙킹"],
     },
     getters: {
         getCategoryCnt(state) {
-            return state.category.length;
+            return state.categoryList.length;
         }
     },
     mutations: {

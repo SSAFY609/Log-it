@@ -46,9 +46,10 @@
 <script>
 // import router from '@/router';
 import { mapState } from 'vuex';
-import { onBeforeMount, onMounted, onBeforeUnmount, computed } from 'vue';
+import { onMounted, onBeforeUnmount, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useToast } from 'vue-toastification';
+import mycomp from '../etc/InviteAlert.vue'
 
 export default {  
     name: 'MainPage',
@@ -70,25 +71,35 @@ export default {
       // })
       const store = useStore()
       const toast = useToast()
-      const invites = computed(()=>store.state.invites)
+      // const invites = store.state.myInvitiation
 
       const testTimeline = () => {
         store.dispatch('timeline/timelineSetting')
       }
       const loginUser = computed(()=>store.state.loginUser)
 
-      onBeforeMount(()=>{
-        if(invites.value){
-          toast('알림입니다', {
-            timeout: 2000,
+      const makeToast = (i)=>{
+            toast({
+            component: mycomp,
+            props: {
+              growth: i,
+            },
+          },{
+            timeout: false,
+            icon: false
           })
-          
-        }
-      })
+      }
 
       onMounted(()=>{
-        writeTitle('.text', '당신의 새로운 여정을 \n 매일 기록해 보세요', 1500)
+        if(!loginUser.value){
+          writeTitle('.text', '당신의 새로운 여정을 \n 매일 기록해 보세요', 1500)
+        }
         window.addEventListener('scroll', onScroll)
+        const invites = store.state.myInvitiation
+        // console.log(invites)
+        for(let i=0; i<invites.length; i++){
+          makeToast(invites[i]);
+        }
       })
       
       onBeforeUnmount(()=>{
@@ -161,7 +172,8 @@ export default {
         // start,
         // state,
         loginUser,
-        invites,
+        // invites,
+        makeToast,
         testTimeline,
         writeTitle,
         onScroll,

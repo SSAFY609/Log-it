@@ -82,6 +82,8 @@
 
 <script>
 import { mapState } from 'vuex'
+import { useToast } from 'vue-toastification';
+const toast = useToast();
 
 export default {
   name: 'SideNavbar',
@@ -107,6 +109,10 @@ export default {
         return
       }   
       if(!this.loginUser.id){
+        toast.error('로그인이 필요한 페이지입니다.', {
+          timeout: 2000,
+          position: 'bottom-right',
+        })
         this.$router.push({name: 'UserLogin'})
         return
       } 
