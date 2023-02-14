@@ -48,30 +48,20 @@
               <div v-show="i.jobCategory=='서류'">
                 <div class="image_area">
                   <h2 class="category_text">💼 {{i.jobCategory}} 전형</h2>
-                  <div v-if="i.resultStatus==`합격`" class="image_box">
-                    <v-img class="logo_img"
-                      :src="require('../../assets/images/passed01.png')"
-                      height="110"
-                    />
-                  </div>
-                  <div v-if="i.resultStatus==`진행중`" class="image_box">
-                    <v-img class="logo_img"
-                      :src="require('../../assets/images/passed01.png')"
-                      height="110"
-                    />
-                  </div>
-                  <div class="right_box_area">
-                    <div class="select_pass_area" @click="openProgress">
+
+                  <!-- 합/불 선택 영역 -->
+                  <div class="right_box_area hover_cursor">
+                    <div class="select_pass_area doc_select" @click="openProgress">
                       <input class="doc_progress_text" type="text" v-model="doc_progress" readonly>
                     </div>
                     <ul class="show_selection" v-if="modal">
-                      <li @click="selectDoc('진행중')">진행중</li>
+                      <li @click="selectDoc('진행')">진행</li>
                       <li @click="selectDoc('합격')">합격</li>
-                      <li @click="selectDoc('불합격')">불합격</li>
+                      <li @click="selectDoc('불합')">불합</li>
                     </ul>
                   </div>
+                  <!-- 합/불 선택 영역 -->
                 </div>
- 
                 <div class="db_board_list" v-for="(el, index) in i.list" :key="index">
                   <div class="num_btn">
                     <p>질문 {{ index + 1 }}</p>
@@ -115,14 +105,24 @@
               </div>
               <!-- 코테 영역 -->
               <div v-show="i.jobCategory=='코테'">
-                <h2 class="category_text">🎓 {{i.jobCategory}} 전형</h2>
-                <div v-if="i.resultStatus==`진행중`" class="image_box">
-                    <v-img class="logo_img"
-                      :src="require('../../assets/images/passed01.png')"
-                      height="110"
-                    />
+                <div class="image_area">
+                  <h2 class="category_text">🎓 {{i.jobCategory}} 전형</h2>
+                  <!-- 합/불 선택 영역 -->
+                  <div class="right_box_area hover_cursor">
+                    <div class="select_pass_area ct_select" @click="openProgress">
+                      <input class="doc_progress_text" type="text" v-model="ct_progress" readonly>
+                    </div>
+                    <ul class="show_selection" v-if="modal">
+                      <li @click="selectCT('진행')">진행</li>
+                      <li @click="selectCT('합격')">합격</li>
+                      <li @click="selectCT('불합')">불합</li>
+                    </ul>
                   </div>
-                   
+                  <!-- 합/불 선택 영역 -->                
+                </div>
+                
+
+                
                 <!-- 인풋창 영역-->
                 <div class="ct_input_area">
 
@@ -150,8 +150,8 @@
                 <!-- 코테 추가 입력 창-->
                 <div class="ct_add_input_area" id="ct_add_input_area">
                   
-                    <div class="num_btn">
-                      <p>문제 추가</p>
+                    <div class="num_btn2">
+                      <p>+ 문제 추가</p>
                     </div>
       
                     <div class="option_types_area">
@@ -185,13 +185,23 @@
 
                 <!-- 면접 전형-->
                 <div v-show="i.jobCategory=='면접'">
-                  <h2 class="category_text">👔 {{i.jobCategory}} 전형</h2>
-                  <div v-if="i.resultStatus==`진행중`" class="image_box">
-                    <v-img class="logo_img"
-                      :src="require('../../assets/images/passed01.png')"
-                      height="110"
-                    />
+                  <div class="image_area">
+
+                    <h2 class="category_text">👔 {{i.jobCategory}} 전형</h2>
+                    <!-- 합/불 선택 영역 -->
+                    <div class="right_box_area hover_cursor">
+                      <div class="select_pass_area iv_select" @click="openProgress">
+                        <input class="doc_progress_text" type="text" v-model="iv_progress" readonly>
+                      </div>
+                      <ul class="show_selection" v-if="modal">
+                        <li @click="selectIV('진행')">진행</li>
+                        <li @click="selectIV('합격')">합격</li>
+                        <li @click="selectIV('불합')">불합</li>
+                      </ul>
+                    </div>
+                    <!-- 합/불 선택 영역 --> 
                   </div>
+                  
                   <div class="db_board_list" v-for="(item, index) in i.list" :key="index">
                     <div class="num_btn">
                       <p>질문 {{ index + 1 }}</p>
@@ -234,8 +244,23 @@
 
               
               <div v-show="i.jobCategory=='기타'">
-                <h2 class="category_text">{{i.jobCategory}} 전형</h2>
-                기타영역
+                <div class="image_area">
+
+                  <h2 class="category_text">{{i.jobCategory}} 전형</h2>
+                  <!-- 합/불 선택 영역 -->
+                  <div class="right_box_area hover_cursor">
+                    <div class="select_pass_area" @click="openProgress">
+                      <input class="doc_progress_text" type="text" v-model="doc_progress" readonly>
+                    </div>
+                    <ul class="show_selection" v-if="modal">
+                      <li @click="selectDoc('진행')">진행</li>
+                      <li @click="selectDoc('합격')">합격</li>
+                      <li @click="selectDoc('불합')">불합</li>
+                    </ul>
+                  </div>
+                  <!-- 합/불 선택 영역 -->
+                </div>
+                  기타영역
 
                  <!-- 추가하기 버튼 -->
                  <div class="add_container">
@@ -295,7 +320,9 @@ import { mapState } from 'vuex';
         interview_answer: '',
         doc_question: '',
         doc_answer: '',
-        doc_progress: '진행중',
+        doc_progress: '진행',
+        iv_progress: '진행',
+        ct_progress: '진행',
         modal: false,
         
       }
@@ -319,13 +346,14 @@ import { mapState } from 'vuex';
 
       // 면접 저장하기
       addQuestion() {
-        // console.log(this.jobs.datas)
+
 
 
         const newData = {
           id: null,
           question: '',
           answer: '',
+          resultStatus: this.iv_progress,
         }
 
         this.jobs.datas.forEach(element => {
@@ -333,7 +361,7 @@ import { mapState } from 'vuex';
             newData.question = this.interview_question
             newData.answer = this.interview_answer
             element.list.push(newData)
-            // console.log(element.list)
+            console.log(element.list)
           }
         });
 
@@ -348,6 +376,67 @@ import { mapState } from 'vuex';
       selectDoc(value) {
         this.doc_progress = value
         this.modal = false;
+        
+        const target = document.querySelector('.doc_select')
+        console.log('value:')
+        console.log(value)
+        console.log('target')
+        console.log(target)
+
+        if(value=='진행') {
+          target.style.outline="1px solid #4990e2"
+          target.firstChild.style.color="#4990e2"  
+        } else if (value=='합격') {
+          target.style.outline="1px solid #70af2a"
+          target.firstChild.style.color="#70af2a" 
+
+        } else if (value=='불합') {
+          target.style.outline="1px solid #FF0A54"
+          target.firstChild.style.color="#FF0A54" 
+        }
+
+      },
+      selectIV(value) {
+        this.iv_progress = value
+        this.modal = false;
+
+        const target = document.querySelector('.iv_select')
+        console.log('value:')
+        console.log(value)
+        console.log('target')
+        console.log(target)
+
+        if(value=='진행') {
+          target.style.outline="1px solid #4990e2!important"
+          target.firstChild.style.color="#4990e2!important"  
+        } else if (value=='합격') {
+          target.style.outline="1px solid #70af2a!important"
+          target.firstChild.style.color="#70af2a!important" 
+        
+        } else if (value=='불합') {
+          target.style.outline="1px solid #FF0A54!important"
+          target.firstChild.style.color="#FF0A54!important" 
+        }
+
+      },
+      selectCT(value) {
+        this.ct_progress = value
+        this.modal = false;
+        const target = document.querySelector('.ct_select')
+        console.log(target)
+        console.log(target.firstChild)
+
+        if(value=='진행') {
+          target.style.outline="1px solid #4990e2"
+          target.firstChild.style.color="#4990e2"  
+        } else if (value=='합격') {
+          target.style.outline="1px solid #70af2a"
+          target.firstChild.style.color="#70af2a" 
+        
+        } else if (value=='불합') {
+          target.style.outline="1px solid #FF0A54"
+          target.firstChild.style.color="#FF0A54" 
+        }
 
       },
 
@@ -358,6 +447,7 @@ import { mapState } from 'vuex';
           id: null,
           question: '',
           answer: '',
+          resultStatus: this.doc_progress,
         }
         this.jobs.datas.forEach(element => {
           if(element.jobCategory == '서류') {
@@ -377,22 +467,13 @@ import { mapState } from 'vuex';
       // 코테 저장하기
       addCT() {
 
-        // console.log(this.added_ct_text)
 
         const new_ct_data = { 
           id: null,
           content: this.added_ct_text, 
           category: this.new_ct_data.category,
+          resultStatus: this.ct_progress,
         }
-        // console.log(this.new_ct_data)
-        
-        this.jobs.datas.forEach(element => {
-          if(element.jobCategory == '코테') {
-            element.list.push(new_ct_data)
-          }  
-        });
-        
-        
 
         this.added_ct_text = '' // 통과
         
@@ -401,8 +482,33 @@ import { mapState } from 'vuex';
         t.forEach(element => {
           element.parentElement.classList.remove('selected_item')
         });
-        this.$store.dispatch('tempJob/jobSetting', this.jobs.jobId)
+
+
         this.sendData()
+
+        for(let i=0; i < this.jobs.datas.length; i++) {
+          if(this.jobs.datas[i].jobCategory == '코테') {
+            this.jobs.datas[i].list.push(new_ct_data)
+
+            const targetList = this.jobs.datas[i].list
+            for(let j=0; j < targetList.length; j++) {
+
+              const removeList = document.getElementsByName(`ct_category${j}`)
+              removeList.forEach(element => {
+
+                if(element.parentElement.innerText == targetList[j].category) {
+                  console.log('일치')
+                  console.log(targetList[j].category)
+
+                  element.parentElement.classList.add('selected_item')
+
+                }
+              });
+            }
+            
+
+          }
+        }
 
       },
 
@@ -446,15 +552,15 @@ import { mapState } from 'vuex';
 
         const removeList = document.getElementsByName('added_ct_option')
         
-        // console.log(removeList)
+
         removeList.forEach(element => {
-          // console.log(element.parentElement.innerText)
+
           element.parentElement.classList.remove('selected_item')
           if(element.parentElement.innerText == item) {  
             element.parentElement.classList.add('selected_item')
             this.new_ct_data.category = item
             
-            // console.log(this.new_ct_data)
+
           }
         })
 
@@ -494,14 +600,14 @@ import { mapState } from 'vuex';
 
         
 
-        // console.log(this.datas.datas.length)
-        // console.log(this.ct_datas.list[0].category)
-        // console.log(this.datas.datas[1].list[1].category)
 
       },
       
 
       sendData() {
+        // this.addQuestion()
+        // this.addCT()
+        // this.addDocument()
         this.$store.dispatch('tempJob/sendJobs', this.jobs)
       },
 
@@ -923,6 +1029,21 @@ label:hover {
   margin-bottom: 10px;
   margin-top: 20px;
 }
+.num_btn2 {
+  width: 140px;
+  height: 34px;
+  /* background-color: #FF0A54; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+.num_btn2 p {
+  font-family: appleH;
+  font-size: 30px;
+}
 .num_btn p {
   font-family: appleL;
   font-size: 16px;
@@ -1016,19 +1137,23 @@ label:hover {
 
 }
 .select_pass_area {
-  width: 100px;
-  height: 40px;
-  background-color: rgb(145, 145, 145);
+  width: 70px;
+  height: 36px;
+  /* background-color: rgb(255, 255, 255); */
+  outline: 1px solid #4990e2;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 6px;
+  border-radius: 50px;
+}
+.select_pass_area:hover {
+  cursor: pointer;
 }
 .show_selection li {
   display: flex;
   justify-content: center;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 6px;
+  padding-bottom: 6px;
   width: 100%;
   height: 100%;
 }
@@ -1039,21 +1164,23 @@ label:hover {
 .show_selection {
   position: absolute;
   top: 470px;
-  width: 100px;
+  width: 70px;
   height: 120px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: white;
+  border-radius: 6px; 
 }
 .doc_progress_text {
   display: flex;
-  padding-left: 26px;
+  padding-left: 20px;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: #4990e2;
   border-radius: 6px;
+  font-size: 16px;
 }
 
 .right_box_area {
@@ -1061,6 +1188,10 @@ label:hover {
   flex-direction: column;
   justify-content: start;
   text-align: end;
-  width: 100px;
+  width: 70px;
+}
+
+input:focus {
+  outline: none;
 }
 </style>
