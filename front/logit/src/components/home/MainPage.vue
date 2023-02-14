@@ -27,7 +27,7 @@
           </router-link>
         </div>
       </div>
-      <div @click="testTimeline">클릭!</div>
+      <!-- <div @click="makeToast({category: '어쩌고', growthId: 0})">클릭!</div> -->
       <div class="img_box lay1">
         <v-img class="laptop_img"
                :src="require('../../assets/images/laptop02.png')"
@@ -48,6 +48,8 @@
 import { mapState } from 'vuex';
 import { onMounted, onBeforeUnmount, computed } from 'vue';
 import { useStore } from 'vuex';
+import { useToast } from 'vue-toastification';
+import mycomp from '../etc/InviteAlert.vue'
 
 export default {  
     name: 'MainPage',
@@ -68,15 +70,44 @@ export default {
       //   observe.observe(postIt)
       // })
       const store = useStore()
+      const toast = useToast()
+      // const invites = store.state.myInvitiation
 
       const testTimeline = () => {
         store.dispatch('timeline/timelineSetting')
       }
       const loginUser = computed(()=>store.state.loginUser)
 
+      const makeToast = (i)=>{
+        toast({
+          component: mycomp,
+          props: {
+            growth: i,
+          },
+          listeners: {
+            accept: (data) => acceptInvite(data),
+            reject: (data) => acceptInvite(data)
+          }
+        },{
+          timeout: false,
+          icon: false
+        })
+      }
+
       onMounted(()=>{
-        writeTitle('.text', '당신의 새로운 여정을 \n 매일 기록해 보세요', 1500)
+        const lu = store.state.loginUser
+        if(!lu.id){
+          writeTitle('.text', '당신의 새로운 여정을 \n 매일 기록해 보세요', 1500)
+        }
         window.addEventListener('scroll', onScroll)
+        const invites = store.state.myInvitation
+
+        for(let i=0; i<invites.length; i++){
+          setTimeout(() => {
+            makeToast(invites[i])
+          }, 500+700*i);
+        }
+
       })
       
       onBeforeUnmount(()=>{
@@ -145,10 +176,17 @@ export default {
       } 
     }
 
+    const acceptInvite = (data) => {
+        console.log('이거 왜 실행되냐', data)
+        store.dispatch('growth/acceptInvite', data)
+    }
+
       return {
         // start,
         // state,
         loginUser,
+        acceptInvite,
+        makeToast,
         testTimeline,
         writeTitle,
         onScroll,

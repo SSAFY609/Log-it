@@ -12,9 +12,6 @@ const tempJob = {
         ]
     },
     getters: {
-        categoryCnt(state) {
-            return state.category.length;
-        }
     },
     mutations: {
         GET_ALL_JOB(state, payload){

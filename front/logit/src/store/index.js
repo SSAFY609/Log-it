@@ -30,14 +30,12 @@ export default createStore({
   state: {
     loginUser : {},
     sidebar: true,
+    myInvitation: [],
   },
   getters: {},
   mutations: {
-    LOGIN_USER(state, payload) {
+    LOGIN(state, payload) {
       state.loginUser = payload
-      sessionStorage.setItem("token", payload["jwt-auth-token"]);
-      sessionStorage.setItem('id', payload.id)
-      router.push({ name: "MainPage" });
     },
     LOG_OUT(state) {
       sessionStorage.removeItem("token");
@@ -53,6 +51,10 @@ export default createStore({
     GET_USER_ONLY(state, payload){
       state.loginUser = payload;
     },
+    GET_MY_INVITATION(state, payload){
+      state.myInvitation = payload
+      router.push({ name: "MainPage" });
+    },
     OPEN_SIDEBAR(state){
       state.sidebar = true;
     },
@@ -62,43 +64,44 @@ export default createStore({
   },
   actions: {
     // 유저 로그인
-    login({ commit }, user) {
+    login({ commit, dispatch }, user) {
       const URL = `${baseURL}/login`;
       axios({
         url: URL,
         method: "POST",
         data: user,
-      })
-        .then((res) => {
-          if (res.data.result == "사용자 없음") { 
-            alert("사용자가 없습니다.")
-            return
-          }          
-          if (res.data.result == "비밀번호 틀림") { 
-            alert("로그인에 실패하였습니다.")
-            return
-          }
-          commit("LOGIN_USER", res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      }).then((res) => {
+        if (res.data.result == "사용자 없음") { 
+          alert("사용자가 없습니다.")
+          return
+        }          
+        if (res.data.result == "비밀번호 틀림") { 
+          alert("로그인에 실패하였습니다.")
+          return
+        }
+        sessionStorage.setItem("token", res.data["jwt-auth-token"]);
+        sessionStorage.setItem('id', res.data.id)
+        dispatch('getMyInvitation')
+        commit("LOGIN", res.data);
+      }).catch((err) => {
+        console.log(err);
+      });
     },
     // 유저 회원가입하기
-    signup({ dispatch }, user) {
+    signup(context, user) {
       const URL = `${baseURL}/regist`;
       axios({
         url: URL,
         method: "POST",
         data: user,
-      })
-        .then(() => {
-          dispatch("login", user);
+      }).then((res) => {
+        console.log(res.data)
+        if(res.data == 'success'){
           router.push({ name: "UserSignupComplete" });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+        }
+      }).catch((err) => {
+        console.log(err);
+      });
     },
 
     // 유저 로그아웃하기
@@ -199,6 +202,18 @@ export default createStore({
       axiosConnector.get(`user`
       ).then((res)=>{
         commit('GET_USER_ONLY', res.data)
+      }).catch((err)=>{
+        console.log(err)
+      })
+    },
+
+    // 초기에 초대된 이벤트가 있는지 표시
+    getMyInvitation({commit}){
+      console.log('이건 초대 이벤트 확인임')
+      axiosConnector.get(`growth/invitation`
+      ).then((res)=>{
+        console.log(res.data)
+        commit('GET_MY_INVITATION', res.data)
       }).catch((err)=>{
         console.log(err)
       })
