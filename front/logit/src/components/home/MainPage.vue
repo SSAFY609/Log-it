@@ -27,7 +27,7 @@
           </router-link>
         </div>
       </div>
-      <div @click="testTimeline">클릭!</div>
+      <div @click="makeToast({category: '어쩌고', growthId: 0})">클릭!</div>
       <div class="img_box lay1">
         <v-img class="laptop_img"
                :src="require('../../assets/images/laptop02.png')"
@@ -79,15 +79,15 @@ export default {
       const loginUser = computed(()=>store.state.loginUser)
 
       const makeToast = (i)=>{
-            toast({
-            component: mycomp,
-            props: {
-              growth: i,
-            },
-          },{
-            timeout: false,
-            icon: false
-          })
+        toast({
+          component: mycomp,
+          props: {
+            growth: i,
+          },
+        },{
+          timeout: false,
+          icon: false
+        })
       }
 
       onMounted(()=>{
@@ -95,11 +95,14 @@ export default {
           writeTitle('.text', '당신의 새로운 여정을 \n 매일 기록해 보세요', 1500)
         }
         window.addEventListener('scroll', onScroll)
-        const invites = store.state.myInvitiation
-        // console.log(invites)
+        const invites = store.state.myInvitation
+
         for(let i=0; i<invites.length; i++){
-          makeToast(invites[i]);
+          setTimeout(() => {
+            makeToast(invites[i])
+          }, 500+700*i);
         }
+
       })
       
       onBeforeUnmount(()=>{
