@@ -2,7 +2,7 @@ package com.ssafy.logit.exception;
 
 public class NotPassException extends RuntimeException{
     public NotPassException() {
-        super("모든 채용전형이 합격이어야 합니다.");
+        super("모든 채용전형이 완료되어야 합니다.");
     }
 
     public NotPassException(String message) {
