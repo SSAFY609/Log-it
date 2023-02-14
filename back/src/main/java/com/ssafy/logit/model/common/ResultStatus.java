@@ -1,8 +1,8 @@
 package com.ssafy.logit.model.common;
 
 public enum ResultStatus {
-    FAIL("탈락"),
-    INPROGRESS("진행중"),
+    FAIL("불합"),
+    INPROGRESS("진행"),
     PASS("합격");
 
     public String value;
@@ -10,7 +10,6 @@ public enum ResultStatus {
     ResultStatus(String value) {
         this.value = value;
     }
-
     // String -> enum
     public static ResultStatus nameOf(String value){
         for(ResultStatus status : ResultStatus.values()){

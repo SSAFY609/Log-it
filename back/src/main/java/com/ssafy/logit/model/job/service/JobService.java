@@ -10,6 +10,7 @@ import com.ssafy.logit.model.job.dto.CreateJobEventRequest;
 import com.ssafy.logit.model.job.dto.CreateJobEventResponse;
 import com.ssafy.logit.model.job.dto.UpdateJobEventRequest;
 import com.ssafy.logit.model.job.entity.JobEvent;
+import com.ssafy.logit.model.job.entity.JobEventStatus;
 import com.ssafy.logit.model.job.repository.JobRepository;
 import com.ssafy.logit.model.step_category.dto.category.entire.AllCategoryRequest;
 import com.ssafy.logit.model.step_category.dto.category.entire.JobEventAllRequest;
@@ -87,7 +88,7 @@ public class JobService {
         JobEvent jobEvent = jobRepository.findById(jobEventId).orElseThrow(NoSuchElementException::new);
         checkUser(user,jobEvent);
         String companyName = request.getCompanyName();
-        ResultStatus resultStatus = request.getResultStatus();
+        JobEventStatus resultStatus = request.getResultStatus();
         LocalDate startDate = request.getStartDate();
         LocalDate endDate = request.getEndDate();
         JobEvent updateEvent = jobEvent.updateInfo(companyName,  resultStatus, startDate,endDate);
@@ -195,22 +196,22 @@ public class JobService {
         }
 
         // 해당 기업 합격여부 업데이트
-        ResultStatus jobResultStatus = ResultStatus.nameOf(request.getResultStatus());
-        if(jobResultStatus==ResultStatus.PASS){
+        JobEventStatus jobResultStatus = JobEventStatus.nameOf(request.getResultStatus());
+        if(jobResultStatus==JobEventStatus.COMPLETE){
             validateJobResult(jobEvent);
         }
         jobEvent.updateInfo(request.getCompanyName(), jobResultStatus, request.getStartDate(), request.getEndDate());
     }
 
     /**
-     * 모든 채용전형이 합격이어야 해당 기업이 합격이 될 수 있다.
+     * 모든 채용전형의 결과가 나와야 해당 기업이 완료될 수 있다.
      * @param jobEvent
      */
     private void validateJobResult(JobEvent jobEvent){
         List<StepCategory> stepCategoryList = jobEvent.getStepCategoryList();
+
         for (StepCategory stepCategory : stepCategoryList) {
-            if(stepCategory.getResultStatus()!=ResultStatus.PASS){
-                System.out.println("stepCategory.getResultStatus() = " + stepCategory.getResultStatus().getValue());
+            if(stepCategory.getResultStatus()==ResultStatus.INPROGRESS){
                 throw new NotPassException();
             }
         }

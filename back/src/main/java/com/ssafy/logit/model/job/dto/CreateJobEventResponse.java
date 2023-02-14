@@ -1,7 +1,7 @@
 package com.ssafy.logit.model.job.dto;
 
-import com.ssafy.logit.model.common.ResultStatus;
 import com.ssafy.logit.model.job.entity.JobEvent;
+import com.ssafy.logit.model.job.entity.JobEventStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -19,7 +19,7 @@ public class CreateJobEventResponse {
 
 
     @Schema(description = "결과")
-    private ResultStatus resultStatus;
+    private JobEventStatus resultStatus;
 
     @Schema(description = "시작 날짜")
     private LocalDate startDate;
