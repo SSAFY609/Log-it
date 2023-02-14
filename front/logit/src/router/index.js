@@ -70,7 +70,7 @@ const router = createRouter({
       component: StatisticsView,
       children: [
         {
-          path: "start",
+          path: "",
           name: "ChartView",
           component: ChartView,
         },

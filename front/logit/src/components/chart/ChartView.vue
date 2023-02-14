@@ -60,6 +60,9 @@ export default {
 .chart-box {
   width: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
+  background-color: red;
 }
 </style>
