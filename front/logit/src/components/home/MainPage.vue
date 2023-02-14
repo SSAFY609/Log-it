@@ -27,7 +27,7 @@
           </router-link>
         </div>
       </div>
-      <div @click="makeToast({category: '어쩌고', growthId: 0})">클릭!</div>
+      <!-- <div @click="makeToast({category: '어쩌고', growthId: 0})">클릭!</div> -->
       <div class="img_box lay1">
         <v-img class="laptop_img"
                :src="require('../../assets/images/laptop02.png')"
@@ -84,6 +84,10 @@ export default {
           props: {
             growth: i,
           },
+          listeners: {
+            accept: (data) => acceptInvite(data),
+            reject: (data) => acceptInvite(data)
+          }
         },{
           timeout: false,
           icon: false
@@ -91,7 +95,8 @@ export default {
       }
 
       onMounted(()=>{
-        if(!loginUser.value){
+        const lu = store.state.loginUser
+        if(!lu.id){
           writeTitle('.text', '당신의 새로운 여정을 \n 매일 기록해 보세요', 1500)
         }
         window.addEventListener('scroll', onScroll)
@@ -171,11 +176,16 @@ export default {
       } 
     }
 
+    const acceptInvite = (data) => {
+        console.log('이거 왜 실행되냐', data)
+        store.dispatch('growth/acceptInvite', data)
+    }
+
       return {
         // start,
         // state,
         loginUser,
-        // invites,
+        acceptInvite,
         makeToast,
         testTimeline,
         writeTitle,

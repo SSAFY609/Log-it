@@ -51,6 +51,7 @@ methods: {
                 content: "초대를 수락하였습니다.",
                 options: { type: "success", timeout: 2000 }
             });
+            this.$emit('accept', data)
             
         }else{
             data = {
@@ -61,10 +62,9 @@ methods: {
                 content: "초대를 거절하였습니다.",
                 options: { type: "warning", timeout: 2000 }
             });
-            
+            this.$emit('reject', data)
         }
         console.log(data)
-        // store.dispatch('growth/acceptInvite', data)
     }
 },
 };

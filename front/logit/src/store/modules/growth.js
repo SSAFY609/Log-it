@@ -289,11 +289,10 @@ const growth = {
         },
         // 초대 수락
         acceptInvite(context, data){
+            console.log('??')
+            console.log(data)
             axiosConnector.put(`growth/invitation`,{
-                params: {
-                    growthId: data.growthId,
-                    aceept: data.aceept,
-                }
+                params: data
             }).then((res)=>{
                 console.log(res.data)
             }).catch((err)=>{
