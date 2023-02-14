@@ -34,6 +34,8 @@ import UserPasswordReset from '../components/user/UserPasswordReset.vue'
 import UserSignupComplete from '../components/user/UserSignupComplete.vue'
 import PageSetting from '../components/etc/PageSetting.vue'
 import DeveloperList from '../components/etc/DeveloperList.vue'
+import ChartView from '../components/chart/ChartView.vue'
+import StatisticsView from "@/views/StatisticsView.vue";
 import OpenSource from '../components/etc/OpenSource.vue'
 
 
@@ -59,6 +61,18 @@ const router = createRouter({
           path: "timeline",
           name: "TimeLine",
           component: TimeLine,
+        },
+      ],
+    },
+    {
+      path: "/statistics",
+      name: "statistics",
+      component: StatisticsView,
+      children: [
+        {
+          path: "start",
+          name: "ChartView",
+          component: ChartView,
         },
       ],
     },
