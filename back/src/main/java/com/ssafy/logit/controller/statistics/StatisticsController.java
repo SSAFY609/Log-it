@@ -33,13 +33,14 @@ public class StatisticsController {
 
     @GetMapping
     @Operation(summary = "모든 통계 확인",description = "모든 통계 데이터를 확인합니다.")
-    public ResponseEntity<List<ResultStatisticsDto>> getAll(@RequestAttribute String email){
+    public ResponseEntity<List<Object>> getAll(@RequestAttribute String email){
         User user = userService.getUserEntity(email);
-        List<ResultStatisticsDto> results = new ArrayList<>();
+        List<Object> results = new ArrayList<>();
         results.add(new ResultStatisticsDto("algorithm", statisticsService.getAlgoStatistics()));
         results.add(new ResultStatisticsDto("interview", statisticsService.getInterviewStatistics()));
         results.add(new ResultStatisticsDto("myApply", statisticsService.getMyApplyStatus(user)));
         results.add(new ResultStatisticsDto("companyRank", statisticsService.getCompanyLank()));
+        results.add(statisticsService.getMyTypeResults(user));
         return new ResponseEntity<>(results, HttpStatus.OK);
     }
 
@@ -91,9 +92,9 @@ public class StatisticsController {
 
     @GetMapping("my/job-type")
     @Operation(summary = "내 지원별 합격률",description = "내 지원별 합격률 통계")
-    public ResponseEntity<Map<String,List<GroupByDto>>> getMyTypeResult(@RequestAttribute String email){
+    public ResponseEntity< Map<String, Object>> getMyTypeResult(@RequestAttribute String email){
         User user = userService.getUserEntity(email);
-        Map<String, List<GroupByDto>> myTypeResults = statisticsService.getMyTypeResults(user);
+        Map<String, Object> myTypeResults = statisticsService.getMyTypeResults(user);
         return new ResponseEntity<>(myTypeResults, HttpStatus.OK);
     }
 

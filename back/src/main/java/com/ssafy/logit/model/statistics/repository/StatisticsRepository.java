@@ -1,12 +1,9 @@
 package com.ssafy.logit.model.statistics.repository;
 
 import com.ssafy.logit.model.statistics.dto.GroupByDto;
-import com.ssafy.logit.model.step_category.dto.category.codingtest.AlgoCategoryStatistics;
 import com.ssafy.logit.model.step_category.entity.JobCategory;
 import com.ssafy.logit.model.user.entity.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -26,8 +23,7 @@ public class StatisticsRepository {
         return em.createQuery("" +
                         " select new com.ssafy.logit.model.statistics.dto.GroupByDto(ct.algoCategory,count(ct))" +
                         " from CodingTest ct " +
-                        " group by ct.algoCategory" +
-                        " order by count(ct) desc", GroupByDto.class)
+                        " group by ct.algoCategory", GroupByDto.class)
                 .getResultList();
     }
 
@@ -39,8 +35,7 @@ public class StatisticsRepository {
         return em.createQuery("" +
                         " select new com.ssafy.logit.model.statistics.dto.GroupByDto(i.interviewCategory,count(i)) " +
                         " from Interview i" +
-                        " group by i.interviewCategory " +
-                        " order by count(i) desc", GroupByDto.class)
+                        " group by i.interviewCategory ", GroupByDto.class)
                 .getResultList();
     }
 
@@ -100,7 +95,6 @@ public class StatisticsRepository {
      * @param jobCategory
      * @return
      */
-
     public List<GroupByDto> myTypeResult(User user,JobCategory jobCategory){
         return em.createQuery("" +
                         " select new com.ssafy.logit.model.statistics.dto.GroupByDto(sc.resultStatus,count(sc))" +
