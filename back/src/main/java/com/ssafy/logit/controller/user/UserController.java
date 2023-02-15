@@ -41,10 +41,10 @@ public class UserController {
     private JwtUtil jwtUtil;
 
     @Autowired
-    private MailService mailService;
+    private ImageService imageService;
 
     @Autowired
-    private ImageService imageService;
+    private MailService mailService;
 
     // 회원 가입
     @Operation(summary = "회원가입", description = "회원 정보 저장 (JWT 인증x)")
@@ -91,6 +91,7 @@ public class UserController {
             resultMap.put("deleted", resultLogin.get("deleted"));
             resultMap.put("createdTime", resultLogin.get("createdTime"));
             resultMap.put("loginTime", resultLogin.get("loginTime"));
+            resultMap.put("existEvent", resultLogin.get("existEvent"));
 
             // 정보 확인을 위해 클라이언트로 전달
             Map<String, Object> authToken_info = jwtUtil.checkAndGetClaims((String)resultLogin.get("refreshToken"));
@@ -202,7 +203,7 @@ public class UserController {
 
     // email로 회원 조회
     @Operation(summary = "회원 조회", description = "email로 회원 단건 조회")
-    @GetMapping
+    @GetMapping()
     public ResponseEntity<UserDto> getUser(@RequestAttribute String email) throws Exception {
         return new ResponseEntity<UserDto>(userService.getUser(email), HttpStatus.OK);
     }

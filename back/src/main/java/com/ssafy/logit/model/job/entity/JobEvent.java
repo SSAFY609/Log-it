@@ -1,6 +1,5 @@
 package com.ssafy.logit.model.job.entity;
 
-import com.ssafy.logit.model.common.ResultStatus;
 import com.ssafy.logit.model.step_category.entity.StepCategory;
 import com.ssafy.logit.model.user.entity.User;
 import lombok.AccessLevel;
@@ -32,14 +31,14 @@ public class JobEvent {
 
 
     @Enumerated(EnumType.STRING)
-    private ResultStatus resultStatus;
+    private JobEventStatus resultStatus;
 
 
 
     private LocalDate startDate;
     private LocalDate endDate;
 
-    @OneToMany(mappedBy = "jobEvent")
+    @OneToMany(mappedBy = "jobEvent",cascade = CascadeType.REMOVE)
     private List<StepCategory> stepCategoryList = new ArrayList<>();
 
 
@@ -49,14 +48,14 @@ public class JobEvent {
         JobEvent jobEvent = new JobEvent();
         jobEvent.user = user;
         jobEvent.companyName = companyName;
-        jobEvent.resultStatus = ResultStatus.INPROGRESS;
+        jobEvent.resultStatus = JobEventStatus.INPROGRESS;
         jobEvent.startDate = startDate;
         jobEvent.endDate = endDate;
         return jobEvent;
     }
 
     // 수정 메소드 //
-    public JobEvent updateInfo(String companyName,ResultStatus resultStatus, LocalDate startDate,LocalDate endDate){
+    public JobEvent updateInfo(String companyName,JobEventStatus resultStatus, LocalDate startDate,LocalDate endDate){
         this.companyName = companyName;
         this.resultStatus = resultStatus;
         this.startDate = startDate;

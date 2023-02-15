@@ -1,7 +1,7 @@
 package com.ssafy.logit.model.job.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.ssafy.logit.model.common.ResultStatus;
+import com.ssafy.logit.model.job.entity.JobEventStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,7 +23,7 @@ public class UpdateJobEventRequest {
 
 
     @Schema(description = "결과")
-    private ResultStatus resultStatus;
+    private JobEventStatus resultStatus;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")

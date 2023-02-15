@@ -41,6 +41,7 @@ public class ProgressDto {
     public ProgressDto(Progress progress) {
         this.progressId = progress.getProgressId();
         this.growth = progress.getGrowth();
+        this.growthId = progress.getGrowth().getGrowthId();
         this.user = progress.getUser();
         this.progressDate = progress.getProgressDate();
         this.content = progress.getContent();
