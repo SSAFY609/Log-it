@@ -96,8 +96,8 @@ public class GrowthController {
 
     // 초대 수락 or 거절
     @Operation(summary = "초대 수락 or 거절", description = "초대된 성장 이벤트를 수락하거나 거절")
-    @PutMapping("/invitation")
-    public ResponseEntity<String> acceptInvitation(@RequestParam long growthId, @RequestParam boolean accept, @RequestAttribute String email) throws Exception {
+    @PutMapping("/invitation/{growthId}/{accept}")
+    public ResponseEntity<String> acceptInvitation(@PathVariable long growthId, @PathVariable boolean accept, @RequestAttribute String email) throws Exception {
         String result = growthService.acceptInvitation(growthId, accept, email);
         return new ResponseEntity<String>(result, HttpStatus.OK);
     }
