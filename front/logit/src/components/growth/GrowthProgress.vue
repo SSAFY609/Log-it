@@ -85,7 +85,7 @@
             <v-card-actions style="justify-content:space-between" class="hover_cursor" @click="searchSet(), show = !show">
               <div>
                 <v-avatar><v-icon>mdi-plus</v-icon></v-avatar>
-                추가하기
+                초대하기
               </div>
               <v-btn
                 :icon="show ? 'mdi-chevron-up' : 'mdi-chevron-down'"
@@ -102,7 +102,7 @@
                       <img :src="require(`@/assets/profiles/scale (${user.image}).png`)" class="user-image">
                       {{ user.name }}({{ user.email }})
                     </div>
-                    <v-btn color="#FF0A54" variant="text" @click="addEventUser(user.id)" icon="mdi-send"></v-btn>
+                    <v-btn color="#FF0A54" variant="text" @click="addEventUser(user)" icon="mdi-send"></v-btn>
                   </div>
                 </div>
               </div>
@@ -216,12 +216,13 @@ export default {
         console.log(email, this.event.event_id);
         // this.$store.dispatch('deleteEventUser', this.event.event_id, email);
       },
-      addEventUser(id){
+      addEventUser(user){
           const data = {
             growthId: this.growth.growthId,
-            userId: id,
+            userId: user.id,
+            userName: user.name
           }
-          console.log(data);
+          // console.log(data);
           this.$store.dispatch('growth/addGrowthUser', data);
           this.$store.commit('growth/RESET_SEARCH_USER')
           

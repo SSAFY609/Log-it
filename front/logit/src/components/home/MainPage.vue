@@ -49,13 +49,18 @@ import { mapState } from 'vuex';
 import { onMounted, onBeforeUnmount, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useToast } from 'vue-toastification';
-import mycomp from '../etc/InviteAlert.vue'
+import mycomp from '../common/InviteAlert.vue'
 
 export default {  
     name: 'MainPage',
     setup() {
+      const store = useStore()
+      const toast = useToast()
       
-
+      const user = store.state.loginUser;
+      if(user.existEvent){
+        store.dispatch('timeline/timelineSetting')
+      }
       // let observe = new IntersectionObserver((e)=>{
       //   e.forEach((box)=>{
       //     if(box.isIntersecting){
@@ -69,8 +74,6 @@ export default {
       //   let postIt = document.querySelector(`.post-it`)
       //   observe.observe(postIt)
       // })
-      const store = useStore()
-      const toast = useToast()
       // const invites = store.state.myInvitiation
 
       const testTimeline = () => {

@@ -75,18 +75,16 @@ export default {
         axios({
             url: "https://i8a609.p.ssafy.io/api/user/check",
             method: "GET",
-            params: this.email,
-          }).then((res)=>{
-            console.log(res)
-            console.log('hey............')
+            params: {
+              email: this.email
+            }
+          }).then(()=>{
             this.email_help = `${this.email}은 사용 가능한 이메일입니다.`;
-          }).catch((err)=>{
-            console.log(err);
-            console.log('what..........')
+            document.querySelector(".signup-email-chkText").innerHTML =this.email_help;
+          }).catch(()=>{
             this.email_help = `${this.email}은 사용할 수 없는 이메일입니다.`;
+            document.querySelector(".signup-email-chkText").innerHTML =this.email_help;
           })
-        document.querySelector(".signup-email-chkText").innerHTML =
-          this.email_help;
         document.querySelector(".signup-button").classList.add("color");
       } else {
         document.querySelector(".signup-email-chkText").innerHTML = "";
@@ -144,6 +142,7 @@ export default {
 }
 .signup-button {
   display: flex;
+  margin-top: 30px;
   justify-content: center;
   align-items: center;
   font-weight: bold;
@@ -172,4 +171,5 @@ export default {
   margin-top: -13px;
   margin-bottom: 5px;
 }
+
 </style>

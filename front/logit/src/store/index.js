@@ -41,7 +41,7 @@ export default createStore({
       sessionStorage.removeItem("token");
       sessionStorage.removeItem("id");
       state.loginUser = {};
-      router.push({name: 'MainPage'})
+      router.replace({name: 'MainPage'})
     },
     GET_USER(state, payload) {
       state.loginUser = payload;
@@ -53,7 +53,7 @@ export default createStore({
     },
     GET_MY_INVITATION(state, payload){
       state.myInvitation = payload
-      router.push({ name: "MainPage" });
+      router.push({ name: "MainPage" })
     },
     OPEN_SIDEBAR(state){
       state.sidebar = true;
