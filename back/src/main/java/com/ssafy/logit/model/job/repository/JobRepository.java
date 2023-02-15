@@ -41,6 +41,7 @@ public interface JobRepository extends JpaRepository<JobEvent, Long> {
             "JOIN  s.codingTestList c ")
     List<CodingTest> getCodingTest();
 
-
+    @Query(value = "select count(*) from jobevent where user_id = ?1", nativeQuery = true)
+    public int checkEvent(long userId);
 }
 

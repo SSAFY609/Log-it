@@ -322,4 +322,12 @@ public class UserController {
             return new ResponseEntity<String>(FAIL, HttpStatus.OK);
         }
     }
+
+    // 로그인 시 성장 or 취업 여정 이벤트가 하나라도 있는지 확인
+    @Operation(summary = "이벤트 존재 유무 확인", description = "회원이 작성한(참여하는) 이벤트가 하나라도 있는지 확인")
+    @GetMapping("/checkEvent")
+    public ResponseEntity<Boolean> checkEvent(@RequestAttribute String email) throws Exception {
+        boolean result = userService.checkEvent(email);
+        return new ResponseEntity<Boolean>(result, HttpStatus.OK);
+    }
 }
