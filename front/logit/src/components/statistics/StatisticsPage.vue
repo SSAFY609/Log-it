@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <div class="title">공진호님의 취업여정 통계입니다.</div>
-    <div class="subtitle">공진호님의 통계와 SSAFY인들의 전체 현황을 비교해 Log-it에서 취업여정을 관리해보세요.</div>
+    <div class="title"> {{ loginUser.name }} 님의 취업여정 통계입니다.</div>
+    <div class="subtitle">{{ loginUser.name }}님의 통계와 SSAFY인들의 전체 현황을 비교해 Log-it에서 취업여정을 관리해보세요.</div>
     <div class="content-box">
         <div class="left">
             <div class="my-statistics">
@@ -16,7 +16,7 @@
                     <div><img class="event-img" :src="require(`@/assets/images/달력2.png`)"></div>
                     <div style="width:50%">
                         <div class="event-title">진행중인 취업여정</div>
-                        <div class="event-cnt"><div class="event-num">{{ complete_cnt }}</div>개</div>
+                        <div class="event-cnt"><div class="event-num">{{ ing_cnt }}</div>개</div>
                     </div>
                 </div>
                 <div class="event complete">
@@ -79,14 +79,14 @@
             <div class="rank-box">
                 <div class="rank-subtitle">SSAFY인들이</div>
                 <div class="rank-title">가장 많이 지원한 기업 순위</div>
-                <div v-for="(r,index) in rank" :key="index" class="rank-company-box">
+                <div v-for="(r,index) in companyRank" :key="index" class="rank-company-box">
                     <v-divider></v-divider>
                     <div class="rank-company">
                         <div style="display:flex">
                             <div class="rank-index">{{ index+1 }}</div>
                             <div>{{ r.name }}</div>
                         </div>
-                        <div>{{ r.cnt }}</div>
+                        <div>{{ r.count }}</div>
                     </div>
                 </div>
             </div>
@@ -96,7 +96,7 @@
         <div class="ct-title">전체 코딩테스트 유형 그래프</div>
         <div class="ct-content">
             <div class="ct-chart">
-                <Bar :data="myData" :options="options"></Bar>
+                <Bar :chartData="myData"></Bar>
             </div>
         </div>
     </div>
@@ -104,64 +104,61 @@
 </template>
 
 <script>
-// import ReactiveChart from './ReactiveChart.vue';
 import { Bar } from 'vue-chartjs';
 import { Chart as ChartJS, Title, BarElement, CategoryScale, LinearScale } from 'chart.js'
+import { mapState } from 'vuex';
 ChartJS.register(Title, BarElement, CategoryScale, LinearScale)
 
 
 export default {
     name: 'StatisticsPage',
     components: {
-        // ReactiveChart,
         Bar,
     },
     data(){
         return {
-            ing_cnt: 6,
-            complete_cnt: 2,
-            rank: [
-                {name: '카카오', cnt: 700},
-                {name: '배달의 민족', cnt: 567},
-                {name: '네이버', cnt: 530},
-                {name: '나현회사', cnt: 333},
-                {name: '데빌설희', cnt: 200},
-                {name: '현대오토에버', cnt: 100},
-            ],
-            myData: {
-                labels:  [ "BFS", "DFS", "그래프", "구현", "문자열", "정렬", "이분탐색", "자료구조", "완전탐색", "힙", "트리", "DP", "그리디", "백트랙킹"],
-                datasets: [
-                    {
-                        backgroundColor: 'rgba(255,185,185, 0.7)',
-                        // background: 'linear-gradient(90deg, rgba(255,185,185,1) 0%, rgba(255,133,132,1) 24%, rgba(255,85,117,1) 67%)',
-                        data: [ 1, 10, 3, 7, 11, 20, 3, 4, 17, 20, 21, 2, 3, 10 ],
-                        label: false
-                    }
-                ],
-            },
+            // myData: {
+            //     labels:  [],
+            //     datasets: [
+            //         {
+            //             backgroundColor: 'rgba(255,185,185, 0.7)',
+            //             // background: 'linear-gradient(90deg, rgba(255,185,185,1) 0%, rgba(255,133,132,1) 24%, rgba(255,85,117,1) 67%)',
+            //             data: [],
+            //         }
+            //     ],
+            // },
+            myData: {},
             options: {
                 gridLines: {
                     display: false,
                 }
             },
-            myProgress: {
-                codingtest: {
-                    pass : 0,
-                    tot : 7,
-                    percentage: 16.7
-                },
-                document: {
-                    pass: 3,
-                    tot: 7,
-                    percentage: 42.9
-                },
-                interview: {
-                    pass: 0,
-                    tot: 7,
-                    percentage: 80.5
-                }
-            }
         }
+    },
+    computed: {
+        ...mapState(['loginUser']),
+        ...mapState('statistics', ['ing_cnt', 'complete_cnt', 'companyRank', 'myProgress', 'algorithm', 'algorithm_cnt'])
+    },
+    methods: {
+        setChart() {
+            let data = this.algorithm_cnt;
+            let datasets = []
+            datasets.push({
+                backgroundColor: 'pink',
+                data : data
+            })
+
+            this.myData = {
+                labels: this.algorithm,
+                datasets: datasets
+            }
+            console.log(this.myData)
+            this.renderChart(this.myData, this.options)
+        }
+    },
+
+    mounted() {
+        this.setChart()
     }
 
 }

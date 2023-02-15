@@ -22,6 +22,7 @@ import temp from './modules/temp.js'
 import growth from "./modules/growth.js";
 import timeline from "./modules/timeline.js";
 import search from "./modules/search.js";
+import statistics from "./modules/statistics.js";
 
 const baseURL = "https://i8a609.p.ssafy.io/api/user";
 // const baseURL = "http://localhost:9090/user";
@@ -41,6 +42,7 @@ export default createStore({
       sessionStorage.removeItem("token");
       sessionStorage.removeItem("id");
       state.loginUser = {};
+      state.myInvitation = [];
       router.replace({name: 'MainPage'})
     },
     GET_USER(state, payload) {
@@ -237,5 +239,6 @@ export default createStore({
     search: search,
     job: job,
     tempJob: tempJob,
+    statistics: statistics,
   },
 });

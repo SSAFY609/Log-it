@@ -126,7 +126,13 @@ export default {
       target.firstChild.classList.toggle('btn_clicked2')
       target.lastChild.classList.toggle('btn_clicked2')
 
-      this.$router.push({name: select})
+      if(select == 'StatisticsPage'){
+        console.log('눌렀고 실행함')
+        this.$store.dispatch('statistics/getMyStatistics');
+      }else{
+        this.$router.push({name: select})
+      }
+
     }
   },
 }
