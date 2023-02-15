@@ -91,6 +91,7 @@ public class UserController {
             resultMap.put("deleted", resultLogin.get("deleted"));
             resultMap.put("createdTime", resultLogin.get("createdTime"));
             resultMap.put("loginTime", resultLogin.get("loginTime"));
+            resultMap.put("existEvent", resultLogin.get("existEvent"));
 
             // 정보 확인을 위해 클라이언트로 전달
             Map<String, Object> authToken_info = jwtUtil.checkAndGetClaims((String)resultLogin.get("refreshToken"));
@@ -321,13 +322,5 @@ public class UserController {
             e.printStackTrace();
             return new ResponseEntity<String>(FAIL, HttpStatus.OK);
         }
-    }
-
-    // 로그인 시 성장 or 취업 여정 이벤트가 하나라도 있는지 확인
-    @Operation(summary = "이벤트 존재 유무 확인", description = "회원이 작성한(참여하는) 이벤트가 하나라도 있는지 확인")
-    @GetMapping("/checkEvent")
-    public ResponseEntity<Boolean> checkEvent(@RequestAttribute String email) throws Exception {
-        boolean result = userService.checkEvent(email);
-        return new ResponseEntity<Boolean>(result, HttpStatus.OK);
     }
 }
