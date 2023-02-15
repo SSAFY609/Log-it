@@ -90,6 +90,7 @@ public class UserService {
                 result.put("pw", userDto.getPw());
                 result.put("flag", userDto.getFlag());
                 result.put("studentNo", userDto.getStudentNo());
+                result.put("existEvent", checkEvent(userDto.getId()));
 
                 String image = userDto.getImage();
                 if(image.length() < 3) {
@@ -339,8 +340,7 @@ public class UserService {
     }
 
     // 해당하는 회원에게 이벤트가 하나라도 있는지 확인
-    public boolean checkEvent(String email) {
-        long userId = userRepo.findByEmail(email).get().getId();
+    public boolean checkEvent(long userId) {
         int growthCnt = growthRepo.checkEvent(userId);
         int jobCnt = jobRepo.checkEvent(userId);
         if(growthCnt + jobCnt == 0) {
