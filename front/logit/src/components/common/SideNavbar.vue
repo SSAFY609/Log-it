@@ -1,12 +1,12 @@
 <template>
   <div class="container b_transparentgray">
     <div class="logo_box">
-      <div @click="btnClicked('MainPage')" class="logo_img_box">
+      <router-link :to="{name: 'MainPage'}" class="logo_img_box">
         <v-img class="logo_img"
             :src="require('../../assets/images/logit_logo_text.png')"
             height="110"
       />
-      </div>
+      </router-link>
       
     <div @click="closeSidebar" class="slider_box b_lightgray slider_hover lay2">
         <v-icon class="silder_icon f_white">mdi-chevron-double-left</v-icon>
@@ -103,12 +103,8 @@ export default {
       this.$store.dispatch(`closeSidebar`)
     },
 
-    btnClicked(select) {
-      if(select == 'MainPage'){
-        this.$router.push({name: select})
-        return
-      }   
-      if(!this.loginUser.id){
+    btnClicked(select) {   
+      if(!this.loginUser.id && select != 'MainPage'){
         toast.error('로그인이 필요한 페이지입니다.', {
           timeout: 2000,
           position: 'bottom-right',

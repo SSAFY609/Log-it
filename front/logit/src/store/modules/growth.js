@@ -1,6 +1,8 @@
 import router from "@/router";
 import axiosConnector from "@/utils/axios-connector";
+import { useToast } from "vue-toastification";
 
+const toast = useToast()
 
 const today_to_str = ()=>{
     const today = new Date();
@@ -202,6 +204,10 @@ const growth = {
             axiosConnector.post('growth/invite', data
             ).then((res)=>{
                 console.log(res.data)
+                toast.success(`${data.userName}님을 초대하였습니다.`, {
+                    timeout: 2000,
+                    position: 'top-center'
+                })
             }).catch((err)=>{
                 console.log(err)
             })
@@ -291,9 +297,8 @@ const growth = {
         acceptInvite(context, data){
             console.log('??')
             console.log(data)
-            axiosConnector.put(`growth/invitation`,{
-                params: data
-            }).then((res)=>{
+            axiosConnector.put(`growth/invitation/${data.growthId}/${data.accept}`
+            ).then((res)=>{
                 console.log(res.data)
             }).catch((err)=>{
                 console.log(err)
