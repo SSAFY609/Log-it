@@ -46,7 +46,7 @@
         </div>
       </div>
       <div class="menu_item_box lay2 hover_cursor">
-        <div class="menu_icon_box lay3" @click="btnClicked">
+        <div class="menu_icon_box lay3" @click="btnClicked('StatisticsPage')">
           <v-icon class="menu_icon f_icon">mdi-poll</v-icon>  
           <div class="menu_text_box f_darkgray lay3">통계</div>
         </div>
