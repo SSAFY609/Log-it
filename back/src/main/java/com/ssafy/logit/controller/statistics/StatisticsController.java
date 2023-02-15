@@ -13,13 +13,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/statistics")
@@ -41,6 +39,7 @@ public class StatisticsController {
         results.add(new ResultStatisticsDto("algorithm", statisticsService.getAlgoStatistics()));
         results.add(new ResultStatisticsDto("interview", statisticsService.getInterviewStatistics()));
         results.add(new ResultStatisticsDto("myApply", statisticsService.getMyApplyStatus(user)));
+        results.add(new ResultStatisticsDto("companyRank", statisticsService.getCompanyLank()));
         return new ResponseEntity<>(results, HttpStatus.OK);
     }
 
@@ -67,6 +66,20 @@ public class StatisticsController {
         return new ResponseEntity<>(randomInterviews, HttpStatus.OK);
     }
 
+    @GetMapping("/company/{companyName}")
+    @Operation(summary = "회사의 각 전형별 합격률",description = "회사의 서류, 면접, 코테의 합격률을 보여줌")
+    public ResponseEntity<Map<String,List<GroupByDto>>> getAllTest(@PathVariable String companyName){
+        Map<String, List<GroupByDto>> companyStatics = statisticsService.getCompanyStatics(companyName);
+        return new ResponseEntity<>(companyStatics, HttpStatus.OK);
+    }
+
+    @GetMapping("rank/company")
+    @Operation(summary = "지원한 회사 순위 ",description = "싸피생이 지원한 회사 순위")
+    public ResponseEntity<List<GroupByDto>> getCompanyRank(){
+        List<GroupByDto> companyLank = statisticsService.getCompanyLank();
+        return new ResponseEntity<>(companyLank, HttpStatus.OK);
+    }
+
     @GetMapping("/my/apply")
     @Operation(summary = "내 지원 현황",description = "내 지원 현황 통계")
     public ResponseEntity<List<GroupByDto>> getMyApplyStatistics(@RequestAttribute String email){
@@ -76,5 +89,12 @@ public class StatisticsController {
     }
 
 
+    @GetMapping("my/job-type")
+    @Operation(summary = "내 지원별 합격률",description = "내 지원별 합격률 통계")
+    public ResponseEntity<Map<String,List<GroupByDto>>> getMyTypeResult(@RequestAttribute String email){
+        User user = userService.getUserEntity(email);
+        Map<String, List<GroupByDto>> myTypeResults = statisticsService.getMyTypeResults(user);
+        return new ResponseEntity<>(myTypeResults, HttpStatus.OK);
+    }
 
 }
