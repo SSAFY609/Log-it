@@ -41,10 +41,10 @@ public class UserController {
     private JwtUtil jwtUtil;
 
     @Autowired
-    private MailService mailService;
+    private ImageService imageService;
 
     @Autowired
-    private ImageService imageService;
+    private MailService mailService;
 
     // 회원 가입
     @Operation(summary = "회원가입", description = "회원 정보 저장 (JWT 인증x)")
@@ -91,7 +91,7 @@ public class UserController {
             resultMap.put("deleted", resultLogin.get("deleted"));
             resultMap.put("createdTime", resultLogin.get("createdTime"));
             resultMap.put("loginTime", resultLogin.get("loginTime"));
-
+            // 안녕하세요 지금은 촬영중입니다~ ^^ 성훈님이 촬영하고
             // 정보 확인을 위해 클라이언트로 전달
             Map<String, Object> authToken_info = jwtUtil.checkAndGetClaims((String)resultLogin.get("refreshToken"));
             resultMap.putAll(authToken_info);
