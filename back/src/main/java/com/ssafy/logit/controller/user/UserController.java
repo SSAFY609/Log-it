@@ -41,10 +41,10 @@ public class UserController {
     private JwtUtil jwtUtil;
 
     @Autowired
-    private MailService mailService;
+    private ImageService imageService;
 
     @Autowired
-    private ImageService imageService;
+    private MailService mailService;
 
     // 회원 가입
     @Operation(summary = "회원가입", description = "회원 정보 저장 (JWT 인증x)")
