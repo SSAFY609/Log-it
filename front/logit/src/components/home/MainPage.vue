@@ -30,7 +30,7 @@
       <!-- <div @click="makeToast({category: '어쩌고', growthId: 0})">클릭!</div> -->
       <div class="img_box lay1">
         <v-img class="laptop_img"
-               :src="require('../../assets/images/laptop02.png')"
+               :src="require('../../assets/images/노트북.png')"
         />
       </div>
       <!-- <div class="post-it">포스트잇이얌</div>
@@ -286,7 +286,7 @@ export default {
     justify-content: center;
     margin-top: 50px;
     position: sticky;
-    top: 70px;
+    top: 0;
   }
   .laptop_img {
     margin: 0 auto;

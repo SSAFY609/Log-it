@@ -11,7 +11,7 @@
             </div>
             <div class="btns">
                 <button
-                class="action"
+                class="action no"
                 @click.stop="clicked(false)"
                 >거절</button>
                 <button
@@ -114,11 +114,15 @@ methods: {
 }
 
 .yes {
-    background-color: rgba(255, 212, 39, 0.795);
+    background-color: #fe9823d8;
     color: white;
 }
-.action:hover {
+.yes:hover {
     /* color: #000000; */
-    font-family: appleB;
+    background-color: #ef860fd8;
+}
+
+.no:hover {
+    background-color: rgba(213, 213, 213, 0.436);
 }
 </style>
