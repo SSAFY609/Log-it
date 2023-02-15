@@ -1,6 +1,8 @@
 package com.ssafy.logit.model.user.service;
 
 import com.ssafy.logit.jwt.JwtUtil;
+import com.ssafy.logit.model.growth.repository.GrowthRepository;
+import com.ssafy.logit.model.job.repository.JobRepository;
 import com.ssafy.logit.model.user.dto.UserDto;
 import com.ssafy.logit.model.user.entity.User;
 import com.ssafy.logit.model.user.repository.UserRepository;
@@ -33,6 +35,12 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private GrowthRepository growthRepo;
+
+    @Autowired
+    private JobRepository jobRepo;
 
     // 회원가입
     @Transactional
@@ -328,5 +336,17 @@ public class UserService {
     // 회원 엔티티 반환
     public User getUserEntity(String email){
         return userRepo.findByEmail(email).orElseThrow(NoSuchElementException::new);
+    }
+
+    // 해당하는 회원에게 이벤트가 하나라도 있는지 확인
+    public boolean checkEvent(String email) {
+        long userId = userRepo.findByEmail(email).get().getId();
+        int growthCnt = growthRepo.checkEvent(userId);
+        int jobCnt = jobRepo.checkEvent(userId);
+        if(growthCnt + jobCnt == 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }
