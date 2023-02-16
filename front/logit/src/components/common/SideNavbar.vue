@@ -58,12 +58,12 @@
 
     <div class="option_menu lay3">
 
-      <router-link :to="{name: 'PageSetting'}" class="menu_item_box2 lay2 hover_cursor">
+      <router-link :to="{name: 'ProfilePage'}" class="menu_item_box2 lay2 hover_cursor">
         <div class="item_container lay1">
           <div class="menu_icon_box2 lay3">
-            <v-icon class="menu_icon2 f_icon">mdi-cog</v-icon>  
+            <v-icon class="menu_icon2 f_icon">mdi-clipboard-account</v-icon>  
           </div>
-          <div class="menu_text_box2 f_darkgray lay3">설정</div>
+          <div class="menu_text_box2 f_darkgray lay3">프로필</div>
         </div>
       </router-link>
 
@@ -203,9 +203,15 @@ export default {
   .menu_item_box2 {
     display: flex;
     height: 60px;
+    width: 100%;
     align-items: center;
     text-decoration: none;  
   }
+
+  .menu_item_box2:hover{
+    background: #ebebeb71;
+  }
+
   .menu_icon_box2 {
     margin-left: 26px;
     width: 24px;
@@ -241,6 +247,7 @@ export default {
     position: fixed;
     bottom: 0px;
     height: 180px;
+    width: 240px;
   }
   .item_container {
     display: flex;
