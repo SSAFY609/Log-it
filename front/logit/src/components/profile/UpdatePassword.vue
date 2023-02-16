@@ -101,20 +101,23 @@ export default {
       // 비밀번호 변경 → 2. formData를 서버에 보낸다
       axiosConnectorFormData.post("user/pw_change", formData
         ).then((res) => {
-           console.log(res)
+          //  console.log(res)
             if (res.data == "success") {
             toast.error("비밀번호가 변경되었습니다.", {
               timeout: 3000,
               position: 'bottom-right'
             })
+            this.$router.push({ name: "ProfilePage" });
             }
         }).catch((err) => {
             // alert("비밀번호 변경이 실패하였습니다.")
             console.log(err)
+            toast.error('다시한번 시도해주세요',{
+              timeout: 2000,
+              position: 'bottom-right'
+            })
          })
-        this.$router.push({ name: "ProfilePage" });
     },
-
     // 비밀번호 유효성 검사
       async chkPw () {
         const validate = await this.$refs.form.validate();
