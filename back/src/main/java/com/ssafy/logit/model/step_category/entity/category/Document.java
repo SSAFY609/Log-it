@@ -22,10 +22,10 @@ public class Document {
     @JoinColumn(name = "step_category_id")
     private StepCategory stepCategory;
 
-    @Max(300)
+    @Column(length = 300)
     private String question;
 
-    @Max(4000)
+    @Column(length = 3000)
     private String answer;
 
 
