@@ -16,7 +16,7 @@ public class CreateDocumentRequest {
     @Max(300)
     @Schema(description = "질문")
     private String question;
-    @Max(2000)
+    @Max(4000)
     @Schema(description = "대답")
     private String answer;
 }
