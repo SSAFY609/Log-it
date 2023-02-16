@@ -25,7 +25,7 @@ public class Document {
     @Max(300)
     private String question;
 
-    @Max(2000)
+    @Max(4000)
     private String answer;
 
 
