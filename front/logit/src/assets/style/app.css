@@ -253,6 +253,16 @@ body::-webkit-scrollbar-thumb {
   border-radius: 10px;
 }
 
+textarea::-webkit-scrollbar {
+  background: none;
+  width: 10px;
+}
+
+textarea::-webkit-scrollbar-thumb {
+  background-color: #a1a1a1a8;
+  border-radius: 10px;
+}
+
 .v-field__input {
  font-size: 14px!important;
 }
