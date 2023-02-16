@@ -361,13 +361,15 @@ import { mapState } from 'vuex';
             newData.question = this.interview_question
             newData.answer = this.interview_answer
             element.list.push(newData)
-            console.log(element.list)
+            // console.log(element.list)
           }
         });
 
 
         this.interview_question = ''
         this.interview_answer = ''
+        console.log('sendData() 실행전 data 상태 확인>>>>>')
+        console.log(newData)
         this.sendData()
         
       },
@@ -378,10 +380,10 @@ import { mapState } from 'vuex';
         this.modal = false;
         
         const target = document.querySelector('.doc_select')
-        console.log('value:')
-        console.log(value)
-        console.log('target')
-        console.log(target)
+        // console.log('value:')
+        // console.log(value)
+        // console.log('target')
+        // console.log(target)
 
         if(value=='진행') {
           target.style.outline="1px solid #4990e2"
@@ -395,16 +397,23 @@ import { mapState } from 'vuex';
           target.firstChild.style.color="#FF0A54" 
         }
 
+        this.jobs.datas.forEach(element => {
+          if(element.jobCategory == '서류') {
+            // console.log(element.jobCategory)
+            // console.log(value)
+            // console.log(element.resultStatus)
+            element.resultStatus = value
+            // console.log(element.resultStatus)
+          }
+        });
+
+
       },
       selectIV(value) {
         this.iv_progress = value
         this.modal = false;
 
         const target = document.querySelector('.iv_select')
-        console.log('value:')
-        console.log(value)
-        console.log('target')
-        console.log(target)
 
         if(value=='진행') {
           target.style.outline="1px solid #4990e2!important"
@@ -417,14 +426,23 @@ import { mapState } from 'vuex';
           target.style.outline="1px solid #FF0A54!important"
           target.firstChild.style.color="#FF0A54!important" 
         }
+        this.jobs.datas.forEach(element => {
+          if(element.jobCategory == '면접') {
+            // console.log(element.jobCategory)
+            // console.log(value)
+            console.log(element.resultStatus)
+            element.resultStatus = value
+            console.log(element.resultStatus)
+          }
+        });
+
 
       },
       selectCT(value) {
         this.ct_progress = value
         this.modal = false;
         const target = document.querySelector('.ct_select')
-        console.log(target)
-        console.log(target.firstChild)
+
 
         if(value=='진행') {
           target.style.outline="1px solid #4990e2"
@@ -437,6 +455,16 @@ import { mapState } from 'vuex';
           target.style.outline="1px solid #FF0A54"
           target.firstChild.style.color="#FF0A54" 
         }
+        this.jobs.datas.forEach(element => {
+          if(element.jobCategory == '코테') {
+            // console.log(element.jobCategory)
+            // console.log(value)
+            console.log(element.resultStatus)
+            element.resultStatus = value
+            console.log(element.resultStatus)
+          }
+        });
+
 
       },
 
@@ -461,6 +489,8 @@ import { mapState } from 'vuex';
 
         this.doc_question = ''
         this.doc_answer = ''
+        console.log('sendData() 실행전 data 상태 확인>>>>>')
+        console.log(newData)
         this.sendData()
       },
 
@@ -483,6 +513,10 @@ import { mapState } from 'vuex';
           element.parentElement.classList.remove('selected_item')
         });
 
+        
+
+        console.log('sendData() 실행전 data 상태 확인>>>>>')
+        console.log(new_ct_data)
 
         this.sendData()
 
