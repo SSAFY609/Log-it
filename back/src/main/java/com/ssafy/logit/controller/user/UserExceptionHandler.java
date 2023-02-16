@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 public class UserExceptionHandler {
 
+    private final String EXPIRED = "token expired";
+
     @ExceptionHandler(ExpiredJwtException.class)
     public ResponseEntity<String> makeCookie(ExpiredJwtException e) {
         log.error("jwt token expired ", e);
-        return new ResponseEntity<String>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+        // return new ResponseEntity<String>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<String>(EXPIRED, HttpStatus.UNAUTHORIZED);
     }
 }

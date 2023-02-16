@@ -1,7 +1,9 @@
 package com.ssafy.logit.model.user.entity;
 
 import com.ssafy.logit.model.user.dto.UserDto;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
@@ -11,10 +13,11 @@ import javax.persistence.*;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name="users")
 public class User extends DateTime {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "user_id")
     private Long id;
 
@@ -24,7 +27,7 @@ public class User extends DateTime {
     @Column(length = 50, nullable = false)
     private String email;
 
-    @Column(length = 50, nullable = false)
+    @Column(length = 200, nullable = false)
     private String pw;
 
     private int flag;
@@ -32,7 +35,7 @@ public class User extends DateTime {
     @Column(length = 10)
     private String studentNo;
 
-    @Column(length = 100)
+    @Column(length = 200, nullable = false)
     private String image;
 
     private boolean deleted;
