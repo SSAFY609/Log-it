@@ -253,6 +253,16 @@ body::-webkit-scrollbar-thumb {
   border-radius: 10px;
 }
 
+textarea::-webkit-scrollbar {
+  background: none;
+  width: 10px;
+}
+
+textarea::-webkit-scrollbar-thumb {
+  background-color: #a1a1a1a8;
+  border-radius: 10px;
+}
+
 .v-field__input {
  font-size: 14px!important;
 }
@@ -267,30 +277,6 @@ ul, li {
 }
 /* alert 창을 위한 CSS */
 
-.Vue-Toastification__toast--error{
-  background-color: #ffffff7a !important;
-  color: red !important;
-  font-family: appleL !important;
-}
-
-.Vue-Toastification__toast--success{
-  background-color: #ffffffe2 !important;
-  color: rgb(0, 28, 120) !important;
-  font-family: appleL !important;
-  font-size: 24px !important;
-}
-
-.Vue-Toastification__toast--warning{
-  background-color: #ffffffe2 !important;
-  color: rgb(172, 0, 0) !important;
-  font-family: appleL !important;
-}
-
-.Vue-Toastification__toast--default{
-  background-color: rgba(243, 243, 243, 0.931) !important;
-  color: #1c1c1c !important;
-}
-
-.Vue-Toastification__close-button{
-  color: #666;
+input[type=radio] {
+  display: none;
 }
