@@ -194,6 +194,7 @@ const growth = {
         searchUser({commit}, data){
             axiosConnector.post(`growth/invite/search`, data
             ).then((res)=>{
+                console.log(res.data)
                 commit('SEARCH_USER', res.data)
             }).catch((err)=>{
                 console.log(err)
