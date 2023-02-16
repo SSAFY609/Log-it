@@ -31,6 +31,7 @@ public class JobEvent {
 
 
     @Enumerated(EnumType.STRING)
+    @Column(length = 15)
     private JobEventStatus resultStatus;
 
 
