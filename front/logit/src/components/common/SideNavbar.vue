@@ -141,7 +141,7 @@ export default {
 <style scoped>
   .container {
     position: fixed;
-    z-index: 200;
+    z-index: 1200;
     border-right: 1px solid #F5F5F4;
   }
   .logo_box {

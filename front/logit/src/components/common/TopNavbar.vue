@@ -149,7 +149,7 @@ export default {
 <style scoped>
   .container {
     position: fixed;
-    z-index: 100;
+    z-index: 1000;
     display: flex;
     justify-content: space-between;
     align-items: center;
