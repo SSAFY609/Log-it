@@ -23,6 +23,7 @@
             label="Password"
             counter
             @click:append-inner="show1 = !show1"
+            @keyup.enter="login"
           ></v-text-field>
         </v-form>
       </div>
@@ -86,7 +87,7 @@ export default {
     ],
     rules1: {
       required: (value) => !!value || "",
-      min: (v) => v.length >= 1 || "최소 8자리 이상 입력해주세요.",
+      min: (v) => v.length >= 8 || "최소 8자리 이상 입력해주세요.",
     },
     user: {
       email: "",

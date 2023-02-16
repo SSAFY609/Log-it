@@ -1,7 +1,7 @@
 <template>
   <div style="display:flex">
     <div class="container">
-      <div v-if="sidebar" style="width:260px"></div>
+      <!-- <div v-if="sidebar" style="width:260px"></div> -->
       <div class="box">
           <h1 class="welcome">
             <!-- <img class="cal" :src="require(`@/assets/images/cal.png`)" /> -->

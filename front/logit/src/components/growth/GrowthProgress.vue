@@ -70,7 +70,7 @@
                 <v-img v-if="growth.user.image.length < 5" :src="require(`@/assets/profiles/scale (${growth.user.image}).png`)"></v-img>
                 <v-img v-else :src="img_to_url(growth.user.image)"></v-img>
               </v-avatar>
-              <span style="margin: 0px 10px">{{ growth.user.name }}</span>
+              <span style="margin: 0px 10px; width:87.64px">{{ growth.user.name }}</span>
               <v-chip color="#FF0A54">호스트</v-chip>
             </div>
             <div v-for="member in growthUsers" :key="member.id" class="member-list">
@@ -78,7 +78,7 @@
                 <v-img v-if="member.image.length < 5" :src="require(`@/assets/profiles/scale (${member.image}).png`)"></v-img>
                 <v-img v-else :src="img_to_url(member.image)"></v-img>
               </v-avatar>
-              <span style="margin: 0px 10px">{{ member.name }}</span>
+              <span class="member-name" style="margin: 0px 10px">{{ member.name }}</span>
               <div class="member">
                 <v-chip color="#2d8bff">멤버</v-chip>
                 <v-icon v-if="is_host" color="red" class="member-delete" @click="member_delete(member.email)">mdi-close</v-icon>
@@ -473,6 +473,10 @@ h1 {
   justify-content: space-between;
   align-items: center;
   width: 310px;
+}
+
+.member-name{
+  width: 100px;
 }
 
 .member-delete{

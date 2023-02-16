@@ -280,3 +280,36 @@ ul, li {
 input[type=radio] {
   display: none;
 }
+
+
+.Vue-Toastification__toast--default {
+  font-family: appleL !important;
+  /* background-color: #1976d2; */
+  background-color: #f8f8f8d5 !important;
+  color: #454545 !important;
+}
+.Vue-Toastification__toast--info {
+  font-family: appleL !important;
+  background-color: #ffffffc5 !important;
+  /* background-color: #2196f3; */
+  color: #fff !important;
+}
+.Vue-Toastification__toast--success {
+  font-family: appleL !important;
+  background-color: #ffffffc5 !important;
+  /* background-color: #4caf50; */
+  color: #080055 !important;
+}
+.Vue-Toastification__toast--error {
+  font-family: appleL !important;
+  background-color: #ffffffc5 !important;
+  /* background-color: #ff5252; */
+  /* color: #fff; */
+  color: #ff5252 !important;
+}
+.Vue-Toastification__toast--warning {
+  font-family: appleL !important;
+  background-color: #ffffffc5 !important;
+  /* background-color: #ffc107; */
+  color: #860000 !important;
+}
