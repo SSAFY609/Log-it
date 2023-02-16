@@ -10,6 +10,7 @@
   "dependencies": {
     "@mdi/font": "5.9.55",
     "@vueup/vue-quill": "^1.1.0",
+    "aos": "^2.3.4",
     "axios": "^1.3.2",
     "chart.js": "^4.2.1",
     "chartjs-plugin-datalabels": "^2.2.0",

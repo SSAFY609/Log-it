@@ -6,7 +6,6 @@ import axiosConnectorFormData from "@/utils/axios-connector-formData";
 
 import tempJob from './modules/tempJob.js'
 import job from './modules/job.js'
-import temp from './modules/temp.js'
 import growth from "./modules/growth.js";
 import timeline from "./modules/timeline.js";
 import search from "./modules/search.js";
@@ -229,7 +228,6 @@ export default createStore({
   },
 
   modules: {
-    temp: temp,
     growth: growth,
     timeline: timeline,
     search: search,

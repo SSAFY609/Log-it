@@ -59,7 +59,7 @@
           <div></div>
           <div v-for="job in jobs" :key="job.id" class="result-one">
             <div v-if="job.type == '취업 여정 기업명'">
-              <div class="eventName" @click="goJob(jog.id)">
+              <div class="eventName" @click="goJob(job.id)">
                 <div>{{ job.preStr }}</div>
                 <div class="keyword">{{ job.keyword }}</div>
                 <div>{{ job.nextStr }}</div>
@@ -129,7 +129,7 @@ import { mapState } from 'vuex'
           this.$store.dispatch('growth/growthSetting', growthId);
         },
         goJob(jobId){
-          this.$store.dispatch('job/jobSetting', jobId);
+          this.$store.dispatch('tempJob/jobSetting', jobId);
         },
         fixSearchbar() {
           const tar = document.querySelector('.search_input')
