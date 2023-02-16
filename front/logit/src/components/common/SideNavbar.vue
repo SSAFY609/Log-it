@@ -1,12 +1,12 @@
 <template>
   <div class="container b_transparentgray">
     <div class="logo_box">
-      <div @click="btnClicked('MainPage')" class="logo_img_box">
+      <router-link :to="{name: 'MainPage'}" class="logo_img_box">
         <v-img class="logo_img"
             :src="require('../../assets/images/logit_logo_text.png')"
             height="110"
       />
-      </div>
+      </router-link>
       
     <div @click="closeSidebar" class="slider_box b_lightgray slider_hover lay2">
         <v-icon class="silder_icon f_white">mdi-chevron-double-left</v-icon>
@@ -28,6 +28,12 @@
         </div>
       </div>
       <div class="menu_item_box lay2 hover_cursor">
+        <div class="menu_icon_box lay3" @click="btnClicked('TimeLine')">
+          <v-icon class="menu_icon f_icon">mdi-timeline-clock</v-icon>  
+          <div class="menu_text_box f_darkgray lay3">타임라인</div>
+        </div>
+      </div>
+      <div class="menu_item_box lay2 hover_cursor">
         <div class="menu_icon_box lay3" @click="btnClicked('GrowthList')">
           <v-icon class="menu_icon f_icon">mdi-list-status</v-icon>  
           <div class="menu_text_box f_darkgray lay3">성장일지</div>
@@ -40,13 +46,7 @@
         </div>
       </div>
       <div class="menu_item_box lay2 hover_cursor">
-        <div class="menu_icon_box lay3" @click="btnClicked('ProfilePage')">
-          <v-icon class="menu_icon f_icon">mdi-account-circle</v-icon>  
-          <div class="menu_text_box f_darkgray lay3">프로필</div>
-        </div>
-      </div>
-      <div class="menu_item_box lay2 hover_cursor">
-        <div class="menu_icon_box lay3" @click="btnClicked('ChartView')">
+        <div class="menu_icon_box lay3" @click="btnClicked('StatisticsPage')">
           <v-icon class="menu_icon f_icon">mdi-poll</v-icon>  
           <div class="menu_text_box f_darkgray lay3">통계</div>
         </div>
@@ -82,6 +82,8 @@
 
 <script>
 import { mapState } from 'vuex'
+import { useToast } from 'vue-toastification';
+const toast = useToast();
 
 export default {
   name: 'SideNavbar',
@@ -101,12 +103,12 @@ export default {
       this.$store.dispatch(`closeSidebar`)
     },
 
-    btnClicked(select) {
-      if(select == 'MainPage'){
-        this.$router.push({name: select})
-        return
-      }   
-      if(!this.loginUser.id){
+    btnClicked(select) {   
+      if(!this.loginUser.id && select != 'MainPage'){
+        toast.error('로그인이 필요한 페이지입니다.', {
+          timeout: 2000,
+          position: 'bottom-right',
+        })
         this.$router.push({name: 'UserLogin'})
         return
       } 
@@ -124,7 +126,14 @@ export default {
       target.firstChild.classList.toggle('btn_clicked2')
       target.lastChild.classList.toggle('btn_clicked2')
 
-      this.$router.push({name: select})
+      if(select == 'StatisticsPage'){
+        this.$store.dispatch('statistics/getMyStatistics');
+      }else if(select == 'TimeLine'){
+        this.$store.dispatch('timeline/timelineSetting')
+      }else{
+        this.$router.push({name: select})
+      }
+
     }
   },
 }

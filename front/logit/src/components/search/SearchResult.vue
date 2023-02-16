@@ -77,16 +77,27 @@
           <div></div>
           <div v-for="user in users" :key="user.id" class="result-one">
             <div class="result-user">
-              <div class="user-image">
+              <div v-if="user.userProfile.length < 5" class="user-image">
                 <img :src="require(`@/assets/profiles/scale (${user.userProfile}).png`)">
               </div>
-              <div>
+              <div v-else class="user-image">
+                <img :src="img_to_url(user.userProfile)">
+              </div>
+              <div v-if="user.type == '회원 이름'">
                 <div class="eventName">
                   <div>{{ user.preStr }}</div>
                   <div class="keyword">{{ user.keyword }}</div>
                   <div>{{ user.nextStr }}</div>
                 </div>
                 <div class="user-email">{{ user.userEmail }}</div>
+              </div>
+              <div v-else>
+                <div class="eventName">{{ user.userName }}</div>
+                <div class="user-email">
+                  <div>{{ user.preStr }}</div>
+                  <div class="keyword">{{ user.keyword }}</div>
+                  <div>{{ user.nextStr }}</div>
+                </div>
               </div>
             </div>
           </div>
@@ -126,6 +137,9 @@ import { mapState } from 'vuex'
           tar.style.marginTop = '60px'
           tar.style.width = '1000px'
           tar2.style.display = 'block'
+        },
+        img_to_url(src) {
+          return `https:/logit-s3.s3.ap-northeast-2.amazonaws.com/${src}`
         }
       }
   }
@@ -281,6 +295,10 @@ import { mapState } from 'vuex'
     height: 60px;
     width: 60px;
     margin-right: 20px;
+   }
+
+   .user-email {
+    display: flex;
    }
 
    .spacer {

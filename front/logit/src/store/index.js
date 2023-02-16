@@ -4,45 +4,37 @@ import router from "@/router";
 import axiosConnector from "@/utils/axios-connector";
 import axiosConnectorFormData from "@/utils/axios-connector-formData";
 
-// import { useRouter } from "vue-router";
-// import temp from './modules/temp.js'
-// import event from './modules/event.js'
-// import timeline from './modules/timeline.js'
-
-// const getToken = () => {
-//   const token = sessionStorage.getItem("token");
-//   return {
-//     Authorization: `bearer ${token}`,
-//   };
-// }; 
-
 import tempJob from './modules/tempJob.js'
 import job from './modules/job.js'
 import temp from './modules/temp.js'
 import growth from "./modules/growth.js";
 import timeline from "./modules/timeline.js";
 import search from "./modules/search.js";
+import statistics from "./modules/statistics.js";
 
 const baseURL = "https://i8a609.p.ssafy.io/api/user";
 // const baseURL = "http://localhost:9090/user";
+
+import { useToast } from "vue-toastification";
+const toast = useToast()
+
 export default createStore({
 
   state: {
     loginUser : {},
     sidebar: true,
+    myInvitation: [],
   },
   getters: {},
   mutations: {
-    LOGIN_USER(state, payload) {
+    LOGIN(state, payload) {
       state.loginUser = payload
-      sessionStorage.setItem("token", payload["jwt-auth-token"]);
-      sessionStorage.setItem('id', payload.id)
-      router.push({ name: "MainPage" });
     },
     LOG_OUT(state) {
       sessionStorage.removeItem("token");
       sessionStorage.removeItem("id");
       state.loginUser = {};
+      state.myInvitation = [];
       router.push({name: 'MainPage'})
     },
     GET_USER(state, payload) {
@@ -53,6 +45,10 @@ export default createStore({
     GET_USER_ONLY(state, payload){
       state.loginUser = payload;
     },
+    GET_MY_INVITATION(state, payload){
+      state.myInvitation = payload
+      router.push({ name: "MainPage" })
+    },
     OPEN_SIDEBAR(state){
       state.sidebar = true;
     },
@@ -62,43 +58,48 @@ export default createStore({
   },
   actions: {
     // 유저 로그인
-    login({ commit }, user) {
+    login({ commit, dispatch }, user) {
       const URL = `${baseURL}/login`;
       axios({
         url: URL,
         method: "POST",
         data: user,
-      })
-        .then((res) => {
-          if (res.data.result == "사용자 없음") { 
-            alert("사용자가 없습니다.")
-            return
-          }          
-          if (res.data.result == "비밀번호 틀림") { 
-            alert("로그인에 실패하였습니다.")
-            return
-          }
-          commit("LOGIN_USER", res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      }).then((res) => {
+        if (res.data.result == "사용자 없음") { 
+          toast.error("이메일을 다시 확인해주세요.", {
+            position: 'bottom-right',
+          })
+          return
+        }          
+        if (res.data.result == "비밀번호 틀림") { 
+          toast.error("비밀번호를 다시 확인해주세요.", {
+            position: 'bottom-right',
+          })
+          return
+        }
+        sessionStorage.setItem("token", res.data["jwt-auth-token"]);
+        sessionStorage.setItem('id', res.data.id)
+        dispatch('getMyInvitation')
+        commit("LOGIN", res.data);
+      }).catch((err) => {
+        console.log(err);
+      });
     },
     // 유저 회원가입하기
-    signup({ dispatch }, user) {
+    signup(context, user) {
       const URL = `${baseURL}/regist`;
       axios({
         url: URL,
         method: "POST",
         data: user,
-      })
-        .then(() => {
-          dispatch("login", user);
+      }).then((res) => {
+        console.log(res.data)
+        if(res.data == 'success'){
           router.push({ name: "UserSignupComplete" });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+        }
+      }).catch((err) => {
+        console.log(err);
+      });
     },
 
     // 유저 로그아웃하기
@@ -204,6 +205,18 @@ export default createStore({
       })
     },
 
+    // 초기에 초대된 이벤트가 있는지 표시
+    getMyInvitation({commit}){
+      console.log('이건 초대 이벤트 확인임')
+      axiosConnector.get(`growth/invitation`
+      ).then((res)=>{
+        console.log(res.data)
+        commit('GET_MY_INVITATION', res.data)
+      }).catch((err)=>{
+        console.log(err)
+      })
+    },
+
     // sidebar 열기
     openSidebar({commit}){
       commit('OPEN_SIDEBAR');
@@ -222,5 +235,6 @@ export default createStore({
     search: search,
     job: job,
     tempJob: tempJob,
+    statistics: statistics,
   },
 });

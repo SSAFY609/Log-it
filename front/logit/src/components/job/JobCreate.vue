@@ -7,7 +7,7 @@
         <div class="category-title">
             💼&nbsp;&nbsp;어떤 기업을 목표로 하시나요?
         </div>
-        <div><v-text-field label="ex) 카카오" v-model="companyName"></v-text-field></div>
+        <div><v-text-field label="ex) 삼성전자" v-model="companyName"></v-text-field></div>
 
         <div class="category-title">
             📌&nbsp;&nbsp;채용을 위한 전형 추가
@@ -34,6 +34,9 @@
 
 <script>
 import { mapState } from 'vuex';
+import { useToast } from 'vue-toastification';
+const toast = useToast()
+
 export default {
     name: 'JobCreate',
 
@@ -68,7 +71,7 @@ export default {
             console.log(target.innerText)
             if(this.selectedList.indexOf(i) != -1){
 
-                console.log("선택 취소")
+                // console.log("선택 취소")
                 const idx = this.selectedList.indexOf(i)
 
                 this.selectedList.splice(idx,1)
@@ -85,9 +88,20 @@ export default {
 
         create() {
             if (!this.companyName) {
-                alert('기업명을 입력해주세요.')
+                toast.error('기업명을 입력해주세요.', {
+                    timeout: 2000,
+                    position: 'bottom-right'
+                })
+            } else if (this.selectedList.length == 0) {
+                toast.error('전형을 최소 1개 선택해 주세요', {
+                    timeout: 2000,
+                    position: 'bottom-right'
+                })
             } else if (!this.start_date || !this.end_date) {
-                alert('날짜를 선택해 주세요.')
+                toast.error('날짜를 선택해 주세요.', {
+                    timeout: 2000,
+                    position: 'bottom-right'
+                })
             } else {
                 const jobs = {
                         companyName: this.companyName,

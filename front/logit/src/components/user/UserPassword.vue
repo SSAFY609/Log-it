@@ -43,6 +43,9 @@
 </template>
 
 <script>
+import { useToast } from 'vue-toastification';
+const toast = useToast()
+
 export default {
   name: "UserPassword",
   data: () => ({
@@ -60,13 +63,19 @@ export default {
     // 계정생성 - 암호
     signPw() {
       if (!this.password.trim() || !this.password_tmp.trim()) {
-        alert("입력한 비밀번호가 없습니다.");
+        toast.error("비밀번호를 입력해 주세요.", {
+          position: 'bottom-right',
+          timeout: 2000
+        });
         return;
       }
       if (
         !document.querySelector(".password-button").classList.contains("color")
       ) {
-        alert("입력한 비밀번호가 일치하지 않습니다.");
+        toast.error("비밀번호가 일치하지 않습니다.", {
+          position: 'bottom-right',
+          timeout: 2000,
+        });
         return;
       }
       this.$emit("updateUserPassword", this.password);

@@ -67,14 +67,16 @@
             <v-card-title class="member-title"><v-icon>mdi-account-multiple</v-icon> 참여 목록</v-card-title>
             <div class="member-list">
               <v-avatar>
-                <v-img :src="require(`@/assets/profiles/scale (${growth.user.image}).png`)"></v-img>
+                <v-img v-if="growth.user.image.length < 5" :src="require(`@/assets/profiles/scale (${growth.user.image}).png`)"></v-img>
+                <v-img v-else :src="img_to_url(growth.user.image)"></v-img>
               </v-avatar>
               <span style="margin: 0px 10px">{{ growth.user.name }}</span>
               <v-chip color="#FF0A54">호스트</v-chip>
             </div>
             <div v-for="member in growthUsers" :key="member.id" class="member-list">
               <v-avatar>
-                <v-img :src="require(`@/assets/profiles/scale (${member.image}).png`)"></v-img>
+                <v-img v-if="member.image.length < 5" :src="require(`@/assets/profiles/scale (${member.image}).png`)"></v-img>
+                <v-img v-else :src="img_to_url(member.image)"></v-img>
               </v-avatar>
               <span style="margin: 0px 10px">{{ member.name }}</span>
               <div class="member">
@@ -85,7 +87,7 @@
             <v-card-actions style="justify-content:space-between" class="hover_cursor" @click="searchSet(), show = !show">
               <div>
                 <v-avatar><v-icon>mdi-plus</v-icon></v-avatar>
-                추가하기
+                초대하기
               </div>
               <v-btn
                 :icon="show ? 'mdi-chevron-up' : 'mdi-chevron-down'"
@@ -99,10 +101,11 @@
                 <div class="search-list">
                   <div v-for="user in searchUser" :key="user.email" class="search-result">
                     <div>
-                      <img :src="require(`@/assets/profiles/scale (${user.image}).png`)" class="user-image">
+                      <img v-if="user.image.length < 5" :src="require(`@/assets/profiles/scale (${user.image}).png`)" class="user-image">
+                      <img v-else :src="img_to_url(user.image)" class="user-image">
                       {{ user.name }}({{ user.email }})
                     </div>
-                    <v-btn color="#FF0A54" variant="text" @click="addEventUser(user.id)" icon="mdi-send"></v-btn>
+                    <v-btn color="#FF0A54" variant="text" @click="addEventUser(user)" icon="mdi-send"></v-btn>
                   </div>
                 </div>
               </div>
@@ -216,12 +219,13 @@ export default {
         console.log(email, this.event.event_id);
         // this.$store.dispatch('deleteEventUser', this.event.event_id, email);
       },
-      addEventUser(id){
+      addEventUser(user){
           const data = {
             growthId: this.growth.growthId,
-            userId: id,
+            userId: user.id,
+            userName: user.name
           }
-          console.log(data);
+          // console.log(data);
           this.$store.dispatch('growth/addGrowthUser', data);
           this.$store.commit('growth/RESET_SEARCH_USER')
           
@@ -298,21 +302,19 @@ export default {
           this.$store.commit('growth/SEARCH_USER_RESET')
         }
       },
+      img_to_url(src) {
+        return `https:/logit-s3.s3.ap-northeast-2.amazonaws.com/${src}`
+      }
     },
     created() {
       // 파람스로 이벤트 아이디 추출
       this.growthId = this.$route.params.growthId;
 
-      // if(this.firstProgress[this.firstProgress.length-1].date == this.today_string()){
-      //   this.today = true;
-      // }else{
-      //   this.today = false;
-      // }
-
-
       if (this.loginUser.id == this.growth.user.id) {
         this.is_host = true
       }
+
+      // console.log(this.growth)
       // console.log(this.log)
     },
 }

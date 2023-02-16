@@ -56,6 +56,9 @@
 
 <script>
 import axiosConnectorFormData from "@/utils/axios-connector-formData";
+import { useToast } from "vue-toastification";
+const toast = useToast()
+
 export default {
   name: "UpdatePassword",
   data: () => ({
@@ -79,15 +82,17 @@ export default {
     modifyPw() {
       // 비밀번호 입력했는지 검사
       if (!this.password.trim() || !this.password_tmp.trim()) {
-        alert("입력한 비밀번호가 없습니다.");
+        toast.error("비밀번호를 입력해 주세요.", {
+          timeout: 2000,
+          position: 'bottom-right'
+        })
         return;
       }
-      if (
-        !document
-          .querySelector(".profile-main-button-user")
-          .classList.contains("color")
-      ) {
-        alert("입력한 비밀번호가 일치하지 않습니다.");
+      if (this.password != this.password_tmp) {
+        toast.error("비밀번호가 일치하지 않습니다.", {
+          timeout: 2000,
+          position: 'bottom-right'
+        });
         return;
       }
       // 비밀번호 변경 → 1. 비밀번호를 formData에 담는다
@@ -96,17 +101,23 @@ export default {
       // 비밀번호 변경 → 2. formData를 서버에 보낸다
       axiosConnectorFormData.post("user/pw_change", formData
         ).then((res) => {
-           console.log(res)
+          //  console.log(res)
             if (res.data == "success") {
-            alert("비밀번호가 변경되었습니다.")
+            toast.error("비밀번호가 변경되었습니다.", {
+              timeout: 3000,
+              position: 'bottom-right'
+            })
+            this.$router.push({ name: "ProfilePage" });
             }
         }).catch((err) => {
-            alert("비밀번호 변경이 실패하였습니다.")
+            // alert("비밀번호 변경이 실패하였습니다.")
             console.log(err)
+            toast.error('다시한번 시도해주세요',{
+              timeout: 2000,
+              position: 'bottom-right'
+            })
          })
-        this.$router.push({ name: "ProfilePage" });
     },
-
     // 비밀번호 유효성 검사
       async chkPw () {
         const validate = await this.$refs.form.validate();
@@ -115,6 +126,10 @@ export default {
             document
               .querySelector(".profile-main-button-user")
               .classList.add("color");
+          }else{
+            document
+              .querySelector(".profile-main-button-user")
+              .classList.remove("color");
           }
         } else {
           document
@@ -126,7 +141,7 @@ export default {
   mounted() {
     const loginUser = this.$store.state.loginUser;
     this.email = loginUser.email;
-    console.log("여기까지왔숨다")
+    // console.log("여기까지왔숨다")
   },
 }
 

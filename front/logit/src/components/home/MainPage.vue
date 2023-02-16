@@ -7,7 +7,7 @@
         />
       </div>
       <div>
-        <div v-if="!loginUser.name">
+        <div v-if="!loginUser.name" class="main-box">
           <div class="writeTitle">
             <h1 class="text"></h1>
           </div>
@@ -22,15 +22,20 @@
             <h1>지금 바로 기록해보세요.</h1>
           </div>
           <p>진행중인 이벤트와 취업여정을 기록하면서 달라진 나의 모습을 발견하세요.</p>
-          <router-link :to="{name: 'FirstTimeline'}" class="login_btn_box b_main btn_hover">
-            <div class="login_btn_text f_white">시작하기</div>
-          </router-link>
+          <div class="btn-box">
+            <router-link :to="{name: 'FirstTimeline'}" class="login_btn_box b_main btn_hover">
+              <div class="login_btn_text f_white">여정 추가하기</div>
+            </router-link>
+            <div @click="goTimeline" class="login_btn_box b_main btn_hover">
+              <div class="login_btn_text f_white">내 타임라인 보기</div>
+            </div>
+          </div>
         </div>
       </div>
-      <div @click="testTimeline">클릭!</div>
+      <!-- <div @click="makeToast({category: '어쩌고', growthId: 0})">클릭!</div> -->
       <div class="img_box lay1">
         <v-img class="laptop_img"
-               :src="require('../../assets/images/laptop02.png')"
+               :src="require('../../assets/images/노트북.png')"
         />
       </div>
       <!-- <div class="post-it">포스트잇이얌</div>
@@ -48,12 +53,15 @@
 import { mapState } from 'vuex';
 import { onMounted, onBeforeUnmount, computed } from 'vue';
 import { useStore } from 'vuex';
+import { useToast } from 'vue-toastification';
+import mycomp from '../common/InviteAlert.vue'
 
 export default {  
     name: 'MainPage',
     setup() {
+      const store = useStore()
+      const toast = useToast()
       
-
       // let observe = new IntersectionObserver((e)=>{
       //   e.forEach((box)=>{
       //     if(box.isIntersecting){
@@ -67,16 +75,43 @@ export default {
       //   let postIt = document.querySelector(`.post-it`)
       //   observe.observe(postIt)
       // })
-      const store = useStore()
+      // const invites = store.state.myInvitiation
 
       const testTimeline = () => {
         store.dispatch('timeline/timelineSetting')
       }
       const loginUser = computed(()=>store.state.loginUser)
 
+      const makeToast = (i)=>{
+        toast({
+          component: mycomp,
+          props: {
+            growth: i,
+          },
+          listeners: {
+            accept: (data) => acceptInvite(data),
+            reject: (data) => acceptInvite(data)
+          }
+        },{
+          timeout: false,
+          icon: false
+        })
+      }
+
       onMounted(()=>{
-        writeTitle('.text', '당신의 새로운 여정을 \n 매일 기록해 보세요', 1500)
+        const lu = store.state.loginUser
+        if(!lu.id){
+          writeTitle('.text', '당신의 새로운 여정을 \n 매일 기록해 보세요', 1500)
+        }
         window.addEventListener('scroll', onScroll)
+        const invites = store.state.myInvitation
+
+        for(let i=0; i<invites.length; i++){
+          setTimeout(() => {
+            makeToast(invites[i])
+          }, 500+700*i);
+        }
+
       })
       
       onBeforeUnmount(()=>{
@@ -145,14 +180,24 @@ export default {
       } 
     }
 
+    const acceptInvite = (data) => {
+        store.dispatch('growth/acceptInvite', data)
+    }
+
+    const goTimeline = () => {
+      store.dispatch('timeline/timelineSetting')
+    }
+
       return {
         // start,
         // state,
         loginUser,
+        acceptInvite,
+        makeToast,
         testTimeline,
         writeTitle,
         onScroll,
-
+        goTimeline,
       }
   },
     computed: { 
@@ -239,13 +284,19 @@ export default {
     margin-left: 6px;
     margin-top: 10px;
   }
+
+  .main-box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
   .img_box {
     width: 1300px;
     display: flex;
     justify-content: center;
     margin-top: 50px;
     position: sticky;
-    top: 70px;
+    top: 0;
   }
   .laptop_img {
     margin: 0 auto;
@@ -257,7 +308,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0 auto;
+    margin: 0 10px;
     margin-top: 40px;
   }
   .login_btn_text {
@@ -265,5 +316,12 @@ export default {
     font-size: 22px;
     font-weight: 500;
   }
+
+.btn-box {
+  width: 400px;
+  display: flex;
+  margin: 0 auto;
+  text-align: center;
+}
 
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div style="display:flex">
     <div class="container">
-      <div v-if="sidebar" style="width:260px"></div>
+      <!-- <div v-if="sidebar" style="width:260px"></div> -->
       <div class="box">
           <h1 class="welcome">
             <!-- <img class="cal" :src="require(`@/assets/images/cal.png`)" /> -->
@@ -46,56 +46,50 @@
               </swiper-slide>
           </swiper>
           <div class="buttons">
-            <!-- 네모모양이냐 원이냐 -->
-            <!-- <v-btn color="#464646" variant="outlined" @click="goslide(0)"><v-icon>mdi-chevron-triple-left</v-icon></v-btn>
-            <v-btn color="#464646" variant="outlined" @click="nextSlide"><v-icon>mdi-chevron-double-left</v-icon></v-btn>
-            <v-btn color="#ff417a" variant="outlined" @click="goslide(state.slide)">Today</v-btn>
-            <v-btn color="#464646" variant="outlined" @click="prevSlide(0)"><v-icon>mdi-chevron-double-right</v-icon></v-btn>
-            <v-btn color="#464646" variant="outlined" @click="goslide(-1)"><v-icon>mdi-chevron-triple-right</v-icon></v-btn> -->
             <v-btn color="#717171" variant="text" size="60" @click="goslide(0)" icon="mdi-chevron-double-left"></v-btn>
             <v-btn color="#717171" variant="text" size="60" @click="nextSlide" icon="mdi-chevron-left"></v-btn>
             <v-btn color="#ff417a" variant="text" size="60" @click="goslide(state.slide)">오늘</v-btn>
             <v-btn color="#717171" variant="text" size="60" @click="prevSlide(0)" icon="mdi-chevron-right"></v-btn>
             <v-btn color="#717171" variant="text" size="60" @click="goslide(-1)" icon="mdi-chevron-double-right"></v-btn>
           </div>
-          <div class="progress" style="display:flex; justify-content:center"> 
-        <div>
-          <div>전체 진행도</div>
-          <v-progress-circular
-            :rotate="360"
-            :size="70"
-            :width="15"
-            :model-value="value"
-            color="#EF476F"
-          >
-            {{ value }}
-          </v-progress-circular>
-        </div>
-        <div>
-          <div>성장 진행도</div>
-          <v-progress-circular
-            :rotate="360"
-            :size="70"
-            :width="15"
-            :model-value="value1"
-            color="#FF9770"
-          >
-            {{ value1 }}
-          </v-progress-circular>
-        </div>
-        <div>
-          <div>취업 진행도</div>
-          <v-progress-circular
-            :rotate="360"
-            :size="70"
-            :width="15"
-            :model-value="value2"
-            color="#06D6A0"
-          >
-            {{ value2 }}
-          </v-progress-circular>
-        </div>
-      </div>
+          <!-- <div class="progress" style="display:flex; justify-content:center"> 
+            <div>
+              <div>전체 진행도</div>
+              <v-progress-circular
+                :rotate="360"
+                :size="70"
+                :width="15"
+                :model-value="value"
+                color="#EF476F"
+              >
+                {{ value }}
+              </v-progress-circular>
+            </div>
+            <div>
+              <div>성장 진행도</div>
+              <v-progress-circular
+                :rotate="360"
+                :size="70"
+                :width="15"
+                :model-value="value1"
+                color="#FF9770"
+              >
+                {{ value1 }}
+              </v-progress-circular>
+            </div>
+            <div>
+              <div>취업 진행도</div>
+              <v-progress-circular
+                :rotate="360"
+                :size="70"
+                :width="15"
+                :model-value="value2"
+                color="#06D6A0"
+              >
+                {{ value2 }}
+              </v-progress-circular>
+            </div>
+          </div> -->
       </div>
       
     </div>
@@ -186,45 +180,80 @@ export default {
       };
       
       onBeforeMount(()=>{
-
         const growths = store.state.timeline.growths;
         const jobs = store.state.timeline.jobs;
 
+        console.log(growths)
+        console.log(jobs)
+
+        let growth_st_str = null
+        let growth_ed_str = null
+        let job_st_str = null
+        let job_ed_str = null
+        let growth_st = null
+        let growth_ed = null
+        let job_st = null
+        let job_ed = null
+        
+        
         // 정렬은 이미 되어있다고 생각
+        if(growths.length != 0){
+          growth_st_str = growths.reduce((prev, curr) => {
+            const p = str_to_date(prev.eventDate.startDate)
+            const c = str_to_date(curr.eventDate.startDate)
+            return p <= c ? prev : curr;
+          }).eventDate.startDate
+          
+          
+          growth_ed_str = growths.reduce((prev, curr) => {
+            const p = str_to_date(prev.eventDate.endDate)
+            const c = str_to_date(curr.eventDate.endDate)
+            return c <= p ? prev : curr;
+          }).eventDate.endDate
 
-        const growth_st_str = growths.reduce((prev, curr) => {
-          const p = str_to_date(prev.eventDate.startDate)
-          const c = str_to_date(curr.eventDate.startDate)
-          return p <= c ? prev : curr;
-        }).eventDate.startDate
+          growth_st = str_to_date(growth_st_str)
+          growth_ed = str_to_date(growth_ed_str)
+        }
+        
+        console.log(jobs.count)
 
-       
-        const growth_ed_str = growths.reduce((prev, curr) => {
-          const p = str_to_date(prev.eventDate.endDate)
-          const c = str_to_date(curr.eventDate.endDate)
-          return c <= p ? prev : curr;
-        }).eventDate.endDate
+        if(jobs.count != 0){
+          job_st_str = jobs.data.reduce((prev, curr) => {
+            const p = str_to_date(prev.startDate)
+            const c = str_to_date(curr.startDate)
+            return p <= c ? prev : curr;
+          }).startDate
+  
+          job_ed_str = jobs.data.reduce((prev, curr) => {
+            const p = str_to_date(prev.endDate)
+            const c = str_to_date(curr.endDate)
+            return c <= p ? prev : curr;
+          }).endDate
+          
+          job_st = str_to_date(job_st_str)
+          job_ed = str_to_date(job_ed_str)
+        }
 
-        const job_st_str = jobs.data.reduce((prev, curr) => {
-          const p = str_to_date(prev.startDate)
-          const c = str_to_date(curr.startDate)
-          return p <= c ? prev : curr;
-        }).startDate
-
-        const job_ed_str = jobs.data.reduce((prev, curr) => {
-          const p = str_to_date(prev.endDate)
-          const c = str_to_date(curr.endDate)
-          return c <= p ? prev : curr;
-        }).endDate
-
-        const growth_st = str_to_date(growth_st_str)
-        const growth_ed = str_to_date(growth_ed_str)
-        const job_st = str_to_date(job_st_str)
-        const job_ed = str_to_date(job_ed_str)
-
+        
         // 성장일지와 취업일지를 비교해 시작 날짜와 끝 날짜 뽑아냄
-        let st = growth_st < job_st ? growth_st : job_st;
-        let ed = growth_ed > job_ed ? growth_ed : job_ed;
+        let st = null;
+        let ed = null;
+
+        if (growth_st && job_st){
+          st = growth_st < job_st ? growth_st : job_st;
+          ed = growth_ed > job_ed ? growth_ed : job_ed;
+        } else if (growth_st){
+          st = growth_st
+          ed = growth_ed
+        } else if (job_st) {
+          st = job_st
+          ed = job_ed
+        } else {
+          const today = new Date()
+          st = addDays(today, -3)
+          ed = addDays(today, 3)
+        }
+
 
         // 시작날짜는 일요일부터, 끝나는 날짜는 토요일까지 될수 있도록
         // 날짜 변경하기
@@ -237,10 +266,6 @@ export default {
             const num = 6 - ed.getDay();
             ed = addDays(ed, num);
         }
-
-        // 테스트 (통)
-        // console.log(st.toLocaleDateString());
-        // console.log(ed.toLocaleDateString());
 
         // 최소 날짜와 최대 날짜 사이 일주일 단위로 끊기
         let new_date = st;
@@ -273,7 +298,7 @@ export default {
                     push_date.sat = target;
                 }
             }
-
+            
             // 성장여정 쪼개기
             for(let i=0; i<growths.length; i++){
               const sd = str_to_date(growths[i].eventDate.startDate);

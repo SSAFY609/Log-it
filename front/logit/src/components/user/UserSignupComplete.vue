@@ -36,6 +36,7 @@ export default {
         email: props.user.email,
         pw:props.user.password,
       }
+      console.log(user)
       store.dispatch('login', user);
     }
     return {
