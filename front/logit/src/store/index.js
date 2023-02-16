@@ -38,7 +38,7 @@ export default createStore({
     },
     GET_USER(state, payload) {
       state.loginUser = payload;
-      console.log(state.loginUser);
+      // console.log(state.loginUser);
       router.push({ name: "ProfilePage" });
     },
     GET_USER_ONLY(state, payload){
@@ -92,7 +92,7 @@ export default createStore({
         method: "POST",
         data: user,
       }).then((res) => {
-        console.log(res.data)
+        // console.log(res.data)
         if(res.data == 'success'){
           router.push({ name: "UserSignupComplete" });
         }
@@ -159,7 +159,7 @@ export default createStore({
           if (res.data == "success") {
             dispatch("getUser");
           }
-          console.log(res.data)
+          // console.log(res.data)
         })
         .catch((err) => { 
           console.log(err);
@@ -175,10 +175,10 @@ export default createStore({
           if (res.data.result == "사용자 없음") {
             return
           }       
-            dispatch("getUser");
+          dispatch("getUser");
         })
         .catch((err) =>{ 
-        alert("유저 정보 업데이트 실패해쓰어 ~~")
+        // alert("유저 정보 업데이트 실패해쓰어 ~~")
           console.log(err);
         })
     },
@@ -206,10 +206,9 @@ export default createStore({
 
     // 초기에 초대된 이벤트가 있는지 표시
     getMyInvitation({commit}){
-      console.log('이건 초대 이벤트 확인임')
       axiosConnector.get(`growth/invitation`
       ).then((res)=>{
-        console.log(res.data)
+        // console.log(res.data)
         commit('GET_MY_INVITATION', res.data)
       }).catch((err)=>{
         console.log(err)

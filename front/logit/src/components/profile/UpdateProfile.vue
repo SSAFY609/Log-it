@@ -161,17 +161,23 @@ export default {
     //  state.defaultImage : 숫자(디즈니)
     const updateUser = () => {
       // 숫자(디즈니)일 경우
-      if (typeof (state.image) == 'string') {
-        const formData = new FormData();
-        formData.append("defaultImage", state.defaultImage);
-        store.dispatch("uploadImage", formData);
-      // 파일일 경우
-      } else { 
-        const formData = new FormData();
-        formData.append('multipartFile', state.image );
-        store.dispatch("uploadFile", formData);
+      if(loginUser.image != state.image){
+        if (typeof (state.image) == 'string') {
+          const formData = new FormData();
+          formData.append("defaultImage", state.defaultImage);
+          store.dispatch("uploadImage", formData);
+        // 파일일 경우
+        } else { 
+          const formData = new FormData();
+          formData.append('multipartFile', state.image );
+          store.dispatch("uploadFile", formData);
+        }
       }
-
+      const user = {
+        name: state.name,
+        studentNo: state.studentNo,
+      }
+      store.dispatch('updateUser', user)
     };
 
     // 프로필 이미지 선택 창 나오게 해줌 

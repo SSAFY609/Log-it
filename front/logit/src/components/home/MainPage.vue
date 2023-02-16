@@ -38,12 +38,9 @@
                :src="require('../../assets/images/노트북.png')"
         />
       </div>
-      <!-- <div class="post-it">포스트잇이얌</div>
-      <h1>아이고 안녕하십니까1111111</h1>
-      <h1>아이고 안녕하십니까222222</h1>
-      <h1>아이고 안녕하십니까3333333</h1>
-      <h1>아이고 안녕하십니까444444</h1>
-      <h1>아이고 안녕하십니까555555</h1> -->
+      <div class="post-it">
+        으악
+      </div>
     </div>
   </div>
 </template>
@@ -211,12 +208,12 @@ export default {
 
 .post-it {
   background-color: yellow;
-  z-index: 100;
+  z-index: 200;
   height: 300px;
   width: 300px;
   position: relative;
-  right: 500px;
-  transition: all 1s;
+  /* right: 500px;
+  transition: all 1s; */
 }
 
 /* h1 {
@@ -260,7 +257,10 @@ export default {
   .discription_box {
     margin-top: 70px;
     height: 2600px;
-    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* justify-content: center; */
   }
   h1 {
     text-align: center;
@@ -296,6 +296,7 @@ export default {
     justify-content: center;
     margin-top: 50px;
     position: sticky;
+    z-index: 100;
     top: 0;
   }
   .laptop_img {
