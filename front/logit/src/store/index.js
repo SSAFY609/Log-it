@@ -4,27 +4,20 @@ import router from "@/router";
 import axiosConnector from "@/utils/axios-connector";
 import axiosConnectorFormData from "@/utils/axios-connector-formData";
 
-// import { useRouter } from "vue-router";
-// import temp from './modules/temp.js'
-// import event from './modules/event.js'
-// import timeline from './modules/timeline.js'
-
-// const getToken = () => {
-//   const token = sessionStorage.getItem("token");
-//   return {
-//     Authorization: `bearer ${token}`,
-//   };
-// }; 
-
 import tempJob from './modules/tempJob.js'
 import job from './modules/job.js'
 import temp from './modules/temp.js'
 import growth from "./modules/growth.js";
 import timeline from "./modules/timeline.js";
 import search from "./modules/search.js";
+import statistics from "./modules/statistics.js";
 
 const baseURL = "https://i8a609.p.ssafy.io/api/user";
 // const baseURL = "http://localhost:9090/user";
+
+import { useToast } from "vue-toastification";
+const toast = useToast()
+
 export default createStore({
 
   state: {
@@ -41,7 +34,8 @@ export default createStore({
       sessionStorage.removeItem("token");
       sessionStorage.removeItem("id");
       state.loginUser = {};
-      router.replace({name: 'MainPage'})
+      state.myInvitation = [];
+      router.push({name: 'MainPage'})
     },
     GET_USER(state, payload) {
       state.loginUser = payload;
@@ -72,11 +66,15 @@ export default createStore({
         data: user,
       }).then((res) => {
         if (res.data.result == "사용자 없음") { 
-          alert("사용자가 없습니다.")
+          toast.error("이메일을 다시 확인해주세요.", {
+            position: 'bottom-right',
+          })
           return
         }          
         if (res.data.result == "비밀번호 틀림") { 
-          alert("로그인에 실패하였습니다.")
+          toast.error("비밀번호를 다시 확인해주세요.", {
+            position: 'bottom-right',
+          })
           return
         }
         sessionStorage.setItem("token", res.data["jwt-auth-token"]);
@@ -237,5 +235,6 @@ export default createStore({
     search: search,
     job: job,
     tempJob: tempJob,
+    statistics: statistics,
   },
 });

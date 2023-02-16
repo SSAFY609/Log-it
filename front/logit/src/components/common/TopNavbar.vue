@@ -18,18 +18,22 @@
         </router-link>
       </div>
       <div v-else class="profile_box right_box_items">
-        <div @click="openProfile" class="profile_id hover_cursor ">{{loginUser.name}} 님</div>
+        <!-- <div @click="openProfile" class="profile_id hover_cursor ">{{loginUser.name}} 님</div> -->
         <div @click="openProfile" class="profile_img_box hover_cursor">
-          <v-img class="logo_img"
+          <v-img v-if="loginUser.image.length < 5" class="logo_img"
             :src="require(`../../assets/profiles/scale (${loginUser.image}).png`)"
+            height="110"
+          />    
+          <v-img v-else class="logo_img"
+            :src="loginUser.image"
             height="110"
           />    
         </div>
         <div class="profile_slider_box nosee">
           <ul>
-            <li>설정</li>
-            <li>친구목록</li>
-            <li>프로필</li>
+            <div class="login-user">{{loginUser.name}} 님</div>
+            <li @click="goTimeline">타임라인</li>
+            <li @click="goProfile">프로필</li>
             <li @click="logout">로그아웃</li>
 
           </ul>
@@ -46,6 +50,7 @@
 
 import { computed } from '@vue/reactivity'
 import { useStore } from 'vuex'
+import router from '@/router'
 
 export default {
   name: 'TopNavbar',
@@ -119,13 +124,22 @@ export default {
 
       target.classList.toggle('nosee')
     }
+
+    const goProfile = () => {
+      router.push({name: 'ProfilePage'})
+    }
     
+    const goTimeline = () => {
+      store.dispatch('timeline/timelineSetting')
+    }
 
     return {
       state,
       loginUser,
       openSidebar,
       openProfile,
+      goProfile,
+      goTimeline,
     }
     
   },
@@ -265,6 +279,21 @@ export default {
     
 
   }
+
+  .login-user{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    height: 40px;
+    width:140px;
+    list-style-type: none;
+    border-radius: 4px;
+    padding: 0 20px;
+    background: rgba(218, 218, 218, 0.419);
+    font-family: appleM;
+  }
+
+
   li {
     display: flex;
     justify-content: left;

@@ -51,6 +51,10 @@ import { reactive, onMounted } from "@vue/runtime-core";
 import axiosConnectorFormData from "@/utils/axios-connector-formData";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
+import { useToast } from "vue-toastification";
+const toast = useToast()
+
+
 export default {
   name: "CheckPassword",
   setup() {
@@ -80,10 +84,16 @@ export default {
              router.push({ name: "UpdatePassword" });  
            }
           if (res.data == "비밀번호 틀림") { 
-              alert("비밀번호를 다시 입력해주세요.")
+              toast.error("비밀번호를 다시 입력해주세요.",{
+                timeout: 2000,
+                position: 'bottom-right'
+              })
            }
            }).catch((err) => {
-              alert("비밀번호를 다시 입력해주세요.")
+              toast.error("비밀번호를 다시 입력해주세요.",{
+                timeout: 2000,
+                position: 'bottom-right'
+              })
               console.log(err);
            })
     }

@@ -28,6 +28,12 @@
         </div>
       </div>
       <div class="menu_item_box lay2 hover_cursor">
+        <div class="menu_icon_box lay3" @click="btnClicked('TimeLine')">
+          <v-icon class="menu_icon f_icon">mdi-timeline-clock</v-icon>  
+          <div class="menu_text_box f_darkgray lay3">타임라인</div>
+        </div>
+      </div>
+      <div class="menu_item_box lay2 hover_cursor">
         <div class="menu_icon_box lay3" @click="btnClicked('GrowthList')">
           <v-icon class="menu_icon f_icon">mdi-list-status</v-icon>  
           <div class="menu_text_box f_darkgray lay3">성장일지</div>
@@ -37,12 +43,6 @@
         <div class="menu_icon_box lay3" @click="btnClicked('JobList')">
           <v-icon class="menu_icon f_icon">mdi-briefcase</v-icon>  
           <div class="menu_text_box f_darkgray lay3">취업일지</div>
-        </div>
-      </div>
-      <div class="menu_item_box lay2 hover_cursor">
-        <div class="menu_icon_box lay3" @click="btnClicked('ProfilePage')">
-          <v-icon class="menu_icon f_icon">mdi-account-circle</v-icon>  
-          <div class="menu_text_box f_darkgray lay3">프로필</div>
         </div>
       </div>
       <div class="menu_item_box lay2 hover_cursor">
@@ -126,7 +126,14 @@ export default {
       target.firstChild.classList.toggle('btn_clicked2')
       target.lastChild.classList.toggle('btn_clicked2')
 
-      this.$router.push({name: select})
+      if(select == 'StatisticsPage'){
+        this.$store.dispatch('statistics/getMyStatistics');
+      }else if(select == 'TimeLine'){
+        this.$store.dispatch('timeline/timelineSetting')
+      }else{
+        this.$router.push({name: select})
+      }
+
     }
   },
 }
