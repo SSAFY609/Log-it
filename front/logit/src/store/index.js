@@ -215,6 +215,17 @@ export default createStore({
       })
     },
 
+    // 초대 수락
+    acceptInvite({dispatch}, data){
+      axiosConnector.put(`growth/invitation/${data.growthId}/${data.accept}`
+      ).then(()=>{
+          // console.log(res.data)
+        dispatch('getMyInvitation')
+      }).catch((err)=>{
+          console.log(err)
+      })
+    },
+
     // sidebar 열기
     openSidebar({commit}){
       commit('OPEN_SIDEBAR');

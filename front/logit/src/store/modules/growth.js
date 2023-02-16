@@ -293,17 +293,6 @@ const growth = {
                 console.log(err)
             })
         },
-        // 초대 수락
-        acceptInvite(context, data){
-            console.log('??')
-            console.log(data)
-            axiosConnector.put(`growth/invitation/${data.growthId}/${data.accept}`
-            ).then((res)=>{
-                console.log(res.data)
-            }).catch((err)=>{
-                console.log(err)
-            })
-        },
         
         // 이벤트 첫 세팅 ㄱㄱ
         growthSetting({dispatch}, growthId){

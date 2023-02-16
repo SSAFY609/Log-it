@@ -35,11 +35,8 @@
       <!-- <div @click="makeToast({category: '어쩌고', growthId: 0})">클릭!</div> -->
       <div class="img_box lay1">
         <v-img class="laptop_img"
-               :src="require('../../assets/images/노트북.png')"
+               :src="require('../../assets/images/노트북합.png')"
         />
-      </div>
-      <div class="post-it">
-        으악
       </div>
     </div>
   </div>
@@ -52,6 +49,8 @@ import { onMounted, onBeforeUnmount, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useToast } from 'vue-toastification';
 import mycomp from '../common/InviteAlert.vue'
+
+
 
 export default {  
     name: 'MainPage',
@@ -171,14 +170,14 @@ export default {
       if(currentScrollPosition < 0){
         return
       }
-      if (currentScrollPosition > 0 && currentScrollPosition < 500){
+      if (currentScrollPosition > 0 && currentScrollPosition < 520){
         const img = document.querySelector('.img_box')
         img.style.width = `${1300 + currentScrollPosition * 0.5}px`
       } 
     }
 
     const acceptInvite = (data) => {
-        store.dispatch('growth/acceptInvite', data)
+        store.dispatch('acceptInvite', data)
     }
 
     const goTimeline = () => {
@@ -207,13 +206,19 @@ export default {
 <style scoped>
 
 .post-it {
-  background-color: yellow;
+  /* background-color: yellow; */
   z-index: 200;
-  height: 300px;
-  width: 300px;
-  position: relative;
-  /* right: 500px;
-  transition: all 1s; */
+  height: 600px;
+  width: 1000px;
+  position: fixed;
+  top: 170px
+  /* right: 500px; */
+  /* transition: all 1s; */
+}
+
+.post-it>img{
+  height: 100%;
+  width: 100%;
 }
 
 /* h1 {
@@ -256,7 +261,7 @@ export default {
   }
   .discription_box {
     margin-top: 70px;
-    height: 2600px;
+    height: 2900px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -298,6 +303,7 @@ export default {
     position: sticky;
     z-index: 100;
     top: 0;
+    /* overflow: hidden; */
   }
   .laptop_img {
     margin: 0 auto;
@@ -325,4 +331,11 @@ export default {
   text-align: center;
 }
 
+.post {
+  position: relative;
+  height: 1px;
+  width: 100px;
+  top: 1000px;
+  /* background: red; */
+}
 </style>
