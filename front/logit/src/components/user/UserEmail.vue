@@ -15,7 +15,7 @@
         >
         </v-text-field>
         <span class="signup-email-chkText"></span>
-        <div @click="signupEmail" class="signup-button b_lightgray_l">
+        <div @click="signupEmail" class="signup-button">
           <div>다음</div>
         </div>
         <div class="signup-link">
@@ -31,6 +31,8 @@
 
 <script>
 import axios from 'axios';
+import { useToast } from 'vue-toastification';
+const toast = useToast()
 
 export default {
   name: "UserEmail",
@@ -52,13 +54,19 @@ export default {
     // 계정생성 - 이메일
     signupEmail() {
       if (!this.email.trim()) {
-        alert("입력된 이메일 주소가 없습니다.");
+        toast.error("입력된 이메일 주소가 없습니다.",{
+          position: 'bottom-right',
+          timeout: 2000
+        });
         return;
       }
       if (
         !document.querySelector(".signup-button").classList.contains("color")
       ) {
-        alert("이메일 주소를 확인해주세요.");
+        toast.error("사용할 수 없는 이메일입니다.",{
+          position: 'bottom-right',
+          timeout: 2000
+        });
         return;
       }
       this.$emit("updateUserEmail", this.email);
@@ -81,12 +89,13 @@ export default {
           }).then(()=>{
             this.email_help = `${this.email}은 사용 가능한 이메일입니다.`;
             document.querySelector(".signup-email-chkText").innerHTML =this.email_help;
+            document.querySelector(".signup-button").classList.add("color");
           }).catch(()=>{
             this.email_help = `${this.email}은 사용할 수 없는 이메일입니다.`;
             document.querySelector(".signup-email-chkText").innerHTML =this.email_help;
+            document.querySelector(".signup-button").classList.remove("color");
           })
-        document.querySelector(".signup-button").classList.add("color");
-      } else {
+        } else {
         document.querySelector(".signup-email-chkText").innerHTML = "";
         document.querySelector(".signup-button").classList.remove("color");
       }
@@ -151,6 +160,7 @@ export default {
   width: 380px;
   height: 60px;
   border-radius: 10px;
+  background: #EDEDED;;
 }
 .signup-container {
   display: flex;

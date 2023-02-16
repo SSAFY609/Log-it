@@ -12,7 +12,8 @@
           <div class="writer">
             <div>
               <v-avatar style="margin-right: 10px">
-                <v-img :src="require(`@/assets/profiles/scale (${progress.user.image}).png`)"></v-img>
+                <v-img v-if="progress.user.image.length < 5" :src="require(`@/assets/profiles/scale (${progress.user.image}).png`)"></v-img>
+                <v-img v-else :src="img_to_url(progress.user.image)"></v-img>
               </v-avatar>
               {{ progress.user.name }}
             </div>
@@ -39,7 +40,8 @@
           <div class="writer">
             <div>
               <v-avatar style="margin-right: 10px">
-                <v-img :src="require(`@/assets/profiles/scale (${progress.user.image}).png`)"></v-img>
+                <v-img v-if="progress.user.image.length < 5" :src="require(`@/assets/profiles/scale (${progress.user.image}).png`)"></v-img>
+                <v-img v-else :src="img_to_url(progress.user.image)"></v-img>
               </v-avatar>
               {{ progress.user.name }}
             </div>
@@ -75,7 +77,7 @@ import 'swiper/css';
 import 'swiper/css/effect-cards';
 
 export default {
-    name: 'ProgressDetail',
+  name: 'ProgressDetail',
     components: {
       QuillEditor,
       Swiper,
@@ -105,7 +107,10 @@ export default {
       },
       unlike(progressId) {
         this.$store.dispatch('growth/unlikeProgress', progressId)
-      }
+      },
+      img_to_url(src) {
+          return `https:/logit-s3.s3.ap-northeast-2.amazonaws.com/${src}`
+        }
     },
     created(){
     }

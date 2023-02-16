@@ -58,7 +58,7 @@ export default {
         },
         create() {
             if (!this.select_category) {
-                toast.error('선택된 카테고리가 없습니다', {
+                toast.error('카테고리를 선택해 주세요.', {
                     timeout: 2000,
                     position: 'bottom-right',
                     // icon: {
@@ -67,7 +67,7 @@ export default {
                     // }
                 })
             } else if (!this.start_date || !this.end_date) {
-                toast.error('선택된 날짜가 없습니다.', {
+                toast.error('날짜를 선택해 주세요.', {
                     timeout: 2000,
                     position: 'bottom-right',
                 })
