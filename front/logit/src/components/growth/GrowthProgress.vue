@@ -68,7 +68,7 @@
             <div class="member-list">
               <v-avatar>
                 <v-img v-if="growth.user.image.length < 5" :src="require(`@/assets/profiles/scale (${growth.user.image}).png`)"></v-img>
-                <v-img v-else :src="loginUser.image"></v-img>
+                <v-img v-else :src="img_to_url(growth.user.image)"></v-img>
               </v-avatar>
               <span style="margin: 0px 10px; width:87.64px">{{ growth.user.name }}</span>
               <v-chip color="#FF0A54">호스트</v-chip>

@@ -5,8 +5,8 @@
       <div v-for="item in allJob.data" :key="item" class="event hover_cursor" @click="goJobDetail(item.id)">
         <div class="event-title">{{ item.companyName }}</div>
         <div class="event-date">{{ date_to_str(item.startDate, item.endDate) }}</div>
-        <v-chip v-if="item.resultStatus=='완료'" variant="outlined" color="rgb(27, 182, 40)">완료</v-chip>
-        <v-chip v-else variant="outlined" color="rgb(245, 21, 107)">진행중</v-chip>
+        <v-chip v-if="item.resultStatus == 'INPROGRESS'" variant="outlined" color="rgb(245, 21, 107)">진행중</v-chip>
+        <v-chip v-else variant="outlined" color="rgb(27, 182, 40)">완료</v-chip>
       </div>
       <!-- <router-link :to="{name: 'JobProgress', params: {jobId: job.jobId}}" class="event hover_cursor" v-for="job in jobs" :key="job">
         <div class="event-title">{{ job.title }}</div>

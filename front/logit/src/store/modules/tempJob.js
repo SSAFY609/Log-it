@@ -16,6 +16,7 @@ const tempJob = {
     mutations: {
         GET_ALL_JOB(state, payload){
             state.allJob = payload
+            // console.log(payload)
             // router.push({name: 'JobList'})
         },
 
@@ -32,7 +33,7 @@ const tempJob = {
         getAllJob({commit}) {
             axiosConnector.get(`job`
             ).then((res)=> {
-                console.log('getAllJob 성공')
+                // console.log('getAllJob 성공')
                 commit('GET_ALL_JOB', res.data)
             }).catch((err)=>{
                 console.log(err)
