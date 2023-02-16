@@ -28,6 +28,7 @@ export default createStore({
   mutations: {
     LOGIN(state, payload) {
       state.loginUser = payload
+      // console.log(payload)
     },
     LOG_OUT(state) {
       sessionStorage.removeItem("token");
