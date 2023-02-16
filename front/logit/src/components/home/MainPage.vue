@@ -57,7 +57,7 @@ export default {
     setup() {
       const store = useStore()
       const toast = useToast()
-      
+      window.scrollTo(0,0)
       // let observe = new IntersectionObserver((e)=>{
       //   e.forEach((box)=>{
       //     if(box.isIntersecting){
@@ -299,7 +299,7 @@ export default {
     width: 1300px;
     display: flex;
     justify-content: center;
-    margin-top: 50px;
+    /*margin-top: 50px;*/
     position: sticky;
     z-index: 100;
     top: 0;
