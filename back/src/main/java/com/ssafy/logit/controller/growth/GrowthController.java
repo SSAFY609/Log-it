@@ -107,7 +107,6 @@ public class GrowthController {
     @PostMapping("/write")
     public ResponseEntity<String> registProgress(@RequestBody ProgressDto progressDto, @RequestAttribute String email) throws Exception {
         try {
-            System.out.println("dddddddddddddddddddddddddddddddddddddddddddddddd");
             String result = growthService.registProgress(progressDto, email);
             return new ResponseEntity<String>(result, HttpStatus.OK);
         } catch (Exception e) {

@@ -340,7 +340,7 @@ public class GrowthService {
             Date start = new SimpleDateFormat("yyyy-MM-dd").parse(startDate.toString());
             Date end = new SimpleDateFormat("yyyy-MM-dd").parse(endDate.toString());
 
-            long diffDays = (end.getTime() - start.getTime()) / 1000 / (24 * 60 * 60) + 1; // 총 일 수
+            long diffDays = (end.getTime() - start.getTime()) / 1000 / (24 * 60 * 60); // 총 일 수
 
             Log log = new Log();
             log.setIdx(0);
