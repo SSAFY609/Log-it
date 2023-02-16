@@ -123,7 +123,7 @@ export default {
                 datasets: [
                     {
                         // backgroundColor: 'rgba(255,185,185, 0.7)',
-                        backgroundColor: ['red', 'green', 'gold'],
+                        backgroundColor: ['#fbf8cc', '#fde4cf', '#ffcfd2', '#f1c0e8', '#cfbaf0', '#a3c4f3', '#90dbf4', '#8eecf5', '#98f5e1', '#b9fbc0'],
                         data: [],
                     }
                 ],
@@ -182,7 +182,7 @@ export default {
     flex-direction: column;
     align-items: center;
     /* justify-content: center; */
-    padding: 150px 100px;
+    padding: 140px 100px;
 }
 
 .title{
@@ -399,7 +399,7 @@ export default {
 
 .ct-subtitle{
     font-size: 18px;
-    margin-bottom: 30px;
+    margin-bottom: 80px;
 }
 
 .ct-chart{

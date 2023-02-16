@@ -176,7 +176,7 @@ export default {
         store.dispatch('growth/growthSetting', id)
       };
       const goJob = (id) => {
-        store.dispatch('job/jobSetting', id)
+        store.dispatch('tempJob/jobSetting', id)
       };
       
       onBeforeMount(()=>{
