@@ -94,9 +94,10 @@
     </div>
     <div class="ct-box">
         <div class="ct-title">전체 코딩테스트 유형 그래프</div>
+        <div class="ct-subtitle">전체 사용자들이 기록한 모든 회사의 알고리즘 유형 횟수입니다.</div>
         <div class="ct-content">
             <div class="ct-chart">
-                <Bar :chartData="myData"></Bar>
+                <Bar :data="myData" :style="myStyle" :options="myOption"></Bar>
             </div>
         </div>
     </div>
@@ -117,22 +118,29 @@ export default {
     },
     data(){
         return {
-            // myData: {
-            //     labels:  [],
-            //     datasets: [
-            //         {
-            //             backgroundColor: 'rgba(255,185,185, 0.7)',
-            //             // background: 'linear-gradient(90deg, rgba(255,185,185,1) 0%, rgba(255,133,132,1) 24%, rgba(255,85,117,1) 67%)',
-            //             data: [],
-            //         }
-            //     ],
-            // },
-            myData: {},
-            options: {
+            myData: {
+                labels:  [],
+                datasets: [
+                    {
+                        // backgroundColor: 'rgba(255,185,185, 0.7)',
+                        backgroundColor: ['red', 'green', 'gold'],
+                        data: [],
+                    }
+                ],
+            },
+            // myData: {},
+            myOption: {
+                responsive: false,
                 gridLines: {
                     display: false,
                 }
             },
+            myStyle: {
+                height: '100%',
+                position: 'relative',
+                width: '100%'
+
+            }
         }
     },
     computed: {
@@ -140,25 +148,26 @@ export default {
         ...mapState('statistics', ['ing_cnt', 'complete_cnt', 'companyRank', 'myProgress', 'algorithm', 'algorithm_cnt'])
     },
     methods: {
-        setChart() {
-            let data = this.algorithm_cnt;
-            let datasets = []
-            datasets.push({
-                backgroundColor: 'pink',
-                data : data
-            })
+        // setChart() {
+        //     let data = this.algorithm_cnt;
+        //     let datasets = []
+        //     datasets.push({
+        //         backgroundColor: 'pink',
+        //         data : data
+        //     })
 
-            this.myData = {
-                labels: this.algorithm,
-                datasets: datasets
-            }
-            console.log(this.myData)
-            this.renderChart(this.myData, this.options)
-        }
+        //     this.myData = {
+        //         labels: this.algorithm,
+        //         datasets: datasets
+        //     }
+        //     console.log(this.myData)
+        //     this.renderChart(this.myData, this.options)
+        // }
     },
 
-    mounted() {
-        this.setChart()
+    created() {
+        this.myData.labels = this.algorithm;
+        this.myData.datasets[0].data = this.algorithm_cnt
     }
 
 }
@@ -373,6 +382,7 @@ export default {
 
 .ct-content {
     width: 97%;
+    height: 600px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -385,11 +395,19 @@ export default {
 .ct-title{
     font-size: 40px;
     font-family: appleB;
+}
+
+.ct-subtitle{
+    font-size: 18px;
     margin-bottom: 30px;
 }
 
 .ct-chart{
-    width: 70%;
+    width: 90%;
+    height: 95%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
 }
 

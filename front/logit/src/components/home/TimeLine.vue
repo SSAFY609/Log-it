@@ -1,7 +1,7 @@
 <template>
   <div style="display:flex">
     <div class="container">
-      <div v-if="sidebar" style="width:260px"></div>
+      <!-- <div v-if="sidebar" style="width:260px"></div> -->
       <div class="box">
           <h1 class="welcome">
             <!-- <img class="cal" :src="require(`@/assets/images/cal.png`)" /> -->
@@ -52,44 +52,44 @@
             <v-btn color="#717171" variant="text" size="60" @click="prevSlide(0)" icon="mdi-chevron-right"></v-btn>
             <v-btn color="#717171" variant="text" size="60" @click="goslide(-1)" icon="mdi-chevron-double-right"></v-btn>
           </div>
-          <div class="progress" style="display:flex; justify-content:center"> 
-        <div>
-          <div>전체 진행도</div>
-          <v-progress-circular
-            :rotate="360"
-            :size="70"
-            :width="15"
-            :model-value="value"
-            color="#EF476F"
-          >
-            {{ value }}
-          </v-progress-circular>
-        </div>
-        <div>
-          <div>성장 진행도</div>
-          <v-progress-circular
-            :rotate="360"
-            :size="70"
-            :width="15"
-            :model-value="value1"
-            color="#FF9770"
-          >
-            {{ value1 }}
-          </v-progress-circular>
-        </div>
-        <div>
-          <div>취업 진행도</div>
-          <v-progress-circular
-            :rotate="360"
-            :size="70"
-            :width="15"
-            :model-value="value2"
-            color="#06D6A0"
-          >
-            {{ value2 }}
-          </v-progress-circular>
-        </div>
-      </div>
+          <!-- <div class="progress" style="display:flex; justify-content:center"> 
+            <div>
+              <div>전체 진행도</div>
+              <v-progress-circular
+                :rotate="360"
+                :size="70"
+                :width="15"
+                :model-value="value"
+                color="#EF476F"
+              >
+                {{ value }}
+              </v-progress-circular>
+            </div>
+            <div>
+              <div>성장 진행도</div>
+              <v-progress-circular
+                :rotate="360"
+                :size="70"
+                :width="15"
+                :model-value="value1"
+                color="#FF9770"
+              >
+                {{ value1 }}
+              </v-progress-circular>
+            </div>
+            <div>
+              <div>취업 진행도</div>
+              <v-progress-circular
+                :rotate="360"
+                :size="70"
+                :width="15"
+                :model-value="value2"
+                color="#06D6A0"
+              >
+                {{ value2 }}
+              </v-progress-circular>
+            </div>
+          </div> -->
       </div>
       
     </div>
