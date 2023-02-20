@@ -65,16 +65,30 @@ Log-it의 메인 기능 중 하나인 '타임라인' 기능에 대하여
 
 #### (2) 체험단
 
-
 <img width="70%" src="https://user-images.githubusercontent.com/59721896/220057733-aa749813-5bcf-44d4-a40e-1fbd46841788.png"/>
 
 <img width="70%" src="https://user-images.githubusercontent.com/59721896/220057757-37f167e1-6f30-42b0-bee0-767fb5d3e578.png"/>
 
 
-
 체험단을 모집하고, 베타 버전 체험 후기를 받아
 
 기능을 추가 및 수정하여 사용자들의 피드백을 반영했습니다.
+
+<br>
+
+---
+
+<br>
+<br>
+
+### 주요 화면
+
+|        |        |
+| ------ | ------ |
+|    <img src="https://user-images.githubusercontent.com/59721896/220106829-39852f2f-d220-4265-a919-0ced79b46971.png">    |    <img src="https://user-images.githubusercontent.com/59721896/220107195-65eb367a-7972-4020-b663-02f505731362.png">    |
+|    <img src="https://user-images.githubusercontent.com/59721896/220107977-1375385a-36f4-4d89-b31d-33c5348c5e3e.png">    |    <img src="https://user-images.githubusercontent.com/59721896/220108925-7f1437be-b2be-42db-8971-472f47f3aa20.png">    |
+|    <img src="https://user-images.githubusercontent.com/59721896/220109064-0e678de5-ef06-411e-bf3c-6f088131dfbc.png">    |    <img src="https://user-images.githubusercontent.com/59721896/220109116-c9199710-99b1-48a8-b807-ea1d2516ded6.png">    |
+|    <img src="https://user-images.githubusercontent.com/59721896/220109650-545b0608-0a1b-42cb-84d6-910361531461.png">    |    <img src="https://user-images.githubusercontent.com/59721896/220109690-7302aec9-dd97-48c4-969c-da3a8fa3317e.png">    |
 
 <br>
 
