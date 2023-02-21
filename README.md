@@ -62,7 +62,7 @@ Log-it의 메인 기능 중 하나인 '타임라인' 기능에 대하여
 
 기능을 추가 및 수정하여 사용자들의 피드백을 반영했습니다.
 
-[체험단 진행 내용 자세히 보기]()
+[체험단 진행 내용 자세히 보기](https://github.com/SSAFY609/Log-it/blob/master/etc/%EC%B2%B4%ED%97%98%EB%8B%A8.pdf)
 
 <br>
 <br>
@@ -82,5 +82,19 @@ Log-it의 메인 기능 중 하나인 '타임라인' 기능에 대하여
 |    <div align=center> `통합 검색` </div>    |    <div align=center> `개발자(오픈소스) 페이지` </div>    |
 
 <br>
+<br>
+<br>
+
+# 아키텍처
+
+<img width="70%" src="https://user-images.githubusercontent.com/59721896/220219652-8c3824ac-9e0b-4e3f-b478-60bcc4530b6a.png">
+
+<br>
+<br>
+<br>
+
+# ERD
+
+<img width="70%" src="https://user-images.githubusercontent.com/59721896/220218382-09c6d0ff-ce21-4827-b738-5defdbbaf6c2.png">
 
 </div>
