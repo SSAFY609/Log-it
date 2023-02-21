@@ -36,13 +36,25 @@ Log-it은 SSAFY 퇴실 5분 전, 우리들의 성장 여정을 기록하는 서�
 <br>
 <br>
 
+# 개발 환경
+
+**FE** `Vue3.0`
+
+**BE** `Java 8` `Spring 2.7.7` `JPA` `S3` `MySQL` `Swagger` `Postman`
+
+**CI/CD** `AWS` `EC2` `RDS` `Docker` `Jenkins` `Nginx`
+
+<br>
+<br>
+<br>
+
 # 프로젝트 특징
 
 <br>
 
 #### `(1) Log-it의 타임라인 오픈소스`
 
-<img width="70%" src="https://user-images.githubusercontent.com/59721896/220053174-73146b02-7e4a-48d4-9d92-0871a2c634ff.png"/>
+<img width="50%" src="https://user-images.githubusercontent.com/59721896/220053174-73146b02-7e4a-48d4-9d92-0871a2c634ff.png"/>
 
 <br>
 
@@ -56,13 +68,25 @@ Log-it의 메인 기능 중 하나인 '타임라인' 기능에 대하여
 
 #### `(2) 체험단`
 
-<img width="70%" src="https://user-images.githubusercontent.com/59721896/220216769-dfef2fc2-b801-4420-b75e-72622a6921e2.png"/>
+<img width="50%" src="https://user-images.githubusercontent.com/59721896/220216769-dfef2fc2-b801-4420-b75e-72622a6921e2.png"/>
 
 체험단을 모집하고, 베타 버전 체험 후기를 받아
 
 기능을 추가 및 수정하여 사용자들의 피드백을 반영했습니다.
 
 [체험단 진행 내용 자세히 보기](https://github.com/SSAFY609/Log-it/blob/master/etc/%EC%B2%B4%ED%97%98%EB%8B%A8.pdf)
+
+<br>
+
+#### `(3) 설문`
+
+<img width="50%" src="https://user-images.githubusercontent.com/59721896/220222028-6cc67ff5-1a13-4c82-969e-71c9eba875ea.png">
+
+설문을 진행하여 서비스의 필요성과 이용 가능성에 대해 조사했고,
+
+Log-it 서비스의 발전 방향에 대해 고민했습니다.
+
+[설문 진행 내용 자세히 보기](https://github.com/SSAFY609/Log-it/blob/master/etc/%EC%84%A4%EB%AC%B8.pdf)
 
 <br>
 <br>
