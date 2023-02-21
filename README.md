@@ -122,3 +122,9 @@ Log-it 서비스의 발전 방향에 대해 고민했습니다.
 <img width="70%" src="https://user-images.githubusercontent.com/59721896/220218382-09c6d0ff-ce21-4827-b738-5defdbbaf6c2.png">
 
 </div>
+
+---
+
+#### ✉ Contact
+
+logitforssafy@gmail.com
