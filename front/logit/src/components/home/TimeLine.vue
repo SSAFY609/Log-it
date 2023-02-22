@@ -52,44 +52,6 @@
             <v-btn color="#717171" variant="text" size="60" @click="prevSlide(0)" icon="mdi-chevron-right"></v-btn>
             <v-btn color="#717171" variant="text" size="60" @click="goslide(-1)" icon="mdi-chevron-double-right"></v-btn>
           </div>
-          <!-- <div class="progress" style="display:flex; justify-content:center"> 
-            <div>
-              <div>전체 진행도</div>
-              <v-progress-circular
-                :rotate="360"
-                :size="70"
-                :width="15"
-                :model-value="value"
-                color="#EF476F"
-              >
-                {{ value }}
-              </v-progress-circular>
-            </div>
-            <div>
-              <div>성장 진행도</div>
-              <v-progress-circular
-                :rotate="360"
-                :size="70"
-                :width="15"
-                :model-value="value1"
-                color="#FF9770"
-              >
-                {{ value1 }}
-              </v-progress-circular>
-            </div>
-            <div>
-              <div>취업 진행도</div>
-              <v-progress-circular
-                :rotate="360"
-                :size="70"
-                :width="15"
-                :model-value="value2"
-                color="#06D6A0"
-              >
-                {{ value2 }}
-              </v-progress-circular>
-            </div>
-          </div> -->
       </div>
       
     </div>
@@ -110,36 +72,6 @@ export default {
       Swiper, 
       SwiperSlide,
   },
-  data() {
-      return {
-        interval: {},
-        interval1: {},
-        interval2: {},
-        value: 0,
-        value1: 0,
-        value2: 0,
-      }
-  },
-  mounted () {
-      this.interval = setInterval(() => {
-        if(this.value == 70){
-          return;
-        }
-        this.value += 1
-      }, 30) 
-      this.interval1 = setInterval(() => {
-        if(this.value1 == 30){
-          return;
-        }
-        this.value1 += 1
-      }, 30) 
-      this.interval2 = setInterval(() => {
-        if(this.value2 == 45){
-          return;
-        }
-        this.value2 += 1
-      }, 30) 
-    },
   setup(){
       const state = reactive({
           date: [],
@@ -183,9 +115,6 @@ export default {
         const growths = store.state.timeline.growths;
         const jobs = store.state.timeline.jobs;
 
-        console.log(growths)
-        console.log(jobs)
-
         let growth_st_str = null
         let growth_ed_str = null
         let job_st_str = null
@@ -215,8 +144,6 @@ export default {
           growth_ed = str_to_date(growth_ed_str)
         }
         
-        console.log(jobs.count)
-
         if(jobs.count != 0){
           job_st_str = jobs.data.reduce((prev, curr) => {
             const p = str_to_date(prev.startDate)

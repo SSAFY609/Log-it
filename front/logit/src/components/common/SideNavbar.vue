@@ -58,14 +58,14 @@
 
     <div class="option_menu lay3">
 
-      <router-link :to="{name: 'ProfilePage'}" class="menu_item_box2 lay2 hover_cursor">
+      <div @click="goProfile" class="menu_item_box2 lay2 hover_cursor">
         <div class="item_container lay1">
           <div class="menu_icon_box2 lay3">
             <v-icon class="menu_icon2 f_icon">mdi-clipboard-account</v-icon>  
           </div>
           <div class="menu_text_box2 f_darkgray lay3">프로필</div>
         </div>
-      </router-link>
+      </div>
 
       <router-link :to="{name: 'DeveloperList'}" class="menu_item_box2 lay2 hover_cursor">
         <div class="item_container lay1">
@@ -134,6 +134,17 @@ export default {
         this.$router.push({name: select})
       }
 
+    },
+    goProfile() {
+      if(this.loginUser.id){
+        this.$router.push({name: 'ProfilePage'})
+      }else{
+        toast.error('로그인이 필요한 페이지입니다.', {
+          timeout: 2000,
+          position: 'bottom-right',
+        })
+        this.$router.push({name: 'UserLogin'})
+      }
     }
   },
 }

@@ -35,7 +35,6 @@ const growth = {
     },
     mutations: {
         GET_ALL_GROWTH(state, payload){
-            console.log(payload)
             state.allGrowth = payload
         },
         GET_GROWTH(state, payload){
@@ -194,7 +193,6 @@ const growth = {
         searchUser({commit}, data){
             axiosConnector.post(`growth/invite/search`, data
             ).then((res)=>{
-                console.log(res.data)
                 commit('SEARCH_USER', res.data)
             }).catch((err)=>{
                 console.log(err)
@@ -203,8 +201,7 @@ const growth = {
         // 이벤트에 회원 추가
         addGrowthUser(context, data){
             axiosConnector.post('growth/invite', data
-            ).then((res)=>{
-                console.log(res.data)
+            ).then(()=>{
                 toast.success(`${data.userName}님을 초대하였습니다.`, {
                     timeout: 2000,
                     position: 'top-center'
@@ -234,7 +231,6 @@ const growth = {
                     growthId: progress.growthId,
                     date: progress.progressDate.date
                 }
-                console.log(data)
                 dispatch('getDateProgress', data)
                 // console.log(res)
                 // 이때 res.data는 eventId
@@ -283,7 +279,6 @@ const growth = {
         likeProgress({dispatch}, data){
             axiosConnector.put(`growth/like/${data.progressId}`
             ).then(()=>{
-                console.log('성공')
                 const payload = {
                     growthId: data.growthId,
                     date: data.date

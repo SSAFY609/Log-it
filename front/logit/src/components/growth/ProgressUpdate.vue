@@ -43,10 +43,7 @@ export default {
               date: this.progress.progressDate.date
             }
           }
-          console.log(progress)
           this.$store.dispatch('growth/updateProgress', progress)
-        }else{
-          alert('내용이 똑같아!!!!!')
         }
       }
     },

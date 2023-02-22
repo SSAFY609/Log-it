@@ -35,7 +35,7 @@
       <!-- <div @click="makeToast({category: '어쩌고', growthId: 0})">클릭!</div> -->
       <div class="img_box lay1">
         <v-img class="laptop_img"
-               :src="require('../../assets/images/노트북합.png')"
+               :src="require('../../assets/images/main.png')"
         />
       </div>
     </div>
@@ -172,7 +172,7 @@ export default {
       }
       if (currentScrollPosition > 0 && currentScrollPosition < 520){
         const img = document.querySelector('.img_box')
-        img.style.width = `${1300 + currentScrollPosition * 0.5}px`
+        img.style.width = `${1400 + currentScrollPosition * 0.5}px`
       } 
     }
 
@@ -296,13 +296,13 @@ export default {
     align-items: center;
   }
   .img_box {
-    width: 1300px;
+    width: 1400px;
     display: flex;
     justify-content: center;
     /*margin-top: 50px;*/
     position: sticky;
     z-index: 100;
-    top: 0;
+    top: 50px;
     /* overflow: hidden; */
   }
   .laptop_img {
