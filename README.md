@@ -20,6 +20,8 @@ Log-it은 SSAFY 퇴실 5분 전, 우리들의 성장 여정을 기록하는 서�
 
 [Log-it 바로가기](https://i8a609.p.ssafy.io/)
 
+[Log-it 홍보영상](https://youtu.be/kjlL84gRi8c)
+
 <br>
 <br>
 <br>
@@ -111,7 +113,7 @@ Log-it 서비스의 발전 방향에 대해 고민했습니다.
 
 # 아키텍처
 
-<img width="70%" src="https://user-images.githubusercontent.com/59721896/220219652-8c3824ac-9e0b-4e3f-b478-60bcc4530b6a.png">
+<img width="70%" src="https://user-images.githubusercontent.com/59721896/220850414-f9043b4f-a7df-46a3-a679-65335c8bd88b.png">
 
 <br>
 <br>
@@ -121,10 +123,27 @@ Log-it 서비스의 발전 방향에 대해 고민했습니다.
 
 <img width="70%" src="https://user-images.githubusercontent.com/59721896/220218382-09c6d0ff-ce21-4827-b738-5defdbbaf6c2.png">
 
+<br>
+<br>
+<br>
+
+# 디자인 가이드
+
+<img width="70%" src="https://user-images.githubusercontent.com/59721896/220849321-d5d44526-8a0d-4664-b4ee-991206515167.png">
+
+<br>
+<br>
+<br>
+
 </div>
 
 ---
 
+<br>
+
 #### ✉ Contact
 
 logitforssafy@gmail.com
+
+<br>
+<br>
