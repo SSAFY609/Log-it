@@ -6,7 +6,7 @@
 
 ### 당신의 새로운 여정을 매일 기록해보세요.
 
-<img width="70%" src="https://user-images.githubusercontent.com/59721896/219296769-ab2382ee-25c2-42ed-a34c-9935813fc8bf.png"/>
+<img width="70%" src="https://user-images.githubusercontent.com/59721896/220792960-578c0646-365f-430c-8b6c-1ca5eab1ae90.png"/>
 
 <br>
 <br>
