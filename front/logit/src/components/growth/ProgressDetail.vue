@@ -102,7 +102,6 @@ export default {
           growthId: this.dateProgress[idx].growth.growthId,
           date: this.dateProgress[idx].progressDate.date
         }
-        console.log(data)
         this.$store.dispatch('growth/likeProgress', data)
       },
       unlike(progressId) {

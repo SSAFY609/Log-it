@@ -96,7 +96,7 @@ export default {
 
       // 사용자 프로필 이미지 세팅
         // 숫자(디즈니)일 경우 
-        console.log(state.image)
+        // console.log(state.image)
       if (state.image.length < 5) {
         previews[0].src = require(`@/assets/profiles/scale (${loginUser.image}).png`)
         // const previews = document.querySelectorAll(".image-box");

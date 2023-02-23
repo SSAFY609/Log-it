@@ -122,7 +122,7 @@ import { mapState } from 'vuex'
       methods: {
         search(e) {
           this.keyword = e.target.value
-          console.log(this.keyword)
+          // console.log(this.keyword)
           this.$store.dispatch('search/getSearchResult', this.keyword)
         },
         goGrowth(growthId){

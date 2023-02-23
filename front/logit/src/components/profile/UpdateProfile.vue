@@ -176,6 +176,7 @@ export default {
       const user = {
         name: state.name,
         studentNo: state.studentNo,
+        
       }
       store.dispatch('updateUser', user)
     };

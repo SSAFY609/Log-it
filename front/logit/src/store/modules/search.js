@@ -28,7 +28,6 @@ const search = {
                     keyword: keyword,
                 }
             }).then((res)=>{
-                console.log(res.data)
                 commit('GET_SEARCH_RESULT', res.data)
             }).catch((err)=>{
                 console.log(err)
